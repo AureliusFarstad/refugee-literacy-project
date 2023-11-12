@@ -3,10 +3,10 @@ import { View, TouchableOpacity, Text, Pressable, Alert } from "react-native";
 import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import { Audio } from "expo-av";
 
-import colors from "../config/colors";
-import Screen from "../components/Screen";
-import alphabetSound from "../config/alphabetSound";
-import ResultScreen from "./ResultScreen";
+import colors from "../../config/colors";
+import Screen from "../../components/Screen";
+import alphabetSound from "../../config/alphabetSound";
+import ResultScreen from "../ResultScreen";
 
 function ListenChooseSccreen(props) {
   const [letters, setLetters] = useState([]);
@@ -48,7 +48,7 @@ function ListenChooseSccreen(props) {
     sound.unloadAsync();
     if (letter === correctLetter) {
       setAnimation(
-        require("../assets/animation/Animation - 1697908227812.json")
+        require("../../assets/animation/Animation - 1697908227812.json")
       );
       setvisibleReusltModal(true);
       setTimeout(() => {
@@ -56,7 +56,7 @@ function ListenChooseSccreen(props) {
       }, 2300);
       generateLetters();
     } else {
-      setAnimation(require("../assets/animation/wrong-new.json"));
+      setAnimation(require("../../assets/animation/wrong-new.json"));
       setvisibleReusltModal(true);
       setTimeout(() => {
         setvisibleReusltModal(false);

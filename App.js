@@ -5,10 +5,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import ListenChooseSccreen from "./app/screens/ListenChooseSccreen";
+import ListenChooseSccreen from "./app/screens/levelOne/ListenChooseSccreen";
 
 import MainMenu from "./app/screens/MainMenu";
-import LevelOneAlphabet from "./app/screens/levelOne/Alphabet";
+import CustomTabBar from "./app/screens/levelOne/Navigator";
 import Home from "./app/assets/icons/Home";
 import Title from "./app/components/header/Title";
 import BackButton from "./app/components/header/BackButton";
@@ -39,7 +39,7 @@ export default function App() {
         {/* Level One Routes */}
         <Stack.Screen 
           name="LevelOneAlphabet" 
-          component={LevelOneAlphabet} 
+          component={CustomTabBar} 
           options={({ navigation }) => { 
             return {
               headerTitle: () => (<Title headerTitle={"s, a, t, p, i, n"} />),
