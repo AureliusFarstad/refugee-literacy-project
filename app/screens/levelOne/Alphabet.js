@@ -66,7 +66,7 @@ export default function LevelOneAlphabet({ navigation }) {
                 </TouchableOpacity>
             </View>
 
-            <View className="flex flex-colum gap-y-[10px]">
+            <View className="flex flex-colum gap-y-[20px]">
                 {/* Sound Button */}
                 <View className="flex flex-row items-center gap-x-[12px] mx-auto">
                     <TouchableOpacity className="w-[40px] aspect-square">
@@ -90,7 +90,7 @@ export default function LevelOneAlphabet({ navigation }) {
                         <View className="w-[45px] aspect-square">
                             <Nametag />
                         </View>
-                        <Text>صدا</Text>
+                        <Text>نام</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -99,7 +99,7 @@ export default function LevelOneAlphabet({ navigation }) {
             <View className="flex flex-row items-center justify-around w-[100%] px-[10px]">
                 {/* Map an array of letters in to buttons to toggle the selected letter*/}
                 {["s", "a", "t", "p", "i", "n"].map((letter, index) => (
-                    <View className="flex flex-column items-center gap-y-[8px]">
+                    <View className="flex flex-column items-center gap-y-[5px]">
                         <View className="w-[20px] h-[20px]">    
                             <CheckMark />
                         </View>

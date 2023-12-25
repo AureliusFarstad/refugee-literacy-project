@@ -6,7 +6,7 @@ import Svg, { Path, G } from 'react-native-svg';
 
 export default function Pencil({ focused, color }) {
     return (
-<Svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+<Svg viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
 <Path fillRule="evenodd" clipRule="evenodd" d="M10.2147 31.3608L9.28625 34.0816C9.22171 34.3273 9.22465 34.4931 9.33025 34.5701H9.81723C9.86124 34.5585 9.90818 34.5439 9.95807 34.5279L11.7945 33.9099L12.5352 33.6613L11.8656 31.8432L10.2147 31.3608Z" fill="#B5C4CF"/>
 <Path fillRule="evenodd" clipRule="evenodd" d="M28.5448 11.6699L17.5074 22.6124L10.9965 29.0689C10.9965 30.6466 12.2271 32.5937 14.8424 32.8816L32.3921 15.4841L31.7042 12.3505L28.5448 11.6699Z" fill="#FDB440"/>
 <Path fillRule="evenodd" clipRule="evenodd" d="M10.2147 31.3607L12.5351 33.6611L14.8423 32.8817C14.4727 32.0528 13.8757 31.2559 13.2597 30.6234C12.4544 29.7974 11.5993 29.2332 10.9965 29.0688L10.2147 31.3607Z" fill="#FCD79B"/>
