@@ -7,7 +7,7 @@ import CheckMark from '../CheckMark';
 export default function TabContainer({checked, children}) {
     return (
         <View className="flex flex-column items-center">
-            <View className="pb-[5px]">
+            <View className="w-[27px] h-[27px] mb-[5px]">
                 <CheckMark checked={checked} />
             </View>
             {children}
