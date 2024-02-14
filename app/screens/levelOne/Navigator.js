@@ -2,13 +2,18 @@ import React, { useState, createContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import ListenChooseSccreen from './ListenChooseSccreen';
 import Alphabet from './Alphabet';
+import MatchLetters from './MatchLetters';
 
 import TabContainer from '../../assets/icons/bottomTabs/Tab'
 import Teacher from '../../assets/icons/bottomTabs/Teacher';
 import Pencil from '../../assets/icons/bottomTabs/Pencil';
 import Ear from '../../assets/icons/bottomTabs/Ear'
+import Nametag from '../../assets/icons/bottomTabs/Nametag';
+import UppercaseLowercase from '../../assets/icons/bottomTabs/UppercaseLowercase';
 
 function Screen2() {
   return (
@@ -24,7 +29,8 @@ const LevelOneCompletedScreensContext = createContext(null);
 const Tab = createBottomTabNavigator();
 
 function CustomTabBar() {
-
+    const insets = useSafeAreaInsets();
+    const bottomPadding = Math.max(insets.bottom, 5)
     const [completedScreens, setCompletedScreens] = useState([]);
 
     function completeScreen(screenName) {
@@ -41,10 +47,10 @@ function CustomTabBar() {
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: {
-                  height: 90,
+                  height: 85 + bottomPadding,
                   paddingHorizontal: 5,
                   paddingTop: 5,
-                  paddingBottom: 5,
+                  paddingBottom: bottomPadding,
                   backgroundColor: '#B5F5FF',
                 },
                 tabBarShowLabel: false,
@@ -80,6 +86,28 @@ function CustomTabBar() {
                     tabBarIcon: ({ focused, color }) => (
                         <TabContainer checked={completedScreens.includes("Screen1")}>
                             <Ear focused={focused} color={color} />
+                        </TabContainer>
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Screen4"
+                component={Screen2}
+                options={{
+                    tabBarIcon: ({ focused, color }) => (
+                        <TabContainer checked={completedScreens.includes("Screen1")}>
+                            <Nametag focused={focused} color={color} />
+                        </TabContainer>
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Screen5"
+                component={MatchLetters}
+                options={{
+                    tabBarIcon: ({ focused, color }) => (
+                        <TabContainer checked={completedScreens.includes("Screen1")}>
+                            <UppercaseLowercase focused={focused} color={color} />
                         </TabContainer>
                     ),
                 }}

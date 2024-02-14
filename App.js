@@ -3,13 +3,9 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import ListenChooseSccreen from "./app/screens/levelOne/ListenChooseSccreen";
-
 import MainMenu from "./app/screens/MainMenu";
+import InfoShare from "./app/components/header/InfoShare";
 import CustomTabBar from "./app/screens/levelOne/Navigator";
-import Home from "./app/assets/icons/Home";
 import Title from "./app/components/header/Title";
 import BackButton from "./app/components/header/BackButton";
 
@@ -44,6 +40,7 @@ export default function App() {
             return {
               headerTitle: () => (<Title headerTitle={"s, a, t, p, i, n"} />),
               headerLeft: () => (<BackButton navigation={navigation} />),
+              headerRight: () => (<InfoShare />),
             };
           }}
         />

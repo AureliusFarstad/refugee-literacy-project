@@ -35,7 +35,9 @@ function MainMenu({ navigation }) {
                         <Text className="ml-[10px]">s, a, t, p, i, n</Text>
                     </TouchableOpacity>
                     <View className="ml-[10px] border border-black">
-                        <CheckMark />
+                        <View className="w-[27px] h-[27px]">
+                            <CheckMark />
+                        </View>
                     </View>
                 </View>
                 {/* Row 2 */}
@@ -48,7 +50,9 @@ function MainMenu({ navigation }) {
                         <Text className="ml-[10px]">I am...</Text>
                     </View>
                     <View className="ml-[10px] border border-black">
-                        <CheckMark />
+                        <View className="w-[27px] h-[27px]">    
+                            <CheckMark />
+                        </View>
                     </View>
                 </View>
                 {/* Row 3 */}
@@ -61,7 +65,9 @@ function MainMenu({ navigation }) {
                         <Text className="ml-[10px]">sit, pen...</Text>
                     </View>
                     <View className="ml-[10px] border border-black">
-                        <CheckMark />
+                        <View className="w-[27px] h-[27px]">
+                            <CheckMark />
+                        </View>
                     </View>
                 </View>
                 {/* Row 4 */}
@@ -76,7 +82,9 @@ function MainMenu({ navigation }) {
                         <Text className="ml-[10px]">food</Text>
                     </View>
                     <View className="ml-[10px] border border-black">
-                        <CheckMark />
+                        <View className="w-[27px] h-[27px]">    
+                            <CheckMark />
+                        </View>
                     </View>
                 </View>
             </View>
