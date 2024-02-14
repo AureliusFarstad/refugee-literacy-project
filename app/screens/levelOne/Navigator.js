@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import ListenChooseSccreen from './ListenChooseSccreen';
 import Alphabet from './Alphabet';
+import MatchLetters from './MatchLetters';
 
 import TabContainer from '../../assets/icons/bottomTabs/Tab'
 import Teacher from '../../assets/icons/bottomTabs/Teacher';
@@ -29,7 +30,7 @@ const Tab = createBottomTabNavigator();
 
 function CustomTabBar() {
     const insets = useSafeAreaInsets();
-
+    const bottomPadding = Math.max(insets.bottom, 5)
     const [completedScreens, setCompletedScreens] = useState([]);
 
     function completeScreen(screenName) {
@@ -46,10 +47,10 @@ function CustomTabBar() {
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: {
-                  height: 85 + insets.bottom,
+                  height: 85 + bottomPadding,
                   paddingHorizontal: 5,
                   paddingTop: 5,
-                  paddingBottom: insets.bottom,
+                  paddingBottom: bottomPadding,
                   backgroundColor: '#B5F5FF',
                 },
                 tabBarShowLabel: false,
@@ -102,7 +103,7 @@ function CustomTabBar() {
             />
             <Tab.Screen
                 name="Screen5"
-                component={Screen2}
+                component={MatchLetters}
                 options={{
                     tabBarIcon: ({ focused, color }) => (
                         <TabContainer checked={completedScreens.includes("Screen1")}>
