@@ -2,7 +2,7 @@ import { useBooleanState } from "@/core/hooks/useBooleanState";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import { XClose } from "@/ui/core/bottom-sheet/x-close";
 import Header from "@/ui/core/headers";
-import { CustomModal } from "@/ui/core/react-native-modal/custom-modal";
+import { CustomModal } from "@/ui/core/modal/custom-modal";
 import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { IS_IOS } from "@/utils/layout";
 import { useNavigation } from "@react-navigation/native";

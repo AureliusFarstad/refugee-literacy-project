@@ -2,7 +2,7 @@ import { useBooleanState } from "@/core/hooks/useBooleanState";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import { XClose } from "@/ui/core/bottom-sheet/x-close";
 import Header from "@/ui/core/headers";
-import { CustomModal } from "@/ui/core/react-native-modal/custom-modal";
+import { CustomModal } from "@/ui/core/modal/custom-modal";
 import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { IS_IOS } from "@/utils/layout";
 import { useNavigation } from "@react-navigation/native";
@@ -11,9 +11,7 @@ import React from "react";
 const CloseButton = ({ close }: { close: () => void }) => {
   return (
     <Pressable
-      onPress={() => {
-        close();
-      }}
+      onPress={close}
       className="h-[24px] w-[24px] items-center justify-center absolute top-4 right-4 z-10"
       hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
       accessibilityLabel="close modal"
@@ -60,6 +58,7 @@ const AudiblePicker = () => {
       <Pressable onPress={showCoolestModal}>
         <Text>Show modal</Text>
       </Pressable>
+      {/* TODO: make this reusable component */}
       <CustomModal
         style={{
           marginTop: IS_IOS ? 30 : 0,
