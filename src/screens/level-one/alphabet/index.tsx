@@ -1,5 +1,6 @@
 import { useBooleanState } from "@/core/hooks/useBooleanState";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
+import Header from "@/ui/core/headers";
 import { XClose } from "@/ui/core/modal/x-close";
 import { CustomModal } from "@/ui/core/react-native-modal/custom-modal";
 import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
@@ -53,6 +54,7 @@ const Alphabet = () => {
   return (
     <SafeAreaView>
       <FocusAwareStatusBar />
+      <Header showCoolestModal={showCoolestModal} />
       <Text>Alphabet Screen</Text>
       <Pressable onPress={showCoolestModal}>
         <Text>Show modal</Text>
