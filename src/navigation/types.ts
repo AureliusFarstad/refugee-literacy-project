@@ -6,6 +6,8 @@ export type RootStackRoutes = {
   Home: undefined;
   LevelOneTabNavigator: NavigatorScreenParams<LevelOneBottomTabRoutes>;
   LevelTwoTabNavigator: NavigatorScreenParams<LevelTwoBottomTabRoutes>;
+  LevelThreeTabNavigator: NavigatorScreenParams<LevelThreeBottomTabRoutes>;
+  LevelFourTabNavigator: NavigatorScreenParams<LevelFourBottomTabRoutes>;
 };
 
 // for useNavigation hook
@@ -65,4 +67,44 @@ export type LevelTwoBottomTabNavigationProps<
 > = {
   navigation: BottomTabNavigationProp<LevelTwoBottomTabRoutes, RouteName>;
   route: RouteProp<LevelTwoBottomTabRoutes, RouteName>;
+};
+
+// for level four useNavigation hook
+
+export type LevelThreeBottomTabRoutes = {
+  Alphabet: undefined;
+  AudiblePicker: undefined;
+};
+
+// for useNavigation hook
+export type LevelThreeBottomTabNavigationType<
+  RouteName extends keyof LevelThreeBottomTabRoutes
+> = StackNavigationProp<LevelThreeBottomTabRoutes, RouteName>;
+
+export type LevelThreeBottomTabNavigationProps<
+  RouteName extends keyof LevelThreeBottomTabRoutes
+> = {
+  navigation: BottomTabNavigationProp<LevelThreeBottomTabRoutes, RouteName>;
+  route: RouteProp<LevelThreeBottomTabRoutes, RouteName>;
+};
+// for level four useNavigation hook
+
+export type LevelFourBottomTabRoutes = {
+  Alphabet: undefined;
+  AudiblePicker: undefined;
+  ChapterThree: undefined;
+  ChapterFour: undefined;
+  ChapterFive: undefined;
+};
+
+// for useNavigation hook
+export type LevelFourBottomTabNavigationType<
+  RouteName extends keyof LevelFourBottomTabRoutes
+> = StackNavigationProp<LevelFourBottomTabRoutes, RouteName>;
+
+export type LevelFourBottomTabNavigationProps<
+  RouteName extends keyof LevelFourBottomTabRoutes
+> = {
+  navigation: BottomTabNavigationProp<LevelFourBottomTabRoutes, RouteName>;
+  route: RouteProp<LevelFourBottomTabRoutes, RouteName>;
 };
