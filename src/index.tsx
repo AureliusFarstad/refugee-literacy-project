@@ -1,4 +1,5 @@
 import "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RootNavigator } from "@/navigation";
@@ -11,9 +12,11 @@ const App = () => {
         flex: 1,
       }}
     >
-      <ReactNativeModalProvider>
-        <RootNavigator />
-      </ReactNativeModalProvider>
+      <BottomSheetModalProvider>
+        <ReactNativeModalProvider>
+          <RootNavigator />
+        </ReactNativeModalProvider>
+      </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
 };
