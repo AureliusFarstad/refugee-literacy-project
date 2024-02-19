@@ -1,7 +1,7 @@
-import { styled } from "nativewind"
-import * as React from "react"
-import type { SvgProps } from "react-native-svg"
-import Svg, { Path } from "react-native-svg"
+import { styled } from "nativewind";
+import * as React from "react";
+import type { SvgProps } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 
 const SvgComponent = ({ fill = "#001136", ...props }: SvgProps) => (
   <Svg width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
@@ -10,8 +10,8 @@ const SvgComponent = ({ fill = "#001136", ...props }: SvgProps) => (
       fill={fill}
     />
   </Svg>
-)
+);
 
 export const XClose = styled(SvgComponent, {
   classProps: ["fill"],
-})
+});

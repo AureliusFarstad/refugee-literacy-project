@@ -1,11 +1,11 @@
-import { Button, Modal, SafeAreaView, Text, useModal } from "@/ui";
+import { Button, Modal, SafeAreaView, Text, useBottomSheetModal } from "@/ui";
 import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 
 const Alphabet = () => {
   const { navigate } = useNavigation();
-  const modal = useModal();
+  const modal = useBottomSheetModal();
 
   return (
     <SafeAreaView>

@@ -1,7 +1,7 @@
 import { useBooleanState } from "@/core/hooks/useBooleanState";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
+import { XClose } from "@/ui/core/bottom-sheet/x-close";
 import Header from "@/ui/core/headers";
-import { XClose } from "@/ui/core/modal/x-close";
 import { CustomModal } from "@/ui/core/react-native-modal/custom-modal";
 import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { IS_IOS } from "@/utils/layout";

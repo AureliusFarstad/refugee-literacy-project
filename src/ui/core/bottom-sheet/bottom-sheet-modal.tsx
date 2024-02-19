@@ -1,14 +1,14 @@
 import type { BottomSheetModalProps } from "@gorhom/bottom-sheet";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { BottomSheetModal as GorhomBottomSheetModal } from "@gorhom/bottom-sheet";
 import * as React from "react";
 
 import { View } from "../view";
-import { renderBackdrop } from "./modal-backdrop";
-import { ModalHeader } from "./modal-header";
+import { renderBackdrop } from "./bottom-sheet-modal-backdrop";
+import { ModalHeader } from "./bottom-sheet-modal-header";
 import type { ModalProps, ModalRef } from "./types";
 
-export const useModal = () => {
-  const ref = React.useRef<BottomSheetModal>(null);
+export const useBottomSheetModal = () => {
+  const ref = React.useRef<GorhomBottomSheetModal>(null);
   const present = React.useCallback((data?: any) => {
     ref.current?.present(data);
   }, []);
@@ -18,7 +18,7 @@ export const useModal = () => {
   return { ref, present, dismiss };
 };
 
-export const Modal = React.forwardRef(
+export const BottomSheetModal = React.forwardRef(
   (
     {
       snapPoints: _snapPoints = ["60%"],
@@ -32,12 +32,12 @@ export const Modal = React.forwardRef(
       () => getDetachedProps(detached),
       [detached]
     );
-    const modal = useModal();
+    const modal = useBottomSheetModal();
     const snapPoints = React.useMemo(() => _snapPoints, [_snapPoints]);
 
     React.useImperativeHandle(
       ref,
-      () => (modal.ref.current as BottomSheetModal) || null
+      () => (modal.ref.current as GorhomBottomSheetModal) || null
     );
 
     const renderHandleComponent = React.useCallback(
@@ -51,7 +51,7 @@ export const Modal = React.forwardRef(
     );
 
     return (
-      <BottomSheetModal
+      <GorhomBottomSheetModal
         {...props}
         {...detachedProps}
         ref={modal.ref}
