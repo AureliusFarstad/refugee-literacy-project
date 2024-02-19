@@ -20,30 +20,48 @@ const Home = () => {
       </Pressable>
       <Pressable
         onPress={() => {
-          navigation.navigate("LevelOneTabNavigator", {
+          navigation.navigate("LevelThreeTabNavigator", {
             screen: "AudiblePicker",
           });
         }}
       >
-        <Text>Level Two(Audio)</Text>
+        <Text>Level Three(Audio)</Text>
       </Pressable>
       <Pressable
         onPress={() => {
-          navigation.navigate("LevelTwoTabNavigator", {
+          navigation.navigate("LevelThreeTabNavigator", {
             screen: "Alphabet",
           });
         }}
       >
-        <Text>Level Two(Alphabet)</Text>
+        <Text>Level Three(Alphabet)</Text>
       </Pressable>
       <Pressable
         onPress={() => {
-          navigation.navigate("LevelTwoTabNavigator", {
+          navigation.navigate("LevelThreeTabNavigator", {
             screen: "AudiblePicker",
           });
         }}
       >
-        <Text>Level Two(Audio)</Text>
+        <Text>Level Three(Audio)</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          navigation.navigate("LevelFourTabNavigator", {
+            screen: "Alphabet",
+          });
+        }}
+      >
+        <Text>Level Four(Alphabet)</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          navigation.navigate("LevelFourTabNavigator", {
+            screen: "AudiblePicker",
+          });
+        }}
+      >
+        <Text>Level Four(Audio)</Text>
       </Pressable>
     </SafeAreaView>
   );

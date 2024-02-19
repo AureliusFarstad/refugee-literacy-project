@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
-import { LevelTwoBottomTabRoutes } from "./types";
+import { LevelThreeBottomTabRoutes } from "./types";
 import Alphabet from "@/screens/level-two/alphabet";
 import AudiblePicker from "@/screens/level-two/audible-picker";
 
-const Tab = createBottomTabNavigator<LevelTwoBottomTabRoutes>();
+const Tab = createBottomTabNavigator<LevelThreeBottomTabRoutes>();
 
-const LevelTwoBottomTabNavigator = () => {
+const LevelThreeBottomTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -22,4 +22,4 @@ const LevelTwoBottomTabNavigator = () => {
   );
 };
 
-export default LevelTwoBottomTabNavigator;
+export default LevelThreeBottomTabNavigator;
