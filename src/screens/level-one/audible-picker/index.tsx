@@ -35,7 +35,10 @@ const CoolestCard = ({ hideCoolestModal }: CoolestCardProps) => {
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veniam
         delectus commodi ad minus impedit omnis repellat dolores, voluptate
         dolorem nemo totam rem reprehenderit debitis facilis laboriosam
-        voluptatibus temporibus earum vitae.
+        voluptatibus temporibus earum vitae. Lorem ipsum dolor sit amet,
+        consectetur adipisicing elit. Officiis quas, repellendus, fugit, quasi
+        repellat eos eveniet distinctio et reprehenderit nobis quis. Dicta
+        dolores odit sint obcaecati officia quam cumque nisi?
       </Text>
     </View>
   );

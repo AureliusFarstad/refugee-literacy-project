@@ -6,13 +6,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as React from "react";
 import {
   CalendarIcon,
-  GiftIcon,
   PaintBrushIcon,
   PuzzlePieceIcon,
   SparklesIcon,
 } from "react-native-heroicons/solid";
 import type { SvgProps } from "react-native-svg";
 import { LevelOneBottomTabRoutes } from "./types";
+import { ArrowIcon, CheckIcon } from "@/ui/icons";
 
 const Tab = createBottomTabNavigator<LevelOneBottomTabRoutes>();
 
@@ -27,9 +27,9 @@ type TabIconsType = {
 };
 
 const tabsIcons: TabIconsType = {
-  Alphabet: (props: SvgProps) => <SparklesIcon {...props} />,
+  Alphabet: (props: SvgProps) => <CheckIcon {...props} />,
   AudiblePicker: (props: SvgProps) => <PaintBrushIcon {...props} />,
-  ChapterThree: (props: SvgProps) => <GiftIcon {...props} />,
+  ChapterThree: (props: SvgProps) => <ArrowIcon {...props} />,
   ChapterFour: (props: SvgProps) => <CalendarIcon {...props} />,
   ChapterFive: (props: SvgProps) => <PuzzlePieceIcon {...props} />,
 };

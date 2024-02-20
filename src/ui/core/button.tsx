@@ -1,19 +1,19 @@
-import React from "react"
-import type { TouchableOpacityProps } from "react-native"
+import React from "react";
+import type { TouchableOpacityProps } from "react-native";
 
-import { ActivityIndicator } from "./activity-indicator"
-import { Text } from "./text"
-import { TouchableOpacity } from "./touchable-opacity"
+import { ActivityIndicator } from "./activity-indicator";
+import { Text } from "./text";
+import { TouchableOpacity } from "./touchable-opacity";
 
 type Variant = {
-  container: string
-  label: string
-  indicator: string
-}
-type VariantName = "defaults" | "primary" | "outline" | "secondary"
+  container: string;
+  label: string;
+  indicator: string;
+};
+type VariantName = "defaults" | "primary" | "outline" | "secondary";
 type BVariant = {
-  [key in VariantName]: Variant
-}
+  [key in VariantName]: Variant;
+};
 
 export const buttonVariants: BVariant = {
   defaults: {
@@ -23,7 +23,7 @@ export const buttonVariants: BVariant = {
     indicator: "text-white h-[30px]",
   },
   primary: {
-    container: "bg-black",
+    container: "bg-blue-500",
     label: "",
     indicator: "text-white",
   },
@@ -37,12 +37,12 @@ export const buttonVariants: BVariant = {
     label: "text-black dark:text-charcoal-100",
     indicator: "text-black",
   },
-}
+};
 
 interface Props extends TouchableOpacityProps {
-  variant?: VariantName
-  label?: string
-  loading?: boolean
+  variant?: VariantName;
+  label?: string;
+  loading?: boolean;
 }
 
 export const Button = ({
@@ -81,5 +81,5 @@ export const Button = ({
         </Text>
       )}
     </TouchableOpacity>
-  )
-}
+  );
+};

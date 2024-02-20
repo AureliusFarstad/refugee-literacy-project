@@ -10,7 +10,7 @@ export type RootStackRoutes = {
   LevelFourTabNavigator: NavigatorScreenParams<LevelFourBottomTabRoutes>;
 };
 
-// for useNavigation hook
+// for global useNavigation hook
 
 declare global {
   namespace ReactNavigation {
@@ -69,7 +69,7 @@ export type LevelTwoBottomTabNavigationProps<
   route: RouteProp<LevelTwoBottomTabRoutes, RouteName>;
 };
 
-// for level four useNavigation hook
+// for level three useNavigation hook
 
 export type LevelThreeBottomTabRoutes = {
   Alphabet: undefined;
@@ -87,6 +87,7 @@ export type LevelThreeBottomTabNavigationProps<
   navigation: BottomTabNavigationProp<LevelThreeBottomTabRoutes, RouteName>;
   route: RouteProp<LevelThreeBottomTabRoutes, RouteName>;
 };
+
 // for level four useNavigation hook
 
 export type LevelFourBottomTabRoutes = {

@@ -1,4 +1,4 @@
-import { Button, SafeAreaView, Text } from "@/ui";
+import { Button, SafeAreaView, Text, View } from "@/ui";
 import { BottomSheetModal, useBottomSheetModal } from "@/ui/core/bottom-sheet";
 import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { useNavigation } from "@react-navigation/native";
@@ -22,7 +22,9 @@ const Alphabet = () => {
         title="bottom sheet title"
         snapPoints={["60%"]}
       >
-        <Text>Bottom Sheet Content</Text>
+        <View className="p-4">
+          <Text>Bottom Sheet Content goes here</Text>
+        </View>
       </BottomSheetModal>
 
       <Text>Alphabet Screen Level Three</Text>
