@@ -26,9 +26,6 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "type-check": "tsc  --noemit",
     "lint:translations": "eslint ./src/translations/ --fix --ext .json  ",
-    "test": "jest",
-    "test:ci": "pnpm run test --coverage",
-    "test:watch": "pnpm run test --watch",
     "eas-build-pre-install": "./scripts/eas-pre-install"
   },
   "dependencies": {
