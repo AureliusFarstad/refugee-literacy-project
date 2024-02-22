@@ -14,7 +14,7 @@ export const CustomModal = ({
   ...props
 }: CustomModalProps & Partial<ModalProps>) => (
   <View>
-    <Modal {...props}>
+    <Modal {...props} useNativeDriverForBackdrop={true}>
       <View style={style}>{children}</View>
     </Modal>
   </View>

@@ -53,6 +53,7 @@ export const DynamicModal = forwardRef<
         onBackButtonPress={_hideCoolestModal}
         animationIn={"zoomIn"}
         animationOut={"zoomOut"}
+        useNativeDriverForBackdrop={true}
       >
         <View style={style}>{children}</View>
       </Modal>
