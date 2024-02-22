@@ -7,7 +7,6 @@
     "android": "cross-env EXPO_NO_DOTENV=1 npx expo run:android",
     "ios": "cross-env EXPO_NO_DOTENV=1 npx expo run:ios",
     "doctor": "npx expo-doctor@latest",
-    "preinstall": "npx only-allow pnpm",
     "start:staging": "cross-env APP_ENV=staging pnpm run start",
     "prebuild:staging": "cross-env APP_ENV=staging pnpm run prebuild",
     "android:staging": "cross-env APP_ENV=staging pnpm run android",
@@ -22,7 +21,6 @@
     "build:staging:android": "cross-env APP_ENV=staging EXPO_NO_DOTENV=1 eas build --profile staging --platform android ",
     "build:production:ios": "cross-env APP_ENV=production EXPO_NO_DOTENV=1 eas build --profile production --platform ios",
     "build:production:android": "cross-env APP_ENV=production EXPO_NO_DOTENV=1 eas build --profile production --platform android ",
-    "postinstall": "husky install",
     "app-release": "cross-env SKIP_BRANCH_PROTECTION=true np --no-publish --no-cleanup --no-release-draft",
     "version": "pnpm run prebuild && git add .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -81,8 +79,7 @@
     "babel-plugin-module-resolver": "^5.0.0",
     "typescript": "^5.3.0",
     "cross-env": "^7.0.3",
-    "dotenv": "^16.0.3",
-    "husky": "^8.0.3"
+    "dotenv": "^16.0.3"
   },
   "private": true,
   "packageManager": "pnpm@8.15.1"
