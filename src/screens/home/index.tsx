@@ -19,7 +19,7 @@ const Home = () => {
       <View className="px-4">
         <Text>Home Screen</Text>
 
-        <DynamicModal ref={dynamicModalRef}>
+        {/* <DynamicModal ref={dynamicModalRef}>
           <View className="bg-white p-4 rounded-xl">
             <Button
               onPress={() => {
@@ -27,7 +27,7 @@ const Home = () => {
               }}
               label="Close Dynamic Modal"
             ></Button>
-            <Text className="text-pink-500">Close first Dynamic modal</Text>
+            <Text className="">Close first Dynamic modal</Text>
           </View>
         </DynamicModal>
 
@@ -46,9 +46,9 @@ const Home = () => {
               label="Close Second Dynamic Modal"
             />
           </View>
-        </DynamicModal>
+        </DynamicModal> */}
 
-        <Button
+        {/* <Button
           onPress={() => {
             dynamicModalRef.current?.showCoolestModal();
           }}
@@ -60,7 +60,7 @@ const Home = () => {
             secondDynamicModalRef.current?.showCoolestModal();
           }}
           label="Open Second Dynamic Modal"
-        />
+        /> */}
 
         <Pressable
           onPress={() => {
@@ -70,51 +70,6 @@ const Home = () => {
           }}
         >
           <Text>Level One(Alphabet)</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("LevelThreeTabNavigator", {
-              screen: "AudiblePicker",
-            });
-          }}
-        >
-          <Text>Level Three(Audio)</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("LevelThreeTabNavigator", {
-              screen: "Alphabet",
-            });
-          }}
-        >
-          <Text>Level Three(Alphabet)</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("LevelThreeTabNavigator", {
-              screen: "AudiblePicker",
-            });
-          }}
-        >
-          <Text>Level Three(Audio)</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("LevelFourTabNavigator", {
-              screen: "Alphabet",
-            });
-          }}
-        >
-          <Text>Level Four(Alphabet)</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("LevelFourTabNavigator", {
-              screen: "AudiblePicker",
-            });
-          }}
-        >
-          <Text>Level Four(Audio)</Text>
         </Pressable>
       </View>
     </SafeAreaView>
