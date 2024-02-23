@@ -10,29 +10,24 @@ type DynamicModalProps = {
   onRequestClose?: F1<boolean>;
 };
 
-export type DynamicModalRefType = {
-  showCoolestModal: () => void;
-  hideCoolestModal: () => void;
-};
-
 export const DynamicModal = forwardRef<
   DynamicModalRefType,
   DynamicModalProps & Partial<ModalProps>
 >(({ style, children, ...props }, ref) => {
   const [
-    isCoolestModalVisible,
-    { setFalse: _hideCoolestModal, setTrue: _showCoolestModal },
+    isDynamicModalVisible,
+    { setFalse: _hideDynamicModal, setTrue: _showDynamicModal },
   ] = useBooleanState(false);
 
   useImperativeHandle(
     ref,
     () => {
       return {
-        showCoolestModal: () => {
-          _showCoolestModal();
+        showDynamicModal: () => {
+          _showDynamicModal();
         },
-        hideCoolestModal: () => {
-          _hideCoolestModal();
+        hideDynamicModal: () => {
+          _hideDynamicModal();
         },
       };
     },
@@ -48,9 +43,9 @@ export const DynamicModal = forwardRef<
         }}
         backdropColor={"rgba(0, 0, 0, 0.4)"}
         backdropOpacity={1}
-        isVisible={isCoolestModalVisible}
-        onBackdropPress={_hideCoolestModal}
-        onBackButtonPress={_hideCoolestModal}
+        isVisible={isDynamicModalVisible}
+        onBackdropPress={_hideDynamicModal}
+        onBackButtonPress={_hideDynamicModal}
         animationIn={"zoomIn"}
         animationOut={"zoomOut"}
         useNativeDriverForBackdrop={true}

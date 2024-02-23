@@ -23,7 +23,7 @@ const Home = () => {
           <View className="bg-white p-4 rounded-xl">
             <Button
               onPress={() => {
-                dynamicModalRef.current?.hideCoolestModal();
+                dynamicModalRef.current?.hideDynamicModal();
               }}
               label="Close Dynamic Modal"
             ></Button>
@@ -41,7 +41,7 @@ const Home = () => {
             </Text>
             <Button
               onPress={() => {
-                secondDynamicModalRef.current?.hideCoolestModal();
+                secondDynamicModalRef.current?.hideDynamicModal();
               }}
               label="Close Second Dynamic Modal"
             />
@@ -50,14 +50,14 @@ const Home = () => {
 
         {/* <Button
           onPress={() => {
-            dynamicModalRef.current?.showCoolestModal();
+            dynamicModalRef.current?.showDynamicModal();
           }}
           label="Open First Dynamic Modal"
         />
 
         <Button
           onPress={() => {
-            secondDynamicModalRef.current?.showCoolestModal();
+            secondDynamicModalRef.current?.showDynamicModal();
           }}
           label="Open Second Dynamic Modal"
         /> */}

@@ -27,3 +27,8 @@ interface IMetadata {
   description: string;
   keywords: string[];
 }
+
+type DynamicModalRefType = {
+  showDynamicModal: () => void;
+  hideDynamicModal: () => void;
+};
