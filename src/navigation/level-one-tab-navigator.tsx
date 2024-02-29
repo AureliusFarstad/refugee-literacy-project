@@ -87,7 +87,9 @@ const LevelOneBottomTabNavigator = () => {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: "#55B8A0",
-          paddingTop: 8,
+        },
+        tabBarIconStyle: {
+          marginVertical: 4,
         },
         tabBarInactiveTintColor: "white",
         tabBarActiveTintColor: "black",
