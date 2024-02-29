@@ -1,7 +1,6 @@
-import { HeaderHomeIcon } from "@/ui/icons";
+import { HeaderHomeIcon, InfoIcon, ShareIcon } from "@/ui/icons";
 import { useNavigation } from "@react-navigation/native";
 import { useCallback } from "react";
-import { InformationCircleIcon, ShareIcon } from "react-native-heroicons/solid";
 import { Pressable } from "../pressable";
 import { Text } from "../text";
 import { View } from "../view";
@@ -34,7 +33,7 @@ const Header = ({ title, modalRef }: HeaderProps) => {
             modalRef?.current?.showDynamicModal();
           }}
         >
-          <InformationCircleIcon color={"white"} />
+          <InfoIcon color={"white"} />
         </Pressable>
         <ShareIcon color={"white"} />
       </View>
