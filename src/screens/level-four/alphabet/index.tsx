@@ -4,7 +4,7 @@ import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 
-const Alphabet = () => {
+const LetterIntroduction = () => {
   const { navigate } = useNavigation();
   const modal = useBottomSheetModal();
 
@@ -24,9 +24,9 @@ const Alphabet = () => {
         <Text>Bottom Sheet Content</Text>
       </BottomSheetModal>
 
-      <Text>Alphabet Screen Level Four</Text>
+      <Text>LetterIntroduction Screen Level Four</Text>
     </SafeAreaView>
   );
 };
 
-export default Alphabet;
+export default LetterIntroduction;

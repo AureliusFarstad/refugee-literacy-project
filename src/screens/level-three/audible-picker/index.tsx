@@ -3,7 +3,7 @@ import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 
-const AudiblePicker = () => {
+const LetterFormation = () => {
   const { navigate } = useNavigation();
 
   return (
@@ -14,4 +14,4 @@ const AudiblePicker = () => {
   );
 };
 
-export default AudiblePicker;
+export default LetterFormation;

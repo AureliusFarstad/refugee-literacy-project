@@ -1,18 +1,21 @@
-import Alphabet from "@/screens/level-one/alphabet";
-import AudiblePicker from "@/screens/level-one/audible-picker";
+import LetterIntroduction from "@/screens/level-one/letter-introduction";
+import LetterMatching from "@/screens/level-one/letter-matching";
+import LetterName from "@/screens/level-one/letter-name";
+import LetterSound from "@/screens/level-one/letter-sound";
+import {
+  EarIcon,
+  LetterMatchIcon,
+  NameIcon,
+  PencilIcon,
+  TeacherIcon,
+} from "@/ui/icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as React from "react";
-import {
-  CalendarIcon,
-  PaintBrushIcon,
-  PuzzlePieceIcon,
-  SparklesIcon,
-} from "react-native-heroicons/solid";
 import type { SvgProps } from "react-native-svg";
 import { LevelOneBottomTabRoutes } from "./types";
-import { ArrowIcon, CheckIcon } from "@/ui/icons";
+import LetterFormation from "@/screens/level-one/letter-formation";
 
 const Tab = createBottomTabNavigator<LevelOneBottomTabRoutes>();
 
@@ -27,11 +30,11 @@ type TabIconsType = {
 };
 
 const tabsIcons: TabIconsType = {
-  Alphabet: (props: SvgProps) => <CheckIcon {...props} />,
-  AudiblePicker: (props: SvgProps) => <PaintBrushIcon {...props} />,
-  ChapterThree: (props: SvgProps) => <ArrowIcon {...props} />,
-  ChapterFour: (props: SvgProps) => <CalendarIcon {...props} />,
-  ChapterFive: (props: SvgProps) => <PuzzlePieceIcon {...props} />,
+  LetterIntroduction: (props: SvgProps) => <TeacherIcon {...props} />,
+  LetterFormation: (props: SvgProps) => <PencilIcon {...props} />,
+  LetterSound: (props: SvgProps) => <EarIcon {...props} />,
+  LetterName: (props: SvgProps) => <NameIcon {...props} />,
+  LetterMatching: (props: SvgProps) => <LetterMatchIcon {...props} />,
 };
 
 export type TabList<T extends keyof LevelOneBottomTabRoutes> = {
@@ -41,29 +44,29 @@ export type TabList<T extends keyof LevelOneBottomTabRoutes> = {
 
 const tabs: TabType[] = [
   {
-    name: "Alphabet",
-    component: Alphabet,
-    label: "Alphabet",
+    name: "LetterIntroduction",
+    component: LetterIntroduction,
+    label: "Introduction",
   },
   {
-    name: "AudiblePicker",
-    component: AudiblePicker,
-    label: "Audible Picker",
+    name: "LetterFormation",
+    component: LetterFormation,
+    label: "Formation",
   },
   {
-    name: "ChapterThree",
-    component: AudiblePicker,
-    label: "Chapter Three",
+    name: "LetterSound",
+    component: LetterSound,
+    label: "Sound",
   },
   {
-    name: "ChapterFour",
-    component: AudiblePicker,
-    label: "Chapter Four",
+    name: "LetterName",
+    component: LetterName,
+    label: "Name",
   },
   {
-    name: "ChapterFive",
-    component: AudiblePicker,
-    label: "Chapter Five",
+    name: "LetterMatching",
+    component: LetterMatching,
+    label: "Matching",
   },
 ];
 
@@ -82,11 +85,16 @@ const LevelOneBottomTabNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarInactiveTintColor: "pink",
-        // eslint-disable-next-line react/no-unstable-nested-components
+        tabBarStyle: {
+          backgroundColor: "#55B8A0",
+          paddingTop: 8,
+        },
+        tabBarInactiveTintColor: "white",
+        tabBarActiveTintColor: "black",
         tabBarIcon: ({ color }) => <BarIcon name={route.name} color={color} />,
+        tabBarShowLabel: false,
       })}
-      initialRouteName="Alphabet"
+      initialRouteName="LetterIntroduction"
     >
       <Tab.Group
         screenOptions={{

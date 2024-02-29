@@ -1,8 +1,4 @@
-import { Button, Pressable, SafeAreaView, Text, View } from "@/ui";
-import {
-  DynamicModal,
-  DynamicModalRefType,
-} from "@/ui/core/modal/dynamic-modal";
+import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import React, { useRef } from "react";
@@ -65,11 +61,11 @@ const Home = () => {
         <Pressable
           onPress={() => {
             navigation.navigate("LevelOneTabNavigator", {
-              screen: "Alphabet",
+              screen: "LetterIntroduction",
             });
           }}
         >
-          <Text>Level One(Alphabet)</Text>
+          <Text>Level One(LetterIntroduction)</Text>
         </Pressable>
       </View>
     </SafeAreaView>

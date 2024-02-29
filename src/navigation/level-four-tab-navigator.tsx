@@ -1,5 +1,5 @@
-import Alphabet from "@/screens/level-three/alphabet";
-import AudiblePicker from "@/screens/level-three/audible-picker";
+import LetterIntroduction from "@/screens/level-three/alphabet";
+import LetterFormation from "@/screens/level-three/audible-picker";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -27,11 +27,11 @@ type TabIconsType = {
 };
 
 const tabsIcons: TabIconsType = {
-  Alphabet: (props: SvgProps) => <SparklesIcon {...props} />,
-  AudiblePicker: (props: SvgProps) => <PaintBrushIcon {...props} />,
-  ChapterThree: (props: SvgProps) => <GiftIcon {...props} />,
-  ChapterFour: (props: SvgProps) => <CalendarIcon {...props} />,
-  ChapterFive: (props: SvgProps) => <PuzzlePieceIcon {...props} />,
+  LetterIntroduction: (props: SvgProps) => <SparklesIcon {...props} />,
+  LetterFormation: (props: SvgProps) => <PaintBrushIcon {...props} />,
+  LetterSound: (props: SvgProps) => <GiftIcon {...props} />,
+  LetterName: (props: SvgProps) => <CalendarIcon {...props} />,
+  LetterMatching: (props: SvgProps) => <PuzzlePieceIcon {...props} />,
 };
 
 export type TabList<T extends keyof LevelFourBottomTabRoutes> = {
@@ -41,28 +41,28 @@ export type TabList<T extends keyof LevelFourBottomTabRoutes> = {
 
 const tabs: TabType[] = [
   {
-    name: "Alphabet",
-    component: Alphabet,
-    label: "Alphabet",
+    name: "LetterIntroduction",
+    component: LetterIntroduction,
+    label: "LetterIntroduction",
   },
   {
-    name: "AudiblePicker",
-    component: AudiblePicker,
+    name: "LetterFormation",
+    component: LetterFormation,
     label: "Audible Picker",
   },
   {
-    name: "ChapterThree",
-    component: AudiblePicker,
+    name: "LetterSound",
+    component: LetterFormation,
     label: "Chapter Three",
   },
   {
-    name: "ChapterFour",
-    component: AudiblePicker,
+    name: "LetterName",
+    component: LetterFormation,
     label: "Chapter Four",
   },
   {
-    name: "ChapterFive",
-    component: AudiblePicker,
+    name: "LetterMatching",
+    component: LetterFormation,
     label: "Chapter Five",
   },
 ];
@@ -86,7 +86,7 @@ const LevelFourBottomTabNavigator = () => {
         // eslint-disable-next-line react/no-unstable-nested-components
         tabBarIcon: ({ color }) => <BarIcon name={route.name} color={color} />,
       })}
-      initialRouteName="Alphabet"
+      initialRouteName="LetterIntroduction"
     >
       <Tab.Group
         screenOptions={{

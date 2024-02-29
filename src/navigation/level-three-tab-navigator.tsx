@@ -1,5 +1,5 @@
-import Alphabet from "@/screens/level-three/alphabet";
-import AudiblePicker from "@/screens/level-three/audible-picker";
+import LetterIntroduction from "@/screens/level-three/alphabet";
+import LetterFormation from "@/screens/level-three/audible-picker";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -21,8 +21,8 @@ type TabIconsType = {
 };
 
 const tabsIcons: TabIconsType = {
-  Alphabet: (props: SvgProps) => <SparklesIcon {...props} />,
-  AudiblePicker: (props: SvgProps) => <PaintBrushIcon {...props} />,
+  LetterIntroduction: (props: SvgProps) => <SparklesIcon {...props} />,
+  LetterFormation: (props: SvgProps) => <PaintBrushIcon {...props} />,
 };
 
 export type TabList<T extends keyof LevelThreeBottomTabRoutes> = {
@@ -32,13 +32,13 @@ export type TabList<T extends keyof LevelThreeBottomTabRoutes> = {
 
 const tabs: TabType[] = [
   {
-    name: "Alphabet",
-    component: Alphabet,
-    label: "Alphabet",
+    name: "LetterIntroduction",
+    component: LetterIntroduction,
+    label: "LetterIntroduction",
   },
   {
-    name: "AudiblePicker",
-    component: AudiblePicker,
+    name: "LetterFormation",
+    component: LetterFormation,
     label: "Audible Picker",
   },
 ];
@@ -62,7 +62,7 @@ const LevelThreeBottomTabNavigator = () => {
         // eslint-disable-next-line react/no-unstable-nested-components
         tabBarIcon: ({ color }) => <BarIcon name={route.name} color={color} />,
       })}
-      initialRouteName="Alphabet"
+      initialRouteName="LetterIntroduction"
     >
       <Tab.Group
         screenOptions={{

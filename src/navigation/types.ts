@@ -28,11 +28,11 @@ export type RootStackNavigationProps<RouteName extends keyof RootStackRoutes> =
   };
 
 export type LevelOneBottomTabRoutes = {
-  Alphabet: undefined;
-  AudiblePicker: undefined;
-  ChapterThree: undefined;
-  ChapterFour: undefined;
-  ChapterFive: undefined;
+  LetterIntroduction: undefined;
+  LetterFormation: undefined;
+  LetterSound: undefined;
+  LetterName: undefined;
+  LetterMatching: undefined;
 };
 
 // for level one useNavigation hook
@@ -50,11 +50,11 @@ export type LevelOneBottomTabNavigationProps<
 // for level two useNavigation hook
 
 export type LevelTwoBottomTabRoutes = {
-  Alphabet: undefined;
-  AudiblePicker: undefined;
-  ChapterThree: undefined;
-  ChapterFour: undefined;
-  ChapterFive: undefined;
+  LetterIntroduction: undefined;
+  LetterFormation: undefined;
+  LetterSound: undefined;
+  LetterName: undefined;
+  LetterMatching: undefined;
 };
 
 // for useNavigation hook
@@ -72,8 +72,8 @@ export type LevelTwoBottomTabNavigationProps<
 // for level three useNavigation hook
 
 export type LevelThreeBottomTabRoutes = {
-  Alphabet: undefined;
-  AudiblePicker: undefined;
+  LetterIntroduction: undefined;
+  LetterFormation: undefined;
 };
 
 // for useNavigation hook
@@ -91,11 +91,11 @@ export type LevelThreeBottomTabNavigationProps<
 // for level four useNavigation hook
 
 export type LevelFourBottomTabRoutes = {
-  Alphabet: undefined;
-  AudiblePicker: undefined;
-  ChapterThree: undefined;
-  ChapterFour: undefined;
-  ChapterFive: undefined;
+  LetterIntroduction: undefined;
+  LetterFormation: undefined;
+  LetterSound: undefined;
+  LetterName: undefined;
+  LetterMatching: undefined;
 };
 
 // for useNavigation hook
