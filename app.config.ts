@@ -25,6 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: Env.BUNDLE_ID,
+    associatedDomains: ["https://refugeeliteracy.org/"],
   },
 
   android: {
@@ -40,7 +41,21 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       "expo-build-properties",
       {
         android: {
-          kotlinVersion: "1.7.22", // this is for softinput package
+          kotlinVersion: "1.7.22", // this is for softinput package,
+          intentFilters: [
+            {
+              action: "VIEW",
+              autoVerify: true,
+              data: [
+                {
+                  scheme: "https",
+                  host: "*.https://refugeeliteracy.org",
+                  pathPrefix: "/records",
+                },
+              ],
+              category: ["BROWSABLE", "DEFAULT"],
+            },
+          ],
         },
       },
     ],
