@@ -1,9 +1,8 @@
+import { useBooleanState } from "@/core/hooks/useBooleanState";
 import React, { forwardRef, useImperativeHandle } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import Modal, { ModalProps } from "react-native-modal";
 import { View } from "../view";
-import { useBooleanState } from "@/core/hooks/useBooleanState";
-import { IS_IOS } from "@/utils/layout";
 
 type DynamicModalProps = {
   style?: StyleProp<ViewStyle>;
@@ -36,22 +35,21 @@ export const DynamicModal = forwardRef<
 
   return (
     <View>
-      <Modal
-        {...props}
-        style={{
-          marginTop: IS_IOS ? 30 : 0,
-        }}
-        backdropColor={"rgba(0, 0, 0, 0.4)"}
-        backdropOpacity={1}
-        isVisible={isDynamicModalVisible}
-        onBackdropPress={_hideDynamicModal}
-        onBackButtonPress={_hideDynamicModal}
-        animationIn={"zoomIn"}
-        animationOut={"zoomOut"}
-        useNativeDriverForBackdrop={true}
-      >
-        <View style={style}>{children}</View>
-      </Modal>
+      {isDynamicModalVisible && (
+        <Modal
+          {...props}
+          backdropColor={"rgba(0, 0, 0, 0.4)"}
+          backdropOpacity={1}
+          isVisible={isDynamicModalVisible}
+          onBackdropPress={_hideDynamicModal}
+          onBackButtonPress={_hideDynamicModal}
+          useNativeDriverForBackdrop={true}
+          hideModalContentWhileAnimating={true}
+          backdropTransitionOutTiming={0}
+        >
+          <View style={style}>{children}</View>
+        </Modal>
+      )}
     </View>
   );
 });
