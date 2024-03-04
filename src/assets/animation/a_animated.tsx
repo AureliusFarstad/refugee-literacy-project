@@ -2,8 +2,6 @@ import React from "react";
 import WebView from "react-native-webview";
 import SVGatorPlayer from "@svgator/react-native";
 
-import { View } from "react-native";
-
 function getHtml() {
   return SVGatorPlayer.wrapPage(
     '<svg id="elEk3BoG2L71" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 150 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" style="background-color:transparent"><path id="elEk3BoG2L72" d="M64.59,117.5c-17-12.45-24.2-13.48-35.46-7.24-11.47,6.35-21.36,24.82-23.87,43.77-1.79,13.46,1.37,29.19,13.64,36.95c11.83,7.48,26.58,1.35,31-3.88c7.91-9.37,13.65-17,14.56-29.23.91-12.22,1.33-24.46.47-36.69-.35-5.01-.7-10.01-1.06-15.02.69,18.16,1.38,36.32,2.07,54.48.32,8.56.79,17.58,5.4,24.8s14.92,11.55,22.04,6.78" transform="translate(25.911621-.279417)" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="0,400"/><g id="elEk3BoG2L73" transform="translate(-19.283042-77.193412)"><g transform="matrix(.1 0 0 0.1 84.184613 143.214019)"><path d="M361.412,297.527v-282.468C361.412,6.742,368.154,0,376.471,0s15.059,6.742,15.059,15.059v316.235c0,3.183-1.008,6.283-2.88,8.857L268.179,505.798c-6.014,8.269-18.344,8.269-24.357,0L123.351,340.151c-1.872-2.574-2.88-5.675-2.88-8.857v-316.235C120.471,6.742,127.213,0,135.529,0s15.059,6.742,15.059,15.059v282.468c10.908-7.292,23.925-11.409,37.647-11.409c12.094,0,23.718,3.189,33.882,9.067c10.164-5.878,21.789-9.067,33.882-9.067c12.094,0,23.718,3.189,33.882,9.067c10.164-5.878,21.789-9.067,33.882-9.067c13.726,0,26.742,4.118,37.649,11.409ZM286.231,429.771l69.576-95.667c-6.816-11.016-18.826-17.869-32.042-17.869-8.992,0-17.459,3.144-24.196,8.804-5.6,4.705-13.772,4.705-19.373,0-6.737-5.66-15.204-8.804-24.196-8.804s-17.459,3.144-24.196,8.804c-5.6,4.705-13.772,4.705-19.373,0-6.737-5.66-15.204-8.804-24.196-8.804-13.212,0-25.221,6.848-32.042,17.869l69.576,95.667c8.885-5.166,19.213-8.124,30.231-8.124s21.345,2.958,30.231,8.124Z"/></g><ellipse rx="2.5" ry="2.5" transform="translate(109.784663 191.913995)" fill="#ff2d34" stroke-width="0"/></g>\r\n<script><![CDATA[\r\n' +
@@ -33,8 +31,6 @@ const SVGatorComponent = React.forwardRef((props, ref) => {
   }
 
   const { newProps, styles } = SVGatorPlayer.getWebViewProps(props, html);
-  console.log(newProps);
-  console.log(styles);
 
   styles.style["height"] = 120;
 

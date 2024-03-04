@@ -1,4 +1,4 @@
-import LowerA from "@/assets/alphabet/vector/lowercase/a-svg";
+import LowerA from "@/assets/animation/a_animated";
 import { SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
@@ -43,9 +43,12 @@ const LetterIntroduction = () => {
           {/* Outside solid blue lines */}
           <View className="relative h-[120px] top-[40px] border-y-[1px] border-[#7747FF]/50">
             {/* Row of letters */}
-            <View className="">
+            <View className="top-[0px] flex flex-row justify-around h-[120px] z-100 px-[50px]">
               <View className="h-[120px] w-[60px]">
-                <LowerA />
+                <LowerA ref={lowercaseWebView} />
+              </View>
+              <View className="h-[120px] w-[60px]">
+                <LowerA ref={uppercaseWebView} />
               </View>
             </View>
             {/* Inner solid blue lines */}
@@ -101,7 +104,7 @@ const LetterIntroduction = () => {
         </View>
 
         {/* Switch through S,A,T,P,I,N */}
-        <View className="flex flex-row items-center justify-around w-[100%] px-[10px]">
+        <View className="flex flex-row items-center justify-around w-[100%] px-[10px] mt-20">
           {/* Map an array of letters in to buttons to toggle the selected letter*/}
           {["s", "a", "t", "p", "i", "n"].map((letter, index) => (
             <View
