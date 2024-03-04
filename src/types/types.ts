@@ -8,3 +8,18 @@ export interface IActivity {
   audio: AVPlaybackSource;
   options: IOption[];
 }
+
+export interface ILetterIntroductionActivity {
+  id: string;
+  numberOfTimesCorrectAnswerGiven: number;
+  type: "LETTER_INTRODUCTION";
+  character: string;
+  letter: {
+    lowerCase: "s";
+    upperCase: "S";
+  };
+  sound: {
+    letterSoundSrc: AVPlaybackSource;
+    phoneticSoundSrc: AVPlaybackSource;
+  };
+}

@@ -20,6 +20,102 @@ export const INITIAL_LEVEL_STATE = [
               {
                 id: "activity1",
                 numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_LETTER",
+                character: "S",
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+                letter: {
+                  lowerCase: "s",
+                  upperCase: "S",
+                },
+              },
+              {
+                id: "activity2",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_LETTER",
+                character: "A",
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+                letter: {
+                  lowerCase: "a",
+                  upperCase: "A",
+                },
+              },
+              {
+                id: "activity3",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_LETTER",
+                character: "T",
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+                letter: {
+                  lowerCase: "t",
+                  upperCase: "T",
+                },
+              },
+              {
+                id: "activity4",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_LETTER",
+                character: "P",
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+                letter: {
+                  lowerCase: "p",
+                  upperCase: "P",
+                },
+              },
+              {
+                id: "activity5",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_LETTER",
+                character: "I",
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+                letter: {
+                  lowerCase: "i",
+                  upperCase: "I",
+                },
+              },
+              {
+                id: "activity6",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_LETTER",
+                character: "N",
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+                letter: {
+                  lowerCase: "n",
+                  upperCase: "N",
+                },
+              },
+            ],
+          },
+          {
+            id: "section2",
+            icon: "speaker",
+            title: "Pronunciation",
+            completed: false,
+            metadata: {
+              description: "Practice the sounds of letters...",
+              keywords: ["sounds", "pronunciation", "phonetics"],
+            },
+            activities: [
+              {
+                id: "activity1",
+                numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionS", title: "S" },
                 audio: require("@/assets/alphabet/audio/sound/s.mp4"),
@@ -102,17 +198,6 @@ export const INITIAL_LEVEL_STATE = [
                 ],
               },
             ],
-          },
-          {
-            id: "section2",
-            icon: "speaker",
-            title: "Pronunciation",
-            completed: false,
-            metadata: {
-              description: "Practice the sounds of letters...",
-              keywords: ["sounds", "pronunciation", "phonetics"],
-            },
-            activities: [],
           },
           {
             id: "section3",

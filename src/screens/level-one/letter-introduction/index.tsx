@@ -1,4 +1,7 @@
 import LowerA from "@/assets/animation/a_animated";
+import { AVPlaybackSource, Audio } from "expo-av";
+import { useLevelStore } from "@/core/store/levels";
+import { IActivity, ILetterIntroductionActivity } from "@/types/types";
 import { SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
@@ -11,10 +14,22 @@ import {
   SqFrameIcon,
   TeacherIcon,
 } from "@/ui/icons";
-import React, { useRef, useState } from "react";
+import clsx from "clsx";
+import { Sound } from "expo-av/build/Audio";
+import React, { useEffect, useRef, useState } from "react";
 
 const LetterIntroduction = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
+
+  const { levels, updateLevels } = useLevelStore();
+  const [sound, setSound] = useState<Sound>();
+  const [isUpdatingSession, setIsUpdatingSession] = useState(false);
+  const [tappedAnswer, setTappedAnswer] = useState<IOption>();
+
+  const [activeActivity, setActiveActivity] =
+    useState<ILetterIntroductionActivity>(
+      levels[0].modules[0].sections[0].activities[0]
+    );
 
   const [selectedLetter, setSelectedLetter] = useState("a");
 
@@ -34,10 +49,32 @@ const LetterIntroduction = () => {
     uppercaseWebView.current?.injectJavaScript(jsCommand);
   };
 
+  const playSound = async (playbackSource: AVPlaybackSource) => {
+    try {
+      const { sound } = await Audio.Sound.createAsync(playbackSource);
+      if (sound) {
+        setSound(sound);
+      }
+      console.log("Playing Sound");
+      await sound.playAsync();
+    } catch (error) {
+      console.log("error in playSound", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
   return (
-    <SafeAreaView>
+    <SafeAreaView className="flex-1">
       <Header title="Introduction" modalRef={dynamicModalRef} />
-      <View className="bg-[#ECE5E1]  p-4">
+      <View className="bg-[#ECE5E1 p-4 ">
         {/* Hand written letters section */}
         <View className="relative h-[200px] bg-white">
           {/* Outside solid blue lines */}
@@ -74,7 +111,7 @@ const LetterIntroduction = () => {
           </TouchableOpacity>
         </View>
 
-        <View className="flex flex-colum gap-y-[20px]">
+        <View className="flex flex-colum gap-y-[20px] mt-10">
           {/* Sound Button */}
           <View className="flex flex-row items-center gap-x-[12px] mx-auto">
             <TouchableOpacity className="w-[40px] aspect-square">
@@ -90,10 +127,20 @@ const LetterIntroduction = () => {
           </View>
           {/* Name Button */}
           <View className="flex flex-row items-center gap-x-[12px] mx-auto">
-            <TouchableOpacity className="w-[40px] aspect-square">
+            <TouchableOpacity
+              className="w-[40px] aspect-square"
+              onPress={() => {
+                playSound(activeActivity.sound.letterSoundSrc);
+              }}
+            >
               <SpeakerIcon />
             </TouchableOpacity>
-            <TouchableOpacity className="bg-[#dce1cd] h-[80px] w-[200px] rounded-full flex flex-row items-center justify-around px-[15px]">
+            <TouchableOpacity
+              className="bg-[#dce1cd] h-[80px] w-[200px] rounded-full flex flex-row items-center justify-around px-[15px]"
+              onPress={() => {
+                playSound(activeActivity.sound.phoneticSoundSrc);
+              }}
+            >
               <Text>Name</Text>
               <View className="w-[45px] aspect-square">
                 <NameIcon />

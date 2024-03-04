@@ -19,7 +19,7 @@ const LetterSound = () => {
   const [tappedAnswer, setTappedAnswer] = useState<IOption>();
 
   const [activeActivity, setActiveActivity] = useState<IActivity>(
-    levels[0].modules[0].sections[0].activities[0]
+    levels[0].modules[0].sections[1].activities[0]
   );
 
   const optionsToRender = useMemo(
@@ -61,20 +61,20 @@ const LetterSound = () => {
   }, [sound]);
 
   const initNextActivity = () => {
-    const currentIndex = levels[0].modules[0].sections[0].activities.findIndex(
+    const currentIndex = levels[0].modules[0].sections[1].activities.findIndex(
       (activity: IActivity) => activity.id === activeActivity.id
     );
     let _nextActivity: IActivity;
     if (
       currentIndex === -1 ||
-      currentIndex === levels[0].modules[0].sections[0].activities.length - 1
+      currentIndex === levels[0].modules[0].sections[1].activities.length - 1
     ) {
       // If current element is not found or is the last element, return the first element
-      _nextActivity = levels[0].modules[0].sections[0].activities[0];
+      _nextActivity = levels[0].modules[0].sections[1].activities[0];
     } else {
       // Return the next element in the array
       _nextActivity =
-        levels[0].modules[0].sections[0].activities[currentIndex + 1];
+        levels[0].modules[0].sections[1].activities[currentIndex + 1];
     }
 
     if (_nextActivity) {
@@ -102,14 +102,14 @@ const LetterSound = () => {
                   const _updatedLevels = levels.map((level) => {
                     if (level.id !== levels[0].id) return level;
 
-                    const _updatedmodules = level.modules.map((sublevel) => {
+                    const _updatedModules = level.modules.map((sublevel) => {
                       if (sublevel.id !== levels[0].modules[0].id)
                         return sublevel;
 
                       const _updatedSections = sublevel.sections.map(
                         (section: ISection) => {
                           if (
-                            section.id !== levels[0].modules[0].sections[0].id
+                            section.id !== levels[0].modules[0].sections[1].id
                           )
                             return section;
 
@@ -141,7 +141,7 @@ const LetterSound = () => {
 
                     return {
                       ...level,
-                      modules: _updatedmodules,
+                      modules: _updatedModules,
                     };
                   });
 
