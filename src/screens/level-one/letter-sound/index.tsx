@@ -90,6 +90,7 @@ const LetterSound = () => {
         <Pressable onPress={playSound}>
           <SpeakerWaveIcon />
         </Pressable>
+        <Text>{activeActivity.numberOfTimesCorrectAnswerGiven}</Text>
         <View className="">
           {optionsToRender.map((option, index) => (
             <Pressable
@@ -155,14 +156,14 @@ const LetterSound = () => {
                     updateLevels(_updatedLevels);
                     setTappedAnswer(undefined);
                     initNextActivity();
-                  }, 5000);
+                  }, 3000);
                 } else {
                   setIsUpdatingSession(true);
                   setTimeout(() => {
                     setIsUpdatingSession(false);
                     setTappedAnswer(undefined);
                     initNextActivity();
-                  }, 5000);
+                  }, 3000);
                   console.log(option.id, activeActivity.correctAnswer.id);
                   console.log("wrong answer");
                 }
