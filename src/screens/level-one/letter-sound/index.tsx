@@ -60,10 +60,24 @@ const LetterSound = () => {
       : undefined;
   }, [sound]);
 
-  const nextActivity = () => {
-    const _nextActivity = levels[0].sublevels[0].sections[0].activities.find(
-      (activity: IActivity) => activity.id !== activeActivity.id
-    );
+  const initNextActivity = () => {
+    const currentIndex =
+      levels[0].sublevels[0].sections[0].activities.findIndex(
+        (activity: IActivity) => activity.id === activeActivity.id
+      );
+    let _nextActivity: IActivity;
+    if (
+      currentIndex === -1 ||
+      currentIndex === levels[0].sublevels[0].sections[0].activities.length - 1
+    ) {
+      // If current element is not found or is the last element, return the first element
+      _nextActivity = levels[0].sublevels[0].sections[0].activities[0];
+    } else {
+      // Return the next element in the array
+      _nextActivity =
+        levels[0].sublevels[0].sections[0].activities[currentIndex + 1];
+    }
+
     if (_nextActivity) {
       setActiveActivity(_nextActivity);
     }
@@ -140,14 +154,14 @@ const LetterSound = () => {
                     setIsUpdatingSession(false);
                     updateLevels(_updatedLevels);
                     setTappedAnswer(undefined);
-                    nextActivity();
+                    initNextActivity();
                   }, 5000);
                 } else {
                   setIsUpdatingSession(true);
                   setTimeout(() => {
                     setIsUpdatingSession(false);
                     setTappedAnswer(undefined);
-                    nextActivity();
+                    initNextActivity();
                   }, 5000);
                   console.log(option.id, activeActivity.correctAnswer.id);
                   console.log("wrong answer");
