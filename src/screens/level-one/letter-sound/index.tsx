@@ -60,8 +60,6 @@ const LetterSound = () => {
       : undefined;
   }, [sound]);
 
-  console.log(`levels`, JSON.stringify(levels, null, 2));
-
   const nextActivity = () => {
     const _nextActivity = levels[0].sublevels[0].sections[0].activities.find(
       (activity: IActivity) => activity.id !== activeActivity.id
