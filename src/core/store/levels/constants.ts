@@ -16,6 +16,36 @@ export const INITIAL_LEVEL_STATE = [
               description: "Learn letters A, B, C...",
               keywords: ["alphabet", "letters", "beginner"],
             },
+            activities: [
+              {
+                id: "activity1",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_SOUND",
+                correctAnswer: { id: "optionS", title: "S" },
+                audio: require("@/assets/alphabet/audio/sound/s.mp4"),
+                options: [
+                  { id: "optionA", title: "A" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionI", title: "I" },
+                  { id: "optionN", title: "N" },
+                ],
+              },
+              {
+                id: "activity2",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_SOUND",
+                correctAnswer: { id: "optionA", title: "A" },
+                audio: require("@/assets/alphabet/audio/sound/a.mp4"),
+                options: [
+                  { id: "optionS", title: "S" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionI", title: "I" },
+                  { id: "optionN", title: "N" },
+                ],
+              },
+            ],
           },
           {
             id: "section2",
@@ -26,6 +56,7 @@ export const INITIAL_LEVEL_STATE = [
               description: "Practice the sounds of letters...",
               keywords: ["sounds", "pronunciation", "phonetics"],
             },
+            activities: [],
           },
           {
             id: "section3",
@@ -36,6 +67,7 @@ export const INITIAL_LEVEL_STATE = [
               description: "Simple words reading practice",
               keywords: ["reading", "words", "practice"],
             },
+            activities: [],
           },
           {
             id: "section4",
@@ -46,6 +78,7 @@ export const INITIAL_LEVEL_STATE = [
               description: "Expressing and recognizing feelings",
               keywords: ["feelings", "emotions", "expression"],
             },
+            activities: [],
           },
         ],
       },

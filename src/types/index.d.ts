@@ -32,3 +32,17 @@ type DynamicModalRefType = {
   showDynamicModal: () => void;
   hideDynamicModal: () => void;
 };
+
+interface IOption {
+  id: string;
+  title: string;
+}
+
+interface IActivity {
+  id: string;
+  numberOfTimesCorrectAnswerGiven: number;
+  type: "MATCH_THE_SOUND";
+  correctAnswer: IOption;
+  audio: string;
+  options: IOption[];
+}

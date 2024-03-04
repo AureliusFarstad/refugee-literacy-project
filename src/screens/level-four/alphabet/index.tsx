@@ -1,6 +1,5 @@
 import { Button, SafeAreaView, Text } from "@/ui";
 import { BottomSheetModal, useBottomSheetModal } from "@/ui/core/bottom-sheet";
-import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 
@@ -10,7 +9,6 @@ const LetterIntroduction = () => {
 
   return (
     <SafeAreaView>
-      <FocusAwareStatusBar />
       <Button
         variant="primary"
         label="Show Bottom Sheet"

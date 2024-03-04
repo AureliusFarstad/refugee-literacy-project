@@ -11,6 +11,7 @@ const Alphabet = () => {
   return (
     <SafeAreaView>
       <FocusAwareStatusBar />
+
       <Button
         variant="primary"
         label="Show Bottom Sheet"
