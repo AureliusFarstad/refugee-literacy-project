@@ -11,7 +11,7 @@ export const INITIAL_LEVEL_STATE = [
             id: "section1",
             icon: "abc",
             title: "LetterIntroduction",
-            completed: true,
+            completed: false,
             metadata: {
               description: "Learn letters A, B, C...",
               keywords: ["alphabet", "letters", "beginner"],

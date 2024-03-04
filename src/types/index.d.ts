@@ -21,6 +21,7 @@ interface ISection {
   title: string;
   completed: boolean;
   metadata: Metadata;
+  activities: IActivity[];
 }
 
 interface IMetadata {
@@ -36,13 +37,4 @@ type DynamicModalRefType = {
 interface IOption {
   id: string;
   title: string;
-}
-
-interface IActivity {
-  id: string;
-  numberOfTimesCorrectAnswerGiven: number;
-  type: "MATCH_THE_SOUND";
-  correctAnswer: IOption;
-  audio: string;
-  options: IOption[];
 }
