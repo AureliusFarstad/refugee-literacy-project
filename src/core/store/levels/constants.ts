@@ -2,10 +2,10 @@ export const INITIAL_LEVEL_STATE = [
   {
     id: "level1",
     title: "Level 1",
-    sublevels: [
+    modules: [
       {
-        id: "sublevel1",
-        title: "Sublevel 1",
+        id: "module1",
+        title: "S,A,T,P,I,N",
         sections: [
           {
             id: "section1",
@@ -137,6 +137,21 @@ export const INITIAL_LEVEL_STATE = [
             activities: [],
           },
         ],
+      },
+      {
+        id: "module2",
+        title: "I'm am",
+        sections: [],
+      },
+      {
+        id: "module3",
+        title: "Sit pen",
+        sections: [],
+      },
+      {
+        id: "module4",
+        title: "Feelings",
+        sections: [],
       },
     ],
   },

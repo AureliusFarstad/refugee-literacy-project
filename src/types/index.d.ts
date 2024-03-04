@@ -6,7 +6,7 @@ type F1<T, RT = void> = (arg: T) => RT;
 interface ILevel {
   id: string;
   title: string;
-  sublevels: Sublevel[];
+  modules: Sublevel[];
 }
 
 interface ISublevel {
