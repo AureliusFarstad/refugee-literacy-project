@@ -1,9 +1,8 @@
 import { HeaderHomeIcon, InfoIcon, ShareIcon } from "@/ui/icons";
-import { useNavigation } from "@react-navigation/native";
-import { useCallback } from "react";
-import { Text } from "../text";
-import { View, Pressable } from "react-native";
 import { router } from "expo-router";
+import { useCallback } from "react";
+import { Pressable, View } from "react-native";
+import { Text } from "../text";
 
 type HeaderProps = {
   title: string;
