@@ -2,10 +2,10 @@ import type { BottomSheetModalProps } from "@gorhom/bottom-sheet";
 import { BottomSheetModal as GorhomBottomSheetModal } from "@gorhom/bottom-sheet";
 import * as React from "react";
 
-import { View } from "../view";
 import { renderBackdrop } from "./bottom-sheet-modal-backdrop";
 import { ModalHeader } from "./bottom-sheet-modal-header";
 import type { ModalProps, ModalRef } from "./types";
+import { View } from "react-native";
 
 export const useBottomSheetModal = () => {
   const ref = React.useRef<GorhomBottomSheetModal>(null);

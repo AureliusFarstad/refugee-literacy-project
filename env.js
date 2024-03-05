@@ -18,6 +18,7 @@ const packageJSON = require("./package.json");
 const path = require("path");
 const APP_ENV = process.env.APP_ENV ?? "development";
 const envPath = path.resolve(__dirname, `.env.${APP_ENV}`);
+const SCHEME = "refugeeliteracy"; // app scheme
 
 require("dotenv").config({
   path: envPath,
@@ -72,6 +73,7 @@ const client = z.object({
   BUNDLE_ID: z.string(),
   PACKAGE: z.string(),
   VERSION: z.string(),
+  SCHEME: z.string(),
 
   // ADD YOUR CLIENT ENV VARS HERE
   API_URL: z.string(),
@@ -93,6 +95,7 @@ const _clientEnv = {
   BUNDLE_ID: withEnvSuffix(BUNDLE_ID),
   PACKAGE: withEnvSuffix(PACKAGE),
   VERSION: packageJSON.version,
+  SCHEME: SCHEME,
 
   // ADD YOUR ENV VARS HERE TOO
   API_URL: process.env.API_URL,

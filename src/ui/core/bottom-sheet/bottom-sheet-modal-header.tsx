@@ -1,9 +1,8 @@
 import * as React from "react";
 
-import { Pressable } from "../pressable";
-import { Text } from "../text";
-import { View } from "../view";
 import { XClose } from "./x-close";
+import { View, Pressable } from "react-native";
+import { Text } from "../text";
 
 type ModalHeaderProps = {
   title?: string;

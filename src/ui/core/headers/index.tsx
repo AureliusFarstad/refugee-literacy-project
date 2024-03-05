@@ -1,9 +1,9 @@
 import { HeaderHomeIcon, InfoIcon, ShareIcon } from "@/ui/icons";
 import { useNavigation } from "@react-navigation/native";
 import { useCallback } from "react";
-import { Pressable } from "../pressable";
 import { Text } from "../text";
-import { View } from "../view";
+import { View, Pressable } from "react-native";
+import { router } from "expo-router";
 
 type HeaderProps = {
   title: string;
@@ -11,10 +11,8 @@ type HeaderProps = {
 };
 
 const Header = ({ title, modalRef }: HeaderProps) => {
-  const { navigate } = useNavigation();
-
   const navigateToHome = useCallback(() => {
-    navigate("Home");
+    router.back();
   }, []);
 
   return (
@@ -23,9 +21,7 @@ const Header = ({ title, modalRef }: HeaderProps) => {
         <Pressable onPress={navigateToHome}>
           <HeaderHomeIcon color={"white"} className="w-8 h-8" />
         </Pressable>
-        <Text variant="h3" className="text-white">
-          {title}
-        </Text>
+        <Text className="text-white">{title}</Text>
       </View>
       <View className="flex-row items-center space-x-4">
         <Pressable

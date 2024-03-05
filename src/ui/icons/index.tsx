@@ -1,4 +1,3 @@
-import { styled } from "nativewind";
 import * as React from "react";
 import type { SvgProps } from "react-native-svg";
 import Svg, {
@@ -32,10 +31,6 @@ const _Check = ({ fill = "#000", ...props }: SvgProps) => (
     />
   </Svg>
 );
-
-export const CheckIcon = styled(_Check, {
-  classProps: ["fill"],
-});
 
 export const PencilIcon = ({ color }: SvgProps) => (
   <Svg viewBox="0 0 43 43" fill="none">

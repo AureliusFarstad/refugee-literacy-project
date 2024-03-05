@@ -118,7 +118,7 @@ export const INITIAL_LEVEL_STATE = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionS", title: "S" },
-                audio: require("@/assets/alphabet/audio/sound/s.mp4"),
+                audio: require("assets/alphabet/audio/sound/s.mp4"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionT", title: "T" },
@@ -132,7 +132,7 @@ export const INITIAL_LEVEL_STATE = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionA", title: "A" },
-                audio: require("@/assets/alphabet/audio/sound/a.mp4"),
+                audio: require("assets/alphabet/audio/sound/a.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -146,7 +146,7 @@ export const INITIAL_LEVEL_STATE = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionT", title: "T" },
-                audio: require("@/assets/alphabet/audio/sound/t.mp4"),
+                audio: require("assets/alphabet/audio/sound/t.mp4"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionS", title: "S" },
@@ -160,7 +160,7 @@ export const INITIAL_LEVEL_STATE = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionP", title: "P" },
-                audio: require("@/assets/alphabet/audio/sound/p.mp4"),
+                audio: require("assets/alphabet/audio/sound/p.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -174,7 +174,7 @@ export const INITIAL_LEVEL_STATE = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionI", title: "I" },
-                audio: require("@/assets/alphabet/audio/sound/p.mp4"),
+                audio: require("assets/alphabet/audio/sound/p.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -188,7 +188,7 @@ export const INITIAL_LEVEL_STATE = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionN", title: "N" },
-                audio: require("@/assets/alphabet/audio/sound/n.mp4"),
+                audio: require("assets/alphabet/audio/sound/n.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
