@@ -12,7 +12,7 @@ type HeaderProps = {
 
 const Header = ({ title, modalRef }: HeaderProps) => {
   const navigateToHome = useCallback(() => {
-    router.back();
+    router.navigate("/");
   }, []);
 
   return (
