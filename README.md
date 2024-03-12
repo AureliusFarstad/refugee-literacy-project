@@ -19,9 +19,9 @@
 Before setting up the project, make sure you have the following installed:
 
 - Node.js: Make sure you have Node.js installed. If not, download and install it from the official website.
-- Expo CLI: Install the Expo CLI globally using npm.
+- Expo CLI: Install the Expo CLI globally using pnpm.
 
-`npm install -g expo-cli`
+`pnpm install -g expo-cli`
 
 ## Installation
 
@@ -32,13 +32,17 @@ Follow these steps to set up and install the project:
 `git clone https://github.com/AureliusFarstad/refugee-literacy-project/
 cd refugee-literacy-project`
 
-2. Install project dependencies using npx:
+2. Install project dependencies using pnpm:
 
-`npx expo install`
+`pnpm install`
 
-3. Start the Development Server:
+3. Build the project for ios/android
 
-`expo start`
+`pnpm ios`
+
+4. Start the Development Server:
+
+`pnpm start`
 
 This will start the Expo development server.
 
