@@ -1,8 +1,16 @@
+const colors = require("./src/ui/colors");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./App.{js,jsx,ts,tsx}", "./app/**/*.{js,jsx,ts,tsx}"],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        "space-mono": ["SpaceMono-Regular"],
+      },
+      colors,
+    },
   },
   plugins: [],
 };
