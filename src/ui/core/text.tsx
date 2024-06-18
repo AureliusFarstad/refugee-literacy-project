@@ -9,8 +9,7 @@ interface Props extends TextProps {
 
 export const Text = ({ className = "", style, children, ...props }: Props) => {
   const textStyle = React.useMemo(
-    () =>
-      twMerge("text-base text-black  dark:text-white font-normal", className),
+    () => twMerge("font-dongle ", className),
     [className]
   );
 
@@ -18,7 +17,7 @@ export const Text = ({ className = "", style, children, ...props }: Props) => {
     () =>
       StyleSheet.flatten([
         {
-          writingDirection: I18nManager.isRTL ? "rtl" : "ltr",
+          writingDirection: "ltr",
         },
         style,
       ]) as TextStyle,

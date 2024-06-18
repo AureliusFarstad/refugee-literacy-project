@@ -75,4 +75,22 @@ export const colors = {
     800: "#991B1B",
     900: "#7F1D1D",
   },
+  green: {
+    500: "#8AC65B",
+  },
+  bluish: {
+    500: "#62A0EC",
+  },
+  purple: {
+    500: "#C385F8",
+  },
+  red: {
+    500: "#F36889",
+  },
+  yellow: {
+    500: "#FBD65B",
+  },
+  orange: {
+    500: "#F69F4E",
+  },
 };

@@ -38,3 +38,12 @@ interface IOption {
   id: string;
   title: string;
 }
+
+interface ILesson {
+  id: string;
+  image: string;
+  title: string;
+  description: string;
+  path: string;
+  isFinished: boolean;
+}

@@ -1,5 +1,4 @@
 export * from "./button";
-export * from "./image";
 export * from "./text";
 
 // export base components from react-native
