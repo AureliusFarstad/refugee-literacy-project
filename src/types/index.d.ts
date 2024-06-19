@@ -46,4 +46,5 @@ interface ILesson {
   description: string;
   path: string;
   isFinished: boolean;
+  progressBarColor: string;
 }
