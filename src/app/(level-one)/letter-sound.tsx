@@ -1,6 +1,6 @@
 import { useLevelStore } from "@/core/store/levels";
-import { IActivity } from "@/types/types";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
+import { Switch } from "@/ui/checkbox";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import { EarIcon } from "@/ui/icons";
@@ -8,8 +8,23 @@ import { getOptionsToRender } from "@/utils/level-one";
 import clsx from "clsx";
 import { Audio } from "expo-av";
 import { Sound } from "expo-av/build/Audio";
+import { router } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { SpeakerWaveIcon } from "react-native-heroicons/solid";
+
+const SwitchExample = () => {
+  const [active, setActive] = React.useState(false);
+  return (
+    <Switch.Root
+      checked={active}
+      onChange={setActive}
+      accessibilityLabel="switch"
+      className="pb-2"
+    >
+      <Switch.Icon checked={active} />
+      <Switch.Label text="" />
+    </Switch.Root>
+  );
+};
 
 const LetterSound = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
@@ -19,7 +34,7 @@ const LetterSound = () => {
   const [tappedAnswer, setTappedAnswer] = useState<IOption>();
 
   const [activeActivity, setActiveActivity] = useState<IActivity>(
-    levels[0].modules[0].sections[1].activities[0]
+    levels[0].modules[0].sections[2].activities[0]
   );
 
   const optionsToRender = useMemo(
@@ -61,20 +76,20 @@ const LetterSound = () => {
   }, [sound]);
 
   const initNextActivity = () => {
-    const currentIndex = levels[0].modules[0].sections[1].activities.findIndex(
+    const currentIndex = levels[0].modules[0].sections[2].activities.findIndex(
       (activity: IActivity) => activity.id === activeActivity.id
     );
     let _nextActivity: IActivity;
     if (
       currentIndex === -1 ||
-      currentIndex === levels[0].modules[0].sections[1].activities.length - 1
+      currentIndex === levels[0].modules[0].sections[2].activities.length - 1
     ) {
       // If current element is not found or is the last element, return the first element
-      _nextActivity = levels[0].modules[0].sections[1].activities[0];
+      _nextActivity = levels[0].modules[0].sections[2].activities[0];
     } else {
       // Return the next element in the array
       _nextActivity =
-        levels[0].modules[0].sections[1].activities[currentIndex + 1];
+        levels[0].modules[0].sections[2].activities[currentIndex + 1];
     }
 
     if (_nextActivity) {
@@ -85,12 +100,23 @@ const LetterSound = () => {
   return (
     <SafeAreaView>
       <Header title="Sound" modalRef={dynamicModalRef} />
-      <View className="bg-[#ECE5E1] flex items-center p-4">
-        <Pressable onPress={playSound}>
-          <SpeakerWaveIcon />
+      <View className="px-5 mt-5">
+        <SwitchExample />
+      </View>
+      <Text className="text-green-500">Sound</Text>
+
+      <View className="flex items-center p-4">
+        <Pressable
+          onPress={playSound}
+          className="bg-colors-purple-500 w-[110] h-[110] rounded-full flex items-center justify-center"
+        >
+          <EarIcon />
         </Pressable>
-        <Text>{activeActivity.numberOfTimesCorrectAnswerGiven}</Text>
-        <View className="">
+        <View className="absolute top-0 flex flex-row w-full">
+          <Text>{activeActivity.numberOfTimesCorrectAnswerGiven}</Text>
+          <Text>{activeActivity.correctAnswer.title}</Text>
+        </View>
+        <View className="flex flex-row w-full flex-1">
           {optionsToRender.map((option, index) => (
             <Pressable
               key={option.id}
@@ -109,7 +135,7 @@ const LetterSound = () => {
                       const _updatedSections = sublevel.sections.map(
                         (section: ISection) => {
                           if (
-                            section.id !== levels[0].modules[0].sections[1].id
+                            section.id !== levels[0].modules[0].sections[2].id
                           )
                             return section;
 
@@ -146,44 +172,62 @@ const LetterSound = () => {
                   });
 
                   setIsUpdatingSession(true);
+                  router.push({
+                    pathname: "/modal",
+                    params: { correctOption: option.title },
+                  });
                   setTimeout(() => {
                     setIsUpdatingSession(false);
                     updateLevels(_updatedLevels);
                     setTappedAnswer(undefined);
                     initNextActivity();
-                  }, 3000);
+                    router.back();
+                  }, 1000);
                 } else {
                   setIsUpdatingSession(true);
                   setTimeout(() => {
                     setIsUpdatingSession(false);
                     setTappedAnswer(undefined);
                     initNextActivity();
-                  }, 3000);
+                  }, 1000);
+                  console.log(activeActivity);
+                  console.log({ tappedAnswer });
                   console.log(option.id, activeActivity.correctAnswer.id);
                   console.log("wrong answer");
                 }
               }}
-              className="bg-white p-4 rounded-lg mt-4"
-            >
-              <Text
-                className={clsx("", {
-                  "text-green-400":
-                    isUpdatingSession &&
-                    option.id === tappedAnswer?.id &&
-                    activeActivity.correctAnswer.id === tappedAnswer.id,
-                  "text-red-400":
+              className={clsx(
+                "bg-colors-purple-200 w-24 h-24 rounded-full flex items-center justify-center absolute",
+                {
+                  "left-10 top-40": index === 0,
+                  "left-36 top-72": index === 1,
+                  "right-0 top-40": index === 2,
+                  " bg-red-500 text-white":
                     isUpdatingSession &&
                     option.id === tappedAnswer?.id &&
                     activeActivity.correctAnswer.id !== tappedAnswer.id,
+                  "bg-green-500":
+                    isUpdatingSession &&
+                    option.id === tappedAnswer?.id &&
+                    activeActivity.correctAnswer.id === tappedAnswer.id,
+                }
+              )}
+            >
+              <Text
+                className={clsx("text-4xl text-colors-purple-500 font-bold", {
+                  "text-white":
+                    (isUpdatingSession &&
+                      option.id === tappedAnswer?.id &&
+                      activeActivity.correctAnswer.id === tappedAnswer.id) ||
+                    (isUpdatingSession &&
+                      option.id === tappedAnswer?.id &&
+                      activeActivity.correctAnswer.id !== tappedAnswer.id),
                 })}
               >
                 {option.title}
               </Text>
             </Pressable>
           ))}
-        </View>
-        <View>
-          <Text>{activeActivity.correctAnswer.title}</Text>
         </View>
       </View>
       <DynamicModal ref={dynamicModalRef}>
