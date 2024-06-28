@@ -1,4 +1,4 @@
-export const INITIAL_LEVEL_STATE = [
+export const INITIAL_LEVEL_STATE: ILevel[] = [
   {
     id: "level1",
     title: "Level 1",
@@ -30,6 +30,12 @@ export const INITIAL_LEVEL_STATE = [
                   lowerCase: "s",
                   upperCase: "S",
                 },
+                audio: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                options: [],
               },
               {
                 id: "activity2",
@@ -44,6 +50,12 @@ export const INITIAL_LEVEL_STATE = [
                   lowerCase: "a",
                   upperCase: "A",
                 },
+                audio: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                options: [],
               },
               {
                 id: "activity3",
@@ -58,6 +70,12 @@ export const INITIAL_LEVEL_STATE = [
                   lowerCase: "t",
                   upperCase: "T",
                 },
+                audio: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                options: [],
               },
               {
                 id: "activity4",
@@ -72,6 +90,12 @@ export const INITIAL_LEVEL_STATE = [
                   lowerCase: "p",
                   upperCase: "P",
                 },
+                audio: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                options: [],
               },
               {
                 id: "activity5",
@@ -86,6 +110,12 @@ export const INITIAL_LEVEL_STATE = [
                   lowerCase: "i",
                   upperCase: "I",
                 },
+                audio: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                options: [],
               },
               {
                 id: "activity6",
@@ -100,11 +130,28 @@ export const INITIAL_LEVEL_STATE = [
                   lowerCase: "n",
                   upperCase: "N",
                 },
+                audio: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                options: [],
               },
             ],
           },
           {
             id: "section2",
+            icon: "book",
+            title: "Reading",
+            completed: true,
+            metadata: {
+              description: "Simple words reading practice",
+              keywords: ["reading", "words", "practice"],
+            },
+            activities: [],
+          },
+          {
+            id: "section3",
             icon: "speaker",
             title: "Pronunciation",
             completed: false,
@@ -126,6 +173,15 @@ export const INITIAL_LEVEL_STATE = [
                   { id: "optionI", title: "I" },
                   { id: "optionN", title: "N" },
                 ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
               },
               {
                 id: "activity2",
@@ -140,6 +196,15 @@ export const INITIAL_LEVEL_STATE = [
                   { id: "optionI", title: "I" },
                   { id: "optionN", title: "N" },
                 ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
               },
               {
                 id: "activity3",
@@ -154,6 +219,15 @@ export const INITIAL_LEVEL_STATE = [
                   { id: "optionI", title: "I" },
                   { id: "optionN", title: "N" },
                 ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
               },
               {
                 id: "activity4",
@@ -168,13 +242,22 @@ export const INITIAL_LEVEL_STATE = [
                   { id: "optionI", title: "I" },
                   { id: "optionN", title: "N" },
                 ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
               },
               {
                 id: "activity5",
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionI", title: "I" },
-                audio: require("assets/alphabet/audio/sound/p.mp4"),
+                audio: require("assets/alphabet/audio/sound/i.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -182,6 +265,15 @@ export const INITIAL_LEVEL_STATE = [
                   { id: "optionP", title: "P" },
                   { id: "optionN", title: "N" },
                 ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
               },
               {
                 id: "activity6",
@@ -196,22 +288,170 @@ export const INITIAL_LEVEL_STATE = [
                   { id: "optionP", title: "P" },
                   { id: "optionI", title: "I" },
                 ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
               },
             ],
           },
           {
-            id: "section3",
-            icon: "book",
-            title: "Reading",
-            completed: true,
+            id: "section4",
+            icon: "speaker",
+            title: "Pronunciation",
+            completed: false,
             metadata: {
-              description: "Simple words reading practice",
-              keywords: ["reading", "words", "practice"],
+              description: "Practice the names of letters...",
+              keywords: ["sounds", "pronunciation", "phonetics"],
             },
-            activities: [],
+            activities: [
+              {
+                id: "activity1",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_NAME",
+                correctAnswer: { id: "optionS", title: "S" },
+                audio: require("assets/alphabet/audio/name/s.mp4"),
+                options: [
+                  { id: "optionA", title: "A" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionI", title: "I" },
+                  { id: "optionN", title: "N" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+              },
+              {
+                id: "activity2",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_NAME",
+                correctAnswer: { id: "optionA", title: "A" },
+                audio: require("assets/alphabet/audio/name/a.mp4"),
+                options: [
+                  { id: "optionS", title: "S" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionI", title: "I" },
+                  { id: "optionN", title: "N" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+              },
+              {
+                id: "activity3",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_NAME",
+                correctAnswer: { id: "optionT", title: "T" },
+                audio: require("assets/alphabet/audio/name/t.mp4"),
+                options: [
+                  { id: "optionA", title: "A" },
+                  { id: "optionS", title: "S" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionI", title: "I" },
+                  { id: "optionN", title: "N" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+              },
+              {
+                id: "activity4",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_NAME",
+                correctAnswer: { id: "optionP", title: "P" },
+                audio: require("assets/alphabet/audio/name/p.mp4"),
+                options: [
+                  { id: "optionS", title: "S" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionA", title: "A" },
+                  { id: "optionI", title: "I" },
+                  { id: "optionN", title: "N" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+              },
+              {
+                id: "activity5",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_NAME",
+                correctAnswer: { id: "optionI", title: "I" },
+                audio: require("assets/alphabet/audio/name/i.mp4"),
+                options: [
+                  { id: "optionS", title: "S" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionA", title: "A" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionN", title: "N" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+              },
+              {
+                id: "activity6",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_NAME",
+                correctAnswer: { id: "optionN", title: "N" },
+                audio: require("assets/alphabet/audio/name/n.mp4"),
+                options: [
+                  { id: "optionS", title: "S" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionA", title: "A" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionI", title: "I" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+              },
+            ],
           },
           {
-            id: "section4",
+            id: "section5",
             icon: "emotions",
             title: "Feelings",
             completed: true,
