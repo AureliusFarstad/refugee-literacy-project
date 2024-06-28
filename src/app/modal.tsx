@@ -1,32 +1,37 @@
-import { Text } from "@/ui";
+import { useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 export default function ModalScreen() {
+  const { correctOption } = useLocalSearchParams();
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="dark" />
+      <View className="flex flex-1 items-center justify-center">
+        <Text className="text-white text-4xl font-bold">{correctOption}</Text>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#C385F8", // Header background color
   },
-  title: {
-    fontSize: 20,
+  headerText: {
+    fontSize: 16,
     fontWeight: "bold",
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  content: {
+    flex: 1,
+    backgroundColor: "#C385F8", // Light purple color
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  contentText: {
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
