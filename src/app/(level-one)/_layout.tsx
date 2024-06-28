@@ -3,17 +3,19 @@ import React from "react";
 
 import { LevelOneBottomTabRoutes } from "@/types/navigation-types";
 import {
-  EarIcon,
-  LetterMatchIcon,
-  NameIcon,
-  PencilIcon,
-  TeacherIcon,
+  EarTabBarIcon,
+  LetterFormationIcon,
+  LetterMatchingIcon,
+  LetterNameIcon,
+  TeacherTipsIcon,
 } from "@/ui/icons";
 import { SvgProps } from "react-native-svg";
+import { isIos } from "@/utils/layout";
 
 type BarIconType = {
   name: keyof LevelOneBottomTabRoutes;
   color: string;
+  focused: boolean;
 };
 
 type TabIconsType = {
@@ -21,11 +23,11 @@ type TabIconsType = {
 };
 
 const tabsIcons: TabIconsType = {
-  "letter-introduction": (props: SvgProps) => <TeacherIcon {...props} />,
-  "letter-formation": (props: SvgProps) => <PencilIcon {...props} />,
-  "letter-sound": (props: SvgProps) => <EarIcon {...props} />,
-  "letter-name": (props: SvgProps) => <NameIcon {...props} />,
-  "letter-matching": (props: SvgProps) => <LetterMatchIcon {...props} />,
+  "letter-introduction": (props: SvgProps) => <TeacherTipsIcon {...props} />,
+  "letter-formation": (props: SvgProps) => <LetterFormationIcon {...props} />,
+  "letter-sound": (props: SvgProps) => <EarTabBarIcon {...props} />,
+  "letter-name": (props: SvgProps) => <LetterNameIcon {...props} />,
+  "letter-matching": (props: SvgProps) => <LetterMatchingIcon {...props} />,
 };
 
 const BarIcon = ({ color, name, ...reset }: BarIconType) => {
@@ -64,13 +66,13 @@ const tabs: TabType[] = [
 export default function TabLayout() {
   return (
     <Tabs
-      screenOptions={({ route }) => ({
+      screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#55B8A0",
-        },
-        tabBarIconStyle: {
-          marginVertical: 4,
+          backgroundColor: "#C385F8",
+          paddingTop: isIos ? 16 : 4,
+          height: isIos ? 108 : 80,
+          paddingHorizontal: 12,
         },
         tabBarInactiveTintColor: "white",
         tabBarActiveTintColor: "black",
@@ -85,7 +87,9 @@ export default function TabLayout() {
             name={name}
             options={{
               title: label,
-              tabBarIcon: ({ color }) => <BarIcon name={name} color={color} />,
+              tabBarIcon: ({ color, focused }) => (
+                <BarIcon name={name} color={color} focused={focused} />
+              ),
             }}
           />
         );
