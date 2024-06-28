@@ -1,8 +1,14 @@
-import { HeaderHomeIcon, InfoIcon, ShareIcon } from "@/ui/icons";
 import { router } from "expo-router";
 import { useCallback } from "react";
 import { Pressable, View } from "react-native";
+import {
+  HomeIcon,
+  InformationCircleIcon,
+  ShareIcon,
+} from "react-native-heroicons/solid";
 import { Text } from "../text";
+
+const SIZE = 36;
 
 type HeaderProps = {
   title: string;
@@ -15,22 +21,24 @@ const Header = ({ title, modalRef }: HeaderProps) => {
   }, []);
 
   return (
-    <View className="flex-row justify-between items-center p-4 bg-[#6FB6A1]">
+    <View className="flex-row justify-between items-center p-4">
       <View className="flex-row items-center space-x-4">
-        <Pressable onPress={navigateToHome}>
-          <HeaderHomeIcon color={"white"} className="w-8 h-8" />
+        <Pressable onPress={navigateToHome} className="p-2">
+          <HomeIcon color={"#C385F8"} size={SIZE} />
         </Pressable>
-        <Text className="text-white">{title}</Text>
       </View>
       <View className="flex-row items-center space-x-4">
         <Pressable
           onPress={() => {
             modalRef?.current?.showDynamicModal();
           }}
+          className="p-2"
         >
-          <InfoIcon color={"white"} />
+          <InformationCircleIcon color={"#C385F8"} size={SIZE} />
         </Pressable>
-        <ShareIcon color={"white"} />
+        <View className="p-2">
+          <ShareIcon color={"#C385F8"} size={SIZE} />
+        </View>
       </View>
     </View>
   );
