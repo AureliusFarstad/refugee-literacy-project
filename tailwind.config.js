@@ -7,9 +7,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        dongle: ["Dongle_400Regular"],
-        sans: ["Dongle_400Regular"],
-        mono: ["Dongle_400Regular"],
+        mono: ["Inter"],
+        sans: ["Inter"],
       },
       colors,
     },
