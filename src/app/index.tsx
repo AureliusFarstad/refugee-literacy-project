@@ -2,6 +2,7 @@ import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { CheckIcon, DashesIcon, MultiLingualIcon } from "@/ui/icons";
 import { Image } from "expo-image";
 
+import ProgressBar from "@/ui/components/home/progress-bar";
 import {
   HOME_BANNER_IMAGE,
   LESSON_FOUR_IMAGE,
@@ -11,10 +12,10 @@ import {
   TEACHER_TIP_IMAGE,
 } from "@/ui/components/illustrations/home";
 import { WIDTH } from "@/utils/layout";
+import { router } from "expo-router";
 import React, { useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ProgressBar from "@/ui/components/home/progress-bar";
 
 const LESSONS = [
   {
@@ -22,7 +23,7 @@ const LESSONS = [
     image: TEACHER_TIP_IMAGE,
     title: "Teacher tip",
     description: "Introduction to the alphabet",
-    path: "/(level-one)/letter-introduction",
+    path: "/(level-one)/letter-formation",
     isFinished: true,
     progressBarColor: "bg-[#2B4AB0]",
   },
@@ -31,7 +32,7 @@ const LESSONS = [
     image: LESSON_ONE_IMAGE,
     title: "Lesson 1",
     description: "Introduction to the alphabet",
-    path: "/(level-one)/letter-introduction",
+    path: "/(level-one)/letter-name",
     isFinished: false,
     progressBarColor: "bg-[#6D28D9]",
   },
@@ -40,7 +41,7 @@ const LESSONS = [
     image: LESSON_TWO_IMAGE,
     title: "Lesson 2",
     description: "Introduction to the alphabet",
-    path: "/(level-one)/letter-introduction",
+    path: "/(level-one)/letter-sound",
     isFinished: false,
     progressBarColor: "bg-[#B43855]",
   },
@@ -68,7 +69,12 @@ const Home = () => {
   const [lessons, setLessons] = useState<ILesson[]>(LESSONS);
   const renderItem = ({ item }: { item: ILesson }) => {
     return (
-      <View className="flex px-5">
+      <Pressable
+        className="flex px-5"
+        onPress={() => {
+          router.push(item.path);
+        }}
+      >
         <View className="flex flex-row">
           <View className="bg-colors-green-500 w-12 h-12 rounded-full p-2 items-center justify-center">
             <MultiLingualIcon />
@@ -92,7 +98,7 @@ const Home = () => {
         <View className="absolute top-16 left-10">
           <DashesIcon />
         </View>
-      </View>
+      </Pressable>
     );
   };
   return (
