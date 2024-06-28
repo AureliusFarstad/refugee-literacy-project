@@ -1,6 +1,5 @@
 import LowerA from "assets/animation/a_animated";
 import { useLevelStore } from "@/core/store/levels";
-import { ILetterIntroductionActivity } from "@/types/types";
 import { SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
