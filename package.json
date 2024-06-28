@@ -58,6 +58,7 @@
     "expo-system-ui": "~2.9.3",
     "expo-web-browser": "~12.8.2",
     "lottie-react-native": "6.5.1",
+    "moti": "^0.29.0",
     "nativewind": "^4.0.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
