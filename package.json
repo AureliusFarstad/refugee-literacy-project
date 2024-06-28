@@ -39,6 +39,7 @@
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/native-stack": "^6.9.18",
     "@react-navigation/stack": "^6.3.21",
+    "@shopify/react-native-skia": "^1.2.3",
     "@svgator/react-native": "^2.0.1",
     "app-icon-badge": "^0.0.15",
     "clsx": "^2.1.0",
