@@ -6,13 +6,13 @@ type F1<T, RT = void> = (arg: T) => RT;
 interface ILevel {
   id: string;
   title: string;
-  modules: Sublevel[];
+  modules: ISublevel[];
 }
 
 interface ISublevel {
   id: string;
   title: string;
-  sections: Section[];
+  sections: ISection[];
 }
 
 interface ISection {
@@ -22,6 +22,11 @@ interface ISection {
   completed: boolean;
   metadata: Metadata;
   activities: IActivity[];
+}
+
+interface Option {
+  id: string;
+  title: string;
 }
 
 interface IMetadata {
@@ -39,6 +44,33 @@ interface IOption {
   title: string;
 }
 
+interface IActivity {
+  id: string;
+  numberOfTimesCorrectAnswerGiven: number;
+  type: "MATCH_THE_LETTER" | "MATCH_THE_SOUND" | "MATCH_THE_NAME";
+  character: string;
+  correctAnswer: Option;
+  audio: AVPlaybackSource;
+  options: Option[];
+  sound: {
+    letterSoundSrc: string;
+    phoneticSoundSrc: string;
+  };
+  letter: {
+    lowerCase: string;
+    upperCase: string;
+  };
+}
+
+interface IActivityWithSoundAndName {
+  id: string;
+  numberOfTimesCorrectAnswerGiven: number;
+  type: "MATCH_THE_LETTER" | "MATCH_THE_SOUND" | "MATCH_THE_NAME";
+  correctAnswer: Option;
+  audio: AVPlaybackSource;
+  options: Option[];
+}
+
 interface ILesson {
   id: string;
   image: string;
@@ -47,4 +79,8 @@ interface ILesson {
   path: string;
   isFinished: boolean;
   progressBarColor: string;
+}
+
+interface ExtendedSvgProps extends SvgProps {
+  focused?: boolean;
 }
