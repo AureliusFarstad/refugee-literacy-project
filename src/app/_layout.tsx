@@ -1,10 +1,14 @@
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  useFonts,
+} from "@expo-google-fonts/inter";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-
-import { useFonts, Dongle_400Regular } from "@expo-google-fonts/dongle";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "../../global.css";
-import { Stack } from "expo-router";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -21,7 +25,9 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    Dongle_400Regular,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
     ...FontAwesome.font,
   });
 
@@ -48,7 +54,15 @@ function RootLayoutNav() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(level-one)" options={{ headerShown: false }} />
-      <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+      <Stack.Screen
+        name="modal"
+        options={{
+          animation: "slide_from_bottom",
+          presentation: "containedModal",
+          headerShown: false,
+          headerShadowVisible: false,
+        }}
+      />
     </Stack>
   );
 }
