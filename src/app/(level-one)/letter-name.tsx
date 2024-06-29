@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Alert } from "react-native";
 
@@ -34,6 +34,8 @@ const LetterName = () => {
   const [sound, setSound] = useState<Sound>();
   const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   const [tappedAnswer, setTappedAnswer] = useState<IOption>();
+
+  const pathname = usePathname();
 
   const [activeActivity, setActiveActivity] =
     useState<IActivityWithSoundAndName>(
@@ -103,22 +105,27 @@ const LetterName = () => {
   };
 
   useEffect(() => {
+    if (pathname !== "/letter-name") {
+      return;
+    }
+
     /**
      * Check if each activity have been answered correctly twice if so means level completed
      */
     const currentSection = levels[0].modules[0].sections[3];
     if (
       currentSection.activities.every(
-        (activity) => activity.numberOfTimesCorrectAnswerGiven >= 3
+        (activity) => activity.numberOfTimesCorrectAnswerGiven >= 1
       )
     ) {
-      Alert.alert("Done");
+      Alert.alert("Activity Completed");
+      router.navigate("/(level-one)/letter-matching");
     }
-  });
+  }, [levels, activeActivity, pathname]);
 
   return (
     <SafeAreaView>
-      <Header title="Sound" modalRef={dynamicModalRef} />
+      <Header title="Name" modalRef={dynamicModalRef} />
       <View className="mt-5 px-5">
         <SwitchExample />
       </View>

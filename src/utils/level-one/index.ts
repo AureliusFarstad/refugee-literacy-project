@@ -38,3 +38,15 @@ export const getOptionsToRender = (
   ].sort(() => Math.random() - 0.5);
   return _shuffledOptionsWithCorrectAnswer;
 };
+
+/**
+ * Shuffle letters
+ */
+
+export const shuffleLetters = (letters: string[]) => {
+  for (let i = letters.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [letters[i], letters[j]] = [letters[j], letters[i]];
+  }
+  return letters;
+};

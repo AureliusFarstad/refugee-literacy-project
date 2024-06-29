@@ -161,11 +161,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
             },
             activities: [
               {
-                id: "activity1",
+                id: "activity4_1",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
+                type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionS", title: "S" },
-                audio: require("assets/alphabet/audio/sound/s.mp4"),
+                audio: require("assets/alphabet/audio/name/s.mp4"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionT", title: "T" },
@@ -184,11 +184,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
               },
               {
-                id: "activity2",
+                id: "activity4_2",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
+                type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionA", title: "A" },
-                audio: require("assets/alphabet/audio/sound/a.mp4"),
+                audio: require("assets/alphabet/audio/name/a.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -207,11 +207,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
               },
               {
-                id: "activity3",
+                id: "activity4_3",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
+                type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionT", title: "T" },
-                audio: require("assets/alphabet/audio/sound/t.mp4"),
+                audio: require("assets/alphabet/audio/name/t.mp4"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionS", title: "S" },
@@ -230,11 +230,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
               },
               {
-                id: "activity4",
+                id: "activity4_4",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
+                type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionP", title: "P" },
-                audio: require("assets/alphabet/audio/sound/p.mp4"),
+                audio: require("assets/alphabet/audio/name/p.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -253,11 +253,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
               },
               {
-                id: "activity5",
+                id: "activity4_5",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
+                type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionI", title: "I" },
-                audio: require("assets/alphabet/audio/sound/i.mp4"),
+                audio: require("assets/alphabet/audio/name/i.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -276,11 +276,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
               },
               {
-                id: "activity6",
+                id: "activity4_6",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
+                type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionN", title: "N" },
-                audio: require("assets/alphabet/audio/sound/n.mp4"),
+                audio: require("assets/alphabet/audio/name/n.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -311,11 +311,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
             },
             activities: [
               {
-                id: "activity1",
+                id: "activity3_1",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
+                type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionS", title: "S" },
-                audio: require("assets/alphabet/audio/name/s.mp4"),
+                audio: require("assets/alphabet/audio/sound/s.mp4"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionT", title: "T" },
@@ -334,11 +334,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
               },
               {
-                id: "activity2",
+                id: "activity3_2",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
+                type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionA", title: "A" },
-                audio: require("assets/alphabet/audio/name/a.mp4"),
+                audio: require("assets/alphabet/audio/sound/a.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -357,11 +357,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
               },
               {
-                id: "activity3",
+                id: "activity3_3",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
+                type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionT", title: "T" },
-                audio: require("assets/alphabet/audio/name/t.mp4"),
+                audio: require("assets/alphabet/audio/sound/t.mp4"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionS", title: "S" },
@@ -380,11 +380,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
               },
               {
-                id: "activity4",
+                id: "activity3_4",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
+                type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionP", title: "P" },
-                audio: require("assets/alphabet/audio/name/p.mp4"),
+                audio: require("assets/alphabet/audio/sound/p.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -403,11 +403,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
               },
               {
-                id: "activity5",
+                id: "activity3_5",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
+                type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionI", title: "I" },
-                audio: require("assets/alphabet/audio/name/i.mp4"),
+                audio: require("assets/alphabet/audio/sound/i.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -426,11 +426,11 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
               },
               {
-                id: "activity6",
+                id: "activity3_6",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
+                type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionN", title: "N" },
-                audio: require("assets/alphabet/audio/name/n.mp4"),
+                audio: require("assets/alphabet/audio/sound/n.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },

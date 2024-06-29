@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Alert } from "react-native";
 
@@ -35,6 +35,8 @@ const LetterSound = () => {
   const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   const [tappedAnswer, setTappedAnswer] = useState<IOption>();
 
+  const pathname = usePathname();
+
   const [activeActivity, setActiveActivity] = useState<IActivity>(
     levels[0].modules[0].sections[2].activities[0]
   );
@@ -44,9 +46,6 @@ const LetterSound = () => {
       getOptionsToRender(activeActivity.options, activeActivity.correctAnswer),
     [activeActivity]
   );
-
-  console.log(`optionsToRender`, JSON.stringify(optionsToRender, null, 2));
-  console.log(`activeActivity`, JSON.stringify(activeActivity, null, 2));
 
   /**
    * 1. 6 letters, S,A,T,P,I,N
@@ -104,24 +103,32 @@ const LetterSound = () => {
     }
   };
 
+  console.log(`🍟🍟🍟`);
+  console.log("logs from letter sound");
+  console.log(
+    levels[0].modules[0].sections[2].activities.map(
+      (activity) => activity.numberOfTimesCorrectAnswerGiven
+    )
+  );
+
   useEffect(() => {
+    if (pathname !== "/letter-sound") {
+      return;
+    }
     /**
      * Check if each activity have been answered correctly twice if so means level completed
      */
     const currentSection = levels[0].modules[0].sections[2];
-    console.log(
-      currentSection.activities.map(
-        (activity) => activity.numberOfTimesCorrectAnswerGiven
-      )
-    );
+
     if (
       currentSection.activities.every(
-        (activity) => activity.numberOfTimesCorrectAnswerGiven >= 2
+        (activity) => activity.numberOfTimesCorrectAnswerGiven >= 1
       )
     ) {
-      Alert.alert("Completed");
+      Alert.alert("Activity Completed");
+      router.navigate("/(level-one)/letter-name");
     }
-  });
+  }, [levels, activeActivity, pathname]);
 
   return (
     <SafeAreaView>
