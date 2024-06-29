@@ -72,7 +72,7 @@ const Home = () => {
       <Pressable
         className="flex px-5"
         onPress={() => {
-          router.push(item.path);
+          router.push(item.path as never);
         }}
       >
         <View className="flex flex-row">
