@@ -29,7 +29,7 @@
     "lint:translations": "eslint ./src/translations/ --fix --ext .json  ",
     "eas-build-pre-install": "./scripts/eas-pre-install",
     "preinstall": "npx only-allow pnpm",
-    "postinstall": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@expo-google-fonts/dongle": "^0.2.3",
@@ -91,8 +91,10 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
     "typescript": "^5.3.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.3.0"
+    "husky": "^9.0.1",
+    "lint-staged": "^13.3.0",
+    "@commitlint/cli": "^17.8.1",
+    "@commitlint/config-conventional": "^17.8.1"
   },
   "private": true,
   "packageManager": "pnpm@8.15.1"
