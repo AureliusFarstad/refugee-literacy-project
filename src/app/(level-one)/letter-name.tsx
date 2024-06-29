@@ -109,7 +109,7 @@ const LetterName = () => {
     const currentSection = levels[0].modules[0].sections[3];
     if (
       currentSection.activities.every(
-        (activity) => activity.numberOfTimesCorrectAnswerGiven === 2
+        (activity) => activity.numberOfTimesCorrectAnswerGiven >= 3
       )
     ) {
       Alert.alert("Done");
@@ -119,7 +119,7 @@ const LetterName = () => {
   return (
     <SafeAreaView>
       <Header title="Sound" modalRef={dynamicModalRef} />
-      <View className="mt-5 bg-green-500 px-5">
+      <View className="mt-5 px-5">
         <SwitchExample />
       </View>
       <View className="flex items-center p-4">
@@ -129,10 +129,6 @@ const LetterName = () => {
         >
           <EarIcon />
         </Pressable>
-        <View className="absolute top-0 flex w-full flex-row">
-          <Text>{activeActivity.numberOfTimesCorrectAnswerGiven}</Text>
-          <Text>{activeActivity.correctAnswer.title}</Text>
-        </View>
         <View className="flex w-full flex-1 flex-row">
           {optionsToRender.map((option, index) => (
             <Pressable

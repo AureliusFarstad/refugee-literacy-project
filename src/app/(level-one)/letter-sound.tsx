@@ -3,6 +3,7 @@ import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import { router } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Alert } from "react-native";
 
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
@@ -43,6 +44,9 @@ const LetterSound = () => {
       getOptionsToRender(activeActivity.options, activeActivity.correctAnswer),
     [activeActivity]
   );
+
+  console.log(`optionsToRender`, JSON.stringify(optionsToRender, null, 2));
+  console.log(`activeActivity`, JSON.stringify(activeActivity, null, 2));
 
   /**
    * 1. 6 letters, S,A,T,P,I,N
@@ -100,13 +104,31 @@ const LetterSound = () => {
     }
   };
 
+  useEffect(() => {
+    /**
+     * Check if each activity have been answered correctly twice if so means level completed
+     */
+    const currentSection = levels[0].modules[0].sections[2];
+    console.log(
+      currentSection.activities.map(
+        (activity) => activity.numberOfTimesCorrectAnswerGiven
+      )
+    );
+    if (
+      currentSection.activities.every(
+        (activity) => activity.numberOfTimesCorrectAnswerGiven >= 2
+      )
+    ) {
+      Alert.alert("Completed");
+    }
+  });
+
   return (
     <SafeAreaView>
       <Header title="Sound" modalRef={dynamicModalRef} />
       <View className="mt-5 px-5">
         <SwitchExample />
       </View>
-      <Text className="text-green-500">Sound</Text>
 
       <View className="flex items-center p-4">
         <Pressable
@@ -115,10 +137,6 @@ const LetterSound = () => {
         >
           <EarIcon />
         </Pressable>
-        <View className="absolute top-0 flex w-full flex-row">
-          <Text>{activeActivity.numberOfTimesCorrectAnswerGiven}</Text>
-          <Text>{activeActivity.correctAnswer.title}</Text>
-        </View>
         <View className="flex w-full flex-1 flex-row">
           {optionsToRender.map((option, index) => (
             <Pressable
