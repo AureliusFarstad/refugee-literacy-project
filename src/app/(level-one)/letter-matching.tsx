@@ -10,9 +10,6 @@ const LetterMatching = () => {
   return (
     <SafeAreaView>
       <Header title="Matching" modalRef={dynamicModalRef} />
-      <View className="bg-[#ECE5E1] flex items-center p-4">
-        <Text>content goes here</Text>
-      </View>
       <DynamicModal ref={dynamicModalRef}>
         <View className="p-4 bg-white rounded-lg">
           <Text>Letter introduction activity</Text>

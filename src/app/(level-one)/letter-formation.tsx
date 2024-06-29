@@ -10,9 +10,6 @@ const LetterFormation = () => {
   return (
     <SafeAreaView>
       <Header title="Formation" modalRef={dynamicModalRef} />
-      <View className="bg-[#ECE5E1] flex items-center p-4">
-        <Text>content goes here</Text>
-      </View>
       <DynamicModal ref={dynamicModalRef}>
         <View className="p-4 bg-white rounded-lg">
           <Text>Letter formation activity</Text>

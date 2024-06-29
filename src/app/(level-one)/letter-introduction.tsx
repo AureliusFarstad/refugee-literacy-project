@@ -23,10 +23,9 @@ const LetterIntroduction = () => {
   const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   const [tappedAnswer, setTappedAnswer] = useState<IOption>();
 
-  const [activeActivity, setActiveActivity] =
-    useState<ILetterIntroductionActivity>(
-      levels[0].modules[0].sections[0].activities[0]
-    );
+  const [activeActivity, setActiveActivity] = useState(
+    levels[0].modules[0].sections[0].activities[0]
+  );
 
   const [selectedLetter, setSelectedLetter] = useState("a");
 
