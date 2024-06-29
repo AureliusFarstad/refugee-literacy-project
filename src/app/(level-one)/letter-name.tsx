@@ -10,7 +10,7 @@ import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import { Switch } from "@/ui/checkbox";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
-import { EarIcon } from "@/ui/icons";
+import { EarIcon, LettersNameIcon } from "@/ui/icons";
 import { getOptionsToRender } from "@/utils/level-one";
 
 const SwitchExample = () => {
@@ -134,7 +134,7 @@ const LetterName = () => {
           onPress={playSound}
           className="flex size-[110] items-center justify-center rounded-full bg-colors-purple-500"
         >
-          <EarIcon />
+          <LettersNameIcon />
         </Pressable>
         <View className="flex w-full flex-1 flex-row">
           {optionsToRender.map((option, index) => (
