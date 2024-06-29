@@ -28,7 +28,8 @@
     "type-check": "tsc  --noemit",
     "lint:translations": "eslint ./src/translations/ --fix --ext .json  ",
     "eas-build-pre-install": "./scripts/eas-pre-install",
-    "prepare": "husky install && chmod ug+x .husky/*"
+    "preinstall": "npx only-allow pnpm",
+    "postinstall": "husky install"
   },
   "dependencies": {
     "@expo-google-fonts/dongle": "^0.2.3",
