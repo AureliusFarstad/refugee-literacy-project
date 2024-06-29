@@ -1,6 +1,9 @@
 import { create } from "zustand";
-import { TokenType, getToken, removeToken, setToken } from "./utils";
+
 import { createSelectors } from "@/core/utils";
+
+import type { TokenType } from "./utils";
+import { getToken, removeToken, setToken } from "./utils";
 
 interface AuthState {
   token: TokenType | null;

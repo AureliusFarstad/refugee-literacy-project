@@ -1,6 +1,8 @@
 import React from "react";
-import { StyleProp, View, ViewStyle } from "react-native";
-import Modal, { ModalProps } from "react-native-modal";
+import type { StyleProp, ViewStyle } from "react-native";
+import { View } from "react-native";
+import type { ModalProps } from "react-native-modal";
+import Modal from "react-native-modal";
 
 type CustomModalProps = {
   style?: StyleProp<ViewStyle>;

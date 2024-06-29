@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  PanResponder,
-  PanResponderGestureState,
-  StyleSheet,
-} from "react-native";
+import { PanResponder, StyleSheet, Text, View } from "react-native";
 
 interface LetterPosition {
   x: number;
@@ -21,7 +15,7 @@ const LetterMatchingGame = () => {
   const [draggingLetter, setDraggingLetter] = useState<string | null>(null);
   const [draggingPosition, setDraggingPosition] =
     useState<LetterPosition | null>(null);
-  const [letterPositions, setLetterPositions] = useState<LetterPositions>({
+  const [letterPositions] = useState<LetterPositions>({
     a: { x: 50, y: 100 },
     b: { x: 50, y: 200 },
     c: { x: 50, y: 300 },

@@ -51,7 +51,7 @@
 
 //   z: require("../assets/alphabet/audio/sound/z.mp4"),
 // };
-export default alphabetSound = [
+export const alphabetSound = [
   require("../assets/alphabet/audio/sound/a.mp4"),
 
   require("../assets/alphabet/audio/sound/b.mp4"),
@@ -103,3 +103,5 @@ export default alphabetSound = [
 
   require("../assets/alphabet/audio/sound/z.mp4"),
 ];
+
+export default alphabetSound;

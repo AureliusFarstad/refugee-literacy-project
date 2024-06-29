@@ -7,8 +7,9 @@ import {
   View,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { colors } from "./theme/colors";
+
 import { Text } from "./core";
+import { colors } from "./theme/colors";
 
 const SIZE = 20;
 const WIDTH = 80;
@@ -157,9 +158,7 @@ export const RadioIcon = ({ checked = false }: IconProps) => {
       transition={{ borderColor: { duration: 100, type: "timing" } }}
     >
       <MotiView
-        className={`h-[10px] w-[10px] rounded-[10px] ${
-          checked && "bg-primary-300"
-        } `}
+        className={`size-[10px] rounded-[10px] ${checked && "bg-primary-300"} `}
         from={{ opacity: 0 }}
         animate={{ opacity: checked ? 1 : 0 }}
         transition={{ opacity: { duration: 50, type: "timing" } }}
@@ -217,7 +216,6 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
         />
       </View>
       <MotiView
-        // eslint-disable-next-line react-native/no-inline-styles
         style={{
           height: THUMB_HEIGHT,
           width: THUMB_WIDTH,

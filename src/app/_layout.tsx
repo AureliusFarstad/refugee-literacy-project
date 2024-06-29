@@ -1,14 +1,15 @@
+import "../../global.css";
+
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   Inter_400Regular,
   Inter_500Medium,
   Inter_600SemiBold,
   useFonts,
 } from "@expo-google-fonts/inter";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import "../../global.css";
 
 export {
   // Catch any errors thrown by the Layout component.

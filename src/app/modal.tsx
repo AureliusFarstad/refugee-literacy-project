@@ -9,7 +9,7 @@ export default function ModalScreen() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
       <View className="flex flex-1 items-center justify-center">
-        <Text className="text-white text-4xl font-bold">{correctOption}</Text>
+        <Text className="text-4xl font-bold text-white">{correctOption}</Text>
       </View>
     </SafeAreaView>
   );

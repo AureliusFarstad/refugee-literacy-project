@@ -1,3 +1,9 @@
+import clsx from "clsx";
+import { Audio } from "expo-av";
+import type { Sound } from "expo-av/build/Audio";
+import { router } from "expo-router";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import { Switch } from "@/ui/checkbox";
@@ -5,11 +11,6 @@ import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import { EarIcon } from "@/ui/icons";
 import { getOptionsToRender } from "@/utils/level-one";
-import clsx from "clsx";
-import { Audio } from "expo-av";
-import { Sound } from "expo-av/build/Audio";
-import { router } from "expo-router";
-import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const SwitchExample = () => {
   const [active, setActive] = React.useState(false);
@@ -55,12 +56,14 @@ const LetterSound = () => {
 
   const playSound = async () => {
     try {
-      const { sound } = await Audio.Sound.createAsync(activeActivity.audio);
-      if (sound) {
-        setSound(sound);
+      const { sound: soundResponse } = await Audio.Sound.createAsync(
+        activeActivity.audio
+      );
+      if (soundResponse) {
+        setSound(soundResponse);
       }
       console.log("Playing Sound");
-      await sound.playAsync();
+      await soundResponse.playAsync();
     } catch (error) {
       console.log("error in playSound", error);
       throw error;
@@ -100,7 +103,7 @@ const LetterSound = () => {
   return (
     <SafeAreaView>
       <Header title="Sound" modalRef={dynamicModalRef} />
-      <View className="px-5 mt-5">
+      <View className="mt-5 px-5">
         <SwitchExample />
       </View>
       <Text className="text-green-500">Sound</Text>
@@ -108,15 +111,15 @@ const LetterSound = () => {
       <View className="flex items-center p-4">
         <Pressable
           onPress={playSound}
-          className="bg-colors-purple-500 w-[110] h-[110] rounded-full flex items-center justify-center"
+          className="flex size-[110] items-center justify-center rounded-full bg-colors-purple-500"
         >
           <EarIcon />
         </Pressable>
-        <View className="absolute top-0 flex flex-row w-full">
+        <View className="absolute top-0 flex w-full flex-row">
           <Text>{activeActivity.numberOfTimesCorrectAnswerGiven}</Text>
           <Text>{activeActivity.correctAnswer.title}</Text>
         </View>
-        <View className="flex flex-row w-full flex-1">
+        <View className="flex w-full flex-1 flex-row">
           {optionsToRender.map((option, index) => (
             <Pressable
               key={option.id}
@@ -197,7 +200,7 @@ const LetterSound = () => {
                 }
               }}
               className={clsx(
-                "bg-colors-purple-200 w-24 h-24 rounded-full flex items-center justify-center absolute",
+                "absolute flex size-24 items-center justify-center rounded-full bg-colors-purple-200",
                 {
                   "left-10 top-40": index === 0,
                   "left-36 top-72": index === 1,
@@ -214,7 +217,7 @@ const LetterSound = () => {
               )}
             >
               <Text
-                className={clsx("text-4xl text-colors-purple-500 font-bold", {
+                className={clsx("text-4xl font-bold text-colors-purple-500", {
                   "text-white":
                     (isUpdatingSession &&
                       option.id === tappedAnswer?.id &&
@@ -231,9 +234,9 @@ const LetterSound = () => {
         </View>
       </View>
       <DynamicModal ref={dynamicModalRef}>
-        <View className="p-4 bg-white rounded-lg">
+        <View className="rounded-lg bg-white p-4">
           <Text>Letter sound activity</Text>
-          <View className="h-20 flex items-center justify-center">
+          <View className="flex h-20 items-center justify-center">
             <EarIcon />
           </View>
           <Text className="mt-4">

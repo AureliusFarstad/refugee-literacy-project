@@ -1,6 +1,6 @@
 import { useIsFocused } from "@react-navigation/native";
-import * as React from "react";
 import { StatusBar } from "expo-status-bar";
+import * as React from "react";
 
 type Props = React.ComponentProps<typeof StatusBar>;
 export const FocusAwareStatusBar = (props: Props) => {

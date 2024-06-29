@@ -1,6 +1,6 @@
+import SVGatorPlayer from "@svgator/react-native";
 import React from "react";
 import WebView from "react-native-webview";
-import SVGatorPlayer from "@svgator/react-native";
 
 function getHtml() {
   return SVGatorPlayer.wrapPage(
@@ -32,7 +32,7 @@ const SVGatorComponent = React.forwardRef((props, ref) => {
 
   const { newProps, styles } = SVGatorPlayer.getWebViewProps(props, html);
 
-  styles.style["height"] = 120;
+  styles.style.height = 120;
 
   return (
     <WebView

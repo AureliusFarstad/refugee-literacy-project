@@ -5,12 +5,9 @@ import Svg, {
   ClipPath,
   Defs,
   G,
-  Image,
   Mask,
   Path,
-  Pattern,
   Rect,
-  Use,
 } from "react-native-svg";
 
 export const ArrowIcon = ({ color = "#000", ...props }: SvgProps) => (
@@ -22,7 +19,7 @@ export const ArrowIcon = ({ color = "#000", ...props }: SvgProps) => (
   </Svg>
 );
 
-export const CheckIcon = ({ color = "#000", ...props }: SvgProps) => (
+export const CheckIcon = ({ ...props }: SvgProps) => (
   <Svg width={40} height={40} viewBox="0 0 40 40" fill="none" {...props}>
     <Path
       fillRule="evenodd"
@@ -289,7 +286,7 @@ export const LetterMatchIcon = ({ color }: SvgProps) => (
   </Svg>
 );
 
-export const HeaderHomeIcon = ({ color, ...props }: SvgProps) => (
+export const HeaderHomeIcon = ({ ...props }: SvgProps) => (
   <Svg width={46} height={46} fill="none" {...props}>
     <Circle cx={23} cy={23} r={21.5} stroke="#fff" strokeWidth={3} />
     <G clipPath="url(#a)">
@@ -348,7 +345,7 @@ export const InfoIcon = ({ color = "white", ...props }: SvgProps) => (
   </Svg>
 );
 
-export const HandwritingIcon = ({ color, ...props }: SvgProps) => (
+export const HandwritingIcon = ({ ...props }: SvgProps) => (
   <Svg
     id="Capa_1"
     enable-background="new 0 0 512.005 512.005"
@@ -372,7 +369,7 @@ export const HandwritingIcon = ({ color, ...props }: SvgProps) => (
   </Svg>
 );
 
-export const SpeakerIcon = ({ color, ...props }: SvgProps) => (
+export const SpeakerIcon = ({ ...props }: SvgProps) => (
   <Svg viewBox="0 0 27 27" fill="none" {...props}>
     <Path
       d="M5.53814 9.14443H1.33834C0.86126 9.14443 0.474609 9.53184 0.474609 10.0096V17.0952C0.474609 17.5733 0.86126 17.9605 1.33834 17.9605H5.53814L14.9438 23.1156V3.98926L5.53814 9.14443Z"
@@ -405,11 +402,7 @@ export const SpeakerIcon = ({ color, ...props }: SvgProps) => (
   </Svg>
 );
 
-export const SqFrameIcon = ({
-  color,
-  active,
-  ...props
-}: SvgProps & { active: boolean }) => (
+export const SqFrameIcon = ({ active }: SvgProps & { active: boolean }) => (
   <Svg viewBox="0 0 36 36" fill="none">
     <Path
       d="M5.55556 33.7778L30.4444 33.7778C32.2854 33.7778 33.7778 32.2854 33.7778 30.4444V22.8889C33.7778 22.2752 34.2752 21.7778 34.8889 21.7778C35.5025 21.7778 36 22.2752 36 22.8889V30.4444C36 33.5127 33.5127 36 30.4444 36L5.55556 36C2.48731 36 0 33.5127 0 30.4444V5.55556C0 2.48731 2.48731 0 5.55556 0L30.4444 0C33.5127 0 36 2.48731 36 5.55556V13.1111C36 13.7248 35.5025 14.2222 34.8889 14.2222C34.2752 14.2222 33.7778 13.7248 33.7778 13.1111V5.55556C33.7778 3.71461 32.2854 2.22222 30.4444 2.22222L5.55556 2.22222C3.71461 2.22222 2.22222 3.71461 2.22222 5.55556V30.4444C2.22222 32.2854 3.71461 33.7778 5.55556 33.7778Z"
@@ -422,7 +415,7 @@ export const SqFrameIcon = ({
   </Svg>
 );
 
-export const MultiLingualIcon = ({ color, ...props }: SvgProps) => (
+export const MultiLingualIcon = ({ ...props }: SvgProps) => (
   <Svg width={32} height={32} viewBox="0 0 36 32" fill="none" {...props}>
     <Path
       d="M25.74 24.744c.4-.23 1.28-.927 1.602-1.88.323-.952.034-2.001-.15-2.407M27.305 27.89c.84-.482 2.689-1.947 3.367-3.948.678-2.002.071-4.206-.317-5.058M28.59 31.03c1.279-.735 4.094-2.966 5.126-6.013 1.032-3.047.109-6.403-.482-7.7"
@@ -436,7 +429,7 @@ export const MultiLingualIcon = ({ color, ...props }: SvgProps) => (
   </Svg>
 );
 
-export const DashesIcon = ({ color, ...props }: SvgProps) => (
+export const DashesIcon = ({ ...props }: SvgProps) => (
   <Svg width={4} height={96} viewBox="0 0 4 114" fill="none" {...props}>
     <Path
       d="M2 2v110"
@@ -448,7 +441,7 @@ export const DashesIcon = ({ color, ...props }: SvgProps) => (
   </Svg>
 );
 
-export const LessonOneTeacherTipIcon = ({ color, ...props }: SvgProps) => (
+export const LessonOneTeacherTipIcon = ({ ...props }: SvgProps) => (
   <Svg width={164} height={118} viewBox="0 0 164 118" fill="none" {...props}>
     <Rect width={164} height={118} rx={10} fill="#62A0EC" />
     <Rect x={10} y={96} width={144} height={12} rx={6} fill="#2B4AB0" />
@@ -637,7 +630,7 @@ export const LessonOneTeacherTipIcon = ({ color, ...props }: SvgProps) => (
   </Svg>
 );
 
-export const SatpinIcon = ({ color = "#000", ...props }: SvgProps) => (
+export const SatpinIcon = ({ ...props }: SvgProps) => (
   <Svg width={164} height={118} viewBox="0 0 164 118" fill="none" {...props}>
     <Rect width={164} height={118} rx={10} fill="#C385F8" />
     <Mask
@@ -737,7 +730,7 @@ export const SatpinIcon = ({ color = "#000", ...props }: SvgProps) => (
   </Svg>
 );
 
-export const LessonThreeIcon = ({ color = "#000", ...props }: SvgProps) => (
+export const LessonThreeIcon = ({ ...props }: SvgProps) => (
   <Svg width={164} height={118} viewBox="0 0 164 118" fill="none" {...props}>
     <Rect width={164} height={118} rx={10} fill="#F36889" />
     <Path
@@ -787,10 +780,7 @@ export const LessonThreeIcon = ({ color = "#000", ...props }: SvgProps) => (
   </Svg>
 );
 
-export const LessonFourIllustration = ({
-  color = "#000",
-  ...props
-}: SvgProps) => (
+export const LessonFourIllustration = ({ ...props }: SvgProps) => (
   <Svg width={164} height={118} viewBox="0 0 164 118" fill="none" {...props}>
     <Rect width={164} height={118} rx={10} fill="#FBD65B" />
     <Path

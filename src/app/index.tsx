@@ -1,6 +1,8 @@
-import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
-import { CheckIcon, DashesIcon, MultiLingualIcon } from "@/ui/icons";
 import { Image } from "expo-image";
+import { router } from "expo-router";
+import React from "react";
+import { FlatList, Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import ProgressBar from "@/ui/components/home/progress-bar";
 import {
@@ -11,11 +13,9 @@ import {
   LESSON_TWO_IMAGE,
   TEACHER_TIP_IMAGE,
 } from "@/ui/components/illustrations/home";
+import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
+import { CheckIcon, DashesIcon, MultiLingualIcon } from "@/ui/icons";
 import { WIDTH } from "@/utils/layout";
-import { router } from "expo-router";
-import React, { useState } from "react";
-import { FlatList, Pressable, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const LESSONS = [
   {
@@ -65,8 +65,31 @@ const LESSONS = [
   },
 ];
 
+const HomeHeader = () => {
+  return (
+    <>
+      <View className="mb-10 flex w-full items-center">
+        <View className="">
+          <Image
+            source={HOME_BANNER_IMAGE}
+            style={{
+              width: WIDTH - 32,
+              height: 200,
+            }}
+          />
+        </View>
+      </View>
+      <View className="mb-10 bg-colors-green-500">
+        <Text className="py-2 text-center text-4xl text-white">1</Text>
+      </View>
+    </>
+  );
+};
+
+const Separator = () => <View className="my-8" />;
+
 const Home = () => {
-  const [lessons, setLessons] = useState<ILesson[]>(LESSONS);
+  // const [lessons, setLessons] = useState<ILesson[]>(LESSONS);
   const renderItem = ({ item }: { item: ILesson }) => {
     return (
       <Pressable
@@ -76,10 +99,10 @@ const Home = () => {
         }}
       >
         <View className="flex flex-row">
-          <View className="bg-colors-green-500 w-12 h-12 rounded-full p-2 items-center justify-center">
+          <View className="size-12 items-center justify-center rounded-full bg-colors-green-500 p-2">
             <MultiLingualIcon />
           </View>
-          <View className="mx-auto relative">
+          <View className="relative mx-auto">
             <Image
               source={item.image}
               style={{
@@ -95,7 +118,7 @@ const Home = () => {
             <CheckIcon />
           </View>
         </View>
-        <View className="absolute top-16 left-10">
+        <View className="absolute left-10 top-16">
           <DashesIcon />
         </View>
       </Pressable>
@@ -107,29 +130,12 @@ const Home = () => {
 
       <View className="py-10">
         <FlatList
-          ListHeaderComponent={() => (
-            <>
-              <View className="w-full flex items-center mb-10">
-                <View className="">
-                  <Image
-                    source={HOME_BANNER_IMAGE}
-                    style={{
-                      width: WIDTH - 32,
-                      height: 200,
-                    }}
-                  />
-                </View>
-              </View>
-              <View className="bg-colors-green-500 mb-10">
-                <Text className="text-white text-center text-4xl py-2">1</Text>
-              </View>
-            </>
-          )}
+          ListHeaderComponent={HomeHeader}
           data={LESSONS}
           renderItem={renderItem}
           keyExtractor={(_) => _.id}
           showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View className="my-8" />}
+          ItemSeparatorComponent={Separator}
         />
       </View>
     </SafeAreaView>

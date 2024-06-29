@@ -1,5 +1,5 @@
-import React from "react";
 import clsx from "clsx";
+import React from "react";
 import { View } from "react-native";
 
 interface ProgressBarProps {
@@ -10,10 +10,10 @@ interface ProgressBarProps {
 const ProgressBar = ({ progress, color }: ProgressBarProps) => {
   const progressBarWidth = `${progress}%` as `${number}%`;
   return (
-    <View className="absolute px-3 flex justify-center bottom-3 h-5 w-full">
+    <View className="absolute bottom-3 flex h-5 w-full justify-center px-3">
       <View
         className={clsx(
-          "rounded-xl w-full h-4 px-1 flex justify-center",
+          "flex h-4 w-full justify-center rounded-xl px-1",
           color
         )}
       >
@@ -21,7 +21,7 @@ const ProgressBar = ({ progress, color }: ProgressBarProps) => {
           style={{
             width: progressBarWidth,
           }}
-          className={clsx("bg-white h-3 rounded-xl")}
+          className={clsx("h-3 rounded-xl bg-white")}
         />
       </View>
     </View>

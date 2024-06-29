@@ -1,8 +1,9 @@
+import React, { useRef } from "react";
+
 import { SafeAreaView, Text, View } from "@/ui";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import { LetterMatchIcon } from "@/ui/icons";
-import React, { useRef } from "react";
 
 const LetterMatching = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
@@ -11,9 +12,9 @@ const LetterMatching = () => {
     <SafeAreaView>
       <Header title="Matching" modalRef={dynamicModalRef} />
       <DynamicModal ref={dynamicModalRef}>
-        <View className="p-4 bg-white rounded-lg">
+        <View className="rounded-lg bg-white p-4">
           <Text>Letter introduction activity</Text>
-          <View className="h-20 flex items-center justify-center">
+          <View className="flex h-20 items-center justify-center">
             <LetterMatchIcon />
           </View>
           <Text className="mt-4">

@@ -6,7 +6,6 @@ import {
   InformationCircleIcon,
   ShareIcon,
 } from "react-native-heroicons/solid";
-import { Text } from "../text";
 
 const SIZE = 36;
 
@@ -15,13 +14,13 @@ type HeaderProps = {
   modalRef?: React.RefObject<DynamicModalRefType>;
 };
 
-const Header = ({ title, modalRef }: HeaderProps) => {
+const Header = ({ modalRef }: HeaderProps) => {
   const navigateToHome = useCallback(() => {
     router.navigate("/");
   }, []);
 
   return (
-    <View className="flex-row justify-between items-center p-4">
+    <View className="flex-row items-center justify-between p-4">
       <View className="flex-row items-center space-x-4">
         <Pressable onPress={navigateToHome} className="p-2">
           <HomeIcon color={"#C385F8"} size={SIZE} />

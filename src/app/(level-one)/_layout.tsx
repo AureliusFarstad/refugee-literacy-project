@@ -1,7 +1,8 @@
 import { Tabs } from "expo-router";
 import React from "react";
+import type { SvgProps } from "react-native-svg";
 
-import { LevelOneBottomTabRoutes } from "@/types/navigation-types";
+import type { LevelOneBottomTabRoutes } from "@/types/navigation-types";
 import {
   EarTabBarIcon,
   LetterFormationIcon,
@@ -9,7 +10,6 @@ import {
   LetterNameIcon,
   TeacherTipsIcon,
 } from "@/ui/icons";
-import { SvgProps } from "react-native-svg";
 import { isIos } from "@/utils/layout";
 
 type BarIconType = {
@@ -87,6 +87,7 @@ export default function TabLayout() {
             name={name}
             options={{
               title: label,
+              // eslint-disable-next-line react/no-unstable-nested-components
               tabBarIcon: ({ color, focused }) => (
                 <BarIcon name={name} color={color} focused={focused} />
               ),

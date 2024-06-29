@@ -1,7 +1,10 @@
-import { useBooleanState } from "@/core/hooks/useBooleanState";
 import React, { forwardRef, useImperativeHandle } from "react";
-import { StyleProp, View, ViewStyle } from "react-native";
-import Modal, { ModalProps } from "react-native-modal";
+import type { StyleProp, ViewStyle } from "react-native";
+import { View } from "react-native";
+import type { ModalProps } from "react-native-modal";
+import Modal from "react-native-modal";
+
+import { useBooleanState } from "@/core/hooks/useBooleanState";
 
 type DynamicModalProps = {
   style?: StyleProp<ViewStyle>;
@@ -29,7 +32,7 @@ export const DynamicModal = forwardRef<
         },
       };
     },
-    []
+    [_hideDynamicModal, _showDynamicModal]
   );
 
   return (
