@@ -53,7 +53,7 @@ interface IActivity {
   audio: AVPlaybackSource;
   options: Option[];
   sound: {
-    letterSoundSrc: AVPlaybackSource;
+    letterSoundSrc: string;
     phoneticSoundSrc: AVPlaybackSource;
   };
   letter: {
