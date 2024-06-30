@@ -1,6 +1,5 @@
 import { SafeAreaView, Text, TouchableOpacity } from "@/ui";
 import Header from "@/ui/core/headers";
-import { HEIGHT, WIDTH } from "@/utils/layout";
 import clsx from "clsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, PanResponder, View } from "react-native";
@@ -36,10 +35,6 @@ const LetterTapMatching = () => {
   const [rightLetters, setRightLetters] = useState<ILetter[]>([]);
   const [selectedLeft, setSelectedLeft] = useState<ILetter | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<string[]>([]);
-
-  const [lettersLayout, setLettersLayout] = useState<
-    { id: string; x: number; y: number; value: string }[]
-  >([]);
 
   const [paths, setPaths] = useState<Path[]>([]);
   const [currentPath, setCurrentPath] = useState<string>("");
@@ -206,10 +201,6 @@ const LetterTapMatching = () => {
                 })}
                 onLayout={(e) => {
                   e.target.measure((x, y, width, height, pageX, pageY) => {
-                    console.log({ pageX });
-                    console.log({ pageY });
-                    console.log({ WIDTH });
-                    console.log({ HEIGHT });
                     if (layoutValuesRef.current) {
                       layoutValuesRef.current = [
                         ...layoutValuesRef.current,
@@ -230,9 +221,6 @@ const LetterTapMatching = () => {
                         },
                       ];
                     }
-                    if (index === letters.length - 1) {
-                      setLettersLayout([...layoutValuesRef.current]);
-                    }
                   });
                 }}
               ></View>
@@ -242,8 +230,6 @@ const LetterTapMatching = () => {
       })}
     </View>
   );
-
-  console.log(`lettersLayout`, JSON.stringify(lettersLayout, null, 2));
 
   const checkLeftLetterValue = ({ x1, y1 }: { x1: number; y1: number }) => {
     if (!layoutValuesRef.current) return "";
