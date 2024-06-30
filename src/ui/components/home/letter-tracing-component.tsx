@@ -1,166 +1,3 @@
-// import React, { useState, useRef } from "react";
-// import { View, StyleSheet, PanResponder } from "react-native";
-// import Svg, { Path as SvgPath } from "react-native-svg";
-
-// type Path = {
-//   pathString: string;
-//   startingPoint: { x1: number; y1: number };
-//   endingPoint: { x2: number; y2: number };
-// };
-
-// const LineDrawingComponent = () => {
-//   const [paths, setPaths] = useState<Path[]>([]);
-//   const [currentPath, setCurrentPath] = useState<string>("");
-//   const pathRef = useRef<string>("");
-//   const startPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-
-//   const panResponder = useRef(
-//     PanResponder.create({
-//       onStartShouldSetPanResponder: () => true,
-//       onMoveShouldSetPanResponder: () => true,
-//       onPanResponderGrant: (evt) => {
-//         const { locationX, locationY } = evt.nativeEvent;
-//         startPointRef.current = { x: locationX, y: locationY };
-//         pathRef.current = `M${locationX},${locationY}`;
-//         setCurrentPath(pathRef.current);
-//       },
-//       onPanResponderMove: (evt) => {
-//         const { locationX, locationY } = evt.nativeEvent;
-//         pathRef.current += ` L${locationX},${locationY}`;
-//         setCurrentPath(pathRef.current);
-//       },
-//       onPanResponderRelease: (evt) => {
-//         const { locationX, locationY } = evt.nativeEvent;
-//         const newPath: Path = {
-//           pathString: pathRef.current,
-//           startingPoint: {
-//             x1: startPointRef.current.x,
-//             y1: startPointRef.current.y,
-//           },
-//           endingPoint: { x2: locationX, y2: locationY },
-//         };
-//         setPaths((prevPaths) => [...prevPaths, newPath]);
-//         setCurrentPath("");
-//       },
-//     })
-//   ).current;
-
-//   console.log(`paths`, JSON.stringify(paths, null, 2));
-
-//   return (
-//     <View style={styles.container} {...panResponder.panHandlers}>
-//       <Svg height="100%" width="100%">
-//         {paths.map((p, index) => (
-//           <SvgPath
-//             key={index}
-//             d={p.pathString}
-//             stroke="green"
-//             strokeWidth="2"
-//             fill="none"
-//           />
-//         ))}
-//         <SvgPath d={currentPath} stroke="blue" strokeWidth="2" fill="none" />
-//       </Svg>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#F5FCFF",
-//   },
-// });
-
-// export default LineDrawingComponent;
-
-// import React, { useState, useRef } from "react";
-// import { View, StyleSheet, PanResponder } from "react-native";
-// import Svg, { Path as SvgPath, Text as SvgText } from "react-native-svg";
-
-// type Path = {
-//   pathString: string;
-//   startingPoint: { x1: number; y1: number };
-//   endingPoint: { x2: number; y2: number };
-// };
-
-// const LineDrawingComponent = () => {
-// const [paths, setPaths] = useState<Path[]>([]);
-// const [currentPath, setCurrentPath] = useState<string>("");
-// const pathRef = useRef<string>("");
-// const startPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-
-// const panResponder = useRef(
-//   PanResponder.create({
-//     onStartShouldSetPanResponder: () => true,
-//     onMoveShouldSetPanResponder: () => true,
-//     onPanResponderGrant: (evt) => {
-//       const { locationX, locationY } = evt.nativeEvent;
-//       startPointRef.current = { x: locationX, y: locationY };
-//       pathRef.current = `M${locationX},${locationY}`;
-//       setCurrentPath(pathRef.current);
-//     },
-//     onPanResponderMove: (evt) => {
-//       const { locationX, locationY } = evt.nativeEvent;
-//       pathRef.current += ` L${locationX},${locationY}`;
-//       setCurrentPath(pathRef.current);
-//     },
-//     onPanResponderRelease: (evt) => {
-//       const { locationX, locationY } = evt.nativeEvent;
-//       const newPath: Path = {
-//         pathString: pathRef.current,
-//         startingPoint: {
-//           x1: Math.floor(startPointRef.current.x),
-//           y1: Math.floor(startPointRef.current.y),
-//         },
-//         endingPoint: { x2: Math.floor(locationX), y2: Math.floor(locationY) },
-//       };
-//       setPaths((prevPaths) => [...prevPaths, newPath]);
-//       setCurrentPath("");
-//     },
-//   })
-// ).current;
-
-//   return (
-// <View style={styles.container} {...panResponder.panHandlers}>
-//   <Svg height="100%" width="100%">
-//     {paths.map((p, index) => (
-//       <React.Fragment key={index}>
-//         <SvgPath
-//           d={p.pathString}
-//           stroke="green"
-//           strokeWidth="2"
-//           fill="none"
-//         />
-//         <SvgText
-//           x={p.startingPoint.x1}
-//           y={p.startingPoint.y1}
-//           fontSize="12"
-//           fill="red"
-//         >{`(${p.startingPoint.x1},${p.startingPoint.y1})`}</SvgText>
-//         <SvgText
-//           x={p.endingPoint.x2}
-//           y={p.endingPoint.y2}
-//           fontSize="12"
-//           fill="red"
-//         >{`(${p.endingPoint.x2},${p.endingPoint.y2})`}</SvgText>
-//       </React.Fragment>
-//     ))}
-//     <SvgPath d={currentPath} stroke="blue" strokeWidth="2" fill="none" />
-//   </Svg>
-// </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#F5FCFF",
-//   },
-// });
-
-// export default LineDrawingComponent;
-
 import { SafeAreaView, Text, TouchableOpacity } from "@/ui";
 import Header from "@/ui/core/headers";
 import { HEIGHT, WIDTH } from "@/utils/layout";
@@ -264,11 +101,6 @@ const LetterTapMatching = () => {
         /**
          * Update the paths
          */
-        console.log(`🍟🍟🍟`);
-        console.log({ letterFoundInLeft });
-        console.log({ letterFoundInRight });
-        console.log(`🍟🍟🍟`);
-
         checkIfLettersMatch(letterFoundInLeft, letterFoundInRight, newPath);
         setCurrentPath("");
       },
@@ -280,11 +112,7 @@ const LetterTapMatching = () => {
     letterFoundInRight: string,
     newPath: Path
   ) => {
-    console.log(`🍟🍟🍟`);
-    console.log(letterFoundInLeft, letterFoundInRight);
     if (letterFoundInLeft === letterFoundInRight) {
-      console.log({ letterFoundInLeft });
-      console.log({ letterFoundInRight });
       setPaths((prevPaths) => [...prevPaths, newPath]);
       setMatchedPairs((prev) => [...prev, letterFoundInRight]);
     }
@@ -362,11 +190,6 @@ const LetterTapMatching = () => {
             >
               <Text className="text-2xl font-bold text-white">
                 {letter.value}
-                {/* {" "}
-                <Text className="text-xs">
-                  {lettersLayout.find((l) => l.id === letter.id)?.x}-
-                  {lettersLayout.find((l) => l.id === letter.id)?.y}
-                </Text> */}
               </Text>
               <View
                 className={clsx("size-4 border-2  absolute rounded-full ", {
