@@ -9,6 +9,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "../../global.css";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -46,7 +47,15 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <GestureHandlerRootView
+      style={{
+        flex: 1,
+      }}
+    >
+      <RootLayoutNav />
+    </GestureHandlerRootView>
+  );
 }
 
 function RootLayoutNav() {
