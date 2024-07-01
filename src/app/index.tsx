@@ -96,6 +96,7 @@ const Home = () => {
         className="flex px-5"
         onPress={() => {
           router.push(item.path as never);
+          // router.push("/modal")
         }}
       >
         <View className="flex flex-row">

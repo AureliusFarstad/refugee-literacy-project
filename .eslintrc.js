@@ -37,7 +37,7 @@ module.exports = {
             endOfLine: "auto",
           },
         ],
-        "max-params": ["error", 3], // Limit the number of parameters in a function to use object instead
+        "max-params": ["error", 10], // Limit the number of parameters in a function to use object instead
         "max-lines-per-function": ["error", 5000],
         "react/destructuring-assignment": "off", // Vscode doesn't support automatically destructuring, it's a pain to add a new variable
         "react/react-in-jsx-scope": "off",

@@ -1,7 +1,10 @@
 import { useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
+
+import { Text } from "@/ui";
+import LetterMatchingGame from "@/ui/components/letters";
 
 export default function ModalScreen() {
   const { correctOption } = useLocalSearchParams();
@@ -11,6 +14,7 @@ export default function ModalScreen() {
       <View className="flex flex-1 items-center justify-center">
         <Text className="text-4xl font-bold text-white">{correctOption}</Text>
       </View>
+      <LetterMatchingGame />
     </SafeAreaView>
   );
 }

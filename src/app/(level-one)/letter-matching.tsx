@@ -1,31 +1,116 @@
 import clsx from "clsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Alert } from "react-native";
+import { Alert, PanResponder, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Svg, { Path as SvgPath } from "react-native-svg";
 
-import { SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
-import Header from "@/ui/core/headers";
-import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
-import { LetterMatchIcon } from "@/ui/icons";
-import { shuffleLetters } from "@/utils/level-one";
+import { Text, TouchableOpacity } from "@/ui";
+
+type Path = {
+  pathString: string;
+  startingPoint: { x1: number; y1: number };
+  endingPoint: { x2: number; y2: number };
+};
 
 /**
- *
- * For the alphabets we have two states, leftLetters and rightLetters, the right ones are randomly shuffled, matchedPairs will have values that the user have matched
- * correctly for instance if he tapped on a and A, p and P, the matchedPairs array
- * will look like ["a","p"]
- * On tapping of the left letter if it's not in the matchedPairs we will store it in selectedLeft
- * On the tap of the right letter if it matches with the selectedLeft (uppercase) we add it to the matchedPairs array and check if all of them have been matched if so
- * render activity completed
- * If it doesn't match we reset the selected left tapped item
+ * Shuffle letters
  */
 
-const LetterMatching = () => {
-  const dynamicModalRef = useRef<DynamicModalRefType>(null);
+export const shuffleLetters = (letters: string[]) => {
+  for (let i = letters.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [letters[i], letters[j]] = [letters[j], letters[i]];
+  }
+  return letters;
+};
+
+interface ILetter {
+  id: string;
+  value: string;
+}
+
+const LetterTapMatching = () => {
+  // const dynamicModalRef = useRef<DynamicModalRefType>(null);
 
   const [leftLetters, setLeftLetters] = useState<ILetter[]>([]);
   const [rightLetters, setRightLetters] = useState<ILetter[]>([]);
   const [selectedLeft, setSelectedLeft] = useState<ILetter | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<string[]>([]);
+
+  const [paths, setPaths] = useState<Path[]>([]);
+  const [currentPath, setCurrentPath] = useState<string>("");
+  const pathRef = useRef<string>("");
+  const startPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  const layoutValuesRef = useRef<
+    {
+      x: number;
+      y: number;
+      id: string;
+      value: string;
+    }[]
+  >();
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: (evt) => {
+        const { locationX, locationY } = evt.nativeEvent;
+        startPointRef.current = { x: locationX, y: locationY };
+        pathRef.current = `M${locationX},${locationY}`;
+        setCurrentPath(`M${locationX},${locationY} L${locationX},${locationY}`);
+      },
+      onPanResponderMove: (evt) => {
+        const { locationX, locationY } = evt.nativeEvent;
+        const newPath = `M${startPointRef.current.x},${startPointRef.current.y} L${locationX},${locationY}`;
+        pathRef.current = newPath;
+        setCurrentPath(newPath);
+      },
+      onPanResponderRelease: (evt) => {
+        const { locationX, locationY } = evt.nativeEvent;
+
+        const newPath: Path = {
+          pathString: `M${startPointRef.current.x},${startPointRef.current.y} L${locationX},${locationY}`,
+          startingPoint: {
+            x1: Math.floor(startPointRef.current.x),
+            y1: Math.floor(startPointRef.current.y),
+          },
+          endingPoint: {
+            x2: Math.floor(locationX),
+            y2: Math.floor(locationY),
+          },
+        };
+        /**
+         * Calculate the two letters
+         * left value
+         * right value
+         */
+        const letterFoundInLeft = checkLeftLetterValue({
+          y1: Math.floor(startPointRef.current.y),
+        });
+        const letterFoundInRight = checkRightLetterValue({
+          y1: locationY,
+        });
+        /**
+         * Update the paths
+         */
+        checkIfLettersMatch(letterFoundInLeft, letterFoundInRight, newPath);
+        setCurrentPath("");
+      },
+    })
+  ).current;
+
+  const checkIfLettersMatch = (
+    letterFoundInLeft: string,
+    letterFoundInRight: string,
+    newPath: Path
+  ) => {
+    if (letterFoundInLeft === letterFoundInRight) {
+      setPaths((prevPaths) => [...prevPaths, newPath]);
+      setMatchedPairs((prev) => [...prev, letterFoundInRight]);
+    }
+  };
 
   const initializeGame = useCallback(() => {
     const letters = shuffleLetters(["s", "n", "i", "t", "p", "a"]);
@@ -75,51 +160,143 @@ const LetterMatching = () => {
 
   const renderLetters = (
     letters: ILetter[],
-    onPress: (letter: ILetter) => void
+    onPress: (letter: ILetter) => void,
+    isRight: boolean
   ) => (
     <View className="items-center">
-      {letters.map((letter) => (
-        <TouchableOpacity
-          key={letter.id}
-          className={clsx(
-            "m-[14px] size-[64px] items-center justify-center rounded-[10px] ",
-            {
-              "bg-[#8AC65B]": matchedPairs.includes(letter.value.toLowerCase()),
-              "bg-[#7471F0]": selectedLeft?.id === letter.id,
-              "bg-colors-purple-500":
-                !matchedPairs.includes(letter.value.toLowerCase()) &&
-                selectedLeft?.id !== letter.id,
-            }
-          )}
-          onPress={() => onPress(letter)}
-        >
-          <Text className="text-2xl font-bold text-white">{letter.value}</Text>
-        </TouchableOpacity>
-      ))}
+      {letters.map((letter) => {
+        return (
+          <View key={letter.id} className="items-center">
+            <TouchableOpacity
+              className={clsx(
+                "my-[14px] size-[64px] items-center justify-center rounded-[10px] ",
+                {
+                  "bg-[#8AC65B]": matchedPairs.includes(
+                    letter.value.toLowerCase()
+                  ),
+                  "bg-[#7471F0]": selectedLeft?.id === letter.id,
+                  "bg-colors-purple-500":
+                    !matchedPairs.includes(letter.value.toLowerCase()) &&
+                    selectedLeft?.id !== letter.id,
+                }
+              )}
+              onPress={() => onPress(letter)}
+            >
+              <Text className="text-2xl font-bold text-white">
+                {letter.value}
+              </Text>
+              <View
+                className={clsx("absolute size-4  rounded-full border-2 ", {
+                  "right-24": isRight,
+                  "left-24": !isRight,
+                  "bg-[#8AC65B] border-[#8AC65B]": matchedPairs.includes(
+                    letter.value.toLowerCase()
+                  ),
+                  "bg-[#7471F0] border-[#7471F0]":
+                    selectedLeft?.id === letter.id,
+                  "border-colors-purple-500":
+                    !matchedPairs.includes(letter.value.toLowerCase()) &&
+                    selectedLeft?.id !== letter.id,
+                })}
+                onLayout={(e) => {
+                  e.target.measure((x, y, width, height, pageX, pageY) => {
+                    if (layoutValuesRef.current) {
+                      layoutValuesRef.current = [
+                        ...layoutValuesRef.current,
+                        {
+                          x: -x + pageX,
+                          y: y + pageY,
+                          id: letter.id,
+                          value: letter.value,
+                        },
+                      ];
+                    } else {
+                      layoutValuesRef.current = [
+                        {
+                          id: letter.id,
+                          x: -x + pageX,
+                          y: y + pageY,
+                          value: letter.value,
+                        },
+                      ];
+                    }
+                  });
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        );
+      })}
     </View>
   );
 
+  const checkLeftLetterValue = ({ y1 }: { y1: number }) => {
+    if (!layoutValuesRef.current) return "";
+    let letterFoundInLeft = "";
+
+    for (let index = 0; index < layoutValuesRef.current.length; index++) {
+      const element = layoutValuesRef.current[index];
+      if (element.id.includes("left")) {
+        const a = y1 + 90;
+        const b = element.y;
+
+        const difference = Math.abs(a - b);
+        if (difference <= 40) {
+          letterFoundInLeft = element.value;
+        }
+      }
+    }
+    return letterFoundInLeft.toLowerCase();
+  };
+
+  const checkRightLetterValue = ({ y1 }: { y1: number }) => {
+    if (!layoutValuesRef.current) return "";
+    let letterFoundInRight = "";
+
+    for (let index = 0; index < layoutValuesRef.current.length; index++) {
+      const element = layoutValuesRef.current[index];
+      if (element.id.includes("right")) {
+        const a = y1 + 90;
+        const b = element.y;
+
+        const difference = Math.abs(a - b);
+        if (difference <= 40) {
+          letterFoundInRight = element.value;
+        }
+      }
+    }
+    return letterFoundInRight.toLowerCase();
+  };
+
   return (
-    <SafeAreaView>
-      <Header title="Matching" modalRef={dynamicModalRef} />
-      <View className="flex flex-row  justify-between px-10">
-        {renderLetters(leftLetters, handleLeftLetterPress)}
-        {renderLetters(rightLetters, handleRightLetterPress)}
-      </View>
-      <DynamicModal ref={dynamicModalRef}>
-        <View className="rounded-lg bg-white p-4">
-          <Text>Letter introduction activity</Text>
-          <View className="flex h-20 items-center justify-center">
-            <LetterMatchIcon />
-          </View>
-          <Text className="mt-4">
-            Start your language learning adventure. Let A, B, C, and D be the
-            building blocks of your multilingual journey!
-          </Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      {/* <Header title="Matching" modalRef={dynamicModalRef} /> */}
+      <View className="relative flex flex-row justify-between border-yellow-500  px-10">
+        {renderLetters(leftLetters, handleLeftLetterPress, false)}
+        <View {...panResponder.panHandlers} className="flex-1">
+          <Svg height="100%" width="100%">
+            {paths.map((p, index) => (
+              <React.Fragment key={index}>
+                <SvgPath
+                  d={p.pathString}
+                  stroke="#8AC65B"
+                  strokeWidth="2"
+                  fill="none"
+                />
+              </React.Fragment>
+            ))}
+            <SvgPath
+              d={currentPath}
+              stroke="blue"
+              strokeWidth="2"
+              fill="none"
+            />
+          </Svg>
         </View>
-      </DynamicModal>
+        {renderLetters(rightLetters, handleRightLetterPress, true)}
+      </View>
     </SafeAreaView>
   );
 };
 
-export default LetterMatching;
+export default LetterTapMatching;
