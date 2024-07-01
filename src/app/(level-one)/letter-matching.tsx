@@ -5,6 +5,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Path as SvgPath } from "react-native-svg";
 
 import { Text, TouchableOpacity } from "@/ui";
+import Header from "@/ui/core/headers";
+import { isIos } from "@/utils/layout";
 
 type Path = {
   pathString: string;
@@ -30,7 +32,7 @@ interface ILetter {
 }
 
 const LetterTapMatching = () => {
-  // const dynamicModalRef = useRef<DynamicModalRefType>(null);
+  const dynamicModalRef = useRef<DynamicModalRefType>(null);
 
   const [leftLetters, setLeftLetters] = useState<ILetter[]>([]);
   const [rightLetters, setRightLetters] = useState<ILetter[]>([]);
@@ -270,7 +272,7 @@ const LetterTapMatching = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {/* <Header title="Matching" modalRef={dynamicModalRef} /> */}
+      {!isIos && <Header title="Matching" modalRef={dynamicModalRef} />}
       <View className="relative flex flex-row justify-between border-yellow-500  px-10">
         {renderLetters(leftLetters, handleLeftLetterPress, false)}
         <View {...panResponder.panHandlers} className="flex-1">
