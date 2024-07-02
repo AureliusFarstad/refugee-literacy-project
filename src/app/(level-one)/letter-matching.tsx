@@ -1,12 +1,14 @@
 import clsx from "clsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, PanResponder, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import Svg, { Path as SvgPath } from "react-native-svg";
 
 import { Text, TouchableOpacity } from "@/ui";
 import Header from "@/ui/core/headers";
-import { isIos } from "@/utils/layout";
 
 type Path = {
   pathString: string;
@@ -33,6 +35,8 @@ interface ILetter {
 
 const LetterTapMatching = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
+
+  const insets = useSafeAreaInsets();
 
   const [leftLetters, setLeftLetters] = useState<ILetter[]>([]);
   const [rightLetters, setRightLetters] = useState<ILetter[]>([]);
@@ -206,8 +210,8 @@ const LetterTapMatching = () => {
                       layoutValuesRef.current = [
                         ...layoutValuesRef.current,
                         {
-                          x: -x + pageX,
-                          y: y + pageY,
+                          x: Math.floor(-x + pageX),
+                          y: Math.floor(y + pageY),
                           id: letter.id,
                           value: letter.value,
                         },
@@ -216,8 +220,8 @@ const LetterTapMatching = () => {
                       layoutValuesRef.current = [
                         {
                           id: letter.id,
-                          x: -x + pageX,
-                          y: y + pageY,
+                          x: Math.floor(-x + pageX),
+                          y: Math.floor(y + pageY),
                           value: letter.value,
                         },
                       ];
@@ -239,7 +243,7 @@ const LetterTapMatching = () => {
     for (let index = 0; index < layoutValuesRef.current.length; index++) {
       const element = layoutValuesRef.current[index];
       if (element.id.includes("left")) {
-        const a = y1 + 90;
+        const a = insets.top < 40 ? y1 + 92 : y1 + 92 + insets.top;
         const b = element.y;
 
         const difference = Math.abs(a - b);
@@ -258,7 +262,7 @@ const LetterTapMatching = () => {
     for (let index = 0; index < layoutValuesRef.current.length; index++) {
       const element = layoutValuesRef.current[index];
       if (element.id.includes("right")) {
-        const a = y1 + 90;
+        const a = insets.top < 40 ? y1 + 92 : y1 + 92 + insets.top;
         const b = element.y;
 
         const difference = Math.abs(a - b);
@@ -272,7 +276,7 @@ const LetterTapMatching = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {!isIos && <Header title="Matching" modalRef={dynamicModalRef} />}
+      <Header title="Matching" modalRef={dynamicModalRef} />
       <View className="relative flex flex-row justify-between border-yellow-500  px-10">
         {renderLetters(leftLetters, handleLeftLetterPress, false)}
         <View {...panResponder.panHandlers} className="flex-1">

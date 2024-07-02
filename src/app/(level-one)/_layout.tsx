@@ -10,7 +10,7 @@ import {
   LetterNameIcon,
   TeacherTipsIcon,
 } from "@/ui/icons";
-import { isIos } from "@/utils/layout";
+import { IS_IOS } from "@/utils/layout";
 
 type BarIconType = {
   name: keyof LevelOneBottomTabRoutes;
@@ -70,8 +70,8 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: "#C385F8",
-          paddingTop: isIos ? 16 : 4,
-          height: isIos ? 108 : 80,
+          paddingTop: IS_IOS ? 16 : 4,
+          height: IS_IOS ? 108 : 80,
           paddingHorizontal: 12,
         },
         tabBarInactiveTintColor: "white",
