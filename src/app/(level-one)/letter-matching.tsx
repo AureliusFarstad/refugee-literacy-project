@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, PanResponder, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -48,6 +49,8 @@ const LetterTapMatching = () => {
   const pathRef = useRef<string>("");
   const startPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
+  const [isDrawing, setIsDrawing] = useState(false);
+
   const layoutValuesRef = useRef<
     {
       x: number;
@@ -62,6 +65,8 @@ const LetterTapMatching = () => {
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: (evt) => {
+        setIsDrawing(true);
+
         const { locationX, locationY } = evt.nativeEvent;
         startPointRef.current = { x: locationX, y: locationY };
         pathRef.current = `M${locationX},${locationY}`;
@@ -74,6 +79,7 @@ const LetterTapMatching = () => {
         setCurrentPath(newPath);
       },
       onPanResponderRelease: (evt) => {
+        setIsDrawing(false);
         const { locationX, locationY } = evt.nativeEvent;
 
         const newPath: Path = {
@@ -277,30 +283,32 @@ const LetterTapMatching = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Header title="Matching" modalRef={dynamicModalRef} />
-      <View className="relative flex flex-row justify-between border-yellow-500  px-10">
-        {renderLetters(leftLetters, handleLeftLetterPress, false)}
-        <View {...panResponder.panHandlers} className="flex-1">
-          <Svg height="100%" width="100%">
-            {paths.map((p, index) => (
-              <React.Fragment key={index}>
-                <SvgPath
-                  d={p.pathString}
-                  stroke="#8AC65B"
-                  strokeWidth="2"
-                  fill="none"
-                />
-              </React.Fragment>
-            ))}
-            <SvgPath
-              d={currentPath}
-              stroke="blue"
-              strokeWidth="2"
-              fill="none"
-            />
-          </Svg>
+      <ScrollView className="flex-1" scrollEnabled={!isDrawing}>
+        <View className="relative flex flex-row justify-between border-yellow-500  px-10">
+          {renderLetters(leftLetters, handleLeftLetterPress, false)}
+          <View {...panResponder.panHandlers} className="flex-1">
+            <Svg height="100%" width="100%">
+              {paths.map((p, index) => (
+                <React.Fragment key={index}>
+                  <SvgPath
+                    d={p.pathString}
+                    stroke="#8AC65B"
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                </React.Fragment>
+              ))}
+              <SvgPath
+                d={currentPath}
+                stroke="blue"
+                strokeWidth="2"
+                fill="none"
+              />
+            </Svg>
+          </View>
+          {renderLetters(rightLetters, handleRightLetterPress, true)}
         </View>
-        {renderLetters(rightLetters, handleRightLetterPress, true)}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
