@@ -286,7 +286,7 @@ const LetterTapMatching = () => {
       <ScrollView className="flex-1" scrollEnabled={!isDrawing}>
         <View className="relative flex flex-row justify-between border-yellow-500  px-10">
           {renderLetters(leftLetters, handleLeftLetterPress, false)}
-          <View {...panResponder.panHandlers} className="flex-1">
+          <View {...panResponder.panHandlers} className="z-10 flex-1">
             <Svg height="100%" width="100%">
               {paths.map((p, index) => (
                 <React.Fragment key={index}>
