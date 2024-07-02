@@ -453,13 +453,35 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
           {
             id: "section5",
             icon: "emotions",
-            title: "Feelings",
+            title: "Match Letters",
             completed: true,
             metadata: {
-              description: "Expressing and recognizing feelings",
-              keywords: ["feelings", "emotions", "expression"],
+              description: "Match the letters",
+              keywords: ["", "", ""],
             },
-            activities: [],
+            activities: [
+              {
+                id: "activity5_1",
+                letters: ["s", "n", "i", "t", "p", "a"],
+                numberOfTimesCorrectAnswerGiven: 0,
+                audio: "",
+                character: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                options: [],
+                sound: {
+                  letterSoundSrc: "",
+                  phoneticSoundSrc: "",
+                },
+                type: "MATCH_THE_LETTER",
+              },
+            ],
           },
         ],
       },

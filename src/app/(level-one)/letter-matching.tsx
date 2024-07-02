@@ -8,25 +8,15 @@ import {
 } from "react-native-safe-area-context";
 import Svg, { Path as SvgPath } from "react-native-svg";
 
+import { useLevelStore } from "@/core/store/levels";
 import { Text, TouchableOpacity } from "@/ui";
 import Header from "@/ui/core/headers";
+import { shuffleLetters } from "@/utils/level-one";
 
 type Path = {
   pathString: string;
   startingPoint: { x1: number; y1: number };
   endingPoint: { x2: number; y2: number };
-};
-
-/**
- * Shuffle letters
- */
-
-export const shuffleLetters = (letters: string[]) => {
-  for (let i = letters.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [letters[i], letters[j]] = [letters[j], letters[i]];
-  }
-  return letters;
 };
 
 interface ILetter {
@@ -36,6 +26,8 @@ interface ILetter {
 
 const LetterTapMatching = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
+  const { levels } = useLevelStore();
+  const activeActivity = useRef(levels[0].modules[0].sections[4].activities[0]);
 
   const insets = useSafeAreaInsets();
 
@@ -125,7 +117,7 @@ const LetterTapMatching = () => {
   };
 
   const initializeGame = useCallback(() => {
-    const letters = shuffleLetters(["s", "n", "i", "t", "p", "a"]);
+    const letters = shuffleLetters(activeActivity.current.letters ?? []);
     const left = letters.map((value, index) => ({
       id: `left-${index}`,
       value,
@@ -169,6 +161,12 @@ const LetterTapMatching = () => {
       setSelectedLeft(null);
     }
   };
+
+  useEffect(() => {
+    if (matchedPairs.length === activeActivity.current.letters?.length) {
+      Alert.alert("Level", "Completed", [{ text: "Done" }]);
+    }
+  }, [matchedPairs, initializeGame]);
 
   const renderLetters = (
     letters: ILetter[],

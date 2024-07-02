@@ -103,14 +103,6 @@ const LetterSound = () => {
     }
   };
 
-  console.log(`🍟🍟🍟`);
-  console.log("logs from letter sound");
-  console.log(
-    levels[0].modules[0].sections[2].activities.map(
-      (activity) => activity.numberOfTimesCorrectAnswerGiven
-    )
-  );
-
   useEffect(() => {
     if (pathname !== "/letter-sound") {
       return;

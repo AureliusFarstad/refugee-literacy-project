@@ -60,6 +60,7 @@ interface IActivity {
     lowerCase: string;
     upperCase: string;
   };
+  letters?: string[];
 }
 
 interface IActivityWithSoundAndName {
