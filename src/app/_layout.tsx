@@ -7,10 +7,13 @@ import {
   Inter_600SemiBold,
   useFonts,
 } from "@expo-google-fonts/inter";
+import { ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+import { theme } from "@/core/useThemeConfig";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -49,8 +52,10 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <RootLayoutNav />
+    <GestureHandlerRootView className="flex-1">
+      <ThemeProvider value={theme}>
+        <RootLayoutNav />
+      </ThemeProvider>
     </GestureHandlerRootView>
   );
 }

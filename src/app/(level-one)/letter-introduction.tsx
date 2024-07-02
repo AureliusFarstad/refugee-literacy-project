@@ -74,7 +74,7 @@ const LetterIntroduction = () => {
   return (
     <SafeAreaView className="flex-1">
       <Header title="Introduction" modalRef={dynamicModalRef} />
-      <View className="bg-[#ECE5E1 p-4 ">
+      <View className="p-4">
         {/* Hand written letters section */}
         <View className="relative h-[200px] bg-white">
           {/* Outside solid blue lines */}
