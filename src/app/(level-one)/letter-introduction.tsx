@@ -1,21 +1,69 @@
-import LowerA from "assets/animation/a-animated";
 import type { AVPlaybackSource } from "expo-av";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import React, { useEffect, useRef, useState } from "react";
+import Svg, { Line } from "react-native-svg";
 
 import { useLevelStore } from "@/core/store/levels";
-import { SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
+import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import {
+  CustomPencilIcon,
   EarIcon,
-  HandwritingIcon,
-  NameIcon,
-  SpeakerIcon,
-  SqFrameIcon,
+  LettersNameIcon,
+  SimplePencilIcon,
   TeacherIcon,
 } from "@/ui/icons";
+import { WIDTH } from "@/utils/layout";
+
+const PageLinesSVG = () => {
+  return (
+    <Svg
+      width={WIDTH - 16}
+      height="143"
+      viewBox={`0 0 ${WIDTH - 16} 143`}
+      fill="none"
+    >
+      <Line
+        x1="-9.00391"
+        y1="141.295"
+        x2={WIDTH - 16}
+        y2="141.295"
+        stroke="#E4E4E7"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeDasharray="8 8"
+      />
+      <Line
+        x1="-10.0039"
+        y1="96.8115"
+        x2={WIDTH - 16}
+        y2="96.8115"
+        stroke="#E4E4E7"
+        strokeWidth="2"
+      />
+      <Line
+        x1="-9.00391"
+        y1="46.3955"
+        x2={WIDTH - 16}
+        y2="46.3955"
+        stroke="#E4E4E7"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeDasharray="8 8"
+      />
+      <Line
+        x1="-10.0039"
+        y1="1.91113"
+        x2={WIDTH - 16}
+        y2="1.91113"
+        stroke="#E4E4E7"
+        strokeWidth="2"
+      />
+    </Svg>
+  );
+};
 
 const LetterIntroduction = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
@@ -29,7 +77,7 @@ const LetterIntroduction = () => {
     levels[0].modules[0].sections[0].activities[0]
   );
 
-  const [selectedLetter, setSelectedLetter] = useState("a");
+  const [_selectedLetter, setSelectedLetter] = useState("a");
 
   const lowercaseWebView = useRef(null);
   const uppercaseWebView = useRef(null);
@@ -74,101 +122,49 @@ const LetterIntroduction = () => {
   return (
     <SafeAreaView className="flex-1">
       <Header title="Introduction" modalRef={dynamicModalRef} />
-      <View className="p-4">
-        {/* Hand written letters section */}
-        <View className="relative h-[200px] bg-white">
-          {/* Outside solid blue lines */}
-          <View className="relative top-[40px] h-[120px] border-y border-[#7747FF]/50">
-            {/* Row of letters */}
-            <View className="z-100 top-0 flex h-[120px] flex-row justify-around px-[50px]">
-              <View className="h-[120px] w-[60px]">
-                <LowerA ref={lowercaseWebView} />
-              </View>
-              <View className="h-[120px] w-[60px]">
-                <LowerA ref={uppercaseWebView} />
-              </View>
-            </View>
-            {/* Inner solid blue lines */}
-            <View className="z-100 absolute inset-x-0 top-[40px] h-[40px] border-y border-[#7747FF]/50" />
-          </View>
-
-          {/* Animate writing button */}
-          <TouchableOpacity
-            className="absolute left-[30px] top-[150px] flex size-[60px] items-center justify-center rounded-full border-2 border-[#ADD590] bg-white"
-            onPress={animateLowercase}
-          >
-            <View className="aspect-square w-[42px]">
-              <HandwritingIcon />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="absolute right-[30px] top-[150px] flex size-[60px] items-center justify-center rounded-full border-2 border-[#ADD590] bg-white"
-            onPress={animateUppercase}
-          >
-            <View className="aspect-square w-[42px]">
-              <HandwritingIcon />
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <View className="flex-colum mt-10 flex gap-y-[20px]">
-          {/* Sound Button */}
-          <View className="mx-auto flex flex-row items-center gap-x-[12px]">
-            <TouchableOpacity className="aspect-square w-[40px]">
-              <SpeakerIcon />
-            </TouchableOpacity>
-            <TouchableOpacity className="flex h-[80px] w-[200px] flex-row items-center justify-around rounded-full bg-[#dce1cd] px-[15px]">
-              <Text>Sound</Text>
-              <View className="aspect-square w-[70px]">
-                <EarIcon />
-              </View>
-              <Text>صدا</Text>
-            </TouchableOpacity>
-          </View>
-          {/* Name Button */}
-          <View className="mx-auto flex flex-row items-center gap-x-[12px]">
-            <TouchableOpacity
-              className="aspect-square w-[40px]"
-              onPress={() => {
-                playSound(activeActivity.sound.letterSoundSrc);
-              }}
+      <View>
+        <View className="flex items-center justify-center">
+          <View className="flex flex-row rounded-full bg-colors-purple-200 p-4">
+            <Pressable
+              onPress={() => playSound(activeActivity.sound.phoneticSoundSrc)}
+              className="mr-5 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
             >
-              <SpeakerIcon />
-            </TouchableOpacity>
-            <TouchableOpacity
-              className="flex h-[80px] w-[200px] flex-row items-center justify-around rounded-full bg-[#dce1cd] px-[15px]"
-              onPress={() => {
-                playSound(activeActivity.sound.phoneticSoundSrc);
-              }}
+              <EarIcon />
+            </Pressable>
+            <Pressable
+              onPress={() => playSound(activeActivity.sound.letterSoundSrc)}
+              className="flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
             >
-              <Text>Name</Text>
-              <View className="aspect-square w-[45px]">
-                <NameIcon />
-              </View>
-              <Text>نام</Text>
-            </TouchableOpacity>
+              <LettersNameIcon />
+            </Pressable>
           </View>
         </View>
-
-        {/* Switch through S,A,T,P,I,N */}
+        <View className="mx-4 mt-5  overflow-hidden">
+          <PageLinesSVG />
+        </View>
+      </View>
+      <View className="my-10 flex flex-row items-center justify-evenly">
+        <Pressable onPress={() => animateLowercase()}>
+          <CustomPencilIcon size={56} border={true} />
+        </Pressable>
+        <SimplePencilIcon width={60} height={60} />
+        <Pressable onPress={() => animateUppercase()}>
+          <CustomPencilIcon size={44} />
+        </Pressable>
+      </View>
+      <View className="flex flex-row justify-between">
         <View className="mt-20 flex w-full flex-row items-center justify-around px-[10px]">
-          {/* Map an array of letters in to buttons to toggle the selected letter*/}
           {["s", "a", "t", "p", "i", "n"].map((letter, index) => (
-            <View
-              className="flex-column flex items-center gap-y-[5px]"
+            <Pressable
+              className="flex size-[60] items-center justify-center rounded-md bg-colors-purple-500"
+              onPress={() => setSelectedLetter(letter)}
               key={index}
             >
-              <View className="size-[20px]" />
-              <TouchableOpacity
-                className="size-[42px]"
-                onPress={() => setSelectedLetter(letter)}
-              >
-                <SqFrameIcon active={letter === selectedLetter} />
-                <View className="absolute flex size-[42px] flex-row items-center justify-center">
-                  <Text className="text-[30px] leading-[32px]">{letter}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+              <Text className="text-[24px] text-white">
+                {letter.toUpperCase()}
+                {letter}
+              </Text>
+            </Pressable>
           ))}
         </View>
       </View>
