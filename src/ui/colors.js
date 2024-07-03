@@ -94,4 +94,7 @@ export const colors = {
   orange: {
     500: "#F69F4E",
   },
+  gray: {
+    300: "#D4D4D8",
+  },
 };

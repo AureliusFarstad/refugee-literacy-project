@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import type { AVPlaybackSource } from "expo-av";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
@@ -73,11 +74,12 @@ const LetterIntroduction = () => {
   // const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   // const [tappedAnswer, setTappedAnswer] = useState<IOption>();
 
-  const [activeActivity] = useState(
+  const [activeActivity, setActiveActivity] = useState(
     levels[0].modules[0].sections[0].activities[0]
   );
 
-  const [_selectedLetter, setSelectedLetter] = useState("a");
+  const activitiesInCurrentSection =
+    levels[0].modules[0].sections[0].activities;
 
   const lowercaseWebView = useRef(null);
   const uppercaseWebView = useRef(null);
@@ -117,7 +119,7 @@ const LetterIntroduction = () => {
           sound.unloadAsync();
         }
       : undefined;
-  }, [sound]);
+  }, [sound, activeActivity]);
 
   return (
     <SafeAreaView className="flex-1">
@@ -154,15 +156,25 @@ const LetterIntroduction = () => {
       </View>
       <View className="flex flex-row justify-between">
         <View className="mt-20 flex w-full flex-row items-center justify-around px-[10px]">
-          {["s", "a", "t", "p", "i", "n"].map((letter, index) => (
+          {activitiesInCurrentSection.map((activity, index) => (
             <Pressable
-              className="flex size-[60] items-center justify-center rounded-md bg-colors-purple-500"
-              onPress={() => setSelectedLetter(letter)}
+              className={clsx(
+                "flex size-[60] items-center justify-center rounded-md bg-colors-purple-500",
+                {
+                  "bg-colors-gray-300": activity.id !== activeActivity.id,
+                }
+              )}
+              onPress={() => {
+                /**
+                 * update current activity
+                 */
+                setActiveActivity(activity);
+              }}
               key={index}
             >
               <Text className="text-[24px] text-white">
-                {letter.toUpperCase()}
-                {letter}
+                {activity.letter.upperCase}
+                {activity.letter.lowerCase}
               </Text>
             </Pressable>
           ))}

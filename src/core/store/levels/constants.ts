@@ -24,7 +24,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 character: "S",
                 sound: {
                   alphabeticAudioSrc: require("assets/alphabet/audio/name/s.mp4"),
-                  phoneticAudioSrc: require("assets/alphabet/sound/name/s.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/s.mp4"),
                 },
                 letter: {
                   lowerCase: "s",
@@ -44,7 +44,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 character: "A",
                 sound: {
                   alphabeticAudioSrc: require("assets/alphabet/audio/name/a.mp4"),
-                  phoneticAudioSrc: require("assets/alphabet/sound/name/a.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/a.mp4"),
                 },
                 letter: {
                   lowerCase: "a",
@@ -64,7 +64,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 character: "T",
                 sound: {
                   alphabeticAudioSrc: require("assets/alphabet/audio/name/t.mp4"),
-                  phoneticAudioSrc: require("assets/alphabet/sound/name/t.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/t.mp4"),
                 },
                 letter: {
                   lowerCase: "t",
@@ -84,7 +84,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 character: "P",
                 sound: {
                   alphabeticAudioSrc: require("assets/alphabet/audio/name/p.mp4"),
-                  phoneticAudioSrc: require("assets/alphabet/sound/name/p.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/p.mp4"),
                 },
                 letter: {
                   lowerCase: "p",
@@ -104,7 +104,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 character: "I",
                 sound: {
                   alphabeticAudioSrc: require("assets/alphabet/audio/name/i.mp4"),
-                  phoneticAudioSrc: require("assets/alphabet/sound/name/i.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/i.mp4"),
                 },
                 letter: {
                   lowerCase: "i",
@@ -124,7 +124,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 character: "N",
                 sound: {
                   alphabeticAudioSrc: require("assets/alphabet/audio/name/n.mp4"),
-                  phoneticAudioSrc: require("assets/alphabet/sound/name/n.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/n.mp4"),
                 },
                 letter: {
                   lowerCase: "n",
