@@ -52,7 +52,7 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView className="flex-1">
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={theme}>
         <RootLayoutNav />
       </ThemeProvider>
