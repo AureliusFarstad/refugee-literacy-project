@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import type { GestureResponderEvent } from "react-native";
-import { Alert, View } from "react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { PanResponder, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
 import { HEIGHT, WIDTH } from "@/utils/layout";
@@ -28,27 +27,31 @@ const AlphabetTracing: React.FC<AlphabetTracingProps> = ({
   const [_completionPercentage, setCompletionPercentage] = useState(0);
   const letterSegmentsRef = useRef<Point[]>([]);
 
+  const [isLetterTraced, setIsLetterTraced] = useState(false);
+
   const [currentPath, setCurrentPath] = useState<string>("");
 
-  const handleTouchStart = (evt: GestureResponderEvent) => {
-    const { locationX, locationY } = evt.nativeEvent;
-    setCurrentPath(`M${locationX},${locationY}`);
-  };
-
-  const handleTouchMove = (evt: GestureResponderEvent) => {
-    const { locationX, locationY } = evt.nativeEvent;
-    if (currentPath) {
-      setCurrentPath((prev) => `${prev} L${locationX},${locationY}`);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    if (currentPath) {
-      setPaths((prevPaths) => [...prevPaths, currentPath]);
-      setCurrentPath("");
-      validateTracing();
-    }
-  };
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: (evt) => {
+        const { locationX, locationY } = evt.nativeEvent;
+        setPaths((prevPaths) => [...prevPaths, `M${locationX},${locationY}`]);
+      },
+      onPanResponderMove: (evt) => {
+        const { locationX, locationY } = evt.nativeEvent;
+        setPaths((prevPaths) => {
+          const newPaths = [...prevPaths];
+          newPaths[newPaths.length - 1] += ` L${locationX},${locationY}`;
+          return newPaths;
+        });
+      },
+      onPanResponderRelease: () => {
+        validateTracing();
+      },
+    })
+  ).current;
 
   const letterPaths: { [key: string]: string } = useMemo(() => {
     const centerX = WIDTH / 2;
@@ -119,11 +122,8 @@ const AlphabetTracing: React.FC<AlphabetTracingProps> = ({
     );
     setCompletionPercentage(newCompletionPercentage);
 
-    if (newCompletionPercentage === 100) {
-      Alert.alert(
-        "Congratulations!",
-        `You've successfully traced the letter ${letter}!`
-      );
+    if (newCompletionPercentage === 100 && !isLetterTraced) {
+      setIsLetterTraced(true);
     }
   };
 
@@ -150,9 +150,6 @@ const AlphabetTracing: React.FC<AlphabetTracingProps> = ({
       }
     }
 
-    /**
-     * Require at least 80% of the segment to be traced
-     */
     return tracedLength >= segmentLength * 0.8;
   };
 
@@ -164,7 +161,7 @@ const AlphabetTracing: React.FC<AlphabetTracingProps> = ({
     const d1 = distance(lineStart, point);
     const d2 = distance(lineEnd, point);
     const lineLength = distance(lineStart, lineEnd);
-    const buffer = TRACING_TOLERANCE; // Increase this value to make tracing easier
+    const buffer = TRACING_TOLERANCE;
     return Math.abs(d1 + d2 - lineLength) < buffer;
   };
 
@@ -178,17 +175,14 @@ const AlphabetTracing: React.FC<AlphabetTracingProps> = ({
     setPaths([]);
     setCurrentPath("");
     setCompletionPercentage(0);
+    setIsLetterTraced(false);
   }, [letter]);
 
+  console.log({ isLetterTraced });
+
   return (
-    <View className="">
-      <Svg
-        height={HEIGHT}
-        width={WIDTH}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
+    <View {...panResponder.panHandlers}>
+      <Svg height={HEIGHT} width={WIDTH}>
         <Path
           d={letterPaths[letter]}
           fill="none"
