@@ -82,10 +82,6 @@ interface ILesson {
   progressBarColor: string;
 }
 
-interface ExtendedSvgProps extends SvgProps {
-  focused?: boolean;
-}
-
 interface ILetter {
   id: string;
   value: string;
