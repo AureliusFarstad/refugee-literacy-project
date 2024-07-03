@@ -23,8 +23,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "S",
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/s.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/sound/name/s.mp4"),
                 },
                 letter: {
                   lowerCase: "s",
@@ -43,8 +43,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "A",
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/a.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/sound/name/a.mp4"),
                 },
                 letter: {
                   lowerCase: "a",
@@ -63,8 +63,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "T",
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/t.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/sound/name/t.mp4"),
                 },
                 letter: {
                   lowerCase: "t",
@@ -83,8 +83,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "P",
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/p.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/sound/name/p.mp4"),
                 },
                 letter: {
                   lowerCase: "p",
@@ -103,8 +103,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "I",
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/i.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/sound/name/i.mp4"),
                 },
                 letter: {
                   lowerCase: "i",
@@ -123,8 +123,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "N",
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/n.mp4"),
+                  phoneticAudioSrc: require("assets/alphabet/sound/name/n.mp4"),
                 },
                 letter: {
                   lowerCase: "n",
@@ -179,8 +179,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
               {
@@ -202,8 +202,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
               {
@@ -225,8 +225,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
               {
@@ -248,8 +248,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
               {
@@ -271,8 +271,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
               {
@@ -294,8 +294,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
             ],
@@ -329,8 +329,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
               {
@@ -352,8 +352,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
               {
@@ -375,8 +375,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
               {
@@ -398,8 +398,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
               {
@@ -421,8 +421,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
               {
@@ -444,8 +444,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   upperCase: "",
                 },
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
               },
             ],
@@ -476,8 +476,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
                 options: [],
                 sound: {
-                  letterSoundSrc: "",
-                  phoneticSoundSrc: "",
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
                 },
                 type: "MATCH_THE_LETTER",
               },

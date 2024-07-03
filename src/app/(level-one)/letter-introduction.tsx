@@ -126,13 +126,13 @@ const LetterIntroduction = () => {
         <View className="flex items-center justify-center">
           <View className="flex flex-row rounded-full bg-colors-purple-200 p-4">
             <Pressable
-              onPress={() => playSound(activeActivity.sound.phoneticSoundSrc)}
+              onPress={() => playSound(activeActivity.sound.phoneticAudioSrc)}
               className="mr-5 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
             >
               <EarIcon />
             </Pressable>
             <Pressable
-              onPress={() => playSound(activeActivity.sound.letterSoundSrc)}
+              onPress={() => playSound(activeActivity.sound.alphabeticAudioSrc)}
               className="flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
             >
               <LettersNameIcon />
