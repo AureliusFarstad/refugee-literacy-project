@@ -125,8 +125,9 @@ const Home = () => {
       </Pressable>
     );
   };
+
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 border-4 border-pink-500 bg-white">
       <FocusAwareStatusBar />
 
       <View className="py-10">
