@@ -159,9 +159,10 @@ const LetterIntroduction = () => {
           {activitiesInCurrentSection.map((activity, index) => (
             <Pressable
               className={clsx(
-                "flex size-[60] items-center justify-center rounded-md bg-colors-purple-500",
+                "flex size-[60] items-center justify-center rounded-md ",
                 {
                   "bg-colors-gray-300": activity.id !== activeActivity.id,
+                  "bg-colors-purple-500": activity.id === activeActivity.id,
                 }
               )}
               onPress={() => {
