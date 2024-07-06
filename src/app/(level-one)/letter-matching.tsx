@@ -26,7 +26,7 @@ interface ILetter {
 
 const LetterTapMatching = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
-  const { levels } = useLevelStore();
+  const { levels, updateLevels } = useLevelStore();
   const activeActivity = useRef(levels[0].modules[0].sections[4].activities[0]);
 
   const insets = useSafeAreaInsets();
@@ -153,9 +153,51 @@ const LetterTapMatching = () => {
       setMatchedPairs([...matchedPairs, selectedLeft.value]);
       setSelectedLeft(null);
       if (matchedPairs.length + 1 === leftLetters.length) {
-        Alert.alert("Level", "Completed", [
-          { text: "Play Again", onPress: initializeGame },
-        ]);
+        Alert.alert("Level", "Completed");
+        console.log(`levels`, JSON.stringify(levels, null, 2));
+        const updatedLevels = levels.map((level: ILevel) => {
+          if (level.id !== levels[0].id) return level;
+
+          const _updatedModules = level.modules.map((sublevel) => {
+            if (sublevel.id !== levels[0].modules[0].id) return sublevel;
+
+            const _updatedSections = sublevel.sections.map(
+              (section: ISection) => {
+                if (section.id !== levels[0].modules[0].sections[4].id)
+                  return section;
+
+                const _updatedActivities = section.activities.map(
+                  (activity: IActivity) => {
+                    if (activity.id !== activeActivity.current.id)
+                      return activity;
+
+                    return {
+                      ...activity,
+                      numberOfTimesCorrectAnswerGiven:
+                        activity.numberOfTimesCorrectAnswerGiven + 1,
+                    };
+                  }
+                );
+
+                return {
+                  ...section,
+                  activities: _updatedActivities,
+                };
+              }
+            );
+
+            return {
+              ...sublevel,
+              sections: _updatedSections,
+            };
+          });
+
+          return {
+            ...level,
+            modules: _updatedModules,
+          };
+        });
+        updateLevels(updatedLevels);
       }
     } else {
       setSelectedLeft(null);

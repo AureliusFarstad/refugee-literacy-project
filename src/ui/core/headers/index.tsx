@@ -23,7 +23,7 @@ const Header = ({ modalRef }: HeaderProps) => {
     <View className="flex-row items-center justify-between p-4">
       <View className="flex-row items-center space-x-4">
         <Pressable onPress={navigateToHome} className="p-2">
-          <HomeIcon color={"#C385F8"} size={SIZE} />
+          <HomeIcon color={"#8AC65B"} size={SIZE} />
         </Pressable>
       </View>
       <View className="flex-row items-center space-x-4">
@@ -33,10 +33,10 @@ const Header = ({ modalRef }: HeaderProps) => {
           }}
           className="p-2"
         >
-          <InformationCircleIcon color={"#C385F8"} size={SIZE} />
+          <InformationCircleIcon color={"#8AC65B"} size={SIZE} />
         </Pressable>
         <View className="p-2">
-          <ShareIcon color={"#C385F8"} size={SIZE} />
+          <ShareIcon color={"#8AC65B"} size={SIZE} />
         </View>
       </View>
     </View>

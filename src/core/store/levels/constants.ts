@@ -30,6 +30,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   lowerCase: "s",
                   upperCase: "S",
                 },
+                animatedLetters: {
+                  lowerCase: "s",
+                  upperCase: "S",
+                },
                 audio: "",
                 correctAnswer: {
                   id: "",
@@ -50,11 +54,16 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   lowerCase: "a",
                   upperCase: "A",
                 },
+                animatedLetters: {
+                  lowerCase: "A",
+                  upperCase: "A",
+                },
                 audio: "",
                 correctAnswer: {
                   id: "",
                   title: "",
                 },
+
                 options: [],
               },
               {
@@ -67,6 +76,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   phoneticAudioSrc: require("assets/alphabet/audio/sound/t.mp4"),
                 },
                 letter: {
+                  lowerCase: "t",
+                  upperCase: "T",
+                },
+                animatedLetters: {
                   lowerCase: "t",
                   upperCase: "T",
                 },
@@ -90,6 +103,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   lowerCase: "p",
                   upperCase: "P",
                 },
+                animatedLetters: {
+                  lowerCase: "p",
+                  upperCase: "P",
+                },
                 audio: "",
                 correctAnswer: {
                   id: "",
@@ -110,6 +127,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   lowerCase: "i",
                   upperCase: "I",
                 },
+                animatedLetters: {
+                  lowerCase: "i",
+                  upperCase: "I",
+                },
                 audio: "",
                 correctAnswer: {
                   id: "",
@@ -127,6 +148,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   phoneticAudioSrc: require("assets/alphabet/audio/sound/n.mp4"),
                 },
                 letter: {
+                  lowerCase: "n",
+                  upperCase: "N",
+                },
+                animatedLetters: {
                   lowerCase: "n",
                   upperCase: "N",
                 },
@@ -153,7 +178,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
           {
             id: "section3",
             icon: "speaker",
-            title: "Pronunciation",
+            title: "Letter Sound Activity",
             completed: false,
             metadata: {
               description: "Practice the sounds of letters...",
@@ -164,8 +189,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 id: "activity4_1",
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
-                correctAnswer: { id: "optionS", title: "S" },
-                audio: require("assets/alphabet/audio/name/s.mp4"),
+                correctAnswer: { id: "optionS", title: "SSSSS" },
+                audio: require("assets/alphabet/audio/sound/s.mp4"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionT", title: "T" },
@@ -188,7 +213,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionA", title: "A" },
-                audio: require("assets/alphabet/audio/name/a.mp4"),
+                audio: require("assets/alphabet/audio/sound/a.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -211,7 +236,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionT", title: "T" },
-                audio: require("assets/alphabet/audio/name/t.mp4"),
+                audio: require("assets/alphabet/audio/sound/t.mp4"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionS", title: "S" },
@@ -234,7 +259,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionP", title: "P" },
-                audio: require("assets/alphabet/audio/name/p.mp4"),
+                audio: require("assets/alphabet/audio/sound/p.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -257,7 +282,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionI", title: "I" },
-                audio: require("assets/alphabet/audio/name/i.mp4"),
+                audio: require("assets/alphabet/audio/sound/i.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -280,7 +305,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionN", title: "N" },
-                audio: require("assets/alphabet/audio/name/n.mp4"),
+                audio: require("assets/alphabet/audio/sound/n.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -303,10 +328,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
           {
             id: "section4",
             icon: "speaker",
-            title: "Pronunciation",
+            title: "Letter Name Activity",
             completed: false,
             metadata: {
-              description: "Practice the names of letters...",
+              description: "Letter Name Activity",
               keywords: ["sounds", "pronunciation", "phonetics"],
             },
             activities: [
@@ -315,7 +340,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionS", title: "S" },
-                audio: require("assets/alphabet/audio/sound/s.mp4"),
+                audio: require("assets/alphabet/audio/name/s.mp4"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionT", title: "T" },
@@ -338,7 +363,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionA", title: "A" },
-                audio: require("assets/alphabet/audio/sound/a.mp4"),
+                audio: require("assets/alphabet/audio/name/a.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -361,7 +386,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionT", title: "T" },
-                audio: require("assets/alphabet/audio/sound/t.mp4"),
+                audio: require("assets/alphabet/audio/name/t.mp4"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionS", title: "S" },
@@ -384,7 +409,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionP", title: "P" },
-                audio: require("assets/alphabet/audio/sound/p.mp4"),
+                audio: require("assets/alphabet/audio/name/p.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -407,7 +432,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionI", title: "I" },
-                audio: require("assets/alphabet/audio/sound/i.mp4"),
+                audio: require("assets/alphabet/audio/name/i.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
@@ -430,7 +455,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionN", title: "N" },
-                audio: require("assets/alphabet/audio/sound/n.mp4"),
+                audio: require("assets/alphabet/audio/name/n.mp4"),
                 options: [
                   { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },

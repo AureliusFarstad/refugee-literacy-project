@@ -7,6 +7,7 @@ import Svg, { Line } from "react-native-svg";
 
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
+import AnimatedLetterComponent from "@/ui/components/home/animated-letter-component";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import {
@@ -17,6 +18,11 @@ import {
   TeacherIcon,
 } from "@/ui/icons";
 import { WIDTH } from "@/utils/layout";
+
+type AnimatedLetterComponentRef = {
+  animateLowercase: () => void;
+  animateUppercase: () => void;
+};
 
 const PageLinesSVG = () => {
   return (
@@ -71,6 +77,12 @@ const LetterIntroduction = () => {
 
   const { levels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
+
+  const [tappedButton, setTappedAction] = useState<
+    "uppercase" | "lowercase" | null
+  >(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   // const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   // const [tappedAnswer, setTappedAnswer] = useState<IOption>();
 
@@ -78,24 +90,10 @@ const LetterIntroduction = () => {
     levels[0].modules[0].sections[0].activities[0]
   );
 
+  const animatedLetterRef = useRef<AnimatedLetterComponentRef | null>(null);
+
   const activitiesInCurrentSection =
     levels[0].modules[0].sections[0].activities;
-
-  const lowercaseWebView = useRef(null);
-  const uppercaseWebView = useRef(null);
-
-  const animateLowercase = () => {
-    const jsCommand = `document.querySelector('svg').svgatorPlayer['ready']((player) => player.play()); true;`;
-    console.log(jsCommand);
-    // @ts-ignore
-    lowercaseWebView.current?.injectJavaScript(jsCommand);
-  };
-
-  const animateUppercase = () => {
-    const jsCommand = `document.querySelector('svg').svgatorPlayer['ready']((player) => player.play()); true;`;
-    // @ts-ignore
-    uppercaseWebView.current?.injectJavaScript(jsCommand);
-  };
 
   const playSound = async (playbackSource: AVPlaybackSource) => {
     try {
@@ -121,6 +119,13 @@ const LetterIntroduction = () => {
       : undefined;
   }, [sound, activeActivity]);
 
+  useEffect(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    return () => {};
+  }, []);
+
   return (
     <SafeAreaView className="flex-1">
       <Header title="Introduction" modalRef={dynamicModalRef} />
@@ -141,17 +146,44 @@ const LetterIntroduction = () => {
             </Pressable>
           </View>
         </View>
-        <View className="mx-4 mt-5  overflow-hidden">
+        <View className="mx-4 mt-5 overflow-hidden  border-yellow-500">
           <PageLinesSVG />
+          <AnimatedLetterComponent
+            ref={animatedLetterRef}
+            name={activeActivity.letter.upperCase}
+            key={activeActivity.letter.upperCase}
+          />
         </View>
       </View>
       <View className="my-10 flex flex-row items-center justify-evenly">
-        <Pressable onPress={() => animateLowercase()}>
-          <CustomPencilIcon size={56} border={true} />
+        <Pressable
+          onPress={() => {
+            setTappedAction("uppercase");
+            animatedLetterRef?.current?.animateLowercase();
+            timeoutRef.current = setTimeout(() => {
+              setTappedAction(null);
+            }, 2000);
+          }}
+        >
+          <CustomPencilIcon
+            size={56}
+            border={tappedButton === "uppercase" ? true : false}
+          />
         </Pressable>
         <SimplePencilIcon width={60} height={60} />
-        <Pressable onPress={() => animateUppercase()}>
-          <CustomPencilIcon size={44} />
+        <Pressable
+          onPress={() => {
+            setTappedAction("lowercase");
+            animatedLetterRef?.current?.animateUppercase();
+            timeoutRef.current = setTimeout(() => {
+              setTappedAction(null);
+            }, 2000);
+          }}
+        >
+          <CustomPencilIcon
+            size={44}
+            border={tappedButton === "lowercase" ? true : false}
+          />
         </Pressable>
       </View>
       <View className="flex flex-row justify-between">

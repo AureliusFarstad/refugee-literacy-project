@@ -2108,13 +2108,11 @@ export const CustomPencilIcon = (props: ExtendedSvgProps) => {
   const scale = Math.min(size / 48, size / 48);
   return (
     <View
-      className={clsx(
-        "rounded-full border-8 border-colors-purple-500 bg-colors-purple-500 p-2",
-        {
-          "border-colors-green-500": props.border,
-          "p-4": size > 48,
-        }
-      )}
+      className={clsx("rounded-full border-8  bg-colors-purple-500 p-2", {
+        "border-colors-green-500": props.border,
+        "border-colors-purple-500": !props.border,
+        "p-4": size > 48,
+      })}
     >
       <Svg
         width={size}

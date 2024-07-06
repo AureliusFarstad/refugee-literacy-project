@@ -60,6 +60,10 @@ interface IActivity {
     lowerCase: string;
     upperCase: string;
   };
+  animatedLetters?: {
+    lowerCase: string;
+    upperCase: string;
+  };
   letters?: string[];
 }
 
