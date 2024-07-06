@@ -189,7 +189,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 id: "activity4_1",
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
-                correctAnswer: { id: "optionS", title: "SSSSS" },
+                correctAnswer: { id: "optionS", title: "S" },
                 audio: require("assets/alphabet/audio/sound/s.mp4"),
                 options: [
                   { id: "optionA", title: "A" },
