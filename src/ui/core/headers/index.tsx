@@ -1,11 +1,9 @@
 import { router } from "expo-router";
 import { useCallback } from "react";
 import { Pressable, View } from "react-native";
-import {
-  HomeIcon,
-  InformationCircleIcon,
-  ShareIcon,
-} from "react-native-heroicons/solid";
+import { HomeIcon, ShareIcon } from "react-native-heroicons/solid";
+
+import { InformationIcon } from "@/ui/icons";
 
 const SIZE = 36;
 
@@ -33,7 +31,7 @@ const Header = ({ modalRef }: HeaderProps) => {
           }}
           className="p-2"
         >
-          <InformationCircleIcon color={"#8AC65B"} size={SIZE} />
+          <InformationIcon color={"#8AC65B"} size={40} />
         </Pressable>
         <View className="p-2">
           <ShareIcon color={"#8AC65B"} size={SIZE} />
