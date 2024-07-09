@@ -2116,13 +2116,11 @@ export const CustomPencilIcon = (props: ExtendedSvgProps) => {
   const scale = Math.min(size / 48, size / 48);
   return (
     <View
-      className={clsx(
-        "rounded-full border-8 border-colors-purple-500 bg-colors-purple-500 p-2",
-        {
-          "border-colors-green-500": props.border,
-          "p-4": size > 48,
-        }
-      )}
+      className={clsx("rounded-full border-8  bg-colors-purple-500 p-2", {
+        "border-colors-green-500": props.border,
+        "border-colors-purple-500": !props.border,
+        "p-4": size > 48,
+      })}
     >
       <Svg
         width={size}
@@ -2169,5 +2167,37 @@ export const SimplePencilIcon = (props: ExtendedSvgProps) => (
       d="M5.336 35.118s3.5.45 3.565.54c.066.089.215 2.893.3 2.958.087.065 2.634.117 2.823.211.189.095.523 3.582.523 3.582M42.316 13.488l-7.593-7.595M37.215 7.982 9.242 35.95M39.165 11.228 11.19 39.196M2.934 41.723s1.178.308 2.07 1.09c.89.783 1.264 2.137 1.264 2.137"
       stroke="#000000"
     />
+  </Svg>
+);
+
+export const InformationIcon = (props: ExtendedSvgProps) => (
+  <Svg
+    viewBox="0 0 32 32"
+    width={props.size}
+    height={props.size}
+    fill="none"
+    {...props}
+  >
+    <Circle cx="15.594" cy="16" r="15.016" fill="#8AC65B" />
+    <Path
+      d="M20.44 21.47c.25-.143.8-.58 1.002-1.175.202-.596.021-1.253-.094-1.506M21.42 23.44c.525-.302 1.682-1.22 2.106-2.472.424-1.252.045-2.63-.198-3.164M22.22 25.404c.8-.46 2.56-1.856 3.206-3.762.646-1.906.069-4.006-.301-4.817"
+      stroke="#FAFAFA"
+      strokeLinecap="round"
+    />
+    <G clipPath="url(#a)">
+      <Path
+        d="M18.564 16.842a.451.451 0 0 0-.438.45v.352c0 .04-.02.078-.057.1l-.193.109a.118.118 0 0 0-.03.177l.177.205a.116.116 0 0 1-.006.157l-.257.27a.119.119 0 0 0-.014.137c.12.204.175.418.175.625 0 .707-.625 1.34-1.41 1.219l-1.779-.279a1.86 1.86 0 0 1-1.853 1.693h-2.277c-1.288 0-2.234-1.205-2.2-2.492.006-.268.007-.55.004-.856-.007-.45-.143-.536-.74-1.382C.678 7.451 14.812 2.081 18.01 10.763c.23.622.227 1.27.091 1.903-.14.654-.1 1.352.274 1.907l.764 1.133c.318.475-.007 1.119-.575 1.136Z"
+        fill="#FAFAFA"
+      />
+    </G>
+    <Defs>
+      <ClipPath id="a">
+        <Path
+          fill="#fff"
+          transform="translate(4.332 5.99)"
+          d="M0 0h16.354v16.479H0z"
+        />
+      </ClipPath>
+    </Defs>
   </Svg>
 );

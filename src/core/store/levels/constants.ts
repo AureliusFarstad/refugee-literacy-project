@@ -30,12 +30,22 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   lowerCase: "s",
                   upperCase: "S",
                 },
+                animatedLetters: {
+                  lowerCase: "s",
+                  upperCase: "S",
+                },
                 audio: "",
                 correctAnswer: {
                   id: "",
                   title: "",
                 },
                 options: [],
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
+                },
               },
               {
                 id: "activity2",
@@ -50,10 +60,20 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   lowerCase: "a",
                   upperCase: "A",
                 },
+                animatedLetters: {
+                  lowerCase: "A",
+                  upperCase: "A",
+                },
                 audio: "",
                 correctAnswer: {
                   id: "",
                   title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
                 },
                 options: [],
               },
@@ -70,10 +90,20 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   lowerCase: "t",
                   upperCase: "T",
                 },
+                animatedLetters: {
+                  lowerCase: "t",
+                  upperCase: "T",
+                },
                 audio: "",
                 correctAnswer: {
                   id: "",
                   title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
                 },
                 options: [],
               },
@@ -90,10 +120,20 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   lowerCase: "p",
                   upperCase: "P",
                 },
+                animatedLetters: {
+                  lowerCase: "p",
+                  upperCase: "P",
+                },
                 audio: "",
                 correctAnswer: {
                   id: "",
                   title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
                 },
                 options: [],
               },
@@ -110,10 +150,20 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   lowerCase: "i",
                   upperCase: "I",
                 },
+                animatedLetters: {
+                  lowerCase: "i",
+                  upperCase: "I",
+                },
                 audio: "",
                 correctAnswer: {
                   id: "",
                   title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
                 },
                 options: [],
               },
@@ -130,10 +180,20 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   lowerCase: "n",
                   upperCase: "N",
                 },
+                animatedLetters: {
+                  lowerCase: "n",
+                  upperCase: "N",
+                },
                 audio: "",
                 correctAnswer: {
                   id: "",
                   title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
                 },
                 options: [],
               },
@@ -153,7 +213,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
           {
             id: "section3",
             icon: "speaker",
-            title: "Pronunciation",
+            title: "Letter Sound Activity",
             completed: false,
             metadata: {
               description: "Practice the sounds of letters...",
@@ -164,156 +224,6 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 id: "activity4_1",
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
-                correctAnswer: { id: "optionS", title: "S" },
-                audio: require("assets/alphabet/audio/name/s.mp4"),
-                options: [
-                  { id: "optionA", title: "A" },
-                  { id: "optionT", title: "T" },
-                  { id: "optionP", title: "P" },
-                  { id: "optionI", title: "I" },
-                  { id: "optionN", title: "N" },
-                ],
-                character: "",
-                letter: {
-                  lowerCase: "",
-                  upperCase: "",
-                },
-                sound: {
-                  alphabeticAudioSrc: "",
-                  phoneticAudioSrc: "",
-                },
-              },
-              {
-                id: "activity4_2",
-                numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
-                correctAnswer: { id: "optionA", title: "A" },
-                audio: require("assets/alphabet/audio/name/a.mp4"),
-                options: [
-                  { id: "optionS", title: "S" },
-                  { id: "optionT", title: "T" },
-                  { id: "optionP", title: "P" },
-                  { id: "optionI", title: "I" },
-                  { id: "optionN", title: "N" },
-                ],
-                character: "",
-                letter: {
-                  lowerCase: "",
-                  upperCase: "",
-                },
-                sound: {
-                  alphabeticAudioSrc: "",
-                  phoneticAudioSrc: "",
-                },
-              },
-              {
-                id: "activity4_3",
-                numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
-                correctAnswer: { id: "optionT", title: "T" },
-                audio: require("assets/alphabet/audio/name/t.mp4"),
-                options: [
-                  { id: "optionA", title: "A" },
-                  { id: "optionS", title: "S" },
-                  { id: "optionP", title: "P" },
-                  { id: "optionI", title: "I" },
-                  { id: "optionN", title: "N" },
-                ],
-                character: "",
-                letter: {
-                  lowerCase: "",
-                  upperCase: "",
-                },
-                sound: {
-                  alphabeticAudioSrc: "",
-                  phoneticAudioSrc: "",
-                },
-              },
-              {
-                id: "activity4_4",
-                numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
-                correctAnswer: { id: "optionP", title: "P" },
-                audio: require("assets/alphabet/audio/name/p.mp4"),
-                options: [
-                  { id: "optionS", title: "S" },
-                  { id: "optionT", title: "T" },
-                  { id: "optionA", title: "A" },
-                  { id: "optionI", title: "I" },
-                  { id: "optionN", title: "N" },
-                ],
-                character: "",
-                letter: {
-                  lowerCase: "",
-                  upperCase: "",
-                },
-                sound: {
-                  alphabeticAudioSrc: "",
-                  phoneticAudioSrc: "",
-                },
-              },
-              {
-                id: "activity4_5",
-                numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
-                correctAnswer: { id: "optionI", title: "I" },
-                audio: require("assets/alphabet/audio/name/i.mp4"),
-                options: [
-                  { id: "optionS", title: "S" },
-                  { id: "optionT", title: "T" },
-                  { id: "optionA", title: "A" },
-                  { id: "optionP", title: "P" },
-                  { id: "optionN", title: "N" },
-                ],
-                character: "",
-                letter: {
-                  lowerCase: "",
-                  upperCase: "",
-                },
-                sound: {
-                  alphabeticAudioSrc: "",
-                  phoneticAudioSrc: "",
-                },
-              },
-              {
-                id: "activity4_6",
-                numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
-                correctAnswer: { id: "optionN", title: "N" },
-                audio: require("assets/alphabet/audio/name/n.mp4"),
-                options: [
-                  { id: "optionS", title: "S" },
-                  { id: "optionT", title: "T" },
-                  { id: "optionA", title: "A" },
-                  { id: "optionP", title: "P" },
-                  { id: "optionI", title: "I" },
-                ],
-                character: "",
-                letter: {
-                  lowerCase: "",
-                  upperCase: "",
-                },
-                sound: {
-                  alphabeticAudioSrc: "",
-                  phoneticAudioSrc: "",
-                },
-              },
-            ],
-          },
-          {
-            id: "section4",
-            icon: "speaker",
-            title: "Pronunciation",
-            completed: false,
-            metadata: {
-              description: "Practice the names of letters...",
-              keywords: ["sounds", "pronunciation", "phonetics"],
-            },
-            activities: [
-              {
-                id: "activity3_1",
-                numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionS", title: "S" },
                 audio: require("assets/alphabet/audio/sound/s.mp4"),
                 options: [
@@ -332,11 +242,15 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
                 },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
               },
               {
-                id: "activity3_2",
+                id: "activity4_2",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
+                type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionA", title: "A" },
                 audio: require("assets/alphabet/audio/sound/a.mp4"),
                 options: [
@@ -355,11 +269,15 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
                 },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
               },
               {
-                id: "activity3_3",
+                id: "activity4_3",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
+                type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionT", title: "T" },
                 audio: require("assets/alphabet/audio/sound/t.mp4"),
                 options: [
@@ -378,11 +296,15 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
                 },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
               },
               {
-                id: "activity3_4",
+                id: "activity4_4",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
+                type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionP", title: "P" },
                 audio: require("assets/alphabet/audio/sound/p.mp4"),
                 options: [
@@ -401,11 +323,15 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
                 },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
               },
               {
-                id: "activity3_5",
+                id: "activity4_5",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
+                type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionI", title: "I" },
                 audio: require("assets/alphabet/audio/sound/i.mp4"),
                 options: [
@@ -424,11 +350,15 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
                 },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
               },
               {
-                id: "activity3_6",
+                id: "activity4_6",
                 numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
+                type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionN", title: "N" },
                 audio: require("assets/alphabet/audio/sound/n.mp4"),
                 options: [
@@ -446,6 +376,184 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 sound: {
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
+              },
+            ],
+          },
+          {
+            id: "section4",
+            icon: "speaker",
+            title: "Letter Name Activity",
+            completed: false,
+            metadata: {
+              description: "Letter Name Activity",
+              keywords: ["sounds", "pronunciation", "phonetics"],
+            },
+            activities: [
+              {
+                id: "activity3_1",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_SOUND",
+                correctAnswer: { id: "optionS", title: "S" },
+                audio: require("assets/alphabet/audio/name/s.mp4"),
+                options: [
+                  { id: "optionA", title: "A" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionI", title: "I" },
+                  { id: "optionN", title: "N" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
+              },
+              {
+                id: "activity3_2",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_SOUND",
+                correctAnswer: { id: "optionA", title: "A" },
+                audio: require("assets/alphabet/audio/name/a.mp4"),
+                options: [
+                  { id: "optionS", title: "S" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionI", title: "I" },
+                  { id: "optionN", title: "N" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
+              },
+              {
+                id: "activity3_3",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_SOUND",
+                correctAnswer: { id: "optionT", title: "T" },
+                audio: require("assets/alphabet/audio/name/t.mp4"),
+                options: [
+                  { id: "optionA", title: "A" },
+                  { id: "optionS", title: "S" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionI", title: "I" },
+                  { id: "optionN", title: "N" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
+              },
+              {
+                id: "activity3_4",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_SOUND",
+                correctAnswer: { id: "optionP", title: "P" },
+                audio: require("assets/alphabet/audio/name/p.mp4"),
+                options: [
+                  { id: "optionS", title: "S" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionA", title: "A" },
+                  { id: "optionI", title: "I" },
+                  { id: "optionN", title: "N" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
+              },
+              {
+                id: "activity3_5",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_SOUND",
+                correctAnswer: { id: "optionI", title: "I" },
+                audio: require("assets/alphabet/audio/name/i.mp4"),
+                options: [
+                  { id: "optionS", title: "S" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionA", title: "A" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionN", title: "N" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
+              },
+              {
+                id: "activity3_6",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_SOUND",
+                correctAnswer: { id: "optionN", title: "N" },
+                audio: require("assets/alphabet/audio/name/n.mp4"),
+                options: [
+                  { id: "optionS", title: "S" },
+                  { id: "optionT", title: "T" },
+                  { id: "optionA", title: "A" },
+                  { id: "optionP", title: "P" },
+                  { id: "optionI", title: "I" },
+                ],
+                character: "",
+                letter: {
+                  lowerCase: "",
+                  upperCase: "",
+                },
+                sound: {
+                  alphabeticAudioSrc: "",
+                  phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
                 },
               },
             ],

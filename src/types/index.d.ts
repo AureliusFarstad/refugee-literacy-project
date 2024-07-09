@@ -60,7 +60,18 @@ interface IActivity {
     lowerCase: string;
     upperCase: string;
   };
+  animatedLetters?: {
+    lowerCase: string;
+    upperCase: string;
+  };
   letters?: string[];
+  progress?: {
+    lowercaseReadCount: number;
+    uppercaseReadCount: number;
+    phoneticSoundPlayCount: number;
+    alphabeticSoundPlayCount: number;
+  };
+  nameAndSoundActivityProgress?: ILetterSoundAndNameProgress;
 }
 
 interface IActivityWithSoundAndName {
@@ -85,4 +96,16 @@ interface ILesson {
 interface ILetter {
   id: string;
   value: string;
+}
+
+interface ILetterIntroductionProgress {
+  lowercaseReadCount: number;
+  uppercaseReadCount: number;
+  phoneticSoundPlayCount: number;
+  alphabeticSoundPlayCount: number;
+}
+
+interface ILetterSoundAndNameProgress {
+  uppercaseSoundCount: number;
+  lowercaseSoundCount: number;
 }
