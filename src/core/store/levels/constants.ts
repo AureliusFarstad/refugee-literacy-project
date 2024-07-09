@@ -40,6 +40,12 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   title: "",
                 },
                 options: [],
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
+                },
               },
               {
                 id: "activity2",
@@ -63,7 +69,12 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   id: "",
                   title: "",
                 },
-
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
+                },
                 options: [],
               },
               {
@@ -87,6 +98,12 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 correctAnswer: {
                   id: "",
                   title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
                 },
                 options: [],
               },
@@ -112,6 +129,12 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   id: "",
                   title: "",
                 },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
+                },
                 options: [],
               },
               {
@@ -136,6 +159,12 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   id: "",
                   title: "",
                 },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
+                },
                 options: [],
               },
               {
@@ -159,6 +188,12 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 correctAnswer: {
                   id: "",
                   title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
                 },
                 options: [],
               },

@@ -5,6 +5,7 @@ import { View } from "react-native";
 
 type AnimatedLetterComponentProps = {
   name: string;
+  onAnimationComplete: (letter: string) => void;
 };
 
 type AnimatedLetterComponentRef = {
@@ -15,7 +16,7 @@ type AnimatedLetterComponentRef = {
 const AnimatedLetterComponent = forwardRef<
   AnimatedLetterComponentRef,
   AnimatedLetterComponentProps
->(({ name }, ref) => {
+>(({ name, onAnimationComplete }, ref) => {
   const lowercaseWebView = useRef(null);
   const uppercaseWebView = useRef(null);
   const animateLowercase = () => {
@@ -35,9 +36,11 @@ const AnimatedLetterComponent = forwardRef<
     return {
       animateLowercase: () => {
         animateLowercase();
+        onAnimationComplete(name);
       },
       animateUppercase: () => {
         animateUppercase();
+        onAnimationComplete(name.toUpperCase());
       },
     };
   });
@@ -45,21 +48,21 @@ const AnimatedLetterComponent = forwardRef<
   const renderLowercaseLetter = () => {
     switch (name) {
       case "a":
-        return <LowerA ref={lowercaseWebView} />;
+        return <LowerA ref={lowercaseWebView} key={name} />;
       case "s":
-        return <LowerS ref={lowercaseWebView} />;
+        return <LowerS ref={lowercaseWebView} key={name} />;
       default:
-        return <LowerA ref={lowercaseWebView} />;
+        return <LowerA ref={lowercaseWebView} key={name} />;
     }
   };
   const renderUppercaseLetter = () => {
     switch (name.toUpperCase()) {
       case "A":
-        return <LowerA ref={uppercaseWebView} />;
+        return <LowerA ref={uppercaseWebView} key={name.toUpperCase()} />;
       case "S":
-        return <LowerS ref={uppercaseWebView} />;
+        return <LowerS ref={uppercaseWebView} key={name.toUpperCase()} />;
       default:
-        return <LowerA ref={uppercaseWebView} />;
+        return <LowerA ref={uppercaseWebView} key={name.toUpperCase()} />;
     }
   };
 
