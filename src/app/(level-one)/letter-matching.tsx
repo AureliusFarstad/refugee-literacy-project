@@ -154,7 +154,6 @@ const LetterTapMatching = () => {
       setSelectedLeft(null);
       if (matchedPairs.length + 1 === leftLetters.length) {
         Alert.alert("Level", "Completed");
-        console.log(`levels`, JSON.stringify(levels, null, 2));
         const updatedLevels = levels.map((level: ILevel) => {
           if (level.id !== levels[0].id) return level;
 

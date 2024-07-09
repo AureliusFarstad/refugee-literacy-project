@@ -7,7 +7,6 @@ import { svgPathProperties } from "svg-path-properties";
 
 import { Text } from "@/ui/core";
 import { HEIGHT, WIDTH } from "@/utils/layout";
-import CoordinateArrayComparison from "@/utils/level-one/cooordinates/comparesvgs";
 import pathsToCoords from "@/utils/level-one/cooordinates/pathsToCoords";
 
 const letterCoordinatesToRender = {
@@ -2503,22 +2502,6 @@ const AlphabetTracing: React.FC<AlphabetTracingProps> = ({
   const _checkIfEqual = () => {
     const result: [][] = getCoordinates(paths.length > 0 ? paths : []);
 
-    const areCoordinatesEqual =
-      CoordinateArrayComparison.compareCoordinateArrays(
-        result,
-        letterCoordinatesToRender[letter as "A" | "S" | "T" | "P" | "I" | "N"]
-      );
-
-    const maximumDifference = CoordinateArrayComparison.getMaxDifference(
-      result,
-      letterCoordinatesToRender[letter as "A" | "S" | "T" | "P" | "I" | "N"]
-    );
-
-    console.log(`🍟🍟🍟`);
-    console.log(areCoordinatesEqual);
-    console.log(maximumDifference);
-    console.log(`🍟🍟🍟`);
-
     /**
      * loop through the result and check if the coordinates are equal to the coordinatesToRender
      */
@@ -2556,9 +2539,6 @@ const AlphabetTracing: React.FC<AlphabetTracingProps> = ({
   ]
     .map((coord) => coord.join(","))
     .join(" ");
-
-  console.log(`🍟🍟🍟`);
-  console.log(paths);
 
   return (
     <View {...panResponder.panHandlers} className="">

@@ -205,8 +205,6 @@ const LetterIntroduction = () => {
     }
   };
 
-  console.log(`levels`, JSON.stringify(levels, null, 2));
-
   useEffect(() => {
     const isCompleted = activitiesInCurrentSection.every((activity) => {
       if (!activity.progress) return false;

@@ -126,10 +126,7 @@ const LetterSound = () => {
         (count) => count >= 1
       );
     });
-    console.log(
-      `activitiesInCurrentSection`,
-      JSON.stringify(activitiesInCurrentSection, null, 2)
-    );
+
     if (isCompleted) {
       console.log("done");
     }
