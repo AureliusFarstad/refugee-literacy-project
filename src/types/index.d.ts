@@ -71,6 +71,7 @@ interface IActivity {
     phoneticSoundPlayCount: number;
     alphabeticSoundPlayCount: number;
   };
+  nameAndSoundActivityProgress?: ILetterSoundAndNameProgress;
 }
 
 interface IActivityWithSoundAndName {
@@ -102,4 +103,9 @@ interface ILetterIntroductionProgress {
   uppercaseReadCount: number;
   phoneticSoundPlayCount: number;
   alphabeticSoundPlayCount: number;
+}
+
+interface ILetterSoundAndNameProgress {
+  uppercaseSoundCount: number;
+  lowercaseSoundCount: number;
 }

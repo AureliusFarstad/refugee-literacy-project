@@ -3,7 +3,6 @@ import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import { router, usePathname } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Alert } from "react-native";
 
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
@@ -13,27 +12,35 @@ import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import { EarIcon, LettersNameIcon } from "@/ui/icons";
 import { getOptionsToRender } from "@/utils/level-one";
 
-const SwitchExample = () => {
-  const [active, setActive] = React.useState(false);
+type LowerCaseSwitchProps = {
+  isLowercase: boolean;
+  setIsLowercase: (value: boolean) => void;
+};
+
+const LowercaseSwitch = ({
+  isLowercase,
+  setIsLowercase,
+}: LowerCaseSwitchProps) => {
   return (
     <Switch.Root
-      checked={active}
-      onChange={setActive}
+      checked={isLowercase}
+      onChange={setIsLowercase}
       accessibilityLabel="switch"
       className="pb-2"
     >
-      <Switch.Icon checked={active} />
+      <Switch.Icon checked={isLowercase} />
       <Switch.Label text="" />
     </Switch.Root>
   );
 };
-
 const LetterName = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels, updateLevels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
   const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   const [tappedAnswer, setTappedAnswer] = useState<IOption>();
+
+  const [isLowercase, setIsLowercase] = useState(false);
 
   const pathname = usePathname();
 
@@ -112,14 +119,21 @@ const LetterName = () => {
     /**
      * Check if each activity have been answered correctly twice if so means level completed
      */
-    const currentSection = levels[0].modules[0].sections[3];
-    if (
-      currentSection.activities.every(
-        (activity) => activity.numberOfTimesCorrectAnswerGiven >= 1
-      )
-    ) {
-      Alert.alert("Activity Completed");
-      router.navigate("/(level-one)/letter-matching");
+    const activitiesInCurrentSection =
+      levels[0].modules[0].sections[2].activities;
+    const isCompleted = activitiesInCurrentSection.every((activity) => {
+      if (!activity.nameAndSoundActivityProgress) return false;
+      return Object.values(activity.nameAndSoundActivityProgress).every(
+        (count) => count >= 1
+      );
+    });
+    console.log(
+      `activitiesInCurrentSection`,
+      JSON.stringify(activitiesInCurrentSection, null, 2)
+    );
+    if (isCompleted) {
+      console.log("done");
+      // router.navigate("/(level-one)/letter-matching");
     }
   }, [levels, activeActivity, pathname]);
 
@@ -127,7 +141,10 @@ const LetterName = () => {
     <SafeAreaView>
       <Header title="Name" modalRef={dynamicModalRef} />
       <View className="mt-5 px-5">
-        <SwitchExample />
+        <LowercaseSwitch
+          isLowercase={isLowercase}
+          setIsLowercase={setIsLowercase}
+        />
       </View>
       <View className="flex items-center p-4">
         <Pressable
@@ -164,10 +181,21 @@ const LetterName = () => {
                               if (activity.id !== activeActivity.id)
                                 return activity;
 
+                              const updatedProgress = {
+                                ...activity.nameAndSoundActivityProgress,
+                              } as ILetterSoundAndNameProgress;
+
+                              if (isLowercase && updatedProgress) {
+                                updatedProgress.lowercaseSoundCount += 1;
+                              } else if (!isLowercase && updatedProgress) {
+                                updatedProgress.uppercaseSoundCount += 1;
+                              }
+
                               return {
                                 ...activity,
-                                numberOfTimesCorrectAnswerGiven:
-                                  activity.numberOfTimesCorrectAnswerGiven + 1,
+                                nameAndSoundActivityProgress: {
+                                  ...updatedProgress,
+                                },
                               };
                             }
                           );
@@ -242,7 +270,9 @@ const LetterName = () => {
                     activeActivity.correctAnswer.id !== tappedAnswer.id,
                 })}
               >
-                {option.title}
+                {isLowercase
+                  ? option.title.toLowerCase()
+                  : option.title.toUpperCase()}
               </Text>
             </Pressable>
           ))}

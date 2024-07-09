@@ -242,6 +242,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
                 },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
               },
               {
                 id: "activity4_2",
@@ -264,6 +268,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 sound: {
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
                 },
               },
               {
@@ -288,6 +296,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
                 },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
               },
               {
                 id: "activity4_4",
@@ -310,6 +322,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 sound: {
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
                 },
               },
               {
@@ -334,6 +350,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
                 },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
               },
               {
                 id: "activity4_6",
@@ -356,6 +376,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 sound: {
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
                 },
               },
             ],
@@ -392,6 +416,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
                 },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
               },
               {
                 id: "activity3_2",
@@ -414,6 +442,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 sound: {
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
                 },
               },
               {
@@ -438,6 +470,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
                 },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
               },
               {
                 id: "activity3_4",
@@ -460,6 +496,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 sound: {
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
                 },
               },
               {
@@ -484,6 +524,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
                 },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
+                },
               },
               {
                 id: "activity3_6",
@@ -506,6 +550,10 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 sound: {
                   alphabeticAudioSrc: "",
                   phoneticAudioSrc: "",
+                },
+                nameAndSoundActivityProgress: {
+                  uppercaseSoundCount: 0,
+                  lowercaseSoundCount: 0,
                 },
               },
             ],
