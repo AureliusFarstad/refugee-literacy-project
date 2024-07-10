@@ -1,5 +1,5 @@
-import LowerA from "assets/animation/a-animated";
-import LowerS from "assets/animation/s-animated";
+import LowerA from "assets/animation/alphabet/lowercase/a";
+import UpperA from "assets/animation/alphabet/uppercase/a";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { View } from "react-native";
 
@@ -50,7 +50,7 @@ const AnimatedLetterComponent = forwardRef<
       case "a":
         return <LowerA ref={lowercaseWebView} key={name} />;
       case "s":
-        return <LowerS ref={lowercaseWebView} key={name} />;
+        return <LowerA ref={lowercaseWebView} key={name} />;
       default:
         return <LowerA ref={lowercaseWebView} key={name} />;
     }
@@ -58,11 +58,11 @@ const AnimatedLetterComponent = forwardRef<
   const renderUppercaseLetter = () => {
     switch (name.toUpperCase()) {
       case "A":
-        return <LowerA ref={uppercaseWebView} key={name.toUpperCase()} />;
+        return <UpperA ref={uppercaseWebView} key={name.toUpperCase()} />;
       case "S":
-        return <LowerS ref={uppercaseWebView} key={name.toUpperCase()} />;
+        return <UpperA ref={uppercaseWebView} key={name.toUpperCase()} />;
       default:
-        return <LowerA ref={uppercaseWebView} key={name.toUpperCase()} />;
+        return <UpperA ref={uppercaseWebView} key={name.toUpperCase()} />;
     }
   };
 
