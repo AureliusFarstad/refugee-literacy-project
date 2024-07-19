@@ -3,7 +3,7 @@ import type { AVPlaybackSource } from "expo-av";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import React, { useEffect, useRef, useState } from "react";
-import { Alert } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import Svg, { Line } from "react-native-svg";
 
 import { useLevelStore } from "@/core/store/levels";
@@ -15,7 +15,6 @@ import {
   CustomPencilIcon,
   EarIcon,
   LettersNameIcon,
-  SimplePencilIcon,
   TeacherIcon,
 } from "@/ui/icons";
 import { WIDTH } from "@/utils/layout";
@@ -221,28 +220,28 @@ const LetterIntroduction = () => {
       <View>
         <View className="flex items-center justify-center">
           <View className="flex flex-row rounded-full bg-colors-purple-200 p-4">
-            <Pressable
-              onPress={async () => {
-                try {
-                  await playSound(activeActivity.sound.phoneticAudioSrc);
-                  incrementProgress("PHONETIC_SOUND");
-                } catch (error) {}
-              }}
-              className="mr-5 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
-            >
-              <EarIcon />
-            </Pressable>
-            <Pressable
+            <TouchableOpacity
               onPress={async () => {
                 try {
                   await playSound(activeActivity.sound.alphabeticAudioSrc);
                   incrementProgress("ALPHABETIC_SOUND");
                 } catch (error) {}
               }}
-              className="flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
+              className="mr-2 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
             >
               <LettersNameIcon />
-            </Pressable>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={async () => {
+                try {
+                  await playSound(activeActivity.sound.phoneticAudioSrc);
+                  incrementProgress("PHONETIC_SOUND");
+                } catch (error) {}
+              }}
+              className=" flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
+            >
+              <EarIcon />
+            </TouchableOpacity>
           </View>
         </View>
         <View className="mx-4 mt-5 overflow-hidden  border-yellow-500">
@@ -266,11 +265,10 @@ const LetterIntroduction = () => {
           }}
         >
           <CustomPencilIcon
-            size={56}
+            size={44}
             border={tappedButton === "uppercase" ? true : false}
           />
         </Pressable>
-        <SimplePencilIcon width={60} height={60} />
         <Pressable
           onPress={() => {
             setTappedAction("lowercase");
