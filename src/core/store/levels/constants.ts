@@ -5,64 +5,34 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
     modules: [
       {
         id: "module1",
-        title: "S,A,T,P,I,N",
+        title: "N,T,I,P,A",
         sections: [
           {
             id: "section1",
             icon: "abc",
-            title: "LetterIntroduction",
+            title: "Letter Introduction",
             completed: false,
             metadata: {
-              description: "Learn letters A, B, C...",
-              keywords: ["alphabet", "letters", "beginner"],
+              description: "",
+              keywords: [],
             },
             activities: [
               {
-                id: "activity1",
+                id: "activity6",
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_LETTER",
-                character: "S",
+                character: "N",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/s.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/s.mp3"),
+                  alphabeticAudioSrc: require("assets/audio/alphabet/name/n.mp3"),
+                  phoneticAudioSrc: require("assets/audio/alphabet/sound/n.mp3"),
                 },
                 letter: {
-                  lowerCase: "s",
-                  upperCase: "S",
+                  lowerCase: "n",
+                  upperCase: "N",
                 },
                 animatedLetters: {
-                  lowerCase: "s",
-                  upperCase: "S",
-                },
-                audio: "",
-                correctAnswer: {
-                  id: "",
-                  title: "",
-                },
-                options: [],
-                progress: {
-                  lowercaseReadCount: 0,
-                  uppercaseReadCount: 0,
-                  alphabeticSoundPlayCount: 0,
-                  phoneticSoundPlayCount: 0,
-                },
-              },
-              {
-                id: "activity2",
-                numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_LETTER",
-                character: "A",
-                sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/a.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/a.mp3"),
-                },
-                letter: {
-                  lowerCase: "a",
-                  upperCase: "A",
-                },
-                animatedLetters: {
-                  lowerCase: "A",
-                  upperCase: "A",
+                  lowerCase: "n",
+                  upperCase: "N",
                 },
                 audio: "",
                 correctAnswer: {
@@ -108,6 +78,36 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 options: [],
               },
               {
+                id: "activity5",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_LETTER",
+                character: "I",
+                sound: {
+                  alphabeticAudioSrc: require("assets/audio/alphabet/name/i.mp3"),
+                  phoneticAudioSrc: require("assets/audio/alphabet/sound/i.mp3"),
+                },
+                letter: {
+                  lowerCase: "i",
+                  upperCase: "I",
+                },
+                animatedLetters: {
+                  lowerCase: "i",
+                  upperCase: "I",
+                },
+                audio: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
+                },
+                options: [],
+              },
+              {
                 id: "activity4",
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_LETTER",
@@ -137,6 +137,109 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 },
                 options: [],
               },
+              {
+                id: "activity2",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_LETTER",
+                character: "A",
+                sound: {
+                  alphabeticAudioSrc: require("assets/audio/alphabet/name/a.mp3"),
+                  phoneticAudioSrc: require("assets/audio/alphabet/sound/a.mp3"),
+                },
+                letter: {
+                  lowerCase: "a",
+                  upperCase: "A",
+                },
+                animatedLetters: {
+                  lowerCase: "A",
+                  upperCase: "A",
+                },
+                audio: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
+                },
+                options: [],
+              },
+            ],
+          },
+          {
+            id: "section2",
+            icon: "none",
+            title: "Letter Formation",
+            completed: true,
+            metadata: {
+              description: "",
+              keywords: [],
+            },
+            activities: [
+              {
+                id: "activity6",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_LETTER",
+                character: "N",
+                sound: {
+                  alphabeticAudioSrc: require("assets/audio/alphabet/name/n.mp3"),
+                  phoneticAudioSrc: require("assets/audio/alphabet/sound/n.mp3"),
+                },
+                letter: {
+                  lowerCase: "n",
+                  upperCase: "N",
+                },
+                animatedLetters: {
+                  lowerCase: "n",
+                  upperCase: "N",
+                },
+                audio: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
+                },
+                options: [],
+              },
+              {
+                id: "activity3",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_LETTER",
+                character: "T",
+                sound: {
+                  alphabeticAudioSrc: require("assets/audio/alphabet/name/t.mp3"),
+                  phoneticAudioSrc: require("assets/audio/alphabet/sound/t.mp3"),
+                },
+                letter: {
+                  lowerCase: "t",
+                  upperCase: "T",
+                },
+                animatedLetters: {
+                  lowerCase: "t",
+                  upperCase: "T",
+                },
+                audio: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
+                },
+                options: [],
+              },
+
               {
                 id: "activity5",
                 numberOfTimesCorrectAnswerGiven: 0,
@@ -168,21 +271,51 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 options: [],
               },
               {
-                id: "activity6",
+                id: "activity4",
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_LETTER",
-                character: "N",
+                character: "P",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/n.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/n.mp3"),
+                  alphabeticAudioSrc: require("assets/audio/alphabet/name/p.mp3"),
+                  phoneticAudioSrc: require("assets/audio/alphabet/sound/p.mp3"),
                 },
                 letter: {
-                  lowerCase: "n",
-                  upperCase: "N",
+                  lowerCase: "p",
+                  upperCase: "P",
                 },
                 animatedLetters: {
-                  lowerCase: "n",
-                  upperCase: "N",
+                  lowerCase: "p",
+                  upperCase: "P",
+                },
+                audio: "",
+                correctAnswer: {
+                  id: "",
+                  title: "",
+                },
+                progress: {
+                  lowercaseReadCount: 0,
+                  uppercaseReadCount: 0,
+                  alphabeticSoundPlayCount: 0,
+                  phoneticSoundPlayCount: 0,
+                },
+                options: [],
+              },
+              {
+                id: "activity2",
+                numberOfTimesCorrectAnswerGiven: 0,
+                type: "MATCH_THE_LETTER",
+                character: "A",
+                sound: {
+                  alphabeticAudioSrc: require("assets/audio/alphabet/name/a.mp3"),
+                  phoneticAudioSrc: require("assets/audio/alphabet/sound/a.mp3"),
+                },
+                letter: {
+                  lowerCase: "a",
+                  upperCase: "A",
+                },
+                animatedLetters: {
+                  lowerCase: "A",
+                  upperCase: "A",
                 },
                 audio: "",
                 correctAnswer: {
@@ -198,17 +331,6 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 options: [],
               },
             ],
-          },
-          {
-            id: "section2",
-            icon: "book",
-            title: "Reading",
-            completed: true,
-            metadata: {
-              description: "Simple words reading practice",
-              keywords: ["reading", "words", "practice"],
-            },
-            activities: [],
           },
           {
             id: "section3",
@@ -386,7 +508,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
           },
           {
             id: "section4",
-            icon: "speaker",
+            icon: "none",
             title: "Letter Name Activity",
             completed: false,
             metadata: {
@@ -570,7 +692,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
             activities: [
               {
                 id: "activity5_1",
-                letters: ["s", "n", "i", "t", "p", "a"],
+                letters: ["n", "i", "p", "a", "t"],
                 numberOfTimesCorrectAnswerGiven: 0,
                 audio: "",
                 character: "",
