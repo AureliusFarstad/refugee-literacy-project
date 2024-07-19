@@ -5,7 +5,7 @@ import type { Sound } from "expo-av/build/Audio";
 import React, { useEffect, useRef, useState } from "react";
 
 import { useLevelStore } from "@/core/store/levels";
-import { Pressable, SafeAreaView, Text, View } from "@/ui";
+import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import AlphabetTracing from "@/ui/components/home/alphabet-tracing";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
@@ -17,11 +17,11 @@ const LetterFormation = () => {
   const [sound, setSound] = useState<Sound>();
 
   const [activeActivity, setActiveActivity] = useState(
-    levels[0].modules[0].sections[0].activities[0]
+    levels[0].modules[0].sections[1].activities[0]
   );
 
   const activitiesInCurrentSection =
-    levels[0].modules[0].sections[0].activities;
+    levels[0].modules[0].sections[1].activities;
 
   const playSound = async (playbackSource: AVPlaybackSource) => {
     try {
@@ -50,32 +50,28 @@ const LetterFormation = () => {
   return (
     <SafeAreaView>
       <Header title="Formation" modalRef={dynamicModalRef} />
+      <View className="flex items-center justify-between">
+        <View className="flex flex-row items-center justify-between  rounded-full bg-colors-purple-200 p-4">
+          <TouchableOpacity
+            onPress={() => playSound(activeActivity.sound.alphabeticAudioSrc)}
+            className="mr-2 flex size-[80] items-center justify-center rounded-full  bg-colors-purple-500"
+          >
+            <LettersNameIcon />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => playSound(activeActivity.sound.phoneticAudioSrc)}
+            className=" flex size-[80] items-center justify-center rounded-full  bg-colors-purple-500"
+          >
+            <EarIcon />
+          </TouchableOpacity>
+        </View>
+      </View>
       <View className="relative flex items-center justify-center ">
         <AlphabetTracing letter={activeActivity.letter.upperCase} />
       </View>
       <View className="mt-auto">
-        <View>
-          <View className="flex items-center justify-center">
-            <View className="flex flex-row rounded-full bg-colors-purple-200 p-4">
-              <Pressable
-                onPress={() => playSound(activeActivity.sound.phoneticAudioSrc)}
-                className="mr-5 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
-              >
-                <EarIcon />
-              </Pressable>
-              <Pressable
-                onPress={() =>
-                  playSound(activeActivity.sound.alphabeticAudioSrc)
-                }
-                className="flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
-              >
-                <LettersNameIcon />
-              </Pressable>
-            </View>
-          </View>
-          {/* <View className="mx-4 mt-5  overflow-hidden" /> */}
-        </View>
-        <View className="mb-4 flex flex-row justify-between">
+        <View>{/* <View className="mx-4 mt-5  overflow-hidden" /> */}</View>
+        <View className="mb-4 flex flex-row justify-between ">
           <View className="mt-16 flex w-full flex-row items-center justify-around px-[10px]">
             {activitiesInCurrentSection.map((activity, index) => (
               <Pressable
