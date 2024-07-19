@@ -21,7 +21,6 @@ const AnimatedLetterComponent = forwardRef<
   const uppercaseWebView = useRef(null);
   const animateLowercase = () => {
     const jsCommand = `document.querySelector('svg').svgatorPlayer['ready']((player) => player.play()); true;`;
-    console.log(jsCommand);
     // @ts-ignore
     lowercaseWebView?.current?.injectJavaScript(jsCommand);
   };
@@ -32,18 +31,22 @@ const AnimatedLetterComponent = forwardRef<
     uppercaseWebView?.current?.injectJavaScript(jsCommand);
   };
 
-  useImperativeHandle(ref, () => {
-    return {
-      animateLowercase: () => {
-        animateLowercase();
-        onAnimationComplete(name);
-      },
-      animateUppercase: () => {
-        animateUppercase();
-        onAnimationComplete(name.toUpperCase());
-      },
-    };
-  });
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        animateLowercase: () => {
+          animateLowercase();
+          onAnimationComplete(name);
+        },
+        animateUppercase: () => {
+          animateUppercase();
+          onAnimationComplete(name.toUpperCase());
+        },
+      };
+    },
+    [name, onAnimationComplete]
+  );
 
   const renderLowercaseLetter = () => {
     switch (name) {
