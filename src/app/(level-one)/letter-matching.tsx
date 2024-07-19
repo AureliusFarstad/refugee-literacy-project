@@ -41,6 +41,8 @@ const LetterTapMatching = () => {
   const pathRef = useRef<string>("");
   const startPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
+  const tappedPath = useRef<Path>();
+
   const [isDrawing, setIsDrawing] = useState(false);
 
   const layoutValuesRef = useRef<
@@ -49,6 +51,8 @@ const LetterTapMatching = () => {
       y: number;
       id: string;
       value: string;
+      pageX: number;
+      pageY: number;
     }[]
   >();
 
@@ -151,6 +155,11 @@ const LetterTapMatching = () => {
   const handleRightLetterPress = (letter: ILetter) => {
     if (selectedLeft && selectedLeft.value.toUpperCase() === letter.value) {
       setMatchedPairs([...matchedPairs, selectedLeft.value]);
+      if (tappedPath?.current) {
+        const updatedPaths = [...paths, tappedPath.current];
+        setPaths(updatedPaths);
+      }
+      tappedPath.current = undefined;
       setSelectedLeft(null);
       if (matchedPairs.length + 1 === leftLetters.length) {
         Alert.alert("Level", "Completed");
@@ -231,7 +240,53 @@ const LetterTapMatching = () => {
                     selectedLeft?.id !== letter.id,
                 }
               )}
-              onPress={() => onPress(letter)}
+              onPress={() => {
+                const letterMetaInformation = layoutValuesRef.current?.find(
+                  (item) => item.value === letter.value
+                );
+                if (!letterMetaInformation) return;
+
+                /**
+                 * HEADER HEIGHT = 96
+                 * INSETS.TOP
+                 * VERTICAL SPACING OF CIRCLE = 8
+                 */
+
+                const offset = 96 + insets.top - (28 - 8);
+
+                if (!isRight) {
+                  tappedPath.current = {
+                    pathString: "",
+                    startingPoint: {
+                      x1: Math.floor(letterMetaInformation.pageX) - 90,
+                      y1: Math.floor(letterMetaInformation.pageY) - offset,
+                    },
+                    endingPoint: {
+                      x2: 0,
+                      y2: 0,
+                    },
+                  };
+                } else {
+                  if (!tappedPath.current) return;
+
+                  tappedPath.current = {
+                    pathString: `M${tappedPath.current.startingPoint.x1},${
+                      tappedPath.current.startingPoint.y1
+                    } L${letterMetaInformation.pageX - 90},${
+                      letterMetaInformation.pageY - offset
+                    }`,
+                    startingPoint: tappedPath.current?.startingPoint as {
+                      x1: number;
+                      y1: number;
+                    },
+                    endingPoint: {
+                      x2: Math.floor(letterMetaInformation.pageX) - 90,
+                      y2: Math.floor(letterMetaInformation.pageY) - offset,
+                    },
+                  };
+                }
+                onPress(letter);
+              }}
             >
               <Text className="text-2xl font-bold text-white">
                 {letter.value}
@@ -259,6 +314,8 @@ const LetterTapMatching = () => {
                           y: Math.floor(y + pageY),
                           id: letter.id,
                           value: letter.value,
+                          pageX: Math.floor(pageX),
+                          pageY: Math.floor(pageY),
                         },
                       ];
                     } else {
@@ -268,6 +325,8 @@ const LetterTapMatching = () => {
                           x: Math.floor(-x + pageX),
                           y: Math.floor(y + pageY),
                           value: letter.value,
+                          pageX: Math.floor(pageX),
+                          pageY: Math.floor(pageY),
                         },
                       ];
                     }
