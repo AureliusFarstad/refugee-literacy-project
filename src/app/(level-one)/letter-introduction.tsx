@@ -4,6 +4,7 @@ import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, TouchableOpacity } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Line } from "react-native-svg";
 
 import { useLevelStore } from "@/core/store/levels";
@@ -17,7 +18,7 @@ import {
   LettersNameIcon,
   TeacherIcon,
 } from "@/ui/icons";
-import { WIDTH } from "@/utils/layout";
+import { HEIGHT, IS_IOS, WIDTH } from "@/utils/layout";
 
 type AnimatedLetterComponentRef = {
   animateLowercase: () => void;
@@ -78,10 +79,7 @@ const LetterIntroduction = () => {
   const { levels, updateLevels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
 
-  const [tappedButton, setTappedAction] = useState<
-    "uppercase" | "lowercase" | null
-  >(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const insets = useSafeAreaInsets();
 
   // const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   // const [tappedAnswer, setTappedAnswer] = useState<IOption>();
@@ -117,13 +115,6 @@ const LetterIntroduction = () => {
         }
       : undefined;
   }, [sound, activeActivity]);
-
-  useEffect(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    return () => {};
-  }, []);
 
   const incrementProgress = (
     type:
@@ -215,102 +206,100 @@ const LetterIntroduction = () => {
   }, [activitiesInCurrentSection, levels]);
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView>
       <Header title="Introduction" modalRef={dynamicModalRef} />
-      <View>
-        <View className="flex items-center justify-center">
-          <View className="flex flex-row rounded-full bg-colors-purple-200 p-4">
+      <View
+        className="flex flex-col justify-between"
+        style={{
+          height:
+            HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
+        }}
+      >
+        <View>
+          <View className=" ">
+            <View className="flex items-center justify-center">
+              <View className="flex flex-row rounded-full bg-colors-purple-200 p-4">
+                <TouchableOpacity
+                  onPress={async () => {
+                    try {
+                      await playSound(activeActivity.sound.alphabeticAudioSrc);
+                      incrementProgress("ALPHABETIC_SOUND");
+                    } catch (error) {}
+                  }}
+                  className="mr-2 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
+                >
+                  <LettersNameIcon />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={async () => {
+                    try {
+                      await playSound(activeActivity.sound.phoneticAudioSrc);
+                      incrementProgress("PHONETIC_SOUND");
+                    } catch (error) {}
+                  }}
+                  className=" flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
+                >
+                  <EarIcon />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View className="mx-4 mt-5 overflow-hidden  border-yellow-500">
+              <PageLinesSVG />
+              <AnimatedLetterComponent
+                ref={animatedLetterRef}
+                name={activeActivity.letter.lowerCase}
+                key={activeActivity.letter.lowerCase}
+                onAnimationComplete={onAnimationComplete}
+              />
+            </View>
+          </View>
+          <View className="my-10 flex flex-row items-center justify-evenly">
             <TouchableOpacity
-              onPress={async () => {
-                try {
-                  await playSound(activeActivity.sound.alphabeticAudioSrc);
-                  incrementProgress("ALPHABETIC_SOUND");
-                } catch (error) {}
+              onPress={() => {
+                animatedLetterRef?.current?.animateLowercase();
               }}
-              className="mr-2 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
             >
-              <LettersNameIcon />
+              <CustomPencilIcon size={44} />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={async () => {
-                try {
-                  await playSound(activeActivity.sound.phoneticAudioSrc);
-                  incrementProgress("PHONETIC_SOUND");
-                } catch (error) {}
+              onPress={() => {
+                animatedLetterRef?.current?.animateUppercase();
               }}
-              className=" flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
             >
-              <EarIcon />
+              <CustomPencilIcon size={44} />
             </TouchableOpacity>
           </View>
         </View>
-        <View className="mx-4 mt-5 overflow-hidden  border-yellow-500">
-          <PageLinesSVG />
-          <AnimatedLetterComponent
-            ref={animatedLetterRef}
-            name={activeActivity.letter.lowerCase}
-            key={activeActivity.letter.lowerCase}
-            onAnimationComplete={onAnimationComplete}
-          />
+
+        <View className="flex w-full flex-row justify-between">
+          <View className="flex w-full flex-row items-center justify-around px-[10px]">
+            {activitiesInCurrentSection.map((activity, index) => (
+              <Pressable
+                className={clsx(
+                  "flex size-[60] items-center justify-center rounded-md ",
+                  {
+                    "bg-colors-gray-300": activity.id !== activeActivity.id,
+                    "bg-colors-purple-500": activity.id === activeActivity.id,
+                  }
+                )}
+                onPress={() => {
+                  /**
+                   * update current activity
+                   */
+                  setActiveActivity(activity);
+                }}
+                key={index}
+              >
+                <Text className="text-[24px] text-white">
+                  {activity.letter.upperCase}
+                  {activity.letter.lowerCase}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
         </View>
       </View>
-      <View className="my-10 flex flex-row items-center justify-evenly">
-        <Pressable
-          onPress={() => {
-            setTappedAction("uppercase");
-            animatedLetterRef?.current?.animateLowercase();
-            timeoutRef.current = setTimeout(() => {
-              setTappedAction(null);
-            }, 2000);
-          }}
-        >
-          <CustomPencilIcon
-            size={44}
-            border={tappedButton === "uppercase" ? true : false}
-          />
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            setTappedAction("lowercase");
-            animatedLetterRef?.current?.animateUppercase();
-            timeoutRef.current = setTimeout(() => {
-              setTappedAction(null);
-            }, 2000);
-          }}
-        >
-          <CustomPencilIcon
-            size={44}
-            border={tappedButton === "lowercase" ? true : false}
-          />
-        </Pressable>
-      </View>
-      <View className="flex flex-row justify-between">
-        <View className="mt-20 flex w-full flex-row items-center justify-around px-[10px]">
-          {activitiesInCurrentSection.map((activity, index) => (
-            <Pressable
-              className={clsx(
-                "flex size-[60] items-center justify-center rounded-md ",
-                {
-                  "bg-colors-gray-300": activity.id !== activeActivity.id,
-                  "bg-colors-purple-500": activity.id === activeActivity.id,
-                }
-              )}
-              onPress={() => {
-                /**
-                 * update current activity
-                 */
-                setActiveActivity(activity);
-              }}
-              key={index}
-            >
-              <Text className="text-[24px] text-white">
-                {activity.letter.upperCase}
-                {activity.letter.lowerCase}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-      </View>
+
       <DynamicModal ref={dynamicModalRef}>
         <View className="rounded-lg bg-white p-4">
           <Text>Letter introduction activity</Text>
