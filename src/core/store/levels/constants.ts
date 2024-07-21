@@ -343,40 +343,12 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
             },
             activities: [
               {
-                id: "activity4_1",
-                numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_NAME",
-                correctAnswer: { id: "optionS", title: "S" },
-                audio: require("assets/audio/alphabet/sound/s.mp3"),
-                options: [
-                  { id: "optionA", title: "A" },
-                  { id: "optionT", title: "T" },
-                  { id: "optionP", title: "P" },
-                  { id: "optionI", title: "I" },
-                  { id: "optionN", title: "N" },
-                ],
-                character: "",
-                letter: {
-                  lowerCase: "",
-                  upperCase: "",
-                },
-                sound: {
-                  alphabeticAudioSrc: "",
-                  phoneticAudioSrc: "",
-                },
-                nameAndSoundActivityProgress: {
-                  uppercaseSoundCount: 0,
-                  lowercaseSoundCount: 0,
-                },
-              },
-              {
                 id: "activity4_2",
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionA", title: "A" },
                 audio: require("assets/audio/alphabet/sound/a.mp3"),
                 options: [
-                  { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
                   { id: "optionP", title: "P" },
                   { id: "optionI", title: "I" },
@@ -404,7 +376,6 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 audio: require("assets/audio/alphabet/sound/t.mp3"),
                 options: [
                   { id: "optionA", title: "A" },
-                  { id: "optionS", title: "S" },
                   { id: "optionP", title: "P" },
                   { id: "optionI", title: "I" },
                   { id: "optionN", title: "N" },
@@ -430,7 +401,6 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 correctAnswer: { id: "optionP", title: "P" },
                 audio: require("assets/audio/alphabet/sound/p.mp3"),
                 options: [
-                  { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
                   { id: "optionI", title: "I" },
@@ -457,7 +427,6 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 correctAnswer: { id: "optionI", title: "I" },
                 audio: require("assets/audio/alphabet/sound/i.mp3"),
                 options: [
-                  { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
                   { id: "optionP", title: "P" },
@@ -484,7 +453,6 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 correctAnswer: { id: "optionN", title: "N" },
                 audio: require("assets/audio/alphabet/sound/n.mp3"),
                 options: [
-                  { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
                   { id: "optionP", title: "P" },
@@ -517,40 +485,12 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
             },
             activities: [
               {
-                id: "activity3_1",
-                numberOfTimesCorrectAnswerGiven: 0,
-                type: "MATCH_THE_SOUND",
-                correctAnswer: { id: "optionS", title: "S" },
-                audio: require("assets/audio/alphabet/name/s.mp3"),
-                options: [
-                  { id: "optionA", title: "A" },
-                  { id: "optionT", title: "T" },
-                  { id: "optionP", title: "P" },
-                  { id: "optionI", title: "I" },
-                  { id: "optionN", title: "N" },
-                ],
-                character: "",
-                letter: {
-                  lowerCase: "",
-                  upperCase: "",
-                },
-                sound: {
-                  alphabeticAudioSrc: "",
-                  phoneticAudioSrc: "",
-                },
-                nameAndSoundActivityProgress: {
-                  uppercaseSoundCount: 0,
-                  lowercaseSoundCount: 0,
-                },
-              },
-              {
                 id: "activity3_2",
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionA", title: "A" },
                 audio: require("assets/audio/alphabet/name/a.mp3"),
                 options: [
-                  { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
                   { id: "optionP", title: "P" },
                   { id: "optionI", title: "I" },
@@ -578,7 +518,6 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 audio: require("assets/audio/alphabet/name/t.mp3"),
                 options: [
                   { id: "optionA", title: "A" },
-                  { id: "optionS", title: "S" },
                   { id: "optionP", title: "P" },
                   { id: "optionI", title: "I" },
                   { id: "optionN", title: "N" },
@@ -604,7 +543,6 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 correctAnswer: { id: "optionP", title: "P" },
                 audio: require("assets/audio/alphabet/name/p.mp3"),
                 options: [
-                  { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
                   { id: "optionI", title: "I" },
@@ -631,7 +569,6 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 correctAnswer: { id: "optionI", title: "I" },
                 audio: require("assets/audio/alphabet/name/i.mp3"),
                 options: [
-                  { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
                   { id: "optionP", title: "P" },
@@ -658,7 +595,6 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 correctAnswer: { id: "optionN", title: "N" },
                 audio: require("assets/audio/alphabet/name/n.mp3"),
                 options: [
-                  { id: "optionS", title: "S" },
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
                   { id: "optionP", title: "P" },
