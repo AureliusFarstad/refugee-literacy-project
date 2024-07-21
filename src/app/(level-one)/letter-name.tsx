@@ -5,7 +5,7 @@ import { router, usePathname } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { useLevelStore } from "@/core/store/levels";
-import { Pressable, SafeAreaView, Text, View } from "@/ui";
+import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import { Switch } from "@/ui/checkbox";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
@@ -144,12 +144,12 @@ const LetterName = () => {
         />
       </View>
       <View className="flex items-center p-4">
-        <Pressable
+        <TouchableOpacity
           onPress={playSound}
           className="flex size-[110] items-center justify-center rounded-full bg-colors-purple-500"
         >
           <LettersNameIcon />
-        </Pressable>
+        </TouchableOpacity>
         <View className="flex w-full flex-1 flex-row">
           {optionsToRender.map((option, index) => (
             <Pressable
