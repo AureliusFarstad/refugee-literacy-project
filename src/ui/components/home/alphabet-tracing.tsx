@@ -72,7 +72,7 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
 
   return (
     <GestureDetector gesture={gesture}>
-      <View className="relative h-72 w-full items-center justify-center border-4">
+      <View className="w-fulßl relative h-72 items-center justify-center ">
         <Canvas
           style={{
             height: canvasHeight,
