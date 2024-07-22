@@ -20,6 +20,9 @@ importers:
       '@gorhom/bottom-sheet':
         specifier: ^4.5.1
         version: 4.6.3(@types/react@18.2.79)(react-native-gesture-handler@2.14.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react-native-reanimated@3.14.0(@babel/core@7.24.7)(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0)
+      '@mgcrea/react-native-dnd':
+        specifier: 2.2.0
+        version: 2.2.0(react-native-gesture-handler@2.14.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react-native-haptic-feedback@2.2.0(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)))(react-native-reanimated@3.14.0(@babel/core@7.24.7)(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-compose-refs':
         specifier: ^1.0.1
         version: 1.1.0(@types/react@18.2.79)(react@18.2.0)
@@ -122,6 +125,9 @@ importers:
       react-native-gesture-handler:
         specifier: ~2.14.1
         version: 2.14.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0)
+      react-native-haptic-feedback:
+        specifier: ^2.2.0
+        version: 2.2.0(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))
       react-native-heroicons:
         specifier: ^3.2.0
         version: 3.2.1(react-native-svg@14.2.0(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react@18.2.0)
@@ -1495,6 +1501,15 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
+  '@mgcrea/react-native-dnd@2.2.0':
+    resolution: {integrity: sha512-gD6vn/ui7wn/GpaBJM5lWlvM+K6x4tBQftS/rjO97979B/Ue2JTc9/ybrJCF7adOH4BrW9aaRmjyBb/exJ4DOQ==}
+    peerDependencies:
+      react: '>=17'
+      react-native: '>=0.70'
+      react-native-gesture-handler: '>=2'
+      react-native-haptic-feedback: '>=2'
+      react-native-reanimated: '>=3'
 
   '@motionone/animation@10.18.0':
     resolution: {integrity: sha512-9z2p5GFGCm0gBsZbi8rVMOAJCtw1WqBTIPw3ozk06gDvZInBPIsQcHgYogEJ4yuHJ+akuW8g1SEIOpTOvYs8hw==}
@@ -5181,6 +5196,11 @@ packages:
       react: '*'
       react-native: '*'
 
+  react-native-haptic-feedback@2.2.0:
+    resolution: {integrity: sha512-3tqJOjCguWhIrX0nkURn4yw6kXdsSDjjrvZCRjKXYGlL28hdQmoW2okAHduDTD9FWj9lA+lHgwFWgGs4aFNN7A==}
+    peerDependencies:
+      react-native: '>=0.60.0'
+
   react-native-helmet-async@2.0.4:
     resolution: {integrity: sha512-m3CkXWss6B1dd6mCMleLpzDCJJGGaHOLQsUzZv8kAASJmMfmVT4d2fx375iXKTRWT25ThBfae3dECuX5cq/8hg==}
     peerDependencies:
@@ -8300,6 +8320,14 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@mgcrea/react-native-dnd@2.2.0(react-native-gesture-handler@2.14.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react-native-haptic-feedback@2.2.0(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)))(react-native-reanimated@3.14.0(@babel/core@7.24.7)(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      react: 18.2.0
+      react-native: 0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)
+      react-native-gesture-handler: 2.14.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0)
+      react-native-haptic-feedback: 2.2.0(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))
+      react-native-reanimated: 3.14.0(@babel/core@7.24.7)(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0)
 
   '@motionone/animation@10.18.0':
     dependencies:
@@ -12589,6 +12617,10 @@ snapshots:
       lodash: 4.17.21
       prop-types: 15.8.1
       react: 18.2.0
+      react-native: 0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)
+
+  react-native-haptic-feedback@2.2.0(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)):
+    dependencies:
       react-native: 0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)
 
   react-native-helmet-async@2.0.4(react@18.2.0):
