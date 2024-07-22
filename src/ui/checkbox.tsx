@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { MotiView } from "moti";
 import React, { useCallback } from "react";
 import {
@@ -27,6 +28,7 @@ export interface RootProps extends Omit<PressableProps, "onPress"> {
 
 export type IconProps = {
   checked: boolean;
+  label?: string;
 };
 
 export const Root = ({
@@ -123,7 +125,7 @@ const CheckboxBase = ({
 }: RootProps & { label?: string }) => {
   return (
     <CheckboxRoot checked={checked} testID={testID} {...props}>
-      <CheckboxIcon checked={checked} />
+      <CheckboxIcon checked={checked} label={label} />
       {label ? (
         <Label
           text={label}
@@ -197,7 +199,7 @@ export const Radio = Object.assign(RadioBase, {
   Label,
 });
 
-export const SwitchIcon = ({ checked = false }: IconProps) => {
+export const SwitchIcon = ({ checked = false, label }: IconProps) => {
   const translateX = checked
     ? THUMB_OFFSET
     : WIDTH - THUMB_WIDTH - THUMB_OFFSET;
@@ -224,11 +226,31 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
           borderRadius: 18,
           right: 0,
         }}
+        className="flex items-center justify-center"
         animate={{
           translateX: I18nManager.isRTL ? translateX : -translateX,
         }}
         transition={{ translateX: { overshootClamping: true } }}
-      />
+      >
+        <Text>{checked ? label?.toLowerCase() : label?.toUpperCase()}</Text>
+      </MotiView>
+
+      <Text
+        className={clsx("absolute ", {
+          "right-5 text-2xl": !checked,
+          "opacity-0": checked,
+        })}
+      >
+        {label}
+      </Text>
+      <Text
+        className={clsx("absolute ", {
+          "left-5 text-lg": checked,
+          "opacity-0": !checked,
+        })}
+      >
+        {label}
+      </Text>
     </View>
   );
 };
@@ -248,7 +270,7 @@ const SwitchBase = ({
 }: RootProps & { label?: string }) => {
   return (
     <SwitchRoot checked={checked} testID={testID} {...props}>
-      <SwitchIcon checked={checked} />
+      <SwitchIcon label={label} checked={checked} />
       {label ? (
         <Label text={label} testID={testID ? `${testID}-label` : undefined} />
       ) : null}
