@@ -5,3 +5,6 @@ export type LevelOneBottomTabRoutes = {
   "letter-name": undefined;
   "letter-matching": undefined;
 };
+export type LevelTwoBottomTabRoutes = {
+  "letter-draggable": undefined;
+};

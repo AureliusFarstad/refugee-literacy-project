@@ -32,7 +32,7 @@ const LESSONS = [
     image: LESSON_ONE_IMAGE,
     title: "Lesson 1",
     description: "Introduction to the alphabet",
-    path: "/(level-one)/letter-introduction",
+    path: "/(level-two)/letter-draggable",
     isFinished: false,
     progressBarColor: "bg-[#6D28D9]",
   },
