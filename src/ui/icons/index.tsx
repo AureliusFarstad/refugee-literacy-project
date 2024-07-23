@@ -2201,3 +2201,13 @@ export const InformationIcon = (props: ExtendedSvgProps) => (
     </Defs>
   </Svg>
 );
+
+export const DashedBorderLines = (props: SvgProps) => (
+  <Svg width={props.width} height={4} fill="none" {...props}>
+    <Path fill="#F36889" d="M0 0h540v4H0z" />
+    <Path
+      fill="#F7D6DE"
+      d="M0 0h15v4H0zM30 0h15v4H30zM60 0h15v4H60zM90 0h15v4H90zM120 0h15v4h-15zM150 0h15v4h-15zM180 0h15v4h-15zM210 0h15v4h-15zM240 0h15v4h-15zM270 0h15v4h-15zM300 0h13v4h-13zM325 0h13v4h-13zM350 0h13v4h-13zM375 0h13v4h-13zM400 0h13v4h-13zM425 0h13v4h-13zM450 0h13v4h-13zM475 0h13v4h-13zM500 0h13v4h-13zM525 0h13v4h-13z"
+    />
+  </Svg>
+);

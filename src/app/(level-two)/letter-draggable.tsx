@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 
-import { SafeAreaView, Text, View } from "@/ui";
+import { SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import DragDrop from "@/ui/components/level-two/dragdrop";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
+import { EarIcon } from "@/ui/icons";
 
 const LetterName = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
@@ -12,8 +13,16 @@ const LetterName = () => {
     <SafeAreaView>
       <Header title="Name" modalRef={dynamicModalRef} />
 
-      <View className="flex items-center p-4">
-        <View className="flex w-full flex-1 flex-row">
+      <View className="flex h-full items-center ">
+        <View className="flex w-full flex-1 flex-col   ">
+          <View className="">
+            <TouchableOpacity
+              onPress={() => {}}
+              className="mx-auto flex size-[110] items-center justify-center rounded-full bg-colors-purple-500"
+            >
+              <EarIcon />
+            </TouchableOpacity>
+          </View>
           <DragDrop />
         </View>
       </View>
