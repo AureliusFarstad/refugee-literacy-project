@@ -72,7 +72,7 @@ export const DragDropQuiz = () => {
       (item) => item.content
     );
     setIsCorrect(JSON.stringify(currentOrder) === JSON.stringify(correctOrder));
-  }, [dynamicData]);
+  }, [dynamicData.value]);
 
   const items = useDerivedValue(() => dynamicData.value.items, [dynamicData]);
   const droppedItems = useDerivedValue(
@@ -84,7 +84,7 @@ export const DragDropQuiz = () => {
     if (droppedItems.value.length === 3) {
       checkOrder();
     }
-  }, [droppedItems, checkOrder]);
+  }, [droppedItems.value, checkOrder]);
 
   return (
     <DndProvider
