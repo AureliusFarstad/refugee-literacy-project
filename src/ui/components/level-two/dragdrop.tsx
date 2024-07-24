@@ -19,9 +19,9 @@ interface Item {
 const initialItems: Item[] = [
   { id: "item1", content: "N" },
   { id: "item2", content: "A" },
-  { id: "item3", content: "P" },
   { id: "item4", content: "I" },
   { id: "item5", content: "T" },
+  { id: "item3", content: "P" },
 ];
 
 const correctOrder = ["P", "A", "N"];
@@ -34,9 +34,9 @@ export const DragDropQuiz = () => {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [, setCounter] = useState(0);
 
-  const updateCounter = () => {
+  const updateCounter = useCallback(() => {
     setCounter((prev) => prev + 1);
-  };
+  }, [setCounter]);
 
   const handleDragEnd: DndProviderProps["onDragEnd"] = ({ active, over }) => {
     "worklet";
@@ -86,6 +86,18 @@ export const DragDropQuiz = () => {
     }
   }, [droppedItems.value, checkOrder]);
 
+  const onTapping = useCallback(
+    (item: Item) => {
+      "worklet";
+      dynamicData.value = {
+        items: dynamicData.value.items.filter((_item) => _item.id !== item.id),
+        droppedItems: [...dynamicData.value.droppedItems, item],
+      };
+      runOnJS(updateCounter)();
+    },
+    [dynamicData, updateCounter]
+  );
+
   return (
     <DndProvider
       onDragEnd={handleDragEnd}
@@ -98,7 +110,7 @@ export const DragDropQuiz = () => {
           {droppedItems.value.map((item) => (
             <View
               key={item.id}
-              className="z-50 mx-4 flex size-[60] items-center justify-center rounded-full bg-[#F36889]"
+              className="z-50 mx-4 flex size-[64] items-center justify-center rounded-full bg-[#F36889]"
             >
               <Text style={styles.itemText}>{item.content}</Text>
             </View>
@@ -106,19 +118,25 @@ export const DragDropQuiz = () => {
           <View className="absolute flex flex-row">
             <View
               className={clsx(
-                "-z-10 mx-4 flex size-[60] items-center justify-center rounded-full border-4 border-dashed border-[#F36889] bg-[#F7D6DE]"
+                "-z-10 mx-4 flex size-[64] items-center justify-center rounded-full  bg-transparent"
               )}
-            />
+            >
+              <View className=" size-16 rounded-full border-2 border-dashed border-[#F36889] bg-[#F7D6DE]" />
+            </View>
             <View
               className={clsx(
-                "-z-10 mx-4 flex size-[60] items-center justify-center rounded-full border-4 border-dashed border-[#F36889] bg-[#F7D6DE]"
+                "-z-10 mx-4 flex size-[64] items-center justify-center rounded-full  bg-transparent"
               )}
-            />
+            >
+              <View className="   size-16 rounded-full border-2 border-dashed border-[#F36889] bg-[#F7D6DE]" />
+            </View>
             <View
               className={clsx(
-                "-z-10 mx-4 flex size-[60] items-center justify-center rounded-full border-4 border-dashed border-[#F36889] bg-[#F7D6DE]"
+                "-z-10 mx-4 flex size-[64] items-center justify-center rounded-full  bg-transparent"
               )}
-            />
+            >
+              <View className=" size-16 rounded-full  border-2 border-dashed border-[#F36889] bg-[#F7D6DE]" />
+            </View>
           </View>
         </View>
       </Droppable>
@@ -134,13 +152,14 @@ export const DragDropQuiz = () => {
           <DynamicStroke />
           {items.value.map((item) => (
             <Draggable key={item.id} id={item.id}>
-              <View
+              <Pressable
                 className={clsx(
                   "flex size-[60] items-center justify-center rounded-full bg-[#F36889]"
                 )}
+                onPress={() => onTapping(item)}
               >
                 <Text style={styles.itemText}>{item.content}</Text>
-              </View>
+              </Pressable>
             </Draggable>
           ))}
         </>
