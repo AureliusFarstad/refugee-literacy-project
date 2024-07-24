@@ -7,4 +7,6 @@ export type LevelOneBottomTabRoutes = {
 };
 export type LevelTwoBottomTabRoutes = {
   "letter-draggable": undefined;
+  draggable: undefined;
+  "words-sound": undefined;
 };

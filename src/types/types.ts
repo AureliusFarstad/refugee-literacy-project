@@ -4,4 +4,6 @@ export interface ExtendedSvgProps extends SvgProps {
   focused?: boolean;
   size?: number;
   border?: boolean;
+  primaryColor?: string;
+  secondaryColor?: string;
 }
