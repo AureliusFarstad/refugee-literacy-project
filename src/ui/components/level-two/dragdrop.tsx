@@ -101,9 +101,12 @@ export const DragDropQuiz = () => {
   const onRemove = useCallback(
     (item: Item) => {
       "worklet";
+      const updatedDroppedItems = dynamicData.value.droppedItems.filter(
+        (_item) => _item.id !== item.id
+      );
       dynamicData.value = {
-        items: dynamicData.value.items.filter((_item) => _item.id !== item.id),
-        droppedItems: [...dynamicData.value.droppedItems, item],
+        items: [...dynamicData.value.items, item],
+        droppedItems: [...updatedDroppedItems],
       };
       runOnJS(updateCounter)();
     },

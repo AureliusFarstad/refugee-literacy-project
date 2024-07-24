@@ -6,7 +6,7 @@ import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import { EarIcon } from "@/ui/icons";
 
-const LetterName = () => {
+const LetterDragDrop = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
 
   return (
@@ -40,4 +40,4 @@ const LetterName = () => {
   );
 };
 
-export default LetterName;
+export default LetterDragDrop;
