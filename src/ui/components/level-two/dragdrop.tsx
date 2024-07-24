@@ -41,6 +41,7 @@ export const DragDropQuiz = () => {
   const handleDragEnd: DndProviderProps["onDragEnd"] = ({ active, over }) => {
     "worklet";
     if (over && over.id === "dropzone" && typeof active.id === "string") {
+      if (dynamicData.value.droppedItems.length === 3) return;
       const draggedItem = dynamicData.value.items.find(
         (item) => item.id === active.id
       );
@@ -89,13 +90,14 @@ export const DragDropQuiz = () => {
   const onTapping = useCallback(
     (item: Item) => {
       "worklet";
+      if (droppedItems.value.length === 3) return;
       dynamicData.value = {
         items: dynamicData.value.items.filter((_item) => _item.id !== item.id),
         droppedItems: [...dynamicData.value.droppedItems, item],
       };
       runOnJS(updateCounter)();
     },
-    [dynamicData, updateCounter]
+    [dynamicData, updateCounter, droppedItems.value]
   );
 
   const onRemove = useCallback(
