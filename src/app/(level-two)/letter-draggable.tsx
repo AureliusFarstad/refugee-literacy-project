@@ -18,9 +18,9 @@ const LetterName = () => {
           <View className="">
             <TouchableOpacity
               onPress={() => {}}
-              className="mx-auto flex size-[110] items-center justify-center rounded-full bg-colors-purple-500"
+              className="mx-auto flex size-[110] items-center justify-center rounded-full bg-colors-red-500"
             >
-              <EarIcon />
+              <EarIcon primaryColor="#F36889" />
             </TouchableOpacity>
           </View>
           <DragDrop />

@@ -3,7 +3,11 @@ import React from "react";
 import type { SvgProps } from "react-native-svg";
 
 import type { LevelTwoBottomTabRoutes } from "@/types/navigation-types";
-import { TeacherTipsIcon } from "@/ui/icons";
+import {
+  EarTabBarIcon,
+  LetterFormationIcon,
+  TeacherTipsIcon,
+} from "@/ui/icons";
 import { IS_IOS } from "@/utils/layout";
 
 type BarIconType = {
@@ -17,7 +21,17 @@ type TabIconsType = {
 };
 
 const tabsIcons: TabIconsType = {
-  "letter-draggable": (props: SvgProps) => <TeacherTipsIcon {...props} />,
+  "letter-draggable": (props: SvgProps) => (
+    <TeacherTipsIcon
+      {...props}
+      primaryColor="#F36889"
+      secondaryColor="#E39AAB"
+    />
+  ),
+  draggable: (props: SvgProps) => <LetterFormationIcon {...props} />,
+  "words-sound": (props: SvgProps) => (
+    <EarTabBarIcon {...props} primaryColor="#F36889" secondaryColor="#E39AAB" />
+  ),
 };
 
 const BarIcon = ({ color, name, ...reset }: BarIconType) => {
@@ -35,6 +49,14 @@ const tabs: TabType[] = [
     name: "letter-draggable",
     label: "Draggable",
   },
+  {
+    name: "draggable",
+    label: "Draggable",
+  },
+  {
+    name: "words-sound",
+    label: "Word Sound",
+  },
 ];
 
 export default function LevelTwoTabLayout() {
@@ -43,7 +65,7 @@ export default function LevelTwoTabLayout() {
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#C385F8",
+          backgroundColor: "#F36889",
           paddingTop: IS_IOS ? 16 : 4,
           height: IS_IOS ? 108 : 80,
           paddingHorizontal: 12,

@@ -98,6 +98,18 @@ export const DragDropQuiz = () => {
     [dynamicData, updateCounter]
   );
 
+  const onRemove = useCallback(
+    (item: Item) => {
+      "worklet";
+      dynamicData.value = {
+        items: dynamicData.value.items.filter((_item) => _item.id !== item.id),
+        droppedItems: [...dynamicData.value.droppedItems, item],
+      };
+      runOnJS(updateCounter)();
+    },
+    [dynamicData, updateCounter]
+  );
+
   return (
     <DndProvider
       onDragEnd={handleDragEnd}
@@ -105,15 +117,20 @@ export const DragDropQuiz = () => {
       onFinalize={handleFinalize}
       style={{ height: 400, width: WIDTH }}
     >
-      <Droppable id="dropzone" style={styles.dropzone}>
-        <View style={styles.droppedItemsContainer}>
+      <Droppable
+        id="dropzone"
+        style={styles.dropzone}
+        className={"mx-auto  w-[280] "}
+      >
+        <View style={styles.droppedItemsContainer} className="mx-auto w-full">
           {droppedItems.value.map((item) => (
-            <View
+            <Pressable
               key={item.id}
               className="z-50 mx-4 flex size-[64] items-center justify-center rounded-full bg-[#F36889]"
+              onPress={() => onRemove(item)}
             >
               <Text style={styles.itemText}>{item.content}</Text>
-            </View>
+            </Pressable>
           ))}
           <View className="absolute flex flex-row">
             <View
@@ -240,7 +257,7 @@ const styles = StyleSheet.create({
   },
   droppedItemsContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
   },
   resetButton: {
