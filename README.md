@@ -7,21 +7,21 @@
 ## Features
 
 - Multilingual Learning: Access learning materials in various languages commonly spoken by refugees in Europe, ensuring an inclusive learning experience.
-- Alphabet and Phonics: Master the alphabet, letter sounds, and blending through interactive exercises, crucial for foundational literacy skills.
+- LetterIntroduction and Phonics: Master the alphabet, letter sounds, and blending through interactive exercises, crucial for foundational literacy skills.
 - Vocabulary Building: Expand vocabulary with essential words related to daily life, using interactive flashcards and audio pronunciation.
 - Culturally Relevant Content: Learn from culturally sensitive examples and stories that resonate with the experiences of refugees in Europe.
 - Accessibility: The app provides audio recordings and an intuitive visual design to ensure accessibility for learners with varying literacy levels.
-Getting Started
-- Access: The app is completely free, has no mandatory sign-up, and works offline. 
+  Getting Started
+- Access: The app is completely free, has no mandatory sign-up, and works offline.
 
 ## Prerequisites
 
 Before setting up the project, make sure you have the following installed:
 
 - Node.js: Make sure you have Node.js installed. If not, download and install it from the official website.
-- Expo CLI: Install the Expo CLI globally using npm.
+- Expo CLI: Install the Expo CLI globally using pnpm.
 
-`npm install -g expo-cli`
+`pnpm install -g expo-cli`
 
 ## Installation
 
@@ -32,13 +32,17 @@ Follow these steps to set up and install the project:
 `git clone https://github.com/AureliusFarstad/refugee-literacy-project/
 cd refugee-literacy-project`
 
-2. Install project dependencies using npx:
+2. Install project dependencies using pnpm:
 
-`npx expo install`
+`pnpm install`
 
-3. Start the Development Server:
+3. Build the project for ios/android
 
-`expo start`
+`pnpm ios`
+
+4. Start the Development Server:
+
+`pnpm start`
 
 This will start the Expo development server.
 
