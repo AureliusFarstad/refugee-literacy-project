@@ -1,5 +1,6 @@
 import {
   Canvas,
+  Circle,
   Fill,
   Mask,
   Morphology,
@@ -9,7 +10,10 @@ import {
 import { useEffect } from "react";
 import { View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { useSharedValue } from "react-native-reanimated";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 
 import { WIDTH } from "@/utils/layout";
 
@@ -21,11 +25,21 @@ const letterCoordinatesToRender = {
   A: "M16.5 210C12.1667 210 8.33333 208.5 5 205.5C1.66667 202.5 7.07805e-07 198.5 7.07805e-07 193.5C7.07805e-07 191.833 0.333334 189.667 1 187L63.5 17.5C65.8333 11.8333 69.3333 7.49999 74 4.49999C78.6667 1.49999 83.6667 -1.3113e-05 89 -1.3113e-05C94.3333 -1.3113e-05 99.3333 1.49999 104 4.49999C109 7.49999 112.667 11.8333 115 17.5L181.5 187C182.167 189.667 182.5 191.833 182.5 193.5C182.5 198.5 180.833 202.5 177.5 205.5C174.167 208.5 170.333 210 166 210C163 210 159.833 209.167 156.5 207.5C153.5 206.167 151.167 203.833 149.5 200.5L133 156.5C132.667 154.5 131.333 153.5 129 153.5H52.5C50.1667 153.5 48.6667 154.5 48 156.5L33 200.5C31.3333 203.833 28.8333 206.167 25.5 207.5C22.5 209.167 19.5 210 16.5 210ZM67.5 123.5H112.5C114.5 123.5 116 122.833 117 121.5C118.333 119.833 118.667 117.833 118 115.5L94 47C93 43.6667 91.5 42 89.5 42C87.1667 42 85.5 43.6667 84.5 47L62 116C61.3333 118 61.5 119.833 62.5 121.5C63.8333 122.833 65.5 123.5 67.5 123.5Z",
 };
 
+const getPathStartPoint = (pathData: string): { x: number; y: number } => {
+  const match = pathData.match(/M\s*(-?\d+(\.\d+)?)\s*(-?\d+(\.\d+)?)/);
+  if (match) {
+    return { x: parseFloat(match[1]), y: parseFloat(match[3]) };
+  }
+  return { x: 0, y: 0 }; // Default to (0, 0) if no match found
+};
+
 type AlphabetTracingProps = {
   letter: string;
 };
 
 const STROKE_WIDTH = 96;
+
+const radius = 30;
 
 const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
   const letterPath = Skia.Path.MakeFromSVGString(
@@ -33,7 +47,17 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
   )!;
   const drawPath = useSharedValue(Skia.Path.Make());
 
-  const cursorPosition = useSharedValue({ x: 0, y: 0 });
+  const x = useSharedValue(100);
+  const y = useSharedValue(100);
+
+  const style = useAnimatedStyle(() => ({
+    position: "absolute",
+    top: -radius,
+    left: -radius,
+    width: radius * 2,
+    height: radius * 2,
+    transform: [{ translateX: x.value }, { translateY: y.value }],
+  }));
 
   const gesture = Gesture.Pan()
     .onBegin((event) => {
@@ -41,8 +65,9 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
       drawPath.modify();
     })
     .onChange((event) => {
+      x.value = event.x;
+      y.value = event.y;
       drawPath.value.lineTo(event.x, event.y);
-      cursorPosition.value = { x: event.x, y: event.y };
       drawPath.modify();
     });
 
@@ -67,12 +92,16 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
 
   useEffect(() => {
     drawPath.value = Skia.Path.Make();
-    cursorPosition.value = { x: 0, y: 0 };
-  }, [cursorPosition, drawPath, letter]);
+    const startPoint = getPathStartPoint(
+      letterCoordinatesToRender[letter as "A" | "T" | "P" | "I" | "N"]
+    );
+    x.value = startPoint.x * scale + centerX;
+    y.value = startPoint.y * scale + centerY;
+  }, [letter, drawPath, x, y, scale, centerX, centerY]);
 
   return (
     <GestureDetector gesture={gesture}>
-      <View className="w-fulßl relative h-72 items-center justify-center ">
+      <View className="relative h-72 w-full items-center justify-center ">
         <Canvas
           style={{
             height: canvasHeight,
@@ -102,7 +131,9 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
           >
             <Path path={letterPath} color="black" strokeWidth={10 / scale} />
           </Mask>
+          <Circle cx={x} cy={y} r={20} color="#C385F8" />
         </Canvas>
+        <Animated.View style={style} />
       </View>
     </GestureDetector>
   );
