@@ -7,6 +7,7 @@ import { Alert, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Line } from "react-native-svg";
 
+import { CORRECT_ANSWER_TIMEOUT } from "@/constants/timing";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import AnimatedLetterComponent from "@/ui/components/home/animated-letter-component";
@@ -184,7 +185,7 @@ const LetterIntroduction = () => {
       if (updatedActiveActivity) {
         setActiveActivity(updatedActiveActivity);
       }
-    }, 1000);
+    }, CORRECT_ANSWER_TIMEOUT);
   };
 
   const onAnimationComplete = (letter: string) => {
