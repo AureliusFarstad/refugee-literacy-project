@@ -47,13 +47,13 @@ const LetterSound = () => {
   const pathname = usePathname();
 
   const [activeActivity, setActiveActivity] = useState<IActivity>(
-    levels[0].modules[0].sections[2].activities[0]
+    levels[0].modules[0].sections[2].activities[0],
   );
 
   const optionsToRender = useMemo(
     () =>
       getOptionsToRender(activeActivity.options, activeActivity.correctAnswer),
-    [activeActivity]
+    [activeActivity],
   );
 
   /**
@@ -69,7 +69,7 @@ const LetterSound = () => {
   const playSound = async () => {
     try {
       const { sound: soundResponse } = await Audio.Sound.createAsync(
-        activeActivity.audio
+        activeActivity.audio,
       );
       if (soundResponse) {
         setSound(soundResponse);
@@ -92,7 +92,7 @@ const LetterSound = () => {
 
   const initNextActivity = () => {
     const currentIndex = levels[0].modules[0].sections[2].activities.findIndex(
-      (activity: IActivity) => activity.id === activeActivity.id
+      (activity: IActivity) => activity.id === activeActivity.id,
     );
     let _nextActivity: IActivity;
     if (
@@ -124,7 +124,7 @@ const LetterSound = () => {
     const isCompleted = activitiesInCurrentSection.every((activity) => {
       if (!activity.nameAndSoundActivityProgress) return false;
       return Object.values(activity.nameAndSoundActivityProgress).every(
-        (count) => count >= 1
+        (count) => count >= 1,
       );
     });
 
@@ -193,14 +193,14 @@ const LetterSound = () => {
                                   ...updatedProgress,
                                 },
                               };
-                            }
+                            },
                           );
 
                           return {
                             ...section,
                             activities: _updatedActivities,
                           };
-                        }
+                        },
                       );
 
                       return {
@@ -254,7 +254,7 @@ const LetterSound = () => {
                     isUpdatingSession &&
                     option.id === tappedAnswer?.id &&
                     activeActivity.correctAnswer.id === tappedAnswer.id,
-                }
+                },
               )}
             >
               <Text

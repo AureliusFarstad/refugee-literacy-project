@@ -22,7 +22,7 @@ export const ModalHeader = React.memo(
         <CloseButton close={dismiss} />
       </View>
     );
-  }
+  },
 );
 
 const CloseButton = ({ close }: { close: () => void }) => {

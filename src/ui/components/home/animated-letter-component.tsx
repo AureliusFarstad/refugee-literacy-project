@@ -31,22 +31,18 @@ const AnimatedLetterComponent = forwardRef<
     uppercaseWebView?.current?.injectJavaScript(jsCommand);
   };
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        animateLowercase: () => {
-          animateLowercase();
-          onAnimationComplete(name);
-        },
-        animateUppercase: () => {
-          animateUppercase();
-          onAnimationComplete(name.toUpperCase());
-        },
-      };
-    },
-    [name, onAnimationComplete]
-  );
+  useImperativeHandle(ref, () => {
+    return {
+      animateLowercase: () => {
+        animateLowercase();
+        onAnimationComplete(name);
+      },
+      animateUppercase: () => {
+        animateUppercase();
+        onAnimationComplete(name.toUpperCase());
+      },
+    };
+  }, [name, onAnimationComplete]);
 
   const renderLowercaseLetter = () => {
     switch (name) {
