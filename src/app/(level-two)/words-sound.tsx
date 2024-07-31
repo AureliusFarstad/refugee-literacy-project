@@ -241,7 +241,7 @@ const WordSound = () => {
                 }
               }}
               className={clsx(
-                "bg-colors-red-200 absolute flex size-24 items-center justify-center rounded-full",
+                "absolute flex size-24 items-center justify-center rounded-full bg-colors-red-200",
                 {
                   "left-10 top-40": index === 0,
                   "left-36 top-72": index === 1,
