@@ -17,20 +17,43 @@ interface Item {
 }
 
 const initialItems: Item[] = [
-  { id: "item1", content: "N" },
-  { id: "item2", content: "A" },
-  { id: "item4", content: "I" },
-  { id: "item5", content: "T" },
-  { id: "item3", content: "P" },
+  { id: "item0", content: "N" },
+  { id: "item1", content: "A" },
+  { id: "item2", content: "I" },
+  { id: "item3", content: "T" },
+  { id: "item4", content: "P" },
 ];
 
-const correctOrder = ["P", "A", "N"];
+const correctAnswers = [
+  { id: "item0", content: "P" },
+  { id: "item1", content: "A" },
+  { id: "item2", content: "N" },
+];
+
+const OFFSET_VALUES_FOR_INDICES: {
+  [key: number]: "first" | "second" | "third";
+} = {
+  0: "first",
+  1: "second",
+  2: "third",
+};
 
 export const DragDropQuiz = () => {
   const dynamicData = useSharedValue<{
     items: Item[];
-    droppedItems: Item[];
-  }>({ items: initialItems, droppedItems: [] });
+    elements: {
+      first: Item | null;
+      second: Item | null;
+      third: Item | null;
+    };
+  }>({
+    items: initialItems,
+    elements: {
+      first: null,
+      second: null,
+      third: null,
+    },
+  });
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [, setCounter] = useState(0);
 
@@ -40,19 +63,37 @@ export const DragDropQuiz = () => {
 
   const handleDragEnd: DndProviderProps["onDragEnd"] = ({ active, over }) => {
     "worklet";
-    if (over && over.id === "dropzone" && typeof active.id === "string") {
-      if (dynamicData.value.droppedItems.length === 3) return;
+    if (over) {
       const draggedItem = dynamicData.value.items.find(
         (item) => item.id === active.id
       );
-      if (draggedItem) {
-        dynamicData.modify((value) => {
+
+      dynamicData.modify((value) => {
+        if (
+          !value.elements.first &&
+          over.id.toString().includes("0") &&
+          draggedItem
+        ) {
+          value.elements.first = draggedItem;
           value.items = value.items.filter((item) => item.id !== active.id);
-          value.droppedItems = [...value.droppedItems, draggedItem];
-          return value;
-        });
-        runOnJS(updateCounter)();
-      }
+        } else if (
+          !value.elements.second &&
+          over.id.toString().includes("1") &&
+          draggedItem
+        ) {
+          value.elements.second = draggedItem;
+          value.items = value.items.filter((item) => item.id !== active.id);
+        } else if (
+          !value.elements.third &&
+          over.id.toString().includes("2") &&
+          draggedItem
+        ) {
+          value.elements.third = draggedItem;
+          value.items = value.items.filter((item) => item.id !== active.id);
+        }
+        return value;
+      });
+      runOnJS(updateCounter)();
     }
   };
 
@@ -69,51 +110,76 @@ export const DragDropQuiz = () => {
   };
 
   const checkOrder = useCallback(() => {
-    const currentOrder = dynamicData.value.droppedItems.map(
-      (item) => item.content
-    );
-    setIsCorrect(JSON.stringify(currentOrder) === JSON.stringify(correctOrder));
+    "worklet";
+    const elements = dynamicData.value.elements;
+    const isCorrectAnswer =
+      elements.first?.content === "P" &&
+      elements.second?.content === "A" &&
+      elements.third?.content === "N";
+    setIsCorrect(isCorrectAnswer);
   }, [dynamicData.value]);
 
   const items = useDerivedValue(() => dynamicData.value.items, [dynamicData]);
-  const droppedItems = useDerivedValue(
-    () => dynamicData.value.droppedItems,
-    [dynamicData]
-  );
-
-  useEffect(() => {
-    if (droppedItems.value.length === 3) {
-      checkOrder();
-    }
-  }, [droppedItems.value, checkOrder]);
 
   const onTapping = useCallback(
     (item: Item) => {
       "worklet";
-      if (droppedItems.value.length === 3) return;
+      const updatedElements = dynamicData.value.elements;
+      let updatedItems = dynamicData.value.items;
+      if (!updatedElements.first) {
+        updatedElements.first = item;
+        updatedItems = dynamicData.value.items.filter(
+          (_item) => _item.id !== item.id
+        );
+      } else if (!updatedElements.second) {
+        updatedElements.second = item;
+        updatedItems = dynamicData.value.items.filter(
+          (_item) => _item.id !== item.id
+        );
+      } else if (!updatedElements.third) {
+        updatedElements.third = item;
+        updatedItems = dynamicData.value.items.filter(
+          (_item) => _item.id !== item.id
+        );
+      }
       dynamicData.value = {
-        items: dynamicData.value.items.filter((_item) => _item.id !== item.id),
-        droppedItems: [...dynamicData.value.droppedItems, item],
+        items: updatedItems,
+        elements: {
+          ...updatedElements,
+        },
       };
       runOnJS(updateCounter)();
     },
-    [dynamicData, updateCounter, droppedItems.value]
+    [updateCounter, dynamicData]
   );
 
   const onRemove = useCallback(
     (item: Item) => {
       "worklet";
-      const updatedDroppedItems = dynamicData.value.droppedItems.filter(
-        (_item) => _item.id !== item.id
-      );
+      const updatedElements = dynamicData.value.elements;
+      let updatedItems = dynamicData.value.items;
+      if (updatedElements.first?.id === item.id) {
+        updatedElements.first = null;
+        updatedItems = [...dynamicData.value.items, item];
+      } else if (updatedElements.second?.id === item.id) {
+        updatedElements.second = null;
+        updatedItems = [...dynamicData.value.items, item];
+      } else if (updatedElements.third?.id === item.id) {
+        updatedElements.third = null;
+        updatedItems = [...dynamicData.value.items, item];
+      }
       dynamicData.value = {
-        items: [...dynamicData.value.items, item],
-        droppedItems: [...updatedDroppedItems],
+        items: updatedItems,
+        elements: updatedElements,
       };
       runOnJS(updateCounter)();
     },
     [dynamicData, updateCounter]
   );
+
+  useEffect(() => {
+    checkOrder();
+  }, [dynamicData.value, checkOrder]);
 
   return (
     <DndProvider
@@ -122,46 +188,43 @@ export const DragDropQuiz = () => {
       onFinalize={handleFinalize}
       style={{ height: 400, width: WIDTH }}
     >
-      <Droppable
-        id="dropzone"
-        style={styles.dropzone}
-        className={"mx-auto  w-[280] "}
-      >
-        <View style={styles.droppedItemsContainer} className="mx-auto w-full">
-          {droppedItems.value.map((item) => (
-            <Pressable
+      <View className="mb-10 mt-24 flex flex-row justify-center">
+        {correctAnswers.map((item, index) => {
+          const offset: "first" | "second" | "third" =
+            OFFSET_VALUES_FOR_INDICES[index];
+          return (
+            <Droppable
               key={item.id}
-              className="z-50 mx-4 flex size-[64] items-center justify-center rounded-full bg-[#F36889]"
-              onPress={() => onRemove(item)}
-            >
-              <Text style={styles.itemText}>{item.content}</Text>
-            </Pressable>
-          ))}
-          <View className="absolute flex flex-row">
-            <View
+              id={item.id}
               className={clsx(
-                "-z-10 mx-4 flex size-[64] items-center justify-center rounded-full  bg-transparent"
+                "z-50 mx-4 flex size-[64] items-center justify-center rounded-full ",
+                {
+                  "bg-[#F36889]": dynamicData.value.elements[offset]?.content,
+                  "bg-[#F7D6DE] border-4 border-dashed border-[#F36889]":
+                    !dynamicData.value.elements[offset]?.content,
+                }
               )}
             >
-              <View className=" size-16 rounded-full border-2 border-dashed border-[#F36889] bg-[#F7D6DE]" />
-            </View>
-            <View
-              className={clsx(
-                "-z-10 mx-4 flex size-[64] items-center justify-center rounded-full  bg-transparent"
-              )}
-            >
-              <View className="   size-16 rounded-full border-2 border-dashed border-[#F36889] bg-[#F7D6DE]" />
-            </View>
-            <View
-              className={clsx(
-                "-z-10 mx-4 flex size-[64] items-center justify-center rounded-full  bg-transparent"
-              )}
-            >
-              <View className=" size-16 rounded-full  border-2 border-dashed border-[#F36889] bg-[#F7D6DE]" />
-            </View>
-          </View>
-        </View>
-      </Droppable>
+              <Pressable
+                onPress={() => {
+                  if (dynamicData.value.elements[offset]) {
+                    onRemove(dynamicData.value.elements[offset]);
+                  }
+                }}
+                className="size-[64] w-full items-center justify-center "
+              >
+                <Text
+                  style={styles.itemText}
+                  className={clsx("font-medium text-black", {})}
+                >
+                  {dynamicData.value.elements[offset]?.content}
+                </Text>
+              </Pressable>
+            </Droppable>
+          );
+        })}
+      </View>
+
       {isCorrect ? (
         <Text>Done</Text>
       ) : (
@@ -169,11 +232,12 @@ export const DragDropQuiz = () => {
           <Text>Check</Text>
         </Pressable>
       )}
+
       <View className="z-50 mt-10 flex size-full flex-row flex-wrap justify-evenly gap-6 bg-[#F7D6DE] p-8 px-16">
         <>
           <DynamicStroke />
           {items.value.map((item) => (
-            <Draggable key={item.id} id={item.id}>
+            <Draggable key={item.id} id={item.id} data={item}>
               <Pressable
                 className={clsx(
                   "flex size-[60] items-center justify-center rounded-full bg-[#F36889]"
