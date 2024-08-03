@@ -1,10 +1,18 @@
 import clsx from "clsx";
 import React, { useCallback, useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { State } from "react-native-gesture-handler";
 import { runOnJS, useSharedValue } from "react-native-reanimated";
 import { useDerivedValue } from "react-native-reanimated";
 
+import useSound from "@/core/hooks/useSound";
+import { SmallEarIcon } from "@/ui/icons";
 import { WIDTH } from "@/utils/layout";
 import type { DndProviderProps } from "@/vendor/react-native-dnd";
 import { DndProvider, Draggable, Droppable } from "@/vendor/react-native-dnd";
@@ -25,9 +33,21 @@ const initialItems: Item[] = [
 ];
 
 const correctAnswers = [
-  { id: "item0", content: "P" },
-  { id: "item1", content: "A" },
-  { id: "item2", content: "N" },
+  {
+    id: "item0",
+    content: "P",
+    audio: require("assets/audio/alphabet/name/p.mp3"),
+  },
+  {
+    id: "item1",
+    content: "A",
+    audio: require("assets/audio/alphabet/name/a.mp3"),
+  },
+  {
+    id: "item2",
+    content: "N",
+    audio: require("assets/audio/alphabet/name/n.mp3"),
+  },
 ];
 
 const OFFSET_VALUES_FOR_INDICES: {
@@ -56,6 +76,9 @@ export const DragDropQuiz = () => {
   });
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [, setCounter] = useState(0);
+  const [isHintDisplayed, setIsHintDisplayed] = useState(false);
+
+  const { playSound } = useSound();
 
   const updateCounter = useCallback(() => {
     setCounter((prev) => prev + 1);
@@ -197,7 +220,7 @@ export const DragDropQuiz = () => {
               key={item.id}
               id={item.id}
               className={clsx(
-                "z-50 mx-4 flex size-[64] items-center justify-center rounded-full ",
+                "z-50 mx-1 flex size-[64] items-center justify-center rounded-full ",
                 {
                   "bg-[#F36889]": dynamicData.value.elements[offset]?.content,
                   "bg-[#F7D6DE] border-4 border-dashed border-[#F36889]":
@@ -213,12 +236,23 @@ export const DragDropQuiz = () => {
                 }}
                 className="size-[64] w-full items-center justify-center "
               >
-                <Text
-                  style={styles.itemText}
-                  className={clsx("font-medium text-black", {})}
-                >
-                  {dynamicData.value.elements[offset]?.content}
-                </Text>
+                {isHintDisplayed &&
+                !dynamicData.value.elements[offset]?.content ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      playSound(item.audio);
+                    }}
+                  >
+                    <SmallEarIcon />
+                  </TouchableOpacity>
+                ) : (
+                  <Text
+                    style={styles.itemText}
+                    className={clsx("font-medium text-black", {})}
+                  >
+                    {dynamicData.value.elements[offset]?.content}
+                  </Text>
+                )}
               </Pressable>
             </Droppable>
           );
@@ -230,6 +264,23 @@ export const DragDropQuiz = () => {
       ) : (
         <Pressable onPress={checkOrder}>
           <Text>Check</Text>
+        </Pressable>
+      )}
+      {!isHintDisplayed ? (
+        <Pressable
+          onPress={() => {
+            setIsHintDisplayed(true);
+          }}
+        >
+          <Text>Show hints</Text>
+        </Pressable>
+      ) : (
+        <Pressable
+          onPress={() => {
+            setIsHintDisplayed(false);
+          }}
+        >
+          <Text>Hide hints</Text>
         </Pressable>
       )}
 
