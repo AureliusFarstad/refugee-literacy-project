@@ -4,6 +4,7 @@ import type { Sound } from "expo-av/build/Audio";
 import { router, usePathname } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
+import { CORRECT_ANSWER_TIMEOUT } from "@/constants/timing";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import { Switch } from "@/ui/checkbox";
@@ -226,14 +227,14 @@ const LetterSound = () => {
                     setTappedAnswer(undefined);
                     initNextActivity();
                     router.back();
-                  }, 1000);
+                  }, CORRECT_ANSWER_TIMEOUT);
                 } else {
                   setIsUpdatingSession(true);
                   setTimeout(() => {
                     setIsUpdatingSession(false);
                     setTappedAnswer(undefined);
                     initNextActivity();
-                  }, 1000);
+                  }, CORRECT_ANSWER_TIMEOUT);
                   console.log(activeActivity);
                   console.log({ tappedAnswer });
                   console.log(option.id, activeActivity.correctAnswer.id);

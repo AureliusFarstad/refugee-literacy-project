@@ -1,0 +1,1 @@
+export const CORRECT_ANSWER_TIMEOUT = 5000;
