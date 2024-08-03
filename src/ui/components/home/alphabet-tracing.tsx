@@ -37,7 +37,7 @@ type AlphabetTracingProps = {
   letter: string;
 };
 
-const STROKE_WIDTH = 56;
+const STROKE_WIDTH = 50;
 
 const radius = 30;
 

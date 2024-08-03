@@ -16,11 +16,13 @@ import { getOptionsToRender } from "@/utils/level-one";
 type LowerCaseSwitchProps = {
   isLowercase: boolean;
   setIsLowercase: (value: boolean) => void;
+  letter: string;
 };
 
 const LowercaseSwitch = ({
   isLowercase,
   setIsLowercase,
+  letter,
 }: LowerCaseSwitchProps) => {
   return (
     <Switch.Root
@@ -29,11 +31,11 @@ const LowercaseSwitch = ({
       accessibilityLabel="switch"
       className="pb-2"
     >
-      <Switch.Icon checked={isLowercase} />
-      <Switch.Label text="" />
+      <Switch.Icon checked={isLowercase} label={letter} />
     </Switch.Root>
   );
 };
+
 const LetterName = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels, updateLevels } = useLevelStore();
@@ -142,6 +144,7 @@ const LetterName = () => {
         <LowercaseSwitch
           isLowercase={isLowercase}
           setIsLowercase={setIsLowercase}
+          letter={"A"}
         />
       </View>
       <View className="flex items-center p-4">

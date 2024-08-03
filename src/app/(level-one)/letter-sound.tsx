@@ -141,7 +141,7 @@ const LetterSound = () => {
         <LowercaseSwitch
           isLowercase={isLowercase}
           setIsLowercase={setIsLowercase}
-          letter={activeActivity.correctAnswer.title}
+          letter={"A"}
         />
       </View>
       <View className="flex items-center p-4">
