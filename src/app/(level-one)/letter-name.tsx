@@ -38,8 +38,8 @@ const LetterName = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels, updateLevels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
-  const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   const [tappedAnswer, setTappedAnswer] = useState<IOption>();
+  const [incorrectAnswers, setIncorrectAnswers] = useState<string[]>([]);
 
   const [isLowercase, setIsLowercase] = useState(false);
 
@@ -158,7 +158,7 @@ const LetterName = () => {
               onPress={() => {
                 setTappedAnswer(option);
                 if (option.id === activeActivity.correctAnswer.id) {
-                  console.log("correct answer");
+                  setIncorrectAnswers([]);
 
                   const _updatedLevels = levels.map((level: ILevel) => {
                     if (level.id !== levels[0].id) return level;
@@ -216,31 +216,25 @@ const LetterName = () => {
                       modules: _updatedModules,
                     };
                   });
+                  playSound();
 
-                  setIsUpdatingSession(true);
                   router.push({
                     pathname: "/modal",
-                    params: { correctOption: option.title },
+                    params: {
+                      correctOption: option.title,
+                    },
                   });
                   setTimeout(() => {
-                    setIsUpdatingSession(false);
                     updateLevels(_updatedLevels);
                     setTappedAnswer(undefined);
                     initNextActivity();
                     router.back();
                   }, CORRECT_ANSWER_TIMEOUT);
                 } else {
-                  setIsUpdatingSession(true);
-                  setTimeout(() => {
-                    setIsUpdatingSession(false);
-                    setTappedAnswer(undefined);
-                    initNextActivity();
-                  }, CORRECT_ANSWER_TIMEOUT);
-                  console.log(activeActivity);
-                  console.log({ tappedAnswer });
-                  ``;
-                  console.log(option.id, activeActivity.correctAnswer.id);
-                  console.log("wrong answer");
+                  setIncorrectAnswers((prevIncorrectAnswers) => [
+                    ...prevIncorrectAnswers,
+                    option.id,
+                  ]);
                 }
               }}
               className={clsx(
@@ -250,11 +244,11 @@ const LetterName = () => {
                   "left-36 top-72": index === 1,
                   "right-0 top-40": index === 2,
                   " bg-red-500 text-white":
-                    isUpdatingSession &&
-                    option.id === tappedAnswer?.id &&
-                    activeActivity.correctAnswer.id !== tappedAnswer.id,
+                    // isUpdatingSession &&
+                    // option.id === tappedAnswer?.id &&
+                    incorrectAnswers.includes(option.id),
+                  // activeActivity.correctAnswer.id !== tappedAnswer.id,
                   "text-green-400":
-                    isUpdatingSession &&
                     option.id === tappedAnswer?.id &&
                     activeActivity.correctAnswer.id === tappedAnswer.id,
                 },
@@ -263,9 +257,9 @@ const LetterName = () => {
               <Text
                 className={clsx("text-4xl font-bold  text-colors-purple-500", {
                   "  text-white":
-                    isUpdatingSession &&
-                    option.id === tappedAnswer?.id &&
-                    activeActivity.correctAnswer.id !== tappedAnswer.id,
+                    (option.id === tappedAnswer?.id &&
+                      activeActivity.correctAnswer.id !== tappedAnswer.id) ||
+                    incorrectAnswers.includes(option.id),
                 })}
               >
                 {isLowercase

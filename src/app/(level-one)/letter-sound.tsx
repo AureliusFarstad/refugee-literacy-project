@@ -10,7 +10,7 @@ import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import { Switch } from "@/ui/checkbox";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
-import { EarIcon } from "@/ui/icons";
+import { EarIcon, LettersNameIcon } from "@/ui/icons";
 import { getOptionsToRender } from "@/utils/level-one";
 
 type LowerCaseSwitchProps = {
@@ -40,7 +40,7 @@ const LetterSound = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels, updateLevels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
-  const [isUpdatingSession, setIsUpdatingSession] = useState(false);
+  const [incorrectAnswers, setIncorrectAnswers] = useState<string[]>([]);
   const [tappedAnswer, setTappedAnswer] = useState<IOption>();
 
   const [isLowercase, setIsLowercase] = useState(false);
@@ -136,7 +136,7 @@ const LetterSound = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Sound" modalRef={dynamicModalRef} />
+      <Header title="Name" modalRef={dynamicModalRef} />
       <View className="mt-5 px-5">
         <LowercaseSwitch
           isLowercase={isLowercase}
@@ -144,13 +144,12 @@ const LetterSound = () => {
           letter={activeActivity.correctAnswer.title}
         />
       </View>
-
       <View className="flex items-center p-4">
         <TouchableOpacity
           onPress={playSound}
           className="flex size-[110] items-center justify-center rounded-full bg-colors-purple-500"
         >
-          <EarIcon />
+          <LettersNameIcon />
         </TouchableOpacity>
         <View className="flex w-full flex-1 flex-row">
           {optionsToRender.map((option, index) => (
@@ -159,6 +158,8 @@ const LetterSound = () => {
               onPress={() => {
                 setTappedAnswer(option);
                 if (option.id === activeActivity.correctAnswer.id) {
+                  setIncorrectAnswers([]);
+
                   const _updatedLevels = levels.map((level: ILevel) => {
                     if (level.id !== levels[0].id) return level;
 
@@ -215,58 +216,50 @@ const LetterSound = () => {
                       modules: _updatedModules,
                     };
                   });
+                  playSound();
 
-                  setIsUpdatingSession(true);
                   router.push({
                     pathname: "/modal",
-                    params: { correctOption: option.title },
+                    params: {
+                      correctOption: option.title,
+                    },
                   });
                   setTimeout(() => {
-                    setIsUpdatingSession(false);
                     updateLevels(_updatedLevels);
                     setTappedAnswer(undefined);
                     initNextActivity();
                     router.back();
                   }, CORRECT_ANSWER_TIMEOUT);
                 } else {
-                  setIsUpdatingSession(true);
-                  setTimeout(() => {
-                    setIsUpdatingSession(false);
-                    setTappedAnswer(undefined);
-                    initNextActivity();
-                  }, CORRECT_ANSWER_TIMEOUT);
-                  console.log(activeActivity);
-                  console.log({ tappedAnswer });
-                  console.log(option.id, activeActivity.correctAnswer.id);
-                  console.log("wrong answer");
+                  setIncorrectAnswers((prevIncorrectAnswers) => [
+                    ...prevIncorrectAnswers,
+                    option.id,
+                  ]);
                 }
               }}
               className={clsx(
-                "absolute flex size-24 items-center justify-center rounded-full bg-colors-purple-200",
+                "absolute flex  size-24 items-center justify-center rounded-full bg-colors-purple-200",
                 {
                   "left-10 top-40": index === 0,
                   "left-36 top-72": index === 1,
                   "right-0 top-40": index === 2,
                   " bg-red-500 text-white":
-                    isUpdatingSession &&
-                    option.id === tappedAnswer?.id &&
-                    activeActivity.correctAnswer.id !== tappedAnswer.id,
-                  "bg-green-500":
-                    isUpdatingSession &&
+                    // isUpdatingSession &&
+                    // option.id === tappedAnswer?.id &&
+                    incorrectAnswers.includes(option.id),
+                  // activeActivity.correctAnswer.id !== tappedAnswer.id,
+                  "text-green-400":
                     option.id === tappedAnswer?.id &&
                     activeActivity.correctAnswer.id === tappedAnswer.id,
                 },
               )}
             >
               <Text
-                className={clsx("text-4xl font-bold text-colors-purple-500", {
-                  "text-white":
-                    (isUpdatingSession &&
-                      option.id === tappedAnswer?.id &&
-                      activeActivity.correctAnswer.id === tappedAnswer.id) ||
-                    (isUpdatingSession &&
-                      option.id === tappedAnswer?.id &&
-                      activeActivity.correctAnswer.id !== tappedAnswer.id),
+                className={clsx("text-4xl font-bold  text-colors-purple-500", {
+                  "  text-white":
+                    (option.id === tappedAnswer?.id &&
+                      activeActivity.correctAnswer.id !== tappedAnswer.id) ||
+                    incorrectAnswers.includes(option.id),
                 })}
               >
                 {isLowercase
@@ -279,7 +272,7 @@ const LetterSound = () => {
       </View>
       <DynamicModal ref={dynamicModalRef}>
         <View className="rounded-lg bg-white p-4">
-          <Text>Letter sound activity</Text>
+          <Text>Letter name activity</Text>
           <View className="flex h-20 items-center justify-center">
             <EarIcon />
           </View>
