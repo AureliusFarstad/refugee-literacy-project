@@ -26,18 +26,18 @@ export const BottomSheetModal = React.forwardRef(
       detached = false,
       ...props
     }: ModalProps,
-    ref: ModalRef
+    ref: ModalRef,
   ) => {
     const detachedProps = React.useMemo(
       () => getDetachedProps(detached),
-      [detached]
+      [detached],
     );
     const modal = useBottomSheetModal();
     const snapPoints = React.useMemo(() => _snapPoints, [_snapPoints]);
 
     React.useImperativeHandle(
       ref,
-      () => (modal.ref.current as GorhomBottomSheetModal) || null
+      () => (modal.ref.current as GorhomBottomSheetModal) || null,
     );
 
     const renderHandleComponent = React.useCallback(
@@ -47,7 +47,7 @@ export const BottomSheetModal = React.forwardRef(
           <ModalHeader title={title} dismiss={modal.dismiss} />
         </>
       ),
-      [title, modal.dismiss]
+      [title, modal.dismiss],
     );
 
     return (
@@ -61,7 +61,7 @@ export const BottomSheetModal = React.forwardRef(
         handleComponent={renderHandleComponent}
       />
     );
-  }
+  },
 );
 
 const getDetachedProps = (detached: boolean) => {

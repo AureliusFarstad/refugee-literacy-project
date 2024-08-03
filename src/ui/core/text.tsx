@@ -10,7 +10,7 @@ interface Props extends TextProps {
 export const Text = ({ className = "", style, children, ...props }: Props) => {
   const textStyle = React.useMemo(
     () => twMerge("font-dongle ", className),
-    [className]
+    [className],
   );
 
   const nStyle = React.useMemo(
@@ -21,7 +21,7 @@ export const Text = ({ className = "", style, children, ...props }: Props) => {
         },
         style,
       ]) as TextStyle,
-    [style]
+    [style],
   );
   return (
     <NNText className={textStyle} style={nStyle} {...props}>

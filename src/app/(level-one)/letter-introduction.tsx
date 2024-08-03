@@ -88,7 +88,7 @@ const LetterIntroduction = () => {
   // const [tappedAnswer, setTappedAnswer] = useState<IOption>();
 
   const [activeActivity, setActiveActivity] = useState(
-    levels[0].modules[0].sections[0].activities[0]
+    levels[0].modules[0].sections[0].activities[0],
   );
 
   const animatedLetterRef = useRef<AnimatedLetterComponentRef | null>(null);
@@ -98,9 +98,8 @@ const LetterIntroduction = () => {
 
   const playSound = async (playbackSource: AVPlaybackSource) => {
     try {
-      const { sound: soundResponse } = await Audio.Sound.createAsync(
-        playbackSource
-      );
+      const { sound: soundResponse } =
+        await Audio.Sound.createAsync(playbackSource);
       if (soundResponse) {
         setSound(soundResponse);
       }
@@ -124,7 +123,7 @@ const LetterIntroduction = () => {
       | "PHONETIC_SOUND"
       | "ALPHABETIC_SOUND"
       | "UPPERCASE_LETTER"
-      | "LOWERCASE_LETTER"
+      | "LOWERCASE_LETTER",
   ) => {
     const _updatedLevels = levels.map((level: ILevel) => {
       if (level.id !== levels[0].id) return level;
@@ -157,7 +156,7 @@ const LetterIntroduction = () => {
                   ...updatedProgress,
                 },
               };
-            }
+            },
           );
 
           return {
@@ -182,7 +181,7 @@ const LetterIntroduction = () => {
     setTimeout(() => {
       const updatedActiveActivity =
         levels[0].modules[0].sections[0].activities.find(
-          (activity) => activity.id === activeActivity.id
+          (activity) => activity.id === activeActivity.id,
         );
       if (updatedActiveActivity) {
         setActiveActivity(updatedActiveActivity);

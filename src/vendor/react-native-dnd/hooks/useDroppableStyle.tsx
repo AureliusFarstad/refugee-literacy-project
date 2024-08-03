@@ -10,7 +10,7 @@ export type UseDroppableStyleCallback<StyleT extends AnimatedStyle> = (_: {
 
 export const useDroppableStyle = <StyleT extends AnimatedStyle>(
   id: UniqueIdentifier,
-  callback: UseDroppableStyleCallback<StyleT>
+  callback: UseDroppableStyleCallback<StyleT>,
 ): StyleT => {
   const { droppableActiveId: activeId, droppableOptions: options } =
     useDndContext();
