@@ -100,13 +100,13 @@ const LetterTapMatching = () => {
         checkIfLettersMatch(letterFoundInLeft, letterFoundInRight, newPath);
         setCurrentPath("");
       },
-    }),
+    })
   ).current;
 
   const checkIfLettersMatch = (
     letterFoundInLeft: string,
     letterFoundInRight: string,
-    newPath: Path,
+    newPath: Path
   ) => {
     if (letterFoundInLeft === letterFoundInRight) {
       setPaths((prevPaths) => [...prevPaths, newPath]);
@@ -124,7 +124,7 @@ const LetterTapMatching = () => {
       letters.map((value, index) => ({
         id: `right-${index}`,
         value: value.toUpperCase(),
-      })),
+      }))
     );
     setLeftLetters(left);
     setRightLetters(right);
@@ -178,14 +178,14 @@ const LetterTapMatching = () => {
                       numberOfTimesCorrectAnswerGiven:
                         activity.numberOfTimesCorrectAnswerGiven + 1,
                     };
-                  },
+                  }
                 );
 
                 return {
                   ...section,
                   activities: _updatedActivities,
                 };
-              },
+              }
             );
 
             return {
@@ -215,7 +215,7 @@ const LetterTapMatching = () => {
   const renderLetters = (
     letters: ILetter[],
     onPress: (letter: ILetter) => void,
-    isRight: boolean,
+    isRight: boolean
   ) => (
     <View className="items-center">
       {letters.map((letter) => {
@@ -226,17 +226,17 @@ const LetterTapMatching = () => {
                 "my-[14px] size-[64px] items-center justify-center rounded-[10px] ",
                 {
                   "bg-[#8AC65B]": matchedPairs.includes(
-                    letter.value.toLowerCase(),
+                    letter.value.toLowerCase()
                   ),
                   "bg-[#7471F0]": selectedLeft?.id === letter.id,
                   "bg-colors-purple-500":
                     !matchedPairs.includes(letter.value.toLowerCase()) &&
                     selectedLeft?.id !== letter.id,
-                },
+                }
               )}
               onPress={() => {
                 const letterMetaInformation = layoutValuesRef.current?.find(
-                  (item) => item.value === letter.value,
+                  (item) => item.value === letter.value
                 );
                 if (!letterMetaInformation) return;
 
@@ -290,7 +290,7 @@ const LetterTapMatching = () => {
                   "right-24": isRight,
                   "left-24": !isRight,
                   "bg-[#8AC65B] border-[#8AC65B]": matchedPairs.includes(
-                    letter.value.toLowerCase(),
+                    letter.value.toLowerCase()
                   ),
                   "bg-[#7471F0] border-[#7471F0]":
                     selectedLeft?.id === letter.id,

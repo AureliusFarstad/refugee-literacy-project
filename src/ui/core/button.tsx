@@ -103,11 +103,11 @@ export const Button = React.forwardRef<View, Props>(
       textClassName = "",
       ...props
     },
-    ref,
+    ref
   ) => {
     const styles = React.useMemo(
       () => button({ variant, disabled, size }),
-      [variant, disabled, size],
+      [variant, disabled, size]
     );
     return (
       <Pressable
@@ -131,5 +131,5 @@ export const Button = React.forwardRef<View, Props>(
         )}
       </Pressable>
     );
-  },
+  }
 );

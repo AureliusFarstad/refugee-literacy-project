@@ -14,7 +14,7 @@ const ProgressBar = ({ progress, color }: ProgressBarProps) => {
       <View
         className={clsx(
           "flex h-4 w-full justify-center rounded-xl px-1",
-          color,
+          color
         )}
       >
         <View

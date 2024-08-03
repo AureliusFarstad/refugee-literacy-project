@@ -20,16 +20,20 @@ export const DynamicModal = forwardRef<
     { setFalse: _hideDynamicModal, setTrue: _showDynamicModal },
   ] = useBooleanState(false);
 
-  useImperativeHandle(ref, () => {
-    return {
-      showDynamicModal: () => {
-        _showDynamicModal();
-      },
-      hideDynamicModal: () => {
-        _hideDynamicModal();
-      },
-    };
-  }, [_hideDynamicModal, _showDynamicModal]);
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        showDynamicModal: () => {
+          _showDynamicModal();
+        },
+        hideDynamicModal: () => {
+          _hideDynamicModal();
+        },
+      };
+    },
+    [_hideDynamicModal, _showDynamicModal]
+  );
 
   return (
     <View>

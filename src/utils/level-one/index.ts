@@ -29,7 +29,7 @@ output
 */
 export const getOptionsToRender = (
   options: IOption[],
-  _correctAnswer: IOption,
+  _correctAnswer: IOption
 ): IOption[] => {
   const shuffledOptions = options.sort(() => Math.random() - 0.5);
   const _shuffledOptionsWithCorrectAnswer = [
