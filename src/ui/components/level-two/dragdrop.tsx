@@ -1,5 +1,3 @@
-import type { DndProviderProps } from "@mgcrea/react-native-dnd";
-import { DndProvider, Draggable, Droppable } from "@mgcrea/react-native-dnd";
 import clsx from "clsx";
 import React, { useCallback, useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -8,6 +6,8 @@ import { runOnJS, useSharedValue } from "react-native-reanimated";
 import { useDerivedValue } from "react-native-reanimated";
 
 import { WIDTH } from "@/utils/layout";
+import type { DndProviderProps } from "@/vendor/react-native-dnd";
+import { DndProvider, Draggable, Droppable } from "@/vendor/react-native-dnd";
 
 import DynamicStroke from "./dynamic-strokes";
 

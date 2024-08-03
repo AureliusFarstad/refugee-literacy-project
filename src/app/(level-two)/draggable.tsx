@@ -1,8 +1,9 @@
-import type { DndProviderProps } from "@mgcrea/react-native-dnd";
-import { DndProvider, Draggable, Droppable } from "@mgcrea/react-native-dnd";
 import { type FunctionComponent, useState } from "react";
 import { Pressable, SafeAreaView, StyleSheet, Text } from "react-native";
 import { State } from "react-native-gesture-handler";
+
+import type { DndProviderProps } from "@/vendor/react-native-dnd";
+import { DndProvider, Draggable, Droppable } from "@/vendor/react-native-dnd";
 
 const DraggableScreen: FunctionComponent = () => {
   const handleDragEnd: DndProviderProps["onDragEnd"] = ({ active, over }) => {
