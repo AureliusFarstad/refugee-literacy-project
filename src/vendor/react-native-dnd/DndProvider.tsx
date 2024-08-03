@@ -216,6 +216,7 @@ export const DndProvider = forwardRef<
       }, delay);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const panGesture = Gesture.Pan()
       .onBegin((event) => {
         const { state, x, y } = event;
@@ -259,6 +260,8 @@ export const DndProvider = forwardRef<
             restingOffset.y.value = activeOffset.y.value;
           }
           // Update activeId directly or with an optional delay
+
+          // eslint-disable-next-line @typescript-eslint/no-shadow
           const { activationDelay } = options[activeId];
           if (activationDelay > 0) {
             draggablePendingId.value = activeId;

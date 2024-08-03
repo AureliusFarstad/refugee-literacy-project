@@ -52,6 +52,8 @@ export const Droppable: FunctionComponent<
 
   const animatedStyle = useAnimatedStyle(() => {
     const isActive = activeId.value === id;
+
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const style = {
       opacity: isActive ? activeOpacity : 1,
     };

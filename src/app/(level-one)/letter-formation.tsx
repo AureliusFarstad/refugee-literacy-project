@@ -21,7 +21,7 @@ const LetterFormation = () => {
   const insets = useSafeAreaInsets();
 
   const [activeActivity, setActiveActivity] = useState(
-    levels[0].modules[0].sections[1].activities[0],
+    levels[0].modules[0].sections[1].activities[0]
   );
 
   const activitiesInCurrentSection =
@@ -29,8 +29,9 @@ const LetterFormation = () => {
 
   const playSound = async (playbackSource: AVPlaybackSource) => {
     try {
-      const { sound: soundResponse } =
-        await Audio.Sound.createAsync(playbackSource);
+      const { sound: soundResponse } = await Audio.Sound.createAsync(
+        playbackSource
+      );
       if (soundResponse) {
         setSound(soundResponse);
       }
@@ -89,7 +90,7 @@ const LetterFormation = () => {
                     {
                       "bg-colors-gray-300": activity.id !== activeActivity.id,
                       "bg-colors-purple-500": activity.id === activeActivity.id,
-                    },
+                    }
                   )}
                   onPress={() => {
                     /**
