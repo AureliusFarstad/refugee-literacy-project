@@ -36,7 +36,6 @@
     "@expo-google-fonts/inter": "^0.2.3",
     "@expo-google-fonts/neucha": "^0.2.3",
     "@gorhom/bottom-sheet": "^4.5.1",
-    "@mgcrea/react-native-dnd": "2.2.0",
     "@radix-ui/react-compose-refs": "^1.0.1",
     "@react-navigation/bottom-tabs": "^6.5.12",
     "@react-navigation/native": "^6.1.10",
