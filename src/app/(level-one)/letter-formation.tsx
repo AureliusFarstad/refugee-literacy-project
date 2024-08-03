@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import AlphabetTracing from "@/ui/components/home/alphabet-tracing";
+import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import { EarIcon, LettersNameIcon, PencilIcon } from "@/ui/icons";
@@ -17,6 +18,8 @@ const LetterFormation = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
+
+  const [isLowercase, setIsLowercase] = useState(false);
 
   const insets = useSafeAreaInsets();
 
@@ -60,6 +63,13 @@ const LetterFormation = () => {
         }}
       >
         <View className="flex items-center justify-between">
+          <View className="w-full  px-5">
+            <LetterCaseSwitch
+              isLowercase={isLowercase}
+              setIsLowercase={setIsLowercase}
+              letter={"A"}
+            />
+          </View>
           <View className="flex flex-row items-center justify-between  rounded-full bg-colors-purple-200 p-4">
             <TouchableOpacity
               onPress={() => playSound(activeActivity.sound.alphabeticAudioSrc)}
@@ -76,7 +86,13 @@ const LetterFormation = () => {
           </View>
         </View>
         <View className="relative h-[356] items-center justify-center  border-pink-500">
-          <AlphabetTracing letter={activeActivity.letter.upperCase} />
+          <AlphabetTracing
+            letter={
+              isLowercase
+                ? activeActivity.letter.lowerCase
+                : activeActivity.letter.upperCase
+            }
+          />
         </View>
         <View className="mt-auto ">
           <View>{/* <View className="mx-4 mt-5  overflow-hidden" /> */}</View>
