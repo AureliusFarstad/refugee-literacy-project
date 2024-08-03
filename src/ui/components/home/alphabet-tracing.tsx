@@ -43,7 +43,7 @@ const radius = 30;
 
 const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
   const letterPath = Skia.Path.MakeFromSVGString(
-    letterCoordinatesToRender[letter as "A" | "T" | "P" | "I" | "N"]
+    letterCoordinatesToRender[letter as "A" | "T" | "P" | "I" | "N"],
   )!;
   const drawPath = useSharedValue(Skia.Path.Make());
 

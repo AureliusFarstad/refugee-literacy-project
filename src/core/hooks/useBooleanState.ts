@@ -18,7 +18,7 @@ export const useBooleanState = (initialValue: boolean): UseBooleanState => {
       toggle: () => setState((prev) => !prev),
       reset: () => setState(initialValue),
     }),
-    [initialValue]
+    [initialValue],
   );
 
   return [state, handlers];
