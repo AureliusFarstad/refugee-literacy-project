@@ -75,7 +75,7 @@ const LetterFormation = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <View className="relative h-full ">
+        <View className="relative h-[356] items-center justify-center  border-pink-500">
           <AlphabetTracing letter={activeActivity.letter.upperCase} />
         </View>
         <View className="mt-auto ">

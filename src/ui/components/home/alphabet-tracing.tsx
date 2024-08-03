@@ -37,7 +37,7 @@ type AlphabetTracingProps = {
   letter: string;
 };
 
-const STROKE_WIDTH = 96;
+const STROKE_WIDTH = 56;
 
 const radius = 30;
 
@@ -55,6 +55,7 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
     top: -radius,
     left: -radius,
     width: radius * 2,
+    zIndex: 50,
     height: radius * 2,
     transform: [{ translateX: x.value }, { translateY: y.value }],
   }));
@@ -101,7 +102,7 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
 
   return (
     <GestureDetector gesture={gesture}>
-      <View className="relative h-72 w-full items-center justify-center ">
+      <View className="relative z-20 h-72 w-full items-center justify-center border-4 border-pink-500">
         <Canvas
           style={{
             height: canvasHeight,
@@ -133,7 +134,7 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
           </Mask>
           <Circle cx={x} cy={y} r={20} color="#C385F8" />
         </Canvas>
-        <Animated.View style={style} />
+        <Animated.View style={style} className={"z-50"} />
       </View>
     </GestureDetector>
   );
