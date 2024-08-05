@@ -232,24 +232,23 @@ export const SwitchIcon = ({ checked = false, label }: IconProps) => {
         }}
         transition={{ translateX: { overshootClamping: true } }}
       >
-        <Text>{checked ? label?.toLowerCase() : label?.toUpperCase()}</Text>
+        <Text className="text-xl font-medium">
+          {checked ? label?.toLowerCase() : label?.toUpperCase()}
+        </Text>
       </MotiView>
-
       <Text
-        className={clsx("absolute ", {
-          "right-5 text-2xl": !checked,
-          "opacity-0": checked,
+        className={clsx("absolute left-4 text-xl font-medium", {
+          hidden: !checked,
         })}
       >
-        {label}
+        {label?.toUpperCase()}
       </Text>
       <Text
-        className={clsx("absolute ", {
-          "left-5 text-lg": checked,
-          "opacity-0": !checked,
+        className={clsx("absolute right-4 text-xl font-medium", {
+          hidden: checked,
         })}
       >
-        {label}
+        {label?.toLowerCase()}
       </Text>
     </View>
   );

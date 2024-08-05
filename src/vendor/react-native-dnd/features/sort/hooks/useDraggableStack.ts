@@ -39,9 +39,9 @@ export const useDraggableStack = ({
       shouldSwapWorklet
         ? shouldSwapWorklet
         : horizontal
-        ? swapByItemHorizontalAxis
-        : swapByItemVerticalAxis,
-    [horizontal, shouldSwapWorklet]
+          ? swapByItemHorizontalAxis
+          : swapByItemVerticalAxis,
+    [horizontal, shouldSwapWorklet],
   );
 
   const { draggablePlaceholderIndex, draggableSortOrder } = useDraggableSort({
@@ -107,7 +107,7 @@ export const useDraggableStack = ({
       // Update the active item offset
       restingOffset[axis].value += nextActiveOffset[axis];
     },
-    [horizontal]
+    [horizontal],
   );
 
   return { draggablePlaceholderIndex, draggableSortOrder };

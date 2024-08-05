@@ -28,49 +28,51 @@ type AnimatedLetterComponentRef = {
 
 const PageLinesSVG = () => {
   return (
-    <Svg
-      width={WIDTH - 16}
-      height="143"
-      viewBox={`0 0 ${WIDTH - 16} 143`}
-      fill="none"
-    >
-      <Line
-        x1="-9.00391"
-        y1="141.295"
-        x2={WIDTH - 16}
-        y2="141.295"
-        stroke="#E4E4E7"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeDasharray="8 8"
-      />
-      <Line
-        x1="-10.0039"
-        y1="96.8115"
-        x2={WIDTH - 16}
-        y2="96.8115"
-        stroke="#E4E4E7"
-        strokeWidth="2"
-      />
-      <Line
-        x1="-9.00391"
-        y1="46.3955"
-        x2={WIDTH - 16}
-        y2="46.3955"
-        stroke="#E4E4E7"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeDasharray="8 8"
-      />
-      <Line
-        x1="-10.0039"
-        y1="1.91113"
-        x2={WIDTH - 16}
-        y2="1.91113"
-        stroke="#E4E4E7"
-        strokeWidth="2"
-      />
-    </Svg>
+    <View className="overflow-hidden">
+      <Svg
+        width={WIDTH - 16}
+        height="320"
+        viewBox={`0 0 ${WIDTH - 16} 143`}
+        fill="none"
+      >
+        <Line
+          x1="-9.00391"
+          y1="141.295"
+          x2={WIDTH - 16}
+          y2="141.295"
+          stroke="#E4E4E7"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeDasharray="8 8"
+        />
+        <Line
+          x1="-10.0039"
+          y1="96.8115"
+          x2={WIDTH - 16}
+          y2="96.8115"
+          stroke="#E4E4E7"
+          strokeWidth="2"
+        />
+        <Line
+          x1="-9.00391"
+          y1="46.3955"
+          x2={WIDTH - 16}
+          y2="46.3955"
+          stroke="#E4E4E7"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeDasharray="8 8"
+        />
+        <Line
+          x1="-10.0039"
+          y1="1.91113"
+          x2={WIDTH - 16}
+          y2="1.91113"
+          stroke="#E4E4E7"
+          strokeWidth="2"
+        />
+      </Svg>
+    </View>
   );
 };
 
@@ -243,7 +245,7 @@ const LetterIntroduction = () => {
                 </TouchableOpacity>
               </View>
             </View>
-            <View className="mx-4 mt-5 overflow-hidden  border-yellow-500">
+            <View className="mx-4  h-[320]   border-yellow-500">
               <PageLinesSVG />
               <AnimatedLetterComponent
                 ref={animatedLetterRef}
@@ -253,7 +255,10 @@ const LetterIntroduction = () => {
               />
             </View>
           </View>
-          <View className="my-10 flex flex-row items-center justify-evenly">
+        </View>
+
+        <View className="flex w-full flex-col justify-between">
+          <View className="mb-8 flex flex-row items-center justify-evenly">
             <TouchableOpacity
               onPress={() => {
                 animatedLetterRef?.current?.animateLowercase();
@@ -269,19 +274,13 @@ const LetterIntroduction = () => {
               <CustomPencilIcon size={44} />
             </TouchableOpacity>
           </View>
-        </View>
-
-        <View className="flex w-full flex-row justify-between">
           <View className="flex w-full flex-row items-center justify-around px-[10px]">
             {activitiesInCurrentSection.map((activity, index) => (
               <Pressable
-                className={clsx(
-                  "flex size-[60] items-center justify-center rounded-md ",
-                  {
-                    "bg-colors-gray-300": activity.id !== activeActivity.id,
-                    "bg-colors-purple-500": activity.id === activeActivity.id,
-                  },
-                )}
+                className={clsx("flex size-[60] justify-center  rounded-md  ", {
+                  "bg-colors-gray-300": activity.id !== activeActivity.id,
+                  "bg-colors-purple-500": activity.id === activeActivity.id,
+                })}
                 onPress={() => {
                   /**
                    * update current activity
@@ -290,10 +289,14 @@ const LetterIntroduction = () => {
                 }}
                 key={index}
               >
-                <Text className="text-[24px] text-white">
-                  {activity.letter.upperCase}
-                  {activity.letter.lowerCase}
-                </Text>
+                <View className="flex flex-row  items-center justify-center ">
+                  <Text className="text-3xl font-medium">
+                    {activity.letter.upperCase}
+                  </Text>
+                  <Text className=" ml-0.5 text-3xl font-medium">
+                    {activity.letter.lowerCase}
+                  </Text>
+                </View>
               </Pressable>
             ))}
           </View>

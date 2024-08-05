@@ -5,7 +5,7 @@ import type { UniqueIdentifier } from "../types";
 
 export const useActiveDropReaction = (
   id: UniqueIdentifier,
-  callback: (isActive: boolean) => void
+  callback: (isActive: boolean) => void,
 ) => {
   const { droppableActiveId: activeId } = useDndContext();
   useAnimatedReaction(
@@ -15,6 +15,6 @@ export const useActiveDropReaction = (
         callback(next);
       }
     },
-    []
+    [],
   );
 };

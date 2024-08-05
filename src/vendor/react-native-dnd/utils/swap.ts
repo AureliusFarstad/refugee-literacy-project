@@ -8,7 +8,7 @@ import {
 
 export const swapByItemCenterPoint = (
   activeLayout: Rectangle,
-  itemLayout: Rectangle
+  itemLayout: Rectangle,
 ) => {
   "worklet";
   const itemCenterPoint = centerPoint(itemLayout);
@@ -18,7 +18,7 @@ export const swapByItemCenterPoint = (
 export const swapByItemAxis = (
   activeLayout: Rectangle,
   itemLayout: Rectangle,
-  horizontal: boolean
+  horizontal: boolean,
 ) => {
   "worklet";
   const itemCenterAxis = centerAxis(itemLayout, horizontal);
@@ -27,7 +27,7 @@ export const swapByItemAxis = (
 
 export const swapByItemHorizontalAxis = (
   activeLayout: Rectangle,
-  itemLayout: Rectangle
+  itemLayout: Rectangle,
 ) => {
   "worklet";
   const itemCenterAxis = centerAxis(itemLayout, true);
@@ -36,7 +36,7 @@ export const swapByItemHorizontalAxis = (
 
 export const swapByItemVerticalAxis = (
   activeLayout: Rectangle,
-  itemLayout: Rectangle
+  itemLayout: Rectangle,
 ) => {
   "worklet";
   const itemCenterAxis = centerAxis(itemLayout, false);

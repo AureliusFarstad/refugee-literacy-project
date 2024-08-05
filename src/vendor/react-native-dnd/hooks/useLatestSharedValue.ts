@@ -4,7 +4,7 @@ import type { DependencyList } from "../types";
 
 export function useLatestSharedValue<T>(
   value: T,
-  dependencies: DependencyList = [value]
+  dependencies: DependencyList = [value],
 ) {
   const sharedValue = useSharedValue<T>(value);
 
@@ -17,7 +17,7 @@ export function useLatestSharedValue<T>(
       }
       sharedValue.value = next;
     },
-    dependencies
+    dependencies,
   );
 
   return sharedValue;

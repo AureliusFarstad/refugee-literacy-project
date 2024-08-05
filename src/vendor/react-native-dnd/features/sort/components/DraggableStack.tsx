@@ -41,7 +41,7 @@ export const DraggableStack: FunctionComponent<
         }
         return null;
       })?.filter(Boolean) as UniqueIdentifier[],
-    [children]
+    [children],
   );
 
   const style = useMemo(
@@ -51,9 +51,9 @@ export const DraggableStack: FunctionComponent<
           flexDirection: direction,
           gap,
         },
-        styleProp
+        styleProp,
       ),
-    [gap, direction, styleProp]
+    [gap, direction, styleProp],
   );
 
   const horizontal = ["row", "row-reverse"].includes(style.flexDirection);

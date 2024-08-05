@@ -70,7 +70,7 @@ export const useDroppable = ({
         droppableOptions.value[id].disabled = disabled;
       }
     },
-    [disabled]
+    [disabled],
   );
 
   useLayoutEffect(() => {
@@ -81,6 +81,7 @@ export const useDroppable = ({
     };
     runOnUI(runLayoutEffect)();
     return () => {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
       const runLayoutEffect = () => {
         "worklet";
         delete droppableLayouts.value[id];

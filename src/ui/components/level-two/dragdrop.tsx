@@ -1,34 +1,24 @@
 import clsx from "clsx";
+import type { AVPlaybackSource } from "expo-av";
 import React, { useCallback, useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { State } from "react-native-gesture-handler";
 import { runOnJS, useSharedValue } from "react-native-reanimated";
 import { useDerivedValue } from "react-native-reanimated";
 
+import useSound from "@/core/hooks/useSound";
+import { SmallEarIcon } from "@/ui/icons";
 import { WIDTH } from "@/utils/layout";
 import type { DndProviderProps } from "@/vendor/react-native-dnd";
 import { DndProvider, Draggable, Droppable } from "@/vendor/react-native-dnd";
 
 import DynamicStroke from "./dynamic-strokes";
-
-interface Item {
-  id: string;
-  content: string;
-}
-
-const initialItems: Item[] = [
-  { id: "item0", content: "N" },
-  { id: "item1", content: "A" },
-  { id: "item2", content: "I" },
-  { id: "item3", content: "T" },
-  { id: "item4", content: "P" },
-];
-
-const correctAnswers = [
-  { id: "item0", content: "P" },
-  { id: "item1", content: "A" },
-  { id: "item2", content: "N" },
-];
 
 const OFFSET_VALUES_FOR_INDICES: {
   [key: number]: "first" | "second" | "third";
@@ -38,7 +28,31 @@ const OFFSET_VALUES_FOR_INDICES: {
   2: "third",
 };
 
-export const DragDropQuiz = () => {
+type WordGameData = {
+  options: {
+    id: string;
+    content: string;
+  }[];
+  correctAnswer: {
+    word: string;
+    alphabets: {
+      id: string;
+      content: string;
+      audio: AVPlaybackSource;
+    }[];
+  };
+};
+
+type DragDropProps = {
+  activeActivity: WordGameData;
+};
+
+type Item = {
+  id: string;
+  content: string;
+};
+
+export const DragDrop = ({ activeActivity }: DragDropProps) => {
   const dynamicData = useSharedValue<{
     items: Item[];
     elements: {
@@ -47,7 +61,7 @@ export const DragDropQuiz = () => {
       third: Item | null;
     };
   }>({
-    items: initialItems,
+    items: activeActivity.options,
     elements: {
       first: null,
       second: null,
@@ -56,6 +70,9 @@ export const DragDropQuiz = () => {
   });
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [, setCounter] = useState(0);
+  const [isHintDisplayed, setIsHintDisplayed] = useState(false);
+
+  const { playSound } = useSound();
 
   const updateCounter = useCallback(() => {
     setCounter((prev) => prev + 1);
@@ -65,7 +82,7 @@ export const DragDropQuiz = () => {
     "worklet";
     if (over) {
       const draggedItem = dynamicData.value.items.find(
-        (item) => item.id === active.id
+        (item) => item.id === active.id,
       );
 
       dynamicData.modify((value) => {
@@ -112,12 +129,14 @@ export const DragDropQuiz = () => {
   const checkOrder = useCallback(() => {
     "worklet";
     const elements = dynamicData.value.elements;
-    const isCorrectAnswer =
-      elements.first?.content === "P" &&
-      elements.second?.content === "A" &&
-      elements.third?.content === "N";
+    const currentAnswer =
+      (elements.first?.content || "") +
+      (elements.second?.content || "") +
+      (elements.third?.content || "");
+
+    const isCorrectAnswer = activeActivity.correctAnswer.word === currentAnswer;
     setIsCorrect(isCorrectAnswer);
-  }, [dynamicData.value]);
+  }, [dynamicData.value, activeActivity.correctAnswer.word]);
 
   const items = useDerivedValue(() => dynamicData.value.items, [dynamicData]);
 
@@ -129,17 +148,17 @@ export const DragDropQuiz = () => {
       if (!updatedElements.first) {
         updatedElements.first = item;
         updatedItems = dynamicData.value.items.filter(
-          (_item) => _item.id !== item.id
+          (_item) => _item.id !== item.id,
         );
       } else if (!updatedElements.second) {
         updatedElements.second = item;
         updatedItems = dynamicData.value.items.filter(
-          (_item) => _item.id !== item.id
+          (_item) => _item.id !== item.id,
         );
       } else if (!updatedElements.third) {
         updatedElements.third = item;
         updatedItems = dynamicData.value.items.filter(
-          (_item) => _item.id !== item.id
+          (_item) => _item.id !== item.id,
         );
       }
       dynamicData.value = {
@@ -150,7 +169,7 @@ export const DragDropQuiz = () => {
       };
       runOnJS(updateCounter)();
     },
-    [updateCounter, dynamicData]
+    [updateCounter, dynamicData],
   );
 
   const onRemove = useCallback(
@@ -174,7 +193,7 @@ export const DragDropQuiz = () => {
       };
       runOnJS(updateCounter)();
     },
-    [dynamicData, updateCounter]
+    [dynamicData, updateCounter],
   );
 
   useEffect(() => {
@@ -189,7 +208,7 @@ export const DragDropQuiz = () => {
       style={{ height: 400, width: WIDTH }}
     >
       <View className="mb-10 mt-24 flex flex-row justify-center">
-        {correctAnswers.map((item, index) => {
+        {activeActivity.correctAnswer.alphabets.map((item, index) => {
           const offset: "first" | "second" | "third" =
             OFFSET_VALUES_FOR_INDICES[index];
           return (
@@ -197,12 +216,12 @@ export const DragDropQuiz = () => {
               key={item.id}
               id={item.id}
               className={clsx(
-                "z-50 mx-4 flex size-[64] items-center justify-center rounded-full ",
+                "z-50 mx-1 flex size-[64] items-center justify-center rounded-full ",
                 {
                   "bg-[#F36889]": dynamicData.value.elements[offset]?.content,
                   "bg-[#F7D6DE] border-4 border-dashed border-[#F36889]":
                     !dynamicData.value.elements[offset]?.content,
-                }
+                },
               )}
             >
               <Pressable
@@ -213,12 +232,23 @@ export const DragDropQuiz = () => {
                 }}
                 className="size-[64] w-full items-center justify-center "
               >
-                <Text
-                  style={styles.itemText}
-                  className={clsx("font-medium text-black", {})}
-                >
-                  {dynamicData.value.elements[offset]?.content}
-                </Text>
+                {isHintDisplayed &&
+                !dynamicData.value.elements[offset]?.content ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      playSound(item.audio);
+                    }}
+                  >
+                    <SmallEarIcon />
+                  </TouchableOpacity>
+                ) : (
+                  <Text
+                    style={styles.itemText}
+                    className={clsx("font-medium text-black", {})}
+                  >
+                    {dynamicData.value.elements[offset]?.content}
+                  </Text>
+                )}
               </Pressable>
             </Droppable>
           );
@@ -232,6 +262,23 @@ export const DragDropQuiz = () => {
           <Text>Check</Text>
         </Pressable>
       )}
+      {!isHintDisplayed ? (
+        <Pressable
+          onPress={() => {
+            setIsHintDisplayed(true);
+          }}
+        >
+          <Text>Show hints</Text>
+        </Pressable>
+      ) : (
+        <Pressable
+          onPress={() => {
+            setIsHintDisplayed(false);
+          }}
+        >
+          <Text>Hide hints</Text>
+        </Pressable>
+      )}
 
       <View className="z-50 mt-10 flex size-full flex-row flex-wrap justify-evenly gap-6 bg-[#F7D6DE] p-8 px-16">
         <>
@@ -240,7 +287,7 @@ export const DragDropQuiz = () => {
             <Draggable key={item.id} id={item.id} data={item}>
               <Pressable
                 className={clsx(
-                  "flex size-[60] items-center justify-center rounded-full bg-[#F36889]"
+                  "flex size-[60] items-center justify-center rounded-full bg-[#F36889]",
                 )}
                 onPress={() => onTapping(item)}
               >
@@ -338,4 +385,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DragDropQuiz;
+export default DragDrop;

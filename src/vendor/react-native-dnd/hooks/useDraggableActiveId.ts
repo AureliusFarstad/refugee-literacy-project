@@ -14,7 +14,7 @@ export const useDraggableActiveId = () => {
         runOnJS(setActiveId)(next);
       }
     },
-    []
+    [],
   );
   return activeId;
 };

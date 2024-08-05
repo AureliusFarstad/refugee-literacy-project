@@ -11,7 +11,7 @@ export type UseDraggableStyleCallback<StyleT extends AnimatedStyle> = (_: {
 
 export const useDraggableStyle = <StyleT extends AnimatedStyle>(
   id: UniqueIdentifier,
-  callback: UseDraggableStyleCallback<StyleT>
+  callback: UseDraggableStyleCallback<StyleT>,
 ): StyleT => {
   const {
     draggableStates: states,

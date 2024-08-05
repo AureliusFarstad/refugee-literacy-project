@@ -3,7 +3,7 @@ import { useLayoutEffect, useRef } from "react";
 
 export function useLatestValue<T>(
   value: T,
-  dependencies: DependencyList = [value]
+  dependencies: DependencyList = [value],
 ) {
   const valueRef = useRef<T>(value);
 

@@ -15,5 +15,5 @@ export type AnimatedViewStyle = ReturnType<typeof useAnimatedStyle<ViewStyle>>;
 export type AnimatedStyleWorklet<T extends AnimatedStyle = AnimatedViewStyle> =
   (
     style: Readonly<T>,
-    options: { isActive: boolean; isDisabled: boolean; isActing?: boolean }
+    options: { isActive: boolean; isDisabled: boolean; isActing?: boolean },
   ) => T;

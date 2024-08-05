@@ -6,7 +6,7 @@ import type { UniqueIdentifier } from "../types";
 
 export const useActiveDragReaction = (
   id: UniqueIdentifier,
-  callback: (isActive: boolean) => void
+  callback: (isActive: boolean) => void,
 ) => {
   const { draggableActiveId: activeId, panGestureState } = useDndContext();
   useAnimatedReaction(
@@ -18,6 +18,6 @@ export const useActiveDragReaction = (
         callback(next);
       }
     },
-    []
+    [],
   );
 };

@@ -18,7 +18,7 @@ import {
 
 export type ShouldSwapWorklet = (
   activeLayout: Rectangle,
-  itemLayout: Rectangle
+  itemLayout: Rectangle,
 ) => boolean;
 
 export type UseDraggableSortOptions = {
@@ -27,7 +27,7 @@ export type UseDraggableSortOptions = {
   onOrderChange?: (order: UniqueIdentifier[]) => void;
   onOrderUpdate?: (
     nextOrder: UniqueIdentifier[],
-    prevOrder: UniqueIdentifier[]
+    prevOrder: UniqueIdentifier[],
   ) => void;
   shouldSwapWorklet?: ShouldSwapWorklet;
 };
@@ -115,7 +115,7 @@ export const useDraggableSort = ({
       // const delta = prevActiveLayout !== null ? nextActiveLayout[axis] - prevActiveLayout[axis] : 0;
       draggablePlaceholderIndex.value = findPlaceholderIndex(nextActiveLayout);
     },
-    []
+    [],
   );
 
   // Track placeholder index changes and update the sort order
@@ -149,7 +149,7 @@ export const useDraggableSort = ({
       const nextOrder = moveArrayIndex(
         prevOrder,
         prevPlaceholderIndex,
-        nextPlaceholderIndex
+        nextPlaceholderIndex,
       );
       // Notify the parent component of the order update
       if (onOrderUpdate) {
@@ -158,7 +158,7 @@ export const useDraggableSort = ({
 
       draggableSortOrder.value = nextOrder;
     },
-    [onOrderChange]
+    [onOrderChange],
   );
 
   return { draggablePlaceholderIndex, draggableSortOrder };

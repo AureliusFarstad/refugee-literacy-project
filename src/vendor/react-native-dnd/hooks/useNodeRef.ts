@@ -4,7 +4,7 @@ import { useEvent } from "./useEvent";
 
 type NodeChangeHandler<T> = (
   nextElement: T | null,
-  prevElement: T | null
+  prevElement: T | null,
 ) => void;
 
 /**
@@ -21,7 +21,7 @@ export const useNodeRef = <T, U = T>(onChange?: NodeChangeHandler<T>) => {
       nodeRef.current = element as T;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   return [nodeRef, setNodeRef] as const;
