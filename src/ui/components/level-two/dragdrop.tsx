@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import type { AVPlaybackSource } from "expo-av";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Pressable,
@@ -19,37 +20,6 @@ import { DndProvider, Draggable, Droppable } from "@/vendor/react-native-dnd";
 
 import DynamicStroke from "./dynamic-strokes";
 
-interface Item {
-  id: string;
-  content: string;
-}
-
-const initialItems: Item[] = [
-  { id: "item0", content: "N" },
-  { id: "item1", content: "A" },
-  { id: "item2", content: "I" },
-  { id: "item3", content: "T" },
-  { id: "item4", content: "P" },
-];
-
-const correctAnswers = [
-  {
-    id: "item0",
-    content: "P",
-    audio: require("assets/audio/alphabet/name/p.mp3"),
-  },
-  {
-    id: "item1",
-    content: "A",
-    audio: require("assets/audio/alphabet/name/a.mp3"),
-  },
-  {
-    id: "item2",
-    content: "N",
-    audio: require("assets/audio/alphabet/name/n.mp3"),
-  },
-];
-
 const OFFSET_VALUES_FOR_INDICES: {
   [key: number]: "first" | "second" | "third";
 } = {
@@ -58,7 +28,31 @@ const OFFSET_VALUES_FOR_INDICES: {
   2: "third",
 };
 
-export const DragDropQuiz = () => {
+type WordGameData = {
+  options: {
+    id: string;
+    content: string;
+  }[];
+  correctAnswer: {
+    word: string;
+    alphabets: {
+      id: string;
+      content: string;
+      audio: AVPlaybackSource;
+    }[];
+  };
+};
+
+type DragDropProps = {
+  activeActivity: WordGameData;
+};
+
+type Item = {
+  id: string;
+  content: string;
+};
+
+export const DragDrop = ({ activeActivity }: DragDropProps) => {
   const dynamicData = useSharedValue<{
     items: Item[];
     elements: {
@@ -67,7 +61,7 @@ export const DragDropQuiz = () => {
       third: Item | null;
     };
   }>({
-    items: initialItems,
+    items: activeActivity.options,
     elements: {
       first: null,
       second: null,
@@ -135,12 +129,14 @@ export const DragDropQuiz = () => {
   const checkOrder = useCallback(() => {
     "worklet";
     const elements = dynamicData.value.elements;
-    const isCorrectAnswer =
-      elements.first?.content === "P" &&
-      elements.second?.content === "A" &&
-      elements.third?.content === "N";
+    const currentAnswer =
+      (elements.first?.content || "") +
+      (elements.second?.content || "") +
+      (elements.third?.content || "");
+
+    const isCorrectAnswer = activeActivity.correctAnswer.word === currentAnswer;
     setIsCorrect(isCorrectAnswer);
-  }, [dynamicData.value]);
+  }, [dynamicData.value, activeActivity.correctAnswer.word]);
 
   const items = useDerivedValue(() => dynamicData.value.items, [dynamicData]);
 
@@ -212,7 +208,7 @@ export const DragDropQuiz = () => {
       style={{ height: 400, width: WIDTH }}
     >
       <View className="mb-10 mt-24 flex flex-row justify-center">
-        {correctAnswers.map((item, index) => {
+        {activeActivity.correctAnswer.alphabets.map((item, index) => {
           const offset: "first" | "second" | "third" =
             OFFSET_VALUES_FOR_INDICES[index];
           return (
@@ -389,4 +385,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DragDropQuiz;
+export default DragDrop;

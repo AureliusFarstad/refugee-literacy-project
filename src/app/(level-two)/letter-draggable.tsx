@@ -6,6 +6,36 @@ import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import { EarIcon } from "@/ui/icons";
 
+const activeActivity = {
+  options: [
+    { id: "item0", content: "P" },
+    { id: "item1", content: "A" },
+    { id: "item2", content: "N" },
+    { id: "item3", content: "I" },
+    { id: "item4", content: "T" },
+  ],
+  correctAnswer: {
+    word: "PAN",
+    alphabets: [
+      {
+        id: "item0",
+        content: "P",
+        audio: require("assets/audio/alphabet/name/p.mp3"),
+      },
+      {
+        id: "item1",
+        content: "A",
+        audio: require("assets/audio/alphabet/name/a.mp3"),
+      },
+      {
+        id: "item2",
+        content: "N",
+        audio: require("assets/audio/alphabet/name/n.mp3"),
+      },
+    ],
+  },
+};
+
 const LetterDragDrop = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
 
@@ -23,7 +53,7 @@ const LetterDragDrop = () => {
               <EarIcon primaryColor="#F36889" />
             </TouchableOpacity>
           </View>
-          <DragDrop />
+          <DragDrop activeActivity={activeActivity} />
         </View>
       </View>
       <DynamicModal ref={dynamicModalRef}>
