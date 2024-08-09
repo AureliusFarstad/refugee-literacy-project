@@ -1,19 +1,16 @@
 import clsx from "clsx";
 import type { AVPlaybackSource } from "expo-av";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { State } from "react-native-gesture-handler";
-import { runOnJS, useSharedValue } from "react-native-reanimated";
-import { useDerivedValue } from "react-native-reanimated";
+import {
+  runOnJS,
+  useDerivedValue,
+  useSharedValue,
+} from "react-native-reanimated";
 
 import useSound from "@/core/hooks/useSound";
-import { SmallEarIcon } from "@/ui/icons";
+import { EyeClosed, EyeOpen, SmallEarIcon } from "@/ui/icons";
 import { WIDTH } from "@/utils/layout";
 import type { DndProviderProps } from "@/vendor/react-native-dnd";
 import { DndProvider, Draggable, Droppable } from "@/vendor/react-native-dnd";
@@ -76,7 +73,31 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
 
   const updateCounter = useCallback(() => {
     setCounter((prev) => prev + 1);
-  }, [setCounter]);
+  }, []);
+
+  const onRemove = useCallback(
+    (item: Item) => {
+      "worklet";
+      const updatedElements = dynamicData.value.elements;
+      let updatedItems = dynamicData.value.items;
+      if (updatedElements.first?.id === item.id) {
+        updatedElements.first = null;
+        updatedItems = [...dynamicData.value.items, item];
+      } else if (updatedElements.second?.id === item.id) {
+        updatedElements.second = null;
+        updatedItems = [...dynamicData.value.items, item];
+      } else if (updatedElements.third?.id === item.id) {
+        updatedElements.third = null;
+        updatedItems = [...dynamicData.value.items, item];
+      }
+      dynamicData.value = {
+        items: updatedItems,
+        elements: updatedElements,
+      };
+      runOnJS(updateCounter)();
+    },
+    [dynamicData, updateCounter],
+  );
 
   const handleDragEnd: DndProviderProps["onDragEnd"] = ({ active, over }) => {
     "worklet";
@@ -172,30 +193,6 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
     [updateCounter, dynamicData],
   );
 
-  const onRemove = useCallback(
-    (item: Item) => {
-      "worklet";
-      const updatedElements = dynamicData.value.elements;
-      let updatedItems = dynamicData.value.items;
-      if (updatedElements.first?.id === item.id) {
-        updatedElements.first = null;
-        updatedItems = [...dynamicData.value.items, item];
-      } else if (updatedElements.second?.id === item.id) {
-        updatedElements.second = null;
-        updatedItems = [...dynamicData.value.items, item];
-      } else if (updatedElements.third?.id === item.id) {
-        updatedElements.third = null;
-        updatedItems = [...dynamicData.value.items, item];
-      }
-      dynamicData.value = {
-        items: updatedItems,
-        elements: updatedElements,
-      };
-      runOnJS(updateCounter)();
-    },
-    [dynamicData, updateCounter],
-  );
-
   useEffect(() => {
     checkOrder();
   }, [dynamicData.value, checkOrder]);
@@ -208,6 +205,8 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
       style={{ height: 400, width: WIDTH }}
     >
       <View className="mb-10 mt-24 flex flex-row justify-center">
+        <View className="mr-10  size-[64] bg-transparent" />
+
         {activeActivity.correctAnswer.alphabets.map((item, index) => {
           const offset: "first" | "second" | "third" =
             OFFSET_VALUES_FOR_INDICES[index];
@@ -216,43 +215,59 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
               key={item.id}
               id={item.id}
               className={clsx(
-                "z-50 mx-1 flex size-[64] items-center justify-center rounded-full ",
+                "z-50 flex size-[64] items-center justify-center rounded-full ",
                 {
-                  "bg-[#F36889]": dynamicData.value.elements[offset]?.content,
+                  "bg-[#8AC65B]": dynamicData.value.elements[offset]?.content,
                   "bg-[#F7D6DE] border-4 border-dashed border-[#F36889]":
                     !dynamicData.value.elements[offset]?.content,
+                  "bg-red-500":
+                    dynamicData.value.elements[offset] &&
+                    dynamicData.value.elements[offset]?.content !==
+                      item.content,
                 },
               )}
             >
-              <Pressable
+              <TouchableOpacity
                 onPress={() => {
                   if (dynamicData.value.elements[offset]) {
                     onRemove(dynamicData.value.elements[offset]);
+                  } else if (!isHintDisplayed) {
+                    playSound(item.audio);
                   }
                 }}
                 className="size-[64] w-full items-center justify-center "
               >
-                {isHintDisplayed &&
-                !dynamicData.value.elements[offset]?.content ? (
-                  <TouchableOpacity
-                    onPress={() => {
-                      playSound(item.audio);
-                    }}
-                  >
-                    <SmallEarIcon />
-                  </TouchableOpacity>
-                ) : (
-                  <Text
-                    style={styles.itemText}
-                    className={clsx("font-medium text-black", {})}
-                  >
-                    {dynamicData.value.elements[offset]?.content}
+                {isHintDisplayed ? (
+                  <Text className="text-3xl font-medium">
+                    {dynamicData.value.elements[offset]?.content
+                      ? dynamicData.value.elements[offset]?.content
+                      : item.content}
                   </Text>
+                ) : (
+                  <>
+                    {dynamicData.value.elements[offset]?.content ? (
+                      <Text className="text-3xl font-medium">
+                        {dynamicData.value.elements[offset]?.content}
+                      </Text>
+                    ) : (
+                      <SmallEarIcon />
+                    )}
+                  </>
                 )}
-              </Pressable>
+              </TouchableOpacity>
             </Droppable>
           );
         })}
+        <TouchableOpacity
+          className="ml-10 flex  size-[64] items-center justify-center "
+          onPress={() => {
+            setIsHintDisplayed(!isHintDisplayed);
+          }}
+        >
+          <View className="size-10 items-center justify-center rounded-full bg-colors-green-500">
+            {isHintDisplayed ? <EyeClosed /> : <EyeOpen />}
+          </View>
+        </TouchableOpacity>
       </View>
 
       {isCorrect ? (
@@ -291,7 +306,7 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
                 )}
                 onPress={() => onTapping(item)}
               >
-                <Text style={styles.itemText}>{item.content}</Text>
+                <Text className="text-3xl font-medium">{item.content}</Text>
               </Pressable>
             </Draggable>
           ))}
@@ -300,89 +315,5 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
     </DndProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#f5f5f5",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  instructions: {
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  itemsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 20,
-    zIndex: 40,
-    height: 80,
-  },
-  item: {
-    width: 60,
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F36889",
-    borderRadius: 8,
-  },
-  itemText: {
-    fontSize: 24,
-    color: "#fff",
-  },
-  dropzone: {
-    height: 100,
-    borderColor: "#2ecc71",
-    borderRadius: 8,
-    marginTop: 120,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  dropzoneText: {
-    fontSize: 16,
-    color: "#7f8c8d",
-  },
-  button: {
-    backgroundColor: "#2ecc71",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  result: {
-    marginTop: 20,
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  correct: {
-    color: "#2ecc71",
-  },
-  incorrect: {
-    color: "#e74c3c",
-  },
-  droppedItemsContainer: {
-    flexDirection: "row",
-    // justifyContent: "center",
-    alignItems: "center",
-  },
-  resetButton: {
-    backgroundColor: "#e74c3c",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
-  },
-});
 
 export default DragDrop;
