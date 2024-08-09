@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
 import { SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
+import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import DragDrop from "@/ui/components/level-two/dragdrop";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
@@ -38,6 +39,7 @@ const activeActivity = {
 
 const LetterDragDrop = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
+  const [isLowercase, setIsLowercase] = useState(false);
 
   return (
     <SafeAreaView>
@@ -45,7 +47,13 @@ const LetterDragDrop = () => {
 
       <View className="flex h-full items-center ">
         <View className="flex w-full flex-1 flex-col   ">
-          <View className="">
+          <View className="px-5">
+            <LetterCaseSwitch
+              backgroundColor="#F36889"
+              isLowercase={isLowercase}
+              letter="A"
+              setIsLowercase={setIsLowercase}
+            />
             <TouchableOpacity
               onPress={() => {}}
               className="mx-auto flex size-[110] items-center justify-center rounded-full bg-colors-red-500"
@@ -53,7 +61,7 @@ const LetterDragDrop = () => {
               <EarIcon primaryColor="#F36889" />
             </TouchableOpacity>
           </View>
-          <DragDrop activeActivity={activeActivity} />
+          <DragDrop activeActivity={activeActivity} isLowercase={isLowercase} />
         </View>
       </View>
       <DynamicModal ref={dynamicModalRef}>

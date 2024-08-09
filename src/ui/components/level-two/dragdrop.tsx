@@ -42,6 +42,7 @@ type WordGameData = {
 
 type DragDropProps = {
   activeActivity: WordGameData;
+  isLowercase: boolean;
 };
 
 type Item = {
@@ -49,7 +50,7 @@ type Item = {
   content: string;
 };
 
-export const DragDrop = ({ activeActivity }: DragDropProps) => {
+export const DragDrop = ({ activeActivity, isLowercase }: DragDropProps) => {
   const dynamicData = useSharedValue<{
     items: Item[];
     elements: {
@@ -240,14 +241,24 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
                 {isHintDisplayed ? (
                   <Text className="text-3xl font-medium">
                     {dynamicData.value.elements[offset]?.content
-                      ? dynamicData.value.elements[offset]?.content
-                      : item.content}
+                      ? isLowercase
+                        ? dynamicData.value.elements[
+                            offset
+                          ]?.content.toLowerCase()
+                        : dynamicData.value.elements[offset]?.content
+                      : isLowercase
+                        ? item.content.toLowerCase()
+                        : item.content}
                   </Text>
                 ) : (
                   <>
                     {dynamicData.value.elements[offset]?.content ? (
                       <Text className="text-3xl font-medium">
-                        {dynamicData.value.elements[offset]?.content}
+                        {isLowercase
+                          ? dynamicData.value.elements[
+                              offset
+                            ]?.content.toLowerCase()
+                          : dynamicData.value.elements[offset]?.content}
                       </Text>
                     ) : (
                       <SmallEarIcon />
@@ -306,7 +317,9 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
                 )}
                 onPress={() => onTapping(item)}
               >
-                <Text className="text-3xl font-medium">{item.content}</Text>
+                <Text className="text-3xl font-medium">
+                  {isLowercase ? item.content.toLowerCase() : item.content}
+                </Text>
               </Pressable>
             </Draggable>
           ))}
