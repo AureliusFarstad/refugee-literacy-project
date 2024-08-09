@@ -6,34 +6,11 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
-import { Switch } from "@/ui/checkbox";
+import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import { EarIcon } from "@/ui/icons";
 import { getOptionsToRender } from "@/utils/level-one";
-
-type LowerCaseSwitchProps = {
-  isLowercase: boolean;
-  setIsLowercase: (value: boolean) => void;
-  letter: string;
-};
-
-const LowercaseSwitch = ({
-  isLowercase,
-  setIsLowercase,
-  letter,
-}: LowerCaseSwitchProps) => {
-  return (
-    <Switch.Root
-      checked={isLowercase}
-      onChange={setIsLowercase}
-      accessibilityLabel="switch"
-      className="pb-2"
-    >
-      <Switch.Icon checked={isLowercase} label={letter} />
-    </Switch.Root>
-  );
-};
 
 const WordSound = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
@@ -137,10 +114,11 @@ const WordSound = () => {
     <SafeAreaView>
       <Header title="Sound" modalRef={dynamicModalRef} />
       <View className="mt-5 px-5">
-        <LowercaseSwitch
+        <LetterCaseSwitch
           isLowercase={isLowercase}
           setIsLowercase={setIsLowercase}
           letter={activeActivity.correctAnswer.title.slice(0, 1)}
+          backgroundColor="#F36889"
         />
       </View>
 

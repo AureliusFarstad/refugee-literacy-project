@@ -117,11 +117,12 @@ const LetterName = () => {
   return (
     <SafeAreaView>
       <Header title="Name" modalRef={dynamicModalRef} />
-      <View className="mt-5 px-5">
+      <View className="px-5">
         <LetterCaseSwitch
           isLowercase={isLowercase}
           setIsLowercase={setIsLowercase}
           letter={"A"}
+          backgroundColor="#C385F8"
         />
       </View>
       <View className="flex items-center p-4">

@@ -7,34 +7,11 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { CORRECT_ANSWER_TIMEOUT } from "@/constants/timing";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
-import { Switch } from "@/ui/checkbox";
+import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import { EarIcon, LettersNameIcon } from "@/ui/icons";
 import { getOptionsToRender } from "@/utils/level-one";
-
-type LowerCaseSwitchProps = {
-  isLowercase: boolean;
-  setIsLowercase: (value: boolean) => void;
-  letter: string;
-};
-
-const LowercaseSwitch = ({
-  isLowercase,
-  setIsLowercase,
-  letter,
-}: LowerCaseSwitchProps) => {
-  return (
-    <Switch.Root
-      checked={isLowercase}
-      onChange={setIsLowercase}
-      accessibilityLabel="switch"
-      className="pb-2"
-    >
-      <Switch.Icon checked={isLowercase} label={letter} />
-    </Switch.Root>
-  );
-};
 
 const LetterSound = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
@@ -137,11 +114,12 @@ const LetterSound = () => {
   return (
     <SafeAreaView>
       <Header title="Name" modalRef={dynamicModalRef} />
-      <View className="mt-5 px-5">
-        <LowercaseSwitch
+      <View className=" px-5">
+        <LetterCaseSwitch
           isLowercase={isLowercase}
           setIsLowercase={setIsLowercase}
           letter={"A"}
+          backgroundColor="#C385F8"
         />
       </View>
       <View className="flex items-center p-4">
