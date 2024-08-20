@@ -66,6 +66,8 @@ export const Draggable: FunctionComponent<
     const isActive = state.value === "dragging";
     const isActing = state.value === "acting";
     const zIndex = isActive ? 999 : isActing ? 998 : 1;
+
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const style = {
       opacity: isActive ? activeOpacity : 1,
       zIndex,
@@ -91,7 +93,7 @@ export const Draggable: FunctionComponent<
           isActive,
           isActing,
           isDisabled: !!disabled,
-        })
+        }),
       );
     }
     return style;

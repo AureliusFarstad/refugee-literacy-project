@@ -49,7 +49,7 @@ export const SLOW_SPRING_CONFIG: WithSpringConfig = {
  */
 export const waitForAll = <T extends unknown[]>(
   callback: (...args: T) => void,
-  count = 2
+  count = 2,
 ) => {
   "worklet";
   const status = new Array(count).fill(false);
@@ -69,19 +69,19 @@ type AnimationCallbackParams = Parameters<AnimationCallback>;
 
 export type AnimationPointCallback = (
   finished: [boolean | undefined, boolean | undefined],
-  current: [AnimatableValue | undefined, AnimatableValue | undefined]
+  current: [AnimatableValue | undefined, AnimatableValue | undefined],
 ) => void;
 
 export const withDefaultSpring: typeof withSpring = (
   toValue,
   userConfig: WithSpringConfig = {},
-  callback
+  callback,
 ) => {
   "worklet";
   const config: WithSpringConfig = Object.assign(
     {},
     SLOW_SPRING_CONFIG,
-    userConfig
+    userConfig,
   );
   return withSpring(toValue, config, callback);
 };
@@ -95,9 +95,9 @@ export const animatePointWithSpring = (
   [toValueX, toValueY]: [number, number],
   [configX, configY]: [
     WithSpringConfig | undefined,
-    WithSpringConfig | undefined
+    WithSpringConfig | undefined,
   ] = [undefined, undefined],
-  callback?: AnimationPointCallback
+  callback?: AnimationPointCallback,
 ) => {
   "worklet";
   const [waitForX, waitForY] = waitForAll<
@@ -136,7 +136,7 @@ export const stringifySharedPoint = ({ x, y }: SharedPoint) => {
 export const stringifyLayout = ({ x, y, width, height }: LayoutRectangle) => {
   "worklet";
   return `{"x": ${Math.floor(x)}, "y": ${Math.floor(y)}, "width": ${Math.floor(
-    width
+    width,
   )}, "height": ${Math.floor(height)}}`;
 };
 
@@ -156,7 +156,7 @@ export const floorLayout = ({ x, y, width, height }: LayoutRectangle) => {
  * @returns {boolean} Whether the value is a `Reanimated` shared value
  */
 export const isReanimatedSharedValue = (
-  value: unknown
+  value: unknown,
 ): value is SharedValue<AnyData> =>
   typeof value === "object" &&
   (value as { _isReanimatedSharedValue: boolean })?._isReanimatedSharedValue;

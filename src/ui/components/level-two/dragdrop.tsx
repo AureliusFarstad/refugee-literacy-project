@@ -1,34 +1,21 @@
 import clsx from "clsx";
+import type { AVPlaybackSource } from "expo-av";
 import React, { useCallback, useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { State } from "react-native-gesture-handler";
-import { runOnJS, useSharedValue } from "react-native-reanimated";
-import { useDerivedValue } from "react-native-reanimated";
+import {
+  runOnJS,
+  useDerivedValue,
+  useSharedValue,
+} from "react-native-reanimated";
 
+import useSound from "@/core/hooks/useSound";
+import { EyeClosed, EyeOpen, SmallEarIcon } from "@/ui/icons";
 import { WIDTH } from "@/utils/layout";
 import type { DndProviderProps } from "@/vendor/react-native-dnd";
 import { DndProvider, Draggable, Droppable } from "@/vendor/react-native-dnd";
 
 import DynamicStroke from "./dynamic-strokes";
-
-interface Item {
-  id: string;
-  content: string;
-}
-
-const initialItems: Item[] = [
-  { id: "item0", content: "N" },
-  { id: "item1", content: "A" },
-  { id: "item2", content: "I" },
-  { id: "item3", content: "T" },
-  { id: "item4", content: "P" },
-];
-
-const correctAnswers = [
-  { id: "item0", content: "P" },
-  { id: "item1", content: "A" },
-  { id: "item2", content: "N" },
-];
 
 const OFFSET_VALUES_FOR_INDICES: {
   [key: number]: "first" | "second" | "third";
@@ -38,7 +25,31 @@ const OFFSET_VALUES_FOR_INDICES: {
   2: "third",
 };
 
-export const DragDropQuiz = () => {
+type WordGameData = {
+  options: {
+    id: string;
+    content: string;
+  }[];
+  correctAnswer: {
+    word: string;
+    alphabets: {
+      id: string;
+      content: string;
+      audio: AVPlaybackSource;
+    }[];
+  };
+};
+
+type DragDropProps = {
+  activeActivity: WordGameData;
+};
+
+type Item = {
+  id: string;
+  content: string;
+};
+
+export const DragDrop = ({ activeActivity }: DragDropProps) => {
   const dynamicData = useSharedValue<{
     items: Item[];
     elements: {
@@ -47,7 +58,7 @@ export const DragDropQuiz = () => {
       third: Item | null;
     };
   }>({
-    items: initialItems,
+    items: activeActivity.options,
     elements: {
       first: null,
       second: null,
@@ -56,16 +67,43 @@ export const DragDropQuiz = () => {
   });
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [, setCounter] = useState(0);
+  const [isHintDisplayed, setIsHintDisplayed] = useState(false);
+
+  const { playSound } = useSound();
 
   const updateCounter = useCallback(() => {
     setCounter((prev) => prev + 1);
-  }, [setCounter]);
+  }, []);
+
+  const onRemove = useCallback(
+    (item: Item) => {
+      "worklet";
+      const updatedElements = dynamicData.value.elements;
+      let updatedItems = dynamicData.value.items;
+      if (updatedElements.first?.id === item.id) {
+        updatedElements.first = null;
+        updatedItems = [...dynamicData.value.items, item];
+      } else if (updatedElements.second?.id === item.id) {
+        updatedElements.second = null;
+        updatedItems = [...dynamicData.value.items, item];
+      } else if (updatedElements.third?.id === item.id) {
+        updatedElements.third = null;
+        updatedItems = [...dynamicData.value.items, item];
+      }
+      dynamicData.value = {
+        items: updatedItems,
+        elements: updatedElements,
+      };
+      runOnJS(updateCounter)();
+    },
+    [dynamicData, updateCounter],
+  );
 
   const handleDragEnd: DndProviderProps["onDragEnd"] = ({ active, over }) => {
     "worklet";
     if (over) {
       const draggedItem = dynamicData.value.items.find(
-        (item) => item.id === active.id
+        (item) => item.id === active.id,
       );
 
       dynamicData.modify((value) => {
@@ -112,12 +150,14 @@ export const DragDropQuiz = () => {
   const checkOrder = useCallback(() => {
     "worklet";
     const elements = dynamicData.value.elements;
-    const isCorrectAnswer =
-      elements.first?.content === "P" &&
-      elements.second?.content === "A" &&
-      elements.third?.content === "N";
+    const currentAnswer =
+      (elements.first?.content || "") +
+      (elements.second?.content || "") +
+      (elements.third?.content || "");
+
+    const isCorrectAnswer = activeActivity.correctAnswer.word === currentAnswer;
     setIsCorrect(isCorrectAnswer);
-  }, [dynamicData.value]);
+  }, [dynamicData.value, activeActivity.correctAnswer.word]);
 
   const items = useDerivedValue(() => dynamicData.value.items, [dynamicData]);
 
@@ -129,17 +169,17 @@ export const DragDropQuiz = () => {
       if (!updatedElements.first) {
         updatedElements.first = item;
         updatedItems = dynamicData.value.items.filter(
-          (_item) => _item.id !== item.id
+          (_item) => _item.id !== item.id,
         );
       } else if (!updatedElements.second) {
         updatedElements.second = item;
         updatedItems = dynamicData.value.items.filter(
-          (_item) => _item.id !== item.id
+          (_item) => _item.id !== item.id,
         );
       } else if (!updatedElements.third) {
         updatedElements.third = item;
         updatedItems = dynamicData.value.items.filter(
-          (_item) => _item.id !== item.id
+          (_item) => _item.id !== item.id,
         );
       }
       dynamicData.value = {
@@ -150,31 +190,7 @@ export const DragDropQuiz = () => {
       };
       runOnJS(updateCounter)();
     },
-    [updateCounter, dynamicData]
-  );
-
-  const onRemove = useCallback(
-    (item: Item) => {
-      "worklet";
-      const updatedElements = dynamicData.value.elements;
-      let updatedItems = dynamicData.value.items;
-      if (updatedElements.first?.id === item.id) {
-        updatedElements.first = null;
-        updatedItems = [...dynamicData.value.items, item];
-      } else if (updatedElements.second?.id === item.id) {
-        updatedElements.second = null;
-        updatedItems = [...dynamicData.value.items, item];
-      } else if (updatedElements.third?.id === item.id) {
-        updatedElements.third = null;
-        updatedItems = [...dynamicData.value.items, item];
-      }
-      dynamicData.value = {
-        items: updatedItems,
-        elements: updatedElements,
-      };
-      runOnJS(updateCounter)();
-    },
-    [dynamicData, updateCounter]
+    [updateCounter, dynamicData],
   );
 
   useEffect(() => {
@@ -189,7 +205,9 @@ export const DragDropQuiz = () => {
       style={{ height: 400, width: WIDTH }}
     >
       <View className="mb-10 mt-24 flex flex-row justify-center">
-        {correctAnswers.map((item, index) => {
+        <View className="mr-10  size-[64] bg-transparent" />
+
+        {activeActivity.correctAnswer.alphabets.map((item, index) => {
           const offset: "first" | "second" | "third" =
             OFFSET_VALUES_FOR_INDICES[index];
           return (
@@ -197,32 +215,59 @@ export const DragDropQuiz = () => {
               key={item.id}
               id={item.id}
               className={clsx(
-                "z-50 mx-4 flex size-[64] items-center justify-center rounded-full ",
+                "z-50 flex size-[64] items-center justify-center rounded-full ",
                 {
-                  "bg-[#F36889]": dynamicData.value.elements[offset]?.content,
+                  "bg-[#8AC65B]": dynamicData.value.elements[offset]?.content,
                   "bg-[#F7D6DE] border-4 border-dashed border-[#F36889]":
                     !dynamicData.value.elements[offset]?.content,
-                }
+                  "bg-red-500":
+                    dynamicData.value.elements[offset] &&
+                    dynamicData.value.elements[offset]?.content !==
+                      item.content,
+                },
               )}
             >
-              <Pressable
+              <TouchableOpacity
                 onPress={() => {
                   if (dynamicData.value.elements[offset]) {
                     onRemove(dynamicData.value.elements[offset]);
+                  } else if (!isHintDisplayed) {
+                    playSound(item.audio);
                   }
                 }}
                 className="size-[64] w-full items-center justify-center "
               >
-                <Text
-                  style={styles.itemText}
-                  className={clsx("font-medium text-black", {})}
-                >
-                  {dynamicData.value.elements[offset]?.content}
-                </Text>
-              </Pressable>
+                {isHintDisplayed ? (
+                  <Text className="text-3xl font-medium">
+                    {dynamicData.value.elements[offset]?.content
+                      ? dynamicData.value.elements[offset]?.content
+                      : item.content}
+                  </Text>
+                ) : (
+                  <>
+                    {dynamicData.value.elements[offset]?.content ? (
+                      <Text className="text-3xl font-medium">
+                        {dynamicData.value.elements[offset]?.content}
+                      </Text>
+                    ) : (
+                      <SmallEarIcon />
+                    )}
+                  </>
+                )}
+              </TouchableOpacity>
             </Droppable>
           );
         })}
+        <TouchableOpacity
+          className="ml-10 flex  size-[64] items-center justify-center "
+          onPress={() => {
+            setIsHintDisplayed(!isHintDisplayed);
+          }}
+        >
+          <View className="size-10 items-center justify-center rounded-full bg-colors-green-500">
+            {isHintDisplayed ? <EyeClosed /> : <EyeOpen />}
+          </View>
+        </TouchableOpacity>
       </View>
 
       {isCorrect ? (
@@ -230,6 +275,23 @@ export const DragDropQuiz = () => {
       ) : (
         <Pressable onPress={checkOrder}>
           <Text>Check</Text>
+        </Pressable>
+      )}
+      {!isHintDisplayed ? (
+        <Pressable
+          onPress={() => {
+            setIsHintDisplayed(true);
+          }}
+        >
+          <Text>Show hints</Text>
+        </Pressable>
+      ) : (
+        <Pressable
+          onPress={() => {
+            setIsHintDisplayed(false);
+          }}
+        >
+          <Text>Hide hints</Text>
         </Pressable>
       )}
 
@@ -240,11 +302,11 @@ export const DragDropQuiz = () => {
             <Draggable key={item.id} id={item.id} data={item}>
               <Pressable
                 className={clsx(
-                  "flex size-[60] items-center justify-center rounded-full bg-[#F36889]"
+                  "flex size-[60] items-center justify-center rounded-full bg-[#F36889]",
                 )}
                 onPress={() => onTapping(item)}
               >
-                <Text style={styles.itemText}>{item.content}</Text>
+                <Text className="text-3xl font-medium">{item.content}</Text>
               </Pressable>
             </Draggable>
           ))}
@@ -254,88 +316,4 @@ export const DragDropQuiz = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#f5f5f5",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  instructions: {
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  itemsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 20,
-    zIndex: 40,
-    height: 80,
-  },
-  item: {
-    width: 60,
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F36889",
-    borderRadius: 8,
-  },
-  itemText: {
-    fontSize: 24,
-    color: "#fff",
-  },
-  dropzone: {
-    height: 100,
-    borderColor: "#2ecc71",
-    borderRadius: 8,
-    marginTop: 120,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  dropzoneText: {
-    fontSize: 16,
-    color: "#7f8c8d",
-  },
-  button: {
-    backgroundColor: "#2ecc71",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  result: {
-    marginTop: 20,
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  correct: {
-    color: "#2ecc71",
-  },
-  incorrect: {
-    color: "#e74c3c",
-  },
-  droppedItemsContainer: {
-    flexDirection: "row",
-    // justifyContent: "center",
-    alignItems: "center",
-  },
-  resetButton: {
-    backgroundColor: "#e74c3c",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
-  },
-});
-
-export default DragDropQuiz;
+export default DragDrop;

@@ -42,7 +42,7 @@ export const DraggableGrid: FunctionComponent<
         }
         return null;
       })?.filter(Boolean) as UniqueIdentifier[],
-    [children]
+    [children],
   );
 
   const style = useMemo(
@@ -53,9 +53,9 @@ export const DraggableGrid: FunctionComponent<
           gap,
           flexWrap: "wrap",
         },
-        styleProp
+        styleProp,
       ),
-    [gap, direction, styleProp]
+    [gap, direction, styleProp],
   );
 
   useDraggableGrid({
