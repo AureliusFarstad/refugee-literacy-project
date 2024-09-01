@@ -7,39 +7,18 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { CORRECT_ANSWER_TIMEOUT } from "@/constants/timing";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
-import { Switch } from "@/ui/checkbox";
+import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import { EarIcon, LettersNameIcon } from "@/ui/icons";
 import { getOptionsToRender } from "@/utils/level-one";
 
-type LowerCaseSwitchProps = {
-  isLowercase: boolean;
-  setIsLowercase: (value: boolean) => void;
-};
-
-const LowercaseSwitch = ({
-  isLowercase,
-  setIsLowercase,
-}: LowerCaseSwitchProps) => {
-  return (
-    <Switch.Root
-      checked={isLowercase}
-      onChange={setIsLowercase}
-      accessibilityLabel="switch"
-      className="pb-2"
-    >
-      <Switch.Icon checked={isLowercase} />
-      <Switch.Label text="" />
-    </Switch.Root>
-  );
-};
 const LetterName = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels, updateLevels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
-  const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   const [tappedAnswer, setTappedAnswer] = useState<IOption>();
+  const [incorrectAnswers, setIncorrectAnswers] = useState<string[]>([]);
 
   const [isLowercase, setIsLowercase] = useState(false);
 
@@ -138,10 +117,12 @@ const LetterName = () => {
   return (
     <SafeAreaView>
       <Header title="Name" modalRef={dynamicModalRef} />
-      <View className="mt-5 px-5">
-        <LowercaseSwitch
+      <View className="px-5">
+        <LetterCaseSwitch
           isLowercase={isLowercase}
           setIsLowercase={setIsLowercase}
+          letter={"A"}
+          backgroundColor="#C385F8"
         />
       </View>
       <View className="flex items-center p-4">
@@ -158,7 +139,7 @@ const LetterName = () => {
               onPress={() => {
                 setTappedAnswer(option);
                 if (option.id === activeActivity.correctAnswer.id) {
-                  console.log("correct answer");
+                  setIncorrectAnswers([]);
 
                   const _updatedLevels = levels.map((level: ILevel) => {
                     if (level.id !== levels[0].id) return level;
@@ -216,31 +197,25 @@ const LetterName = () => {
                       modules: _updatedModules,
                     };
                   });
+                  playSound();
 
-                  setIsUpdatingSession(true);
                   router.push({
                     pathname: "/modal",
-                    params: { correctOption: option.title },
+                    params: {
+                      correctOption: option.title,
+                    },
                   });
                   setTimeout(() => {
-                    setIsUpdatingSession(false);
                     updateLevels(_updatedLevels);
                     setTappedAnswer(undefined);
                     initNextActivity();
                     router.back();
                   }, CORRECT_ANSWER_TIMEOUT);
                 } else {
-                  setIsUpdatingSession(true);
-                  setTimeout(() => {
-                    setIsUpdatingSession(false);
-                    setTappedAnswer(undefined);
-                    initNextActivity();
-                  }, CORRECT_ANSWER_TIMEOUT);
-                  console.log(activeActivity);
-                  console.log({ tappedAnswer });
-                  ``;
-                  console.log(option.id, activeActivity.correctAnswer.id);
-                  console.log("wrong answer");
+                  setIncorrectAnswers((prevIncorrectAnswers) => [
+                    ...prevIncorrectAnswers,
+                    option.id,
+                  ]);
                 }
               }}
               className={clsx(
@@ -250,11 +225,11 @@ const LetterName = () => {
                   "left-36 top-72": index === 1,
                   "right-0 top-40": index === 2,
                   " bg-red-500 text-white":
-                    isUpdatingSession &&
-                    option.id === tappedAnswer?.id &&
-                    activeActivity.correctAnswer.id !== tappedAnswer.id,
+                    // isUpdatingSession &&
+                    // option.id === tappedAnswer?.id &&
+                    incorrectAnswers.includes(option.id),
+                  // activeActivity.correctAnswer.id !== tappedAnswer.id,
                   "text-green-400":
-                    isUpdatingSession &&
                     option.id === tappedAnswer?.id &&
                     activeActivity.correctAnswer.id === tappedAnswer.id,
                 },
@@ -263,9 +238,9 @@ const LetterName = () => {
               <Text
                 className={clsx("text-4xl font-bold  text-colors-purple-500", {
                   "  text-white":
-                    isUpdatingSession &&
-                    option.id === tappedAnswer?.id &&
-                    activeActivity.correctAnswer.id !== tappedAnswer.id,
+                    (option.id === tappedAnswer?.id &&
+                      activeActivity.correctAnswer.id !== tappedAnswer.id) ||
+                    incorrectAnswers.includes(option.id),
                 })}
               >
                 {isLowercase
