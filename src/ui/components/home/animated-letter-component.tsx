@@ -1,5 +1,5 @@
-import LowerA from "assets/animation/alphabet/lowercase/a-lowercase-large";
-import UpperA from "assets/animation/alphabet/uppercase/a-uppercase-large";
+import LowerA from "assets/animation/alphabet/lowercase/a-pencil-formation-12px";
+import UpperA from "assets/animation/alphabet/uppercase/a-pencil-formation-12px";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { View } from "react-native";
 
