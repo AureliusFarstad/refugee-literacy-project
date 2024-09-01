@@ -91,7 +91,7 @@ export const Draggable: FunctionComponent<
           isActive,
           isActing,
           isDisabled: !!disabled,
-        })
+        }),
       );
     }
     return style;

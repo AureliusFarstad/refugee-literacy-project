@@ -93,7 +93,7 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
   useEffect(() => {
     drawPath.value = Skia.Path.Make();
     const startPoint = getPathStartPoint(
-      letterCoordinatesToRender[letter as "A" | "T" | "P" | "I" | "N"]
+      letterCoordinatesToRender[letter as "A" | "T" | "P" | "I" | "N"],
     );
     x.value = startPoint.x * scale + centerX;
     y.value = startPoint.y * scale + centerY;

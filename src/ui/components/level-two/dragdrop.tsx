@@ -65,7 +65,7 @@ export const DragDropQuiz = () => {
     "worklet";
     if (over) {
       const draggedItem = dynamicData.value.items.find(
-        (item) => item.id === active.id
+        (item) => item.id === active.id,
       );
 
       dynamicData.modify((value) => {
@@ -129,17 +129,17 @@ export const DragDropQuiz = () => {
       if (!updatedElements.first) {
         updatedElements.first = item;
         updatedItems = dynamicData.value.items.filter(
-          (_item) => _item.id !== item.id
+          (_item) => _item.id !== item.id,
         );
       } else if (!updatedElements.second) {
         updatedElements.second = item;
         updatedItems = dynamicData.value.items.filter(
-          (_item) => _item.id !== item.id
+          (_item) => _item.id !== item.id,
         );
       } else if (!updatedElements.third) {
         updatedElements.third = item;
         updatedItems = dynamicData.value.items.filter(
-          (_item) => _item.id !== item.id
+          (_item) => _item.id !== item.id,
         );
       }
       dynamicData.value = {
@@ -150,7 +150,7 @@ export const DragDropQuiz = () => {
       };
       runOnJS(updateCounter)();
     },
-    [updateCounter, dynamicData]
+    [updateCounter, dynamicData],
   );
 
   const onRemove = useCallback(
@@ -174,7 +174,7 @@ export const DragDropQuiz = () => {
       };
       runOnJS(updateCounter)();
     },
-    [dynamicData, updateCounter]
+    [dynamicData, updateCounter],
   );
 
   useEffect(() => {
@@ -202,7 +202,7 @@ export const DragDropQuiz = () => {
                   "bg-[#F36889]": dynamicData.value.elements[offset]?.content,
                   "bg-[#F7D6DE] border-4 border-dashed border-[#F36889]":
                     !dynamicData.value.elements[offset]?.content,
-                }
+                },
               )}
             >
               <Pressable
@@ -240,7 +240,7 @@ export const DragDropQuiz = () => {
             <Draggable key={item.id} id={item.id} data={item}>
               <Pressable
                 className={clsx(
-                  "flex size-[60] items-center justify-center rounded-full bg-[#F36889]"
+                  "flex size-[60] items-center justify-center rounded-full bg-[#F36889]",
                 )}
                 onPress={() => onTapping(item)}
               >

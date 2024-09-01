@@ -41,7 +41,7 @@ export const splitLayout = (layout: Rectangle, axis: "x" | "y") => {
 export const includesPoint = (
   layout: Rectangle,
   { x, y }: Point,
-  strict?: boolean
+  strict?: boolean,
 ) => {
   "worklet";
   if (strict) {
@@ -81,7 +81,7 @@ export const overlapsRectangle = (layout: Rectangle, other: Rectangle) => {
 export const overlapsRectangleBy = (
   layout: Rectangle,
   other: Rectangle,
-  by: number
+  by: number,
 ) => {
   "worklet";
   return (
@@ -136,7 +136,7 @@ export const centerAxis = (layout: Rectangle, horizontal: boolean): number => {
 export const overlapsAxis = (
   layout: Rectangle,
   axis: number,
-  horizontal: boolean
+  horizontal: boolean,
 ) => {
   "worklet";
   return horizontal

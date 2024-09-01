@@ -49,15 +49,15 @@ export type DndProviderProps = {
   onDragEnd?: (ev: { active: ItemOptions; over: ItemOptions | null }) => void;
   onBegin?: (
     event: GestureStateChangeEvent<PanGestureHandlerEventPayload>,
-    meta: { activeId: UniqueIdentifier; activeLayout: LayoutRectangle }
+    meta: { activeId: UniqueIdentifier; activeLayout: LayoutRectangle },
   ) => void;
   onUpdate?: (
     event: GestureUpdateEvent<PanGestureHandlerEventPayload>,
-    meta: { activeId: UniqueIdentifier; activeLayout: LayoutRectangle }
+    meta: { activeId: UniqueIdentifier; activeLayout: LayoutRectangle },
   ) => void;
   onFinalize?: (
     event: GestureStateChangeEvent<PanGestureHandlerEventPayload>,
-    meta: { activeId: UniqueIdentifier; activeLayout: LayoutRectangle }
+    meta: { activeId: UniqueIdentifier; activeLayout: LayoutRectangle },
   ) => void;
   hapticFeedback?: HapticFeedbackTypes;
   style?: StyleProp<ViewStyle>;
@@ -90,7 +90,7 @@ export const DndProvider = forwardRef<
     style,
     debug,
   },
-  ref
+  ref,
 ) {
   const containerRef = useRef<View | null>(null);
   const draggableLayouts = useSharedValue<Layouts>({});
@@ -123,7 +123,7 @@ export const DndProvider = forwardRef<
         runOnJS(runFeedback)();
       }
     },
-    []
+    [],
   );
 
   const contextValue = useRef<DndContextValue>({
@@ -155,7 +155,7 @@ export const DndProvider = forwardRef<
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   const panGesture = useMemo(() => {
@@ -183,7 +183,7 @@ export const DndProvider = forwardRef<
     };
 
     const findDroppableLayoutId = (
-      activeLayout: LayoutRectangle
+      activeLayout: LayoutRectangle,
     ): UniqueIdentifier | null => {
       "worklet";
       const { value: layouts } = droppableLayouts;
@@ -315,7 +315,7 @@ export const DndProvider = forwardRef<
           y: activeOffset.y.value,
         });
         droppableActiveId.value = findDroppableLayoutId(
-          draggableActiveLayout.value
+          draggableActiveLayout.value,
         );
         if (onUpdate) {
           onUpdate(event, {
@@ -401,7 +401,7 @@ export const DndProvider = forwardRef<
             // for (const [id, offset] of Object.entries(offsets)) {
             //   console.log({ [id]: [offset.x.value.toFixed(2), offset.y.value.toFixed(2)] });
             // }
-          }
+          },
         );
       })
       .withTestId("DndProvider.pan");

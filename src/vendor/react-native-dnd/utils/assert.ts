@@ -5,7 +5,7 @@ class AssertionError extends Error {
     message = "",
     public actual: unknown,
     public expected: unknown = "true",
-    public operator = "=="
+    public operator = "==",
   ) {
     super(message || `${actual} ${operator} ${expected}`);
     Object.setPrototypeOf(this, new.target.prototype);
@@ -14,7 +14,7 @@ class AssertionError extends Error {
 
 export const assert: (value: unknown, message?: string) => asserts value = (
   value,
-  message
+  message,
 ) => {
   if (value === undefined || value === null) {
     throw new AssertionError(message, value);

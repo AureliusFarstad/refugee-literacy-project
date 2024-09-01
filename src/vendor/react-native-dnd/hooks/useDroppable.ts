@@ -70,7 +70,7 @@ export const useDroppable = ({
         droppableOptions.value[id].disabled = disabled;
       }
     },
-    [disabled]
+    [disabled],
   );
 
   useLayoutEffect(() => {

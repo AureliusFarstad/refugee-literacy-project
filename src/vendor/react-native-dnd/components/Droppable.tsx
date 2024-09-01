@@ -58,7 +58,7 @@ export const Droppable: FunctionComponent<
     if (animatedStyleWorklet) {
       Object.assign(
         style,
-        animatedStyleWorklet(style, { isActive, isDisabled: !!disabled })
+        animatedStyleWorklet(style, { isActive, isDisabled: !!disabled }),
       );
     }
     return style;
