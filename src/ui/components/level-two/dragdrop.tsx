@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import type { AVPlaybackSource } from "expo-av";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { State } from "react-native-gesture-handler";
 import {
@@ -42,6 +42,7 @@ type WordGameData = {
 
 type DragDropProps = {
   activeActivity: WordGameData;
+  isLowercase: boolean;
 };
 
 type Item = {
@@ -49,7 +50,7 @@ type Item = {
   content: string;
 };
 
-export const DragDrop = ({ activeActivity }: DragDropProps) => {
+export const DragDrop = ({ activeActivity, isLowercase }: DragDropProps) => {
   const dynamicData = useSharedValue<{
     items: Item[];
     elements: {
@@ -68,12 +69,17 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [, setCounter] = useState(0);
   const [isHintDisplayed, setIsHintDisplayed] = useState(false);
+  const [isUndoInProgress, setIsUndoInProgress] = useState(false);
 
   const { playSound } = useSound();
+
+  const undoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const updateCounter = useCallback(() => {
     setCounter((prev) => prev + 1);
   }, []);
+
+  console.log({ isUndoInProgress });
 
   const onRemove = useCallback(
     (item: Item) => {
@@ -95,13 +101,36 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
         elements: updatedElements,
       };
       runOnJS(updateCounter)();
+      runOnJS(setIsUndoInProgress)(false);
     },
     [dynamicData, updateCounter],
   );
 
+  const checkAndUndoIncorrectPlacement = useCallback(() => {
+    const elements = dynamicData.value.elements;
+    const correctWord = activeActivity.correctAnswer.word;
+
+    let hasIncorrectPlacement = false;
+
+    Object.entries(elements).forEach(([_key, element], index) => {
+      if (element && element.content !== correctWord[index]) {
+        hasIncorrectPlacement = true;
+        setIsUndoInProgress(true);
+        // Schedule undo after 1 second
+        undoTimeoutRef.current = setTimeout(() => {
+          onRemove(element);
+        }, 1000);
+      }
+    });
+
+    if (!hasIncorrectPlacement) {
+      setIsUndoInProgress(false);
+    }
+  }, [dynamicData.value, activeActivity.correctAnswer.word, onRemove]);
+
   const handleDragEnd: DndProviderProps["onDragEnd"] = ({ active, over }) => {
     "worklet";
-    if (over) {
+    if (over && !isUndoInProgress) {
       const draggedItem = dynamicData.value.items.find(
         (item) => item.id === active.id,
       );
@@ -132,6 +161,7 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
         return value;
       });
       runOnJS(updateCounter)();
+      runOnJS(checkAndUndoIncorrectPlacement)();
     }
   };
 
@@ -164,6 +194,8 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
   const onTapping = useCallback(
     (item: Item) => {
       "worklet";
+      if (isUndoInProgress) return;
+
       const updatedElements = dynamicData.value.elements;
       let updatedItems = dynamicData.value.items;
       if (!updatedElements.first) {
@@ -189,13 +221,27 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
         },
       };
       runOnJS(updateCounter)();
+      runOnJS(checkAndUndoIncorrectPlacement)();
     },
-    [updateCounter, dynamicData],
+    [
+      updateCounter,
+      dynamicData,
+      isUndoInProgress,
+      checkAndUndoIncorrectPlacement,
+    ],
   );
 
   useEffect(() => {
     checkOrder();
   }, [dynamicData.value, checkOrder]);
+
+  useEffect(() => {
+    return () => {
+      if (undoTimeoutRef.current) {
+        clearTimeout(undoTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <DndProvider
@@ -229,7 +275,7 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
             >
               <TouchableOpacity
                 onPress={() => {
-                  if (dynamicData.value.elements[offset]) {
+                  if (dynamicData.value.elements[offset] && !isUndoInProgress) {
                     onRemove(dynamicData.value.elements[offset]);
                   } else if (!isHintDisplayed) {
                     playSound(item.audio);
@@ -240,14 +286,24 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
                 {isHintDisplayed ? (
                   <Text className="text-3xl font-medium">
                     {dynamicData.value.elements[offset]?.content
-                      ? dynamicData.value.elements[offset]?.content
-                      : item.content}
+                      ? isLowercase
+                        ? dynamicData.value.elements[
+                            offset
+                          ]?.content.toLowerCase()
+                        : dynamicData.value.elements[offset]?.content
+                      : isLowercase
+                        ? item.content.toLowerCase()
+                        : item.content}
                   </Text>
                 ) : (
                   <>
                     {dynamicData.value.elements[offset]?.content ? (
                       <Text className="text-3xl font-medium">
-                        {dynamicData.value.elements[offset]?.content}
+                        {isLowercase
+                          ? dynamicData.value.elements[
+                              offset
+                            ]?.content.toLowerCase()
+                          : dynamicData.value.elements[offset]?.content}
                       </Text>
                     ) : (
                       <SmallEarIcon />
@@ -303,10 +359,14 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
               <Pressable
                 className={clsx(
                   "flex size-[60] items-center justify-center rounded-full bg-[#F36889]",
+                  isUndoInProgress && "opacity-50",
                 )}
-                onPress={() => onTapping(item)}
+                onPress={() => !isUndoInProgress && onTapping(item)}
+                disabled={isUndoInProgress}
               >
-                <Text className="text-3xl font-medium">{item.content}</Text>
+                <Text className="text-3xl font-medium">
+                  {isLowercase ? item.content.toLowerCase() : item.content}
+                </Text>
               </Pressable>
             </Draggable>
           ))}

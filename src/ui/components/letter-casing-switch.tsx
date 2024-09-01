@@ -4,12 +4,14 @@ type LowerCaseSwitchProps = {
   isLowercase: boolean;
   setIsLowercase: (value: boolean) => void;
   letter: string;
+  backgroundColor: string;
 };
 
 const LetterCaseSwitch = ({
   isLowercase,
   setIsLowercase,
   letter,
+  backgroundColor,
 }: LowerCaseSwitchProps) => {
   return (
     <Switch.Root
@@ -17,8 +19,13 @@ const LetterCaseSwitch = ({
       onChange={setIsLowercase}
       accessibilityLabel="switch"
       className="pb-2"
+      backgroundColor={"white"}
     >
-      <Switch.Icon checked={isLowercase} label={letter} />
+      <Switch.Icon
+        checked={isLowercase}
+        label={letter}
+        backgroundColor={backgroundColor}
+      />
     </Switch.Root>
   );
 };

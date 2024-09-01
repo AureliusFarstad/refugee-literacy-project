@@ -68,6 +68,7 @@ const LetterFormation = () => {
               isLowercase={isLowercase}
               setIsLowercase={setIsLowercase}
               letter={"A"}
+              backgroundColor={"#C385F8"}
             />
           </View>
           <View className="flex flex-row items-center justify-between  rounded-full bg-colors-purple-200 p-4">

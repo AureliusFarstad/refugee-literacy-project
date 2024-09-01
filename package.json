@@ -45,7 +45,6 @@
     "@svgator/react-native": "^2.0.1",
     "app-icon-badge": "^0.0.15",
     "clsx": "^2.1.0",
-    "d3-array": "^3.2.4",
     "eslint-plugin-prettier": "^5.2.1",
     "expo": "~50.0.7",
     "expo-app-loading": "^2.1.1",

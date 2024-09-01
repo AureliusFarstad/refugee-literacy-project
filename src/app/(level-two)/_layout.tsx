@@ -50,10 +50,6 @@ const tabs: TabType[] = [
     label: "Draggable",
   },
   {
-    name: "draggable",
-    label: "Draggable",
-  },
-  {
     name: "words-sound",
     label: "Word Sound",
   },

@@ -24,11 +24,13 @@ export interface RootProps extends Omit<PressableProps, "onPress"> {
   checked?: boolean;
   className?: string;
   accessibilityLabel: string;
+  backgroundColor: string;
 }
 
 export type IconProps = {
   checked: boolean;
   label?: string;
+  backgroundColor: string;
 };
 
 export const Root = ({
@@ -72,14 +74,17 @@ const Label = ({ text, testID, className = "" }: LabelProps) => {
   );
 };
 
-export const CheckboxIcon = ({ checked = false }: IconProps) => {
+export const CheckboxIcon = ({
+  checked = false,
+  backgroundColor,
+}: IconProps) => {
   const color = checked ? colors.primary[200] : colors.charcoal[400];
   return (
     <MotiView
       style={{
         height: SIZE,
         width: SIZE,
-        borderColor: color,
+        borderColor: backgroundColor,
       }}
       className="items-center justify-center rounded-[5px] border-2"
       from={{ backgroundColor: "transparent", borderColor: "#CCCFD6" }}
@@ -100,7 +105,7 @@ export const CheckboxIcon = ({ checked = false }: IconProps) => {
         <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <Path
             d="m16.726 7-.64.633c-2.207 2.212-3.878 4.047-5.955 6.158l-2.28-1.928-.69-.584L6 12.66l.683.577 2.928 2.477.633.535.591-.584c2.421-2.426 4.148-4.367 6.532-6.756l.633-.64L16.726 7Z"
-            fill="#fff"
+            fill="#C385F8"
           />
         </Svg>
       </MotiView>
@@ -120,12 +125,21 @@ const CheckboxBase = ({
   checked = false,
   testID,
   label,
-
+  backgroundColor,
   ...props
 }: RootProps & { label?: string }) => {
   return (
-    <CheckboxRoot checked={checked} testID={testID} {...props}>
-      <CheckboxIcon checked={checked} label={label} />
+    <CheckboxRoot
+      backgroundColor={backgroundColor}
+      checked={checked}
+      testID={testID}
+      {...props}
+    >
+      <CheckboxIcon
+        checked={checked}
+        label={label}
+        backgroundColor={backgroundColor}
+      />
       {label ? (
         <Label
           text={label}
@@ -181,11 +195,17 @@ const RadioBase = ({
   checked = false,
   testID,
   label,
+  backgroundColor,
   ...props
 }: RootProps & { label?: string }) => {
   return (
-    <RadioRoot checked={checked} testID={testID} {...props}>
-      <RadioIcon checked={checked} />
+    <RadioRoot
+      backgroundColor={backgroundColor}
+      checked={checked}
+      testID={testID}
+      {...props}
+    >
+      <RadioIcon checked={checked} backgroundColor={backgroundColor} />
       {label ? (
         <Label text={label} testID={testID ? `${testID}-label` : undefined} />
       ) : null}
@@ -199,12 +219,14 @@ export const Radio = Object.assign(RadioBase, {
   Label,
 });
 
-export const SwitchIcon = ({ checked = false, label }: IconProps) => {
+export const SwitchIcon = ({
+  checked = false,
+  label,
+  backgroundColor,
+}: IconProps) => {
   const translateX = checked
     ? THUMB_OFFSET
     : WIDTH - THUMB_WIDTH - THUMB_OFFSET;
-
-  const backgroundColor = checked ? colors.primary[200] : colors.charcoal[400];
 
   return (
     <View className="w-[80px] justify-center">
@@ -213,7 +235,7 @@ export const SwitchIcon = ({ checked = false, label }: IconProps) => {
           style={{
             width: WIDTH,
             height: HEIGHT,
-            backgroundColor,
+            backgroundColor: "#D4D4D8",
           }}
         />
       </View>
@@ -222,7 +244,7 @@ export const SwitchIcon = ({ checked = false, label }: IconProps) => {
           height: THUMB_HEIGHT,
           width: THUMB_WIDTH,
           position: "absolute",
-          backgroundColor: "white",
+          backgroundColor: backgroundColor,
           borderRadius: 18,
           right: 0,
         }}
@@ -231,23 +253,11 @@ export const SwitchIcon = ({ checked = false, label }: IconProps) => {
           translateX: I18nManager.isRTL ? translateX : -translateX,
         }}
         transition={{ translateX: { overshootClamping: true } }}
-      >
-        <Text className="text-xl font-medium">
-          {checked ? label?.toLowerCase() : label?.toUpperCase()}
-        </Text>
-      </MotiView>
-      <Text
-        className={clsx("absolute left-4 text-xl font-medium", {
-          hidden: !checked,
-        })}
-      >
+      />
+      <Text className={clsx("absolute left-4 text-xl font-medium")}>
         {label?.toUpperCase()}
       </Text>
-      <Text
-        className={clsx("absolute right-4 text-xl font-medium", {
-          hidden: checked,
-        })}
-      >
+      <Text className={clsx("absolute right-4 text-xl font-medium")}>
         {label?.toLowerCase()}
       </Text>
     </View>
@@ -265,11 +275,21 @@ const SwitchBase = ({
   checked = false,
   testID,
   label,
+  backgroundColor,
   ...props
 }: RootProps & { label?: string }) => {
   return (
-    <SwitchRoot checked={checked} testID={testID} {...props}>
-      <SwitchIcon label={label} checked={checked} />
+    <SwitchRoot
+      backgroundColor={backgroundColor}
+      checked={checked}
+      testID={testID}
+      {...props}
+    >
+      <SwitchIcon
+        label={label}
+        checked={checked}
+        backgroundColor={backgroundColor}
+      />
       {label ? (
         <Label text={label} testID={testID ? `${testID}-label` : undefined} />
       ) : null}
