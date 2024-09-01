@@ -245,7 +245,7 @@ const LetterIntroduction = () => {
                 </TouchableOpacity>
               </View>
             </View>
-            <View className="mx-4  h-[320]   border-yellow-500">
+            <View className="mx-4  h-[320] overflow-hidden  ">
               <PageLinesSVG />
               <AnimatedLetterComponent
                 ref={animatedLetterRef}
