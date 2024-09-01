@@ -68,7 +68,7 @@ const AnimatedLetterComponent = forwardRef<
 
   return (
     <View className="z-100 absolute flex size-full flex-row justify-around  border-purple-500">
-      <View className="flex w-[90px] items-center justify-center">
+      <View className="mb-12 flex w-[90px] items-center justify-center">
         {renderLowercaseLetter()}
       </View>
       <View className="mb-12 flex w-[80px] items-center justify-center">
