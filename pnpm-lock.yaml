@@ -123,8 +123,8 @@ importers:
         specifier: ~2.14.1
         version: 2.14.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0)
       react-native-haptic-feedback:
-        specifier: ^2.2.0
-        version: 2.2.0(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))
+        specifier: ^2.3.1
+        version: 2.3.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))
       react-native-heroicons:
         specifier: ^3.2.0
         version: 3.2.1(react-native-svg@14.2.0(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react@18.2.0)
@@ -155,6 +155,9 @@ importers:
       react-native-webview:
         specifier: 13.6.4
         version: 13.6.4(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0)
+      rn-super-drag-drop:
+        specifier: ^1.0.0
+        version: 1.0.0(react-native-gesture-handler@2.14.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react-native-haptic-feedback@2.3.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)))(react-native-reanimated@3.14.0(@babel/core@7.24.7)(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0)
       tailwind-merge:
         specifier: ^2.2.1
         version: 2.4.0
@@ -5202,8 +5205,8 @@ packages:
       react: '*'
       react-native: '*'
 
-  react-native-haptic-feedback@2.2.0:
-    resolution: {integrity: sha512-3tqJOjCguWhIrX0nkURn4yw6kXdsSDjjrvZCRjKXYGlL28hdQmoW2okAHduDTD9FWj9lA+lHgwFWgGs4aFNN7A==}
+  react-native-haptic-feedback@2.3.1:
+    resolution: {integrity: sha512-dPfjV4iVHfhVyfG+nRd88ygjahbdup7KFZDM5L2aNIAzqbNtKxHZn5O1pHegwSj1t15VJliu0GyTX7XpBDeXUw==}
     peerDependencies:
       react-native: '>=0.60.0'
 
@@ -5470,6 +5473,15 @@ packages:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
+
+  rn-super-drag-drop@1.0.0:
+    resolution: {integrity: sha512-sHuci4MOFwITxlcfGFe+rVL1djD+BCrnvn0qEjrcqM7cgDfokKXWhBzxTH3YjNJ1gtSpqu1Md8FYRVUQVBUzwQ==}
+    peerDependencies:
+      react: '>=17'
+      react-native: '>=0.70'
+      react-native-gesture-handler: '>=2'
+      react-native-haptic-feedback: '>=2'
+      react-native-reanimated: '>=3'
 
   rtl-detect@1.1.2:
     resolution: {integrity: sha512-PGMBq03+TTG/p/cRB7HCLKJ1MgDIi07+QU1faSjiYRfmY5UsAttV9Hs08jDAHVwcOwmVLcSJkpwyfXszVjWfIQ==}
@@ -12628,7 +12640,7 @@ snapshots:
       react: 18.2.0
       react-native: 0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)
 
-  react-native-haptic-feedback@2.2.0(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)):
+  react-native-haptic-feedback@2.3.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)):
     dependencies:
       react-native: 0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)
 
@@ -12970,6 +12982,14 @@ snapshots:
   rimraf@3.0.2:
     dependencies:
       glob: 7.2.3
+
+  rn-super-drag-drop@1.0.0(react-native-gesture-handler@2.14.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react-native-haptic-feedback@2.3.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)))(react-native-reanimated@3.14.0(@babel/core@7.24.7)(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0))(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+      react-native: 0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0)
+      react-native-gesture-handler: 2.14.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0)
+      react-native-haptic-feedback: 2.3.1(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))
+      react-native-reanimated: 3.14.0(@babel/core@7.24.7)(react-native@0.73.6(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(react@18.2.0))(react@18.2.0)
 
   rtl-detect@1.1.2: {}
 
