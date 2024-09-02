@@ -8,12 +8,12 @@ import {
   useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
+import type { DndProviderProps } from "rn-super-drag-drop";
+import { DndProvider, Draggable, Droppable } from "rn-super-drag-drop";
 
 import useSound from "@/core/hooks/useSound";
 import { EyeClosed, EyeOpen, SmallEarIcon } from "@/ui/icons";
 import { WIDTH } from "@/utils/layout";
-import type { DndProviderProps } from "@/vendor/react-native-dnd";
-import { DndProvider, Draggable, Droppable } from "@/vendor/react-native-dnd";
 
 import DynamicStroke from "./dynamic-strokes";
 
