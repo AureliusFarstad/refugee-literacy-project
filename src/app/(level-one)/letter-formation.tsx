@@ -131,7 +131,7 @@ const LetterFormation = () => {
           </View>
         </View>
         <View className="relative h-[356] items-center justify-center overflow-hidden  border-pink-500">
-          {!isOverlayAnimation ? (
+          <View className="absolute">
             <AlphabetTracing
               letter={
                 isLowercase
@@ -139,16 +139,15 @@ const LetterFormation = () => {
                   : activeActivity.letter.upperCase
               }
             />
-          ) : (
-            <OverlayLetterAnimation
-              ref={animatedLetterRef}
-              name={activeActivity.letter.lowerCase}
-              key={activeActivity.letter.lowerCase}
-              onAnimationComplete={onAnimationComplete}
-              onAnimationStart={onAnimationStart}
-              isAnimating={isAnimating}
-            />
-          )}
+          </View>
+          <OverlayLetterAnimation
+            ref={animatedLetterRef}
+            name={activeActivity.letter.lowerCase}
+            key={activeActivity.letter.lowerCase}
+            onAnimationComplete={onAnimationComplete}
+            onAnimationStart={onAnimationStart}
+            isAnimating={isAnimating}
+          />
         </View>
         <View className="mt-auto ">
           <View>{/* <View className="mx-4 mt-5  overflow-hidden" /> */}</View>
