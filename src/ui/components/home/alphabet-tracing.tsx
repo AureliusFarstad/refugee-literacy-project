@@ -52,8 +52,8 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
   )!;
   const drawPath = useSharedValue(Skia.Path.Make());
 
-  const x = useSharedValue(100);
-  const y = useSharedValue(100);
+  const x = useSharedValue(50);
+  const y = useSharedValue(50);
 
   const style = useAnimatedStyle(() => ({
     position: "absolute",
@@ -139,7 +139,7 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
           >
             <Path path={letterPath} color="black" strokeWidth={10 / scale} />
           </Mask>
-          <Circle cx={x} cy={y} r={20} color="#C385F8" />
+          <Circle cx={x} cy={y} r={12} color="#C385F8" />
         </Canvas>
         <Animated.View style={style} className={"z-50"} />
       </View>
