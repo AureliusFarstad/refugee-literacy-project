@@ -51,7 +51,7 @@ const OverlayLetterAnimation = forwardRef<
 
   return (
     <View className="z-100  flex size-full h-[356] flex-row justify-around   border-purple-500">
-      <View className="flex w-[250] items-center justify-center  ">
+      <View className="flex w-[200] items-center justify-center  ">
         {renderLowercaseLetter()}
       </View>
     </View>
