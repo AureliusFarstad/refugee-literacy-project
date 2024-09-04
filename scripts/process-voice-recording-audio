@@ -1,34 +1,60 @@
 #!/bin/bash
 
 # Input and output directories
-input_dir="path/to/your/input/folder"
-output_dir="path/to/your/output/folder"
+# Modify these paths to point to the directories where the audio files are stored and where the processed audio files should be saved
+input_dir="/Users/marcusfarstad/Documents/rlp/refugee-literacy-project/raw-assets/multilingual-audio"
+output_dir="/Users/marcusfarstad/Documents/rlp/refugee-literacy-project/assets/multilingual-audio"
 
 # Create the output directory if it doesn't exist
 mkdir -p "$output_dir"
 
-# Process each MP4 file in the input directory
-for input_file in "$input_dir"/*.mp4; do
-    # Get the base name of the file
-    base_name=$(basename "$input_file" .mp4)
+# Process each MP4, M4A, or MP3 file in the input directory and its subdirectories
+find "$input_dir" -type f \( -name "*.mp4" -o -name "*.m4a" -o -name "*.mp3" \) | while read -r input_file; do
+    # Get the relative path of the file from the input directory
+    relative_path="${input_file#$input_dir/}"
     
-    # Extract audio to a temporary file
-    ffmpeg -i "$input_file" -q:a 0 -map a "$output_dir/${base_name}_temp.mp3"
-
+    # Get the base name of the file without the extension
+    base_name=$(basename "$relative_path" | sed 's/\.[^.]*$//')
+    
+    # Get the directory path where the output file should be placed
+    output_subdir="$output_dir/$(dirname "$relative_path")"
+    
+    # Create the output subdirectory if it doesn't exist
+    mkdir -p "$output_subdir"
+    
+    # Final output file path
+    final_output="$output_subdir/${base_name}.mp3"
+    
+    # Check if the final output file already exists
+    if [ -f "$final_output" ]; then
+        echo "File already exists, skipping: $final_output"
+        continue
+    fi
+    
+    # Extract audio to a temporary file if input is not already mp3
+    if [[ "$input_file" == *.mp3 ]]; then
+        cp "$input_file" "$output_subdir/${base_name}_temp.mp3"
+    else
+        ffmpeg -i "$input_file" -q:a 0 -map a "$output_subdir/${base_name}_temp.mp3"
+    fi
+    
     # First pass volume normalization
-    ffmpeg -i "$output_dir/${base_name}_temp.mp3" -filter:a loudnorm "$output_dir/${base_name}_step1.mp3"
+    ffmpeg -i "$output_subdir/${base_name}_temp.mp3" -filter:a loudnorm "$output_subdir/${base_name}_step1.mp3"
     
     # Second pass volume normalization
-    ffmpeg -i "$output_dir/${base_name}_step1.mp3" -filter:a loudnorm "$output_dir/${base_name}_step2.mp3"
+    ffmpeg -i "$output_subdir/${base_name}_step1.mp3" -filter:a loudnorm "$output_subdir/${base_name}_step2.mp3"
     
     # Noise reduction
-    ffmpeg -i "$output_dir/${base_name}_step2.mp3" -af afftdn "$output_dir/${base_name}_step3.mp3"
+    ffmpeg -i "$output_subdir/${base_name}_step2.mp3" -af afftdn "$output_subdir/${base_name}_step3.mp3"
     
     # Trimming silence and quality reduction/compression
-    ffmpeg -i "$output_dir/${base_name}_step3.mp3" -af "silenceremove=start_periods=1:stop_periods=-1:stop_duration=0.8:start_threshold=-45dB:stop_threshold=-45dB" -q:a 6 "$output_dir/${base_name}.mp3"
-        
+    ffmpeg -i "$output_subdir/${base_name}_step3.mp3" -af "silenceremove=start_periods=1:stop_periods=-1:stop_duration=0.8:start_threshold=-45dB:stop_threshold=-45dB" -q:a 6 "$final_output"
+    
     # Cleanup temporary files
-    rm "$output_dir/${base_name}_temp.mp3" "$output_dir/${base_name}_step1.mp3" "$output_dir/${base_name}_step2.mp3" "$output_dir/${base_name}_step3.mp3"
+    rm "$output_subdir/${base_name}_temp.mp3" "$output_subdir/${base_name}_step1.mp3" "$output_subdir/${base_name}_step2.mp3" "$output_subdir/${base_name}_step3.mp3"
+    
+    # Log the successful processing
+    echo "Successfully processed: $final_output"
 done
 
 echo "Processing completed. Check the output folder: $output_dir"
