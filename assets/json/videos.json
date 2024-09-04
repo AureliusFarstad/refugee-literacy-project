@@ -1,0 +1,63 @@
+{
+    "_comment": [
+        "This file contains the file paths for audio/video combinations of slideshow videos played in the app",
+        "The keys are the names of the videos",
+        "The visual file paths are relative to: assets/videos/",
+        "The audio file paths are relative to: assets/multilingual-audio/{language}/videos/ Where language must be replaced"
+    ],
+    "welcome": {
+        "number_of_screens": 8,
+        "screens": {
+            "screen-1": {
+                "audio": "welcome/welcome_partA",
+                "visual_type": "svg",
+                "visual": "welcome/screen-1.svg"
+            },
+            "screen-2": {
+                "audio": "welcome/welcome_partB",
+                "visual_type": "svg",
+                "visual": "welcome/screen-2.svg"
+            },
+            "screen-3": {
+                "audio": "welcome/welcome_partC",
+                "visual_type": "svgator",
+                "visual": "welcome/screen-3.js"
+            },
+            "screen-4": {
+                "audio": "welcome/welcome_partD",
+                "visual_type": "svg",
+                "visual": "welcome/screen-4.svg"
+            },
+            "screen-5": {
+                "audio": "welcome/welcome_partE",
+                "visual_type": "svgator",
+                "visual": "welcome/screen-5.js"
+            },
+            "screen-6": {
+                "audio": "welcome/welcome_partF",
+                "visual_type": "svgator",
+                "visual": "welcome/screen-6.js"
+            },
+            "screen-7": {
+                "audio": "welcome/welcome_partG",
+                "visual_type": "svg",
+                "visual": "welcome/screen-7.svg"
+            },
+            "screen-8": {
+                "audio": "welcome/welcome_partH",
+                "visual_type": "svg",
+                "visual": "welcome/to-do.svg"
+            },
+            "screen-9": {
+                "audio": "welcome/welcome_partI",
+                "visual_type": "svg",
+                "visual": "welcome/to-do.svg"
+            },
+            "screen-10": {
+                "audio": "welcome/welcome_partJ",
+                "visual_type": "svg",
+                "visual": "welcome/screen-1.svg"
+            }
+        }
+    }
+}
