@@ -10,3 +10,6 @@ export type LevelTwoBottomTabRoutes = {
   draggable: undefined;
   "words-sound": undefined;
 };
+export type LevelThreeBottomTabRoutes = {
+  listening: undefined;
+};
