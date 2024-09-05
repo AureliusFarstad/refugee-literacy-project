@@ -23,7 +23,7 @@ const SVGatorLetterComponent = forwardRef(
     const webViewRef = useRef(null);
     const [isWebViewReady, setIsWebViewReady] = useState(false);
 
-    const svgContent = letterSVGMap[letter] || "<svg></svg>"; // Default to empty SVG if letter not found
+    const svgContent = letterSVGMap[letter] || letterSVGMap.a; // Default to empty SVG if letter not found
     const wrappedHtml = SVGatorPlayer.wrapPage(svgContent);
 
     const injectJavaScript = (code) => {
