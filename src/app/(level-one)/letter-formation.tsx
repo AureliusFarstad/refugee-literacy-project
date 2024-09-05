@@ -169,6 +169,7 @@ const LetterFormation = () => {
                     setActiveActivity(activity);
                   }}
                   key={index}
+                  disabled={isOverlayAnimation}
                 >
                   <View className="flex flex-row  items-center justify-center ">
                     <Text className="text-3xl font-medium">
