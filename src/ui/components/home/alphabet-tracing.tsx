@@ -7,6 +7,7 @@ import {
   Path,
   Skia,
 } from "@shopify/react-native-skia";
+import clsx from "clsx";
 import { useEffect } from "react";
 import { View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -40,13 +41,17 @@ const getPathStartPoint = (pathData: string): { x: number; y: number } => {
 
 type AlphabetTracingProps = {
   letter: string;
+  isOverlayAnimation: boolean;
 };
 
 const STROKE_WIDTH = 50;
 
-const radius = 30;
+const radius = 40;
 
-const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
+const AlphabetTracing = ({
+  letter,
+  isOverlayAnimation,
+}: AlphabetTracingProps) => {
   const letterPath = Skia.Path.MakeFromSVGString(
     letterCoordinatesToRender[letter as "A" | "T" | "P" | "I" | "N"],
   )!;
@@ -109,7 +114,14 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
 
   return (
     <GestureDetector gesture={gesture}>
-      <View className="relative z-20 h-72 w-full items-center justify-center  border-pink-500">
+      <View
+        className={clsx(
+          "relative z-20 h-72 w-full items-center justify-center border-pink-500",
+          {
+            "pointer-events-none -z-20": isOverlayAnimation,
+          },
+        )}
+      >
         <Canvas
           style={{
             height: canvasHeight,
@@ -139,7 +151,9 @@ const AlphabetTracing = ({ letter }: AlphabetTracingProps) => {
           >
             <Path path={letterPath} color="black" strokeWidth={10 / scale} />
           </Mask>
-          <Circle cx={x} cy={y} r={12} color="#C385F8" />
+          {!isOverlayAnimation && (
+            <Circle cx={x} cy={y} r={12} color="#C385F8" />
+          )}
         </Canvas>
         <Animated.View style={style} className={"z-50"} />
       </View>
