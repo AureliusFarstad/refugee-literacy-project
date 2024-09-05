@@ -131,27 +131,26 @@ const LetterFormation = () => {
           </View>
         </View>
         <View className="relative h-[356] items-center justify-center overflow-hidden  border-pink-500">
-          {!isOverlayAnimation ? (
-            <AlphabetTracing
-              letter={
-                isLowercase
-                  ? activeActivity.letter.lowerCase
-                  : activeActivity.letter.upperCase
-              }
-            />
-          ) : (
-            <OverlayLetterAnimation
-              ref={animatedLetterRef}
-              name={activeActivity.letter.lowerCase}
-              key={activeActivity.letter.lowerCase}
-              onAnimationComplete={onAnimationComplete}
-              onAnimationStart={onAnimationStart}
-              isAnimating={isAnimating}
-            />
-          )}
+          <AlphabetTracing
+            letter={
+              isLowercase
+                ? activeActivity.letter.lowerCase
+                : activeActivity.letter.upperCase
+            }
+            isOverlayAnimation={isOverlayAnimation}
+          />
+          <OverlayLetterAnimation
+            ref={animatedLetterRef}
+            name={activeActivity.letter.lowerCase}
+            key={activeActivity.letter.lowerCase}
+            onAnimationComplete={onAnimationComplete}
+            onAnimationStart={onAnimationStart}
+            isAnimating={isAnimating}
+            isOverlayAnimation={isOverlayAnimation}
+          />
         </View>
         <View className="mt-auto ">
-          <View>{/* <View className="mx-4 mt-5  overflow-hidden" /> */}</View>
+          <View />
           <View className=" flex flex-row justify-between ">
             <View className="mt-16 flex w-full flex-row items-center justify-around px-[10px]">
               {activitiesInCurrentSection.map((activity, index) => (
