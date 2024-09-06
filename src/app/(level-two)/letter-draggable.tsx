@@ -21,17 +21,17 @@ const activeActivity = {
       {
         id: "item0",
         content: "P",
-        audio: require("assets/audio/alphabet/name/p.mp3"),
+        audio: require("assets/alphabet/audio/name/p.mp3"),
       },
       {
         id: "item1",
         content: "A",
-        audio: require("assets/audio/alphabet/name/a.mp3"),
+        audio: require("assets/alphabet/audio/name/a.mp3"),
       },
       {
         id: "item2",
         content: "N",
-        audio: require("assets/audio/alphabet/name/n.mp3"),
+        audio: require("assets/alphabet/audio/name/n.mp3"),
       },
     ],
   },
