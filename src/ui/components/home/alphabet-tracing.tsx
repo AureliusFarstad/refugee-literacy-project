@@ -116,9 +116,10 @@ const AlphabetTracing = ({
     <GestureDetector gesture={gesture}>
       <View
         className={clsx(
-          "relative z-20 h-72 w-full items-center justify-center border-pink-500",
+          "relative  h-72 w-full items-center justify-center border-pink-500",
           {
             "pointer-events-none -z-20": isOverlayAnimation,
+            "z-20": !isOverlayAnimation,
           },
         )}
       >
