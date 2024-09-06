@@ -1,4 +1,4 @@
-import LetterDotAnimation from "assets/animation/alphabet/lowercase/a-purpledot";
+import LetterDotAnimation from "assets/alphabet/animation/lowercase/a-purpledot";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { View } from "react-native";
 
