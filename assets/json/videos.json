@@ -9,54 +9,74 @@
         "number_of_screens": 8,
         "screens": {
             "screen-1": {
-                "audio": "welcome/welcome_partA",
-                "visual-type": "svg",
-                "visual": "welcome/screen-1.svg"
+                "audio": "welcome/welcome_partA.mp3",
+                "visual": {
+                    "type": "svg",
+                    "source": "welcome/screen-1.svg"
+                }
             },
             "screen-2": {
-                "audio": "welcome/welcome_partB",
-                "visual-type": "svg",
-                "visual": "welcome/screen-2.svg"
+                "audio": "welcome/welcome_partB.mp3",
+                "visual": {
+                    "type": "svg",
+                    "source": "welcome/screen-2.svg"
+                }
             },
             "screen-3": {
-                "audio": "welcome/welcome_partC",
-                "visual-type": "svgator",
-                "visual": "welcome/screen-3.js"
+                "audio": "welcome/welcome_partC.mp3",
+                "visual": {
+                    "type": "svgator",
+                    "source": "welcome/screen-3.js"
+                }
             },
             "screen-4": {
                 "audio": "welcome/welcome_partD",
-                "visual-type": "svg",
-                "visual": "welcome/screen-4.svg"
+                "visual": {
+                    "type": "svg",
+                    "source": "welcome/screen-4.svg"
+                }
             },
             "screen-5": {
                 "audio": "welcome/welcome_partE",
-                "visual-type": "svgator",
-                "visual": "welcome/screen-5.js"
+                "visual": {
+                    "type": "svgator",
+                    "source": "welcome/screen-5.js"
+                }
             },
             "screen-6": {
                 "audio": "welcome/welcome_partF",
-                "visual-type": "svgator",
-                "visual": "welcome/screen-6.js"
+                "visual": {
+                    "type": "svg",
+                    "source": "welcome/screen-6.svg"
+                }
             },
             "screen-7": {
                 "audio": "welcome/welcome_partG",
-                "visual-type": "svg",
-                "visual": "welcome/screen-7.svg"
+                "visual": {
+                    "type": "svg",
+                    "source": "welcome/screen-7.svg"
+                }
             },
             "screen-8": {
                 "audio": "welcome/welcome_partH",
-                "visual-type": "svg",
-                "visual": "welcome/to-do.svg"
+                "visual": {
+                    "type": "svg",
+                    "source": "welcome/to-do.svg"
+                }
             },
             "screen-9": {
                 "audio": "welcome/welcome_partI",
-                "visual-type": "svg",
-                "visual": "welcome/to-do.svg"
+                "visual": {
+                    "type": "svg",
+                    "source": "welcome/to-do.svg"
+                }
             },
             "screen-10": {
                 "audio": "welcome/welcome_partJ",
-                "visual-type": "svg",
-                "visual": "welcome/screen-1.svg"
+                "visual": {
+                    "type": "svg",
+                    "source": "welcome/screen-1.svg"
+                }
             }
         }
     }

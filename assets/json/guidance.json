@@ -1,5 +1,9 @@
 {
-    "_comment": [],
+    "_comment": [
+        "These are the audio files corresponding to the top right green audio button in the app",
+        "This audio explains the content and functions of the current screen",
+        "The audio file paths are relative to: assets/multilingual-audio/{language}/"
+    ],
     "alphabet-module": {
         "letter-introduction": {
             "audio-files": [
