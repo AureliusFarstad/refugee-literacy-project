@@ -9,10 +9,10 @@ const SIZE = 36;
 
 type HeaderProps = {
   title: string;
-  modalRef?: React.RefObject<DynamicModalRefType>;
+  onPressGuide?: () => void;
 };
 
-const Header = ({ modalRef }: HeaderProps) => {
+const Header = ({ onPressGuide }: HeaderProps) => {
   const navigateToHome = useCallback(() => {
     router.navigate("/");
   }, []);
@@ -25,12 +25,7 @@ const Header = ({ modalRef }: HeaderProps) => {
         </Pressable>
       </View>
       <View className="flex-row items-center space-x-4">
-        <Pressable
-          onPress={() => {
-            modalRef?.current?.showDynamicModal();
-          }}
-          className="p-2"
-        >
+        <Pressable onPress={onPressGuide} className="p-2">
           <InformationIcon color={"#8AC65B"} size={40} />
         </Pressable>
         <View className="p-2">
