@@ -5,6 +5,7 @@ import { router, usePathname } from "expo-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { CORRECT_ANSWER_TIMEOUT } from "@/constants/timing";
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
@@ -21,6 +22,10 @@ const LetterSound = () => {
   const [tappedAnswer, setTappedAnswer] = useState<IOption>();
 
   const [isLowercase, setIsLowercase] = useState(false);
+
+  const { playGuideAudio } = useGuideAudio({
+    screenName: "letter-sound",
+  });
 
   const pathname = usePathname();
 
@@ -113,7 +118,7 @@ const LetterSound = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Name" modalRef={dynamicModalRef} />
+      <Header title="Name" onPressGuide={playGuideAudio} />
       <View className=" px-5">
         <LetterCaseSwitch
           isLowercase={isLowercase}

@@ -7,6 +7,7 @@ import {
 } from "react-native-safe-area-context";
 import Svg, { Path as SvgPath } from "react-native-svg";
 
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Text, TouchableOpacity } from "@/ui";
 import Header from "@/ui/core/headers";
@@ -24,11 +25,14 @@ interface ILetter {
 }
 
 const LetterTapMatching = () => {
-  const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels, updateLevels } = useLevelStore();
   const activeActivity = useRef(levels[0].modules[0].sections[4].activities[0]);
 
   const insets = useSafeAreaInsets();
+
+  const { playGuideAudio } = useGuideAudio({
+    screenName: "letter-matching",
+  });
 
   const [leftLetters, setLeftLetters] = useState<ILetter[]>([]);
   const [rightLetters, setRightLetters] = useState<ILetter[]>([]);
@@ -374,7 +378,7 @@ const LetterTapMatching = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Header title="Matching" modalRef={dynamicModalRef} />
+      <Header title="Matching" onPressGuide={playGuideAudio} />
       <View className="relative flex flex-row justify-between border-yellow-500  px-10">
         {renderLetters(leftLetters, handleLeftLetterPress, false)}
         <View {...panResponder.panHandlers} className="z-10 flex-1">
