@@ -69,7 +69,12 @@ const HomeHeader = () => {
   return (
     <>
       <View className="mb-10 flex w-full items-center">
-        <View className="">
+        <Pressable
+          className=""
+          onPress={() => {
+            router.push("/video");
+          }}
+        >
           <Image
             source={HOME_BANNER_IMAGE}
             style={{
@@ -77,7 +82,7 @@ const HomeHeader = () => {
               height: 200,
             }}
           />
-        </View>
+        </Pressable>
       </View>
       <View className="mb-10 bg-colors-green-500">
         <Text className="py-2 text-center text-4xl text-white">1</Text>
