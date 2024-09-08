@@ -115,7 +115,7 @@ const WordSound = () => {
         <LetterCaseSwitch
           isLowercase={isLowercase}
           setIsLowercase={setIsLowercase}
-          letter={activeActivity.correctAnswer.title.slice(0, 1)}
+          letter={"a"}
           backgroundColor="#F36889"
         />
       </View>
