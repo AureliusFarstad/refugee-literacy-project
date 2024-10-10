@@ -7,7 +7,7 @@ import { Alert, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Line } from "react-native-svg";
 
-import { CORRECT_ANSWER_TIMEOUT } from "@/constants/timing";
+import { CORRECT_ANSWER_3_MS_TIMEOUT } from "@/constants/timing";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import AnimatedLetterComponent from "@/ui/components/home/animated-letter-component";
@@ -83,6 +83,11 @@ const LetterIntroduction = () => {
   const [sound, setSound] = useState<Sound>();
 
   const insets = useSafeAreaInsets();
+
+  const [isAnimating, setIsAnimating] = useState(false);
+  const onAnimationStart = () => {
+    setIsAnimating(true);
+  };
 
   // const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   // const [tappedAnswer, setTappedAnswer] = useState<IOption>();
@@ -186,14 +191,16 @@ const LetterIntroduction = () => {
       if (updatedActiveActivity) {
         setActiveActivity(updatedActiveActivity);
       }
-    }, CORRECT_ANSWER_TIMEOUT);
+    }, CORRECT_ANSWER_3_MS_TIMEOUT);
   };
 
   const onAnimationComplete = (letter: string) => {
+    setIsAnimating(false);
     if (letter === activeActivity.letter.upperCase) {
       incrementProgress("UPPERCASE_LETTER");
     } else if (letter === activeActivity.letter.lowerCase) {
       incrementProgress("LOWERCASE_LETTER");
+      console.log("animation completed");
     }
   };
 
@@ -245,13 +252,15 @@ const LetterIntroduction = () => {
                 </TouchableOpacity>
               </View>
             </View>
-            <View className="mx-4  h-[320]   border-yellow-500">
+            <View className="mx-4  h-[320] overflow-hidden  ">
               <PageLinesSVG />
               <AnimatedLetterComponent
                 ref={animatedLetterRef}
                 name={activeActivity.letter.lowerCase}
                 key={activeActivity.letter.lowerCase}
                 onAnimationComplete={onAnimationComplete}
+                onAnimationStart={onAnimationStart}
+                isAnimating={isAnimating}
               />
             </View>
           </View>
@@ -280,6 +289,7 @@ const LetterIntroduction = () => {
                 className={clsx("flex size-[60] justify-center  rounded-md  ", {
                   "bg-colors-gray-300": activity.id !== activeActivity.id,
                   "bg-colors-purple-500": activity.id === activeActivity.id,
+                  "bg-gray-200": isAnimating,
                 })}
                 onPress={() => {
                   /**
@@ -288,6 +298,7 @@ const LetterIntroduction = () => {
                   setActiveActivity(activity);
                 }}
                 key={index}
+                disabled={isAnimating}
               >
                 <View className="flex flex-row  items-center justify-center ">
                   <Text className="text-3xl font-medium">

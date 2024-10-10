@@ -23,8 +23,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "N",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/n.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/n.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/n.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/n.mp3"),
                 },
                 letter: {
                   lowerCase: "n",
@@ -53,8 +53,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "T",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/t.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/t.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/t.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/t.mp3"),
                 },
                 letter: {
                   lowerCase: "t",
@@ -83,8 +83,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "I",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/i.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/i.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/i.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/i.mp3"),
                 },
                 letter: {
                   lowerCase: "i",
@@ -113,8 +113,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "P",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/p.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/p.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/p.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/p.mp3"),
                 },
                 letter: {
                   lowerCase: "p",
@@ -143,8 +143,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "A",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/a.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/a.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/a.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/a.mp3"),
                 },
                 letter: {
                   lowerCase: "a",
@@ -185,8 +185,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "N",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/n.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/n.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/n.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/n.mp3"),
                 },
                 letter: {
                   lowerCase: "n",
@@ -215,8 +215,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "T",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/t.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/t.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/t.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/t.mp3"),
                 },
                 letter: {
                   lowerCase: "t",
@@ -246,8 +246,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "I",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/i.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/i.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/i.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/i.mp3"),
                 },
                 letter: {
                   lowerCase: "i",
@@ -276,8 +276,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "P",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/p.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/p.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/p.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/p.mp3"),
                 },
                 letter: {
                   lowerCase: "p",
@@ -306,8 +306,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "A",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/a.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/a.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/a.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/a.mp3"),
                 },
                 letter: {
                   lowerCase: "a",
@@ -347,7 +347,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionA", title: "A" },
-                audio: require("assets/audio/alphabet/sound/a.mp3"),
+                audio: require("assets/alphabet/audio/sound/a.mp3"),
                 options: [
                   { id: "optionT", title: "T" },
                   { id: "optionP", title: "P" },
@@ -373,7 +373,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionT", title: "T" },
-                audio: require("assets/audio/alphabet/sound/t.mp3"),
+                audio: require("assets/alphabet/audio/sound/t.mp3"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionP", title: "P" },
@@ -399,7 +399,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionP", title: "P" },
-                audio: require("assets/audio/alphabet/sound/p.mp3"),
+                audio: require("assets/alphabet/audio/sound/p.mp3"),
                 options: [
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
@@ -425,7 +425,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionI", title: "I" },
-                audio: require("assets/audio/alphabet/sound/i.mp3"),
+                audio: require("assets/alphabet/audio/sound/i.mp3"),
                 options: [
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
@@ -451,7 +451,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionN", title: "N" },
-                audio: require("assets/audio/alphabet/sound/n.mp3"),
+                audio: require("assets/alphabet/audio/sound/n.mp3"),
                 options: [
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
@@ -489,7 +489,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionA", title: "A" },
-                audio: require("assets/audio/alphabet/name/a.mp3"),
+                audio: require("assets/alphabet/audio/name/a.mp3"),
                 options: [
                   { id: "optionT", title: "T" },
                   { id: "optionP", title: "P" },
@@ -515,7 +515,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionT", title: "T" },
-                audio: require("assets/audio/alphabet/name/t.mp3"),
+                audio: require("assets/alphabet/audio/name/t.mp3"),
                 options: [
                   { id: "optionA", title: "A" },
                   { id: "optionP", title: "P" },
@@ -541,7 +541,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionP", title: "P" },
-                audio: require("assets/audio/alphabet/name/p.mp3"),
+                audio: require("assets/alphabet/audio/name/p.mp3"),
                 options: [
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
@@ -567,7 +567,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionI", title: "I" },
-                audio: require("assets/audio/alphabet/name/i.mp3"),
+                audio: require("assets/alphabet/audio/name/i.mp3"),
                 options: [
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
@@ -593,7 +593,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_SOUND",
                 correctAnswer: { id: "optionN", title: "N" },
-                audio: require("assets/audio/alphabet/name/n.mp3"),
+                audio: require("assets/alphabet/audio/name/n.mp3"),
                 options: [
                   { id: "optionT", title: "T" },
                   { id: "optionA", title: "A" },
@@ -692,8 +692,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "N",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/n.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/n.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/n.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/n.mp3"),
                 },
                 letter: {
                   lowerCase: "n",
@@ -722,8 +722,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "T",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/t.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/t.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/t.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/t.mp3"),
                 },
                 letter: {
                   lowerCase: "t",
@@ -752,8 +752,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "I",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/i.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/i.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/i.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/i.mp3"),
                 },
                 letter: {
                   lowerCase: "i",
@@ -782,8 +782,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "P",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/p.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/p.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/p.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/p.mp3"),
                 },
                 letter: {
                   lowerCase: "p",
@@ -812,8 +812,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "A",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/a.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/a.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/a.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/a.mp3"),
                 },
                 letter: {
                   lowerCase: "a",
@@ -854,8 +854,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "N",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/n.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/n.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/n.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/n.mp3"),
                 },
                 letter: {
                   lowerCase: "n",
@@ -884,8 +884,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "T",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/t.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/t.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/t.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/t.mp3"),
                 },
                 letter: {
                   lowerCase: "t",
@@ -915,8 +915,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "I",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/i.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/i.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/i.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/i.mp3"),
                 },
                 letter: {
                   lowerCase: "i",
@@ -945,8 +945,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "P",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/p.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/p.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/p.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/p.mp3"),
                 },
                 letter: {
                   lowerCase: "p",
@@ -975,8 +975,8 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 type: "MATCH_THE_LETTER",
                 character: "A",
                 sound: {
-                  alphabeticAudioSrc: require("assets/audio/alphabet/name/a.mp3"),
-                  phoneticAudioSrc: require("assets/audio/alphabet/sound/a.mp3"),
+                  alphabeticAudioSrc: require("assets/alphabet/audio/name/a.mp3"),
+                  phoneticAudioSrc: require("assets/alphabet/audio/sound/a.mp3"),
                 },
                 letter: {
                   lowerCase: "a",
@@ -1016,7 +1016,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionPAN", title: "PAN" },
-                audio: require("assets/audio/alphabet/sound/a.mp3"),
+                audio: require("assets/alphabet/audio/sound/a.mp3"),
                 options: [
                   { id: "optionSIT", title: "SIT" },
                   { id: "optionTAP", title: "TAP" },
@@ -1041,7 +1041,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionTAN", title: "TAN" },
-                audio: require("assets/audio/alphabet/sound/t.mp3"),
+                audio: require("assets/alphabet/audio/sound/t.mp3"),
                 options: [
                   { id: "optionSIT", title: "SIT" },
                   { id: "optionPAN", title: "PAN" },
@@ -1066,7 +1066,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionSIT", title: "SIT" },
-                audio: require("assets/audio/alphabet/sound/i.mp3"),
+                audio: require("assets/alphabet/audio/sound/i.mp3"),
                 options: [
                   { id: "optionTAP", title: "TAP" },
                   { id: "optionPAN", title: "PAN" },
@@ -1091,7 +1091,7 @@ export const INITIAL_LEVEL_STATE: ILevel[] = [
                 numberOfTimesCorrectAnswerGiven: 0,
                 type: "MATCH_THE_NAME",
                 correctAnswer: { id: "optionTAP", title: "TAP" },
-                audio: require("assets/audio/alphabet/sound/n.mp3"),
+                audio: require("assets/alphabet/audio/sound/n.mp3"),
                 options: [
                   { id: "optionSIT", title: "SIT" },
                   { id: "optionPAN", title: "PAN" },

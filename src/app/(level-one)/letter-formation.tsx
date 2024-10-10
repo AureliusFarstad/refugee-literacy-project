@@ -9,17 +9,27 @@ import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import AlphabetTracing from "@/ui/components/home/alphabet-tracing";
 import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
+import OverlayLetterAnimation from "@/ui/components/letter-formation/overlay-letter-animation";
 import Header from "@/ui/core/headers";
 import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
-import { EarIcon, LettersNameIcon, PencilIcon } from "@/ui/icons";
+import {
+  CustomPencilIcon,
+  EarIcon,
+  LettersNameIcon,
+  PencilIcon,
+} from "@/ui/icons";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
+
+type AnimatedLetterComponentRef = {
+  animateLowercase: () => void;
+};
 
 const LetterFormation = () => {
   const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
 
-  const [isLowercase, setIsLowercase] = useState(false);
+  const [isLowercase, setIsLowercase] = useState(true);
 
   const insets = useSafeAreaInsets();
 
@@ -29,6 +39,14 @@ const LetterFormation = () => {
 
   const activitiesInCurrentSection =
     levels[0].modules[0].sections[1].activities;
+
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [isOverlayAnimation, setIsOverlayAnimation] = useState(true);
+  const onAnimationStart = () => {
+    setIsAnimating(true);
+  };
+
+  const animatedLetterRef = useRef<AnimatedLetterComponentRef | null>(null);
 
   const playSound = async (playbackSource: AVPlaybackSource) => {
     try {
@@ -45,6 +63,13 @@ const LetterFormation = () => {
     }
   };
 
+  const onAnimationComplete = (letter: string) => {
+    console.log(letter);
+    setIsAnimating(false);
+    setIsOverlayAnimation(false);
+    console.log("animation completed");
+  };
+
   useEffect(() => {
     return sound
       ? () => {
@@ -52,6 +77,14 @@ const LetterFormation = () => {
         }
       : undefined;
   }, [sound, activeActivity]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      animatedLetterRef.current?.animateLowercase();
+    }, 3000);
+  }, []);
+
+  console.log({ isOverlayAnimation });
 
   return (
     <SafeAreaView>
@@ -84,19 +117,40 @@ const LetterFormation = () => {
             >
               <EarIcon />
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setIsOverlayAnimation(true);
+                setTimeout(() => {
+                  animatedLetterRef.current?.animateLowercase();
+                }, 2000);
+              }}
+              className=" ml-2 flex size-[80] items-center justify-center  rounded-full bg-colors-purple-500"
+            >
+              <CustomPencilIcon size={44} />
+            </TouchableOpacity>
           </View>
         </View>
-        <View className="relative h-[356] items-center justify-center  border-pink-500">
+        <View className="relative h-[356] items-center justify-center overflow-hidden  border-pink-500">
           <AlphabetTracing
             letter={
               isLowercase
                 ? activeActivity.letter.lowerCase
                 : activeActivity.letter.upperCase
             }
+            isOverlayAnimation={isOverlayAnimation}
+          />
+          <OverlayLetterAnimation
+            ref={animatedLetterRef}
+            name={activeActivity.letter.lowerCase}
+            key={activeActivity.letter.lowerCase}
+            onAnimationComplete={onAnimationComplete}
+            onAnimationStart={onAnimationStart}
+            isAnimating={isAnimating}
+            isOverlayAnimation={isOverlayAnimation}
           />
         </View>
         <View className="mt-auto ">
-          <View>{/* <View className="mx-4 mt-5  overflow-hidden" /> */}</View>
+          <View />
           <View className=" flex flex-row justify-between ">
             <View className="mt-16 flex w-full flex-row items-center justify-around px-[10px]">
               {activitiesInCurrentSection.map((activity, index) => (
@@ -115,6 +169,7 @@ const LetterFormation = () => {
                     setActiveActivity(activity);
                   }}
                   key={index}
+                  disabled={isOverlayAnimation}
                 >
                   <View className="flex flex-row  items-center justify-center ">
                     <Text className="text-3xl font-medium">
