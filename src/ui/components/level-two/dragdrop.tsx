@@ -66,7 +66,7 @@ export const DragDrop = ({ activeActivity, isLowercase }: DragDropProps) => {
       third: null,
     },
   });
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [_isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [, setCounter] = useState(0);
   const [isHintDisplayed, setIsHintDisplayed] = useState(false);
   const [isUndoInProgress, setIsUndoInProgress] = useState(false);
@@ -326,14 +326,14 @@ export const DragDrop = ({ activeActivity, isLowercase }: DragDropProps) => {
         </TouchableOpacity>
       </View>
 
-      {isCorrect ? (
+      {/* {isCorrect ? (
         <Text>Done</Text>
       ) : (
         <Pressable onPress={checkOrder}>
           <Text>Check</Text>
         </Pressable>
-      )}
-      {!isHintDisplayed ? (
+      )} */}
+      {/* {!isHintDisplayed ? (
         <Pressable
           onPress={() => {
             setIsHintDisplayed(true);
@@ -349,7 +349,7 @@ export const DragDrop = ({ activeActivity, isLowercase }: DragDropProps) => {
         >
           <Text>Hide hints</Text>
         </Pressable>
-      )}
+      )} */}
 
       <View className="z-50 mt-10 flex size-full flex-row flex-wrap justify-evenly gap-6 bg-[#F7D6DE] p-8 px-16">
         <>

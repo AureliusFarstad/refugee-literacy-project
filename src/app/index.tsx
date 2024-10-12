@@ -41,7 +41,7 @@ const LESSONS = [
     image: LESSON_TWO_IMAGE,
     title: "Lesson 3",
     description: "Listening the chat",
-    path: "/(level-three)/letter-introduction",
+    path: "/(level-three)/listening",
     isFinished: false,
     progressBarColor: "bg-[#B43855]",
   },

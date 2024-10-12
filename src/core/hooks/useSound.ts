@@ -6,14 +6,17 @@ import { useEffect, useState } from "react";
 const useSound = () => {
   const [sound, setSound] = useState<Sound>();
 
-  const playSound = async (soundSource: AVPlaybackSource) => {
+  const playSound = async (soundSource: AVPlaybackSource | string) => {
     try {
-      const { sound: soundResponse } =
-        await Audio.Sound.createAsync(soundSource);
+      if (typeof soundSource === "string" && soundSource.includes("mp3")) {
+        soundSource = { uri: soundSource };
+      }
+      const { sound: soundResponse } = await Audio.Sound.createAsync(
+        soundSource as AVPlaybackSource,
+      );
       if (soundResponse) {
         setSound(soundResponse);
       }
-      console.log("Playing Sound");
       await soundResponse.playAsync();
     } catch (error) {
       console.log("error in playSound", error);
