@@ -84,8 +84,6 @@ const LetterFormation = () => {
     }, 3000);
   }, []);
 
-  console.log({ isOverlayAnimation });
-
   return (
     <SafeAreaView>
       <Header title="Formation" modalRef={dynamicModalRef} />
@@ -131,23 +129,24 @@ const LetterFormation = () => {
           </View>
         </View>
         <View className="relative h-[356] items-center justify-center overflow-hidden  border-pink-500">
-          <AlphabetTracing
-            letter={
-              isLowercase
-                ? activeActivity.letter.lowerCase
-                : activeActivity.letter.upperCase
-            }
-            isOverlayAnimation={isOverlayAnimation}
-          />
-          <OverlayLetterAnimation
-            ref={animatedLetterRef}
-            name={activeActivity.letter.lowerCase}
-            key={activeActivity.letter.lowerCase}
-            onAnimationComplete={onAnimationComplete}
-            onAnimationStart={onAnimationStart}
-            isAnimating={isAnimating}
-            isOverlayAnimation={isOverlayAnimation}
-          />
+          {!isOverlayAnimation ? (
+            <AlphabetTracing
+              letter={
+                isLowercase
+                  ? activeActivity.letter.lowerCase
+                  : activeActivity.letter.upperCase
+              }
+            />
+          ) : (
+            <OverlayLetterAnimation
+              ref={animatedLetterRef}
+              name={activeActivity.letter.lowerCase}
+              key={activeActivity.letter.lowerCase}
+              onAnimationComplete={onAnimationComplete}
+              onAnimationStart={onAnimationStart}
+              isAnimating={isAnimating}
+            />
+          )}
         </View>
         <View className="mt-auto ">
           <View />
