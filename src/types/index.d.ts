@@ -109,3 +109,12 @@ interface ILetterSoundAndNameProgress {
   uppercaseSoundCount: number;
   lowercaseSoundCount: number;
 }
+
+interface AudioPlayerStatus {
+  isLoaded: boolean;
+  isPlaying: boolean;
+  isBuffering: boolean;
+  positionMillis?: number;
+  durationMillis?: number;
+  didJustFinish: boolean;
+}
