@@ -45,6 +45,7 @@ const welcome = {
   ),
 };
 
+<<<<<<< HEAD
 const WelcomeVideoAnimation = forwardRef(
   ({ onAnimationComplete, letter, ...props }, ref) => {
     const webViewRef = useRef(null);
@@ -164,3 +165,6 @@ const WelcomeVideoAnimation = forwardRef(
 );
 
 export default WelcomeVideoAnimation;
+=======
+export default welcome;
+>>>>>>> 29e0c5c (chore: pencil formation assets)
