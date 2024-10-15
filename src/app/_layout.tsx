@@ -66,8 +66,18 @@ function RootLayoutNav() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(level-one)" options={{ headerShown: false }} />
       <Stack.Screen name="(level-two)" options={{ headerShown: false }} />
+      <Stack.Screen name="(level-three)" options={{ headerShown: false }} />
       <Stack.Screen
         name="modal"
+        options={{
+          animation: "slide_from_bottom",
+          presentation: "containedModal",
+          headerShown: false,
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="welcome-screen-modal"
         options={{
           animation: "slide_from_bottom",
           presentation: "containedModal",

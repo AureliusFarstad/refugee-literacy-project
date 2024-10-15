@@ -129,7 +129,15 @@ const Home = () => {
   return (
     <SafeAreaView className="flex-1   bg-white">
       <FocusAwareStatusBar />
-
+      <Pressable
+        className="bg-colors-green-500 p-5"
+        onPress={() => {
+          // router.push("/(level-three)/listening");
+          router.push("/welcome-screen-modal");
+        }}
+      >
+        <Text>Listening activity</Text>
+      </Pressable>
       <View className="py-10">
         <FlatList
           ListHeaderComponent={HomeHeader}
