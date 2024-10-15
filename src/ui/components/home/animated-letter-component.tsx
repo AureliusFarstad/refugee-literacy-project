@@ -1,5 +1,5 @@
-import LowercaseLetter from "assets/alphabet/animation/lowercase/lowercase-letter";
-import UppercaseLetter from "assets/alphabet/animation/uppercase/uppercase-letter";
+import LowercaseLetter from "assets/alphabet/animation/pencil";
+import UppercaseLetter from "assets/alphabet/animation/pencil";
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { View } from "react-native";
 
@@ -74,10 +74,10 @@ const AnimatedLetterComponent = forwardRef<
 
   return (
     <View className="z-100 absolute flex size-full flex-row justify-around border-purple-500">
-      <View className="mb-12 flex w-[90px] items-center justify-center">
+      <View className="mb-12 flex w-[128px] items-center justify-center">
         {renderLowercaseLetter()}
       </View>
-      <View className="mb-12 flex w-[80px] items-center justify-center">
+      <View className="mb-12 flex w-[132px] items-center justify-center">
         {renderUppercaseLetter()}
       </View>
     </View>
