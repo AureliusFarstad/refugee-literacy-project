@@ -67,6 +67,7 @@ export default function LevelThreeTabLayout() {
             name={name}
             options={{
               title: label,
+              headerShown: false,
               // eslint-disable-next-line react/no-unstable-nested-components
               tabBarIcon: ({ color, focused }) => (
                 <BarIcon name={name} color={color} focused={focused} />
