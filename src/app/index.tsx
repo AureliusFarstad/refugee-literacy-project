@@ -67,7 +67,11 @@ const LESSONS = [
 
 const HomeHeader = () => {
   return (
-    <>
+    <Pressable
+      onPress={() => {
+        router.push("/welcome-screen-modal");
+      }}
+    >
       <View className="mb-10 flex w-full items-center">
         <View className="">
           <Image
@@ -82,7 +86,7 @@ const HomeHeader = () => {
       <View className="mb-10 bg-colors-green-500">
         <Text className="py-2 text-center text-4xl text-white">1</Text>
       </View>
-    </>
+    </Pressable>
   );
 };
 
@@ -129,13 +133,6 @@ const Home = () => {
   return (
     <SafeAreaView className="flex-1   bg-white">
       <FocusAwareStatusBar />
-      <Pressable
-        onPress={() => {
-          router.push("/welcome-screen-modal");
-        }}
-      >
-        <Text>Welcome video</Text>
-      </Pressable>
 
       <View className="py-10">
         <FlatList
