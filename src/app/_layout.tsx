@@ -90,6 +90,15 @@ function RootLayoutNav() {
           headerShadowVisible: false,
         }}
       />
+      <Stack.Screen
+        name="teacher-tip-modal"
+        options={{
+          animation: "slide_from_bottom",
+          presentation: "containedModal",
+          headerShown: false,
+          headerShadowVisible: false,
+        }}
+      />
     </Stack>
   );
 }
