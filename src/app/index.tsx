@@ -23,7 +23,7 @@ const LESSONS = [
     image: TEACHER_TIP_IMAGE,
     title: "Teacher tip",
     description: "Introduction to the alphabet",
-    path: "/(level-one)/letter-introduction",
+    path: "teacher-tip-modal",
     isFinished: true,
     progressBarColor: "bg-[#2B4AB0]",
   },
@@ -32,7 +32,7 @@ const LESSONS = [
     image: LESSON_ONE_IMAGE,
     title: "Lesson 1",
     description: "Introduction to the alphabet",
-    path: "/(level-two)/letter-draggable",
+    path: "/(level-one)/letter-introduction",
     isFinished: false,
     progressBarColor: "bg-[#6D28D9]",
   },
@@ -41,7 +41,7 @@ const LESSONS = [
     image: LESSON_TWO_IMAGE,
     title: "Lesson 2",
     description: "Introduction to the alphabet",
-    path: "/(level-two)/draggable",
+    path: "/(level-two)/letter-draggable",
     isFinished: false,
     progressBarColor: "bg-[#B43855]",
   },
@@ -49,8 +49,8 @@ const LESSONS = [
     id: "lesson-3",
     image: LESSON_THREE_IMAGE,
     title: "Lesson 3",
-    description: "Introduction to the alphabet",
-    path: "/(level-one)/letter-introduction",
+    description: "",
+    path: "/(level-three)/listening",
     isFinished: false,
     progressBarColor: "bg-[#CA8A04]",
   },
@@ -58,8 +58,8 @@ const LESSONS = [
     id: "lesson-4",
     image: LESSON_FOUR_IMAGE,
     title: "Lesson 4",
-    description: "Introduction to the alphabet",
-    path: "/(level-one)/letter-introduction",
+    description: "Vocabulary",
+    path: "/(level-three)/listening",
     isFinished: false,
     progressBarColor: "bg-[#C07027]",
   },
@@ -133,7 +133,14 @@ const Home = () => {
   return (
     <SafeAreaView className="flex-1   bg-white">
       <FocusAwareStatusBar />
-
+      <Pressable
+        className="bg-colors-green-500 p-5"
+        onPress={() => {
+          router.push("/(level-three)/listening");
+        }}
+      >
+        <Text>Listening activity</Text>
+      </Pressable>
       <View className="py-10">
         <FlatList
           ListHeaderComponent={HomeHeader}
