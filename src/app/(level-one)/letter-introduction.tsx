@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Line } from "react-native-svg";
 
 import { CORRECT_ANSWER_3_MS_TIMEOUT } from "@/constants/timing";
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import AnimatedLetterComponent from "@/ui/components/home/animated-letter-component";
@@ -88,6 +89,10 @@ const LetterIntroduction = () => {
   const onAnimationStart = () => {
     setIsAnimating(true);
   };
+
+  const { playGuideAudio } = useGuideAudio({
+    screenName: "letter-introduction",
+  });
 
   // const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   // const [tappedAnswer, setTappedAnswer] = useState<IOption>();
@@ -216,7 +221,7 @@ const LetterIntroduction = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Introduction" modalRef={dynamicModalRef} />
+      <Header title="" onPressGuide={playGuideAudio} />
       <View
         className="flex flex-col justify-between"
         style={{

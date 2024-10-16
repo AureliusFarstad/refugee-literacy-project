@@ -5,6 +5,7 @@ import type { Sound } from "expo-av/build/Audio";
 import React, { useEffect, useRef, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import AlphabetTracing from "@/ui/components/home/alphabet-tracing";
@@ -46,6 +47,10 @@ const LetterFormation = () => {
     setIsAnimating(true);
   };
 
+  const { playGuideAudio } = useGuideAudio({
+    screenName: "letter-formation",
+  });
+
   const animatedLetterRef = useRef<AnimatedLetterComponentRef | null>(null);
 
   const playSound = async (playbackSource: AVPlaybackSource) => {
@@ -84,11 +89,9 @@ const LetterFormation = () => {
     }, 3000);
   }, []);
 
-  console.log({ isOverlayAnimation });
-
   return (
     <SafeAreaView>
-      <Header title="Formation" modalRef={dynamicModalRef} />
+      <Header title="Formation" onPressGuide={playGuideAudio} />
       <View
         style={{
           height:

@@ -4,16 +4,15 @@ import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import { MotiView } from "moti";
 import type { ReactNode } from "react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 
 import useSound from "@/core/hooks/useSound";
 import { useLevelStore } from "@/core/store/levels";
-import { SafeAreaView, Text, View } from "@/ui";
+import { SafeAreaView, View } from "@/ui";
 import ChatIndicator from "@/ui/components/chat-indicator";
 import Header from "@/ui/core/headers";
-import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
-import { EarIcon, EnSpeakerIcon, NativeSpeakerIcon } from "@/ui/icons";
+import { EnSpeakerIcon, NativeSpeakerIcon } from "@/ui/icons";
 import { UserAvatar } from "@/ui/illustrations";
 
 type Message = {
@@ -227,7 +226,6 @@ function MessageRow({
 }
 
 function Listening() {
-  const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels: _levels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
   const [status, setStatus] = useState<AudioPlayerStatus>({
@@ -373,7 +371,7 @@ function Listening() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Sound" modalRef={dynamicModalRef} />
+      <Header title="Sound" />
       <View className=" bg-[#F0F0F0]" style={styles.listContainer}>
         <FlatList
           className=""
@@ -391,18 +389,6 @@ function Listening() {
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={ItemSeparator}
         />
-        <DynamicModal ref={dynamicModalRef}>
-          <View className="rounded-lg bg-white p-4">
-            <Text>Letter sound activity</Text>
-            <View className="flex h-[72] items-center justify-center">
-              <EarIcon />
-            </View>
-            <Text className="mt-4">
-              Start your language learning adventure. Let A, B, C, and D be the
-              building blocks of your multilingual journey!
-            </Text>
-          </View>
-        </DynamicModal>
       </View>
     </SafeAreaView>
   );

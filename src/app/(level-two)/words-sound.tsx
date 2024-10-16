@@ -2,18 +2,16 @@ import clsx from "clsx";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import { router, usePathname } from "expo-router";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import Header from "@/ui/core/headers";
-import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
 import { EarIcon } from "@/ui/icons";
 import { getOptionsToRender } from "@/utils/level-one";
 
 const WordSound = () => {
-  const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels, updateLevels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
   const [isUpdatingSession, setIsUpdatingSession] = useState(false);
@@ -112,12 +110,12 @@ const WordSound = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Sound" modalRef={dynamicModalRef} />
+      <Header title="Sound" />
       <View className="mt-5 px-5">
         <LetterCaseSwitch
           isLowercase={isLowercase}
           setIsLowercase={setIsLowercase}
-          letter={activeActivity.correctAnswer.title.slice(0, 1)}
+          letter={"a"}
           backgroundColor="#F36889"
         />
       </View>
@@ -254,18 +252,6 @@ const WordSound = () => {
           ))}
         </View>
       </View>
-      <DynamicModal ref={dynamicModalRef}>
-        <View className="rounded-lg bg-white p-4">
-          <Text>Letter sound activity</Text>
-          <View className="flex h-20 items-center justify-center">
-            <EarIcon />
-          </View>
-          <Text className="mt-4">
-            Start your language learning adventure. Let A, B, C, and D be the
-            building blocks of your multilingual journey!
-          </Text>
-        </View>
-      </DynamicModal>
     </SafeAreaView>
   );
 };

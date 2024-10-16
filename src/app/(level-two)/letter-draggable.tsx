@@ -43,7 +43,7 @@ const LetterDragDrop = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Name" modalRef={dynamicModalRef} />
+      <Header title="Letter Draggable" />
 
       <View className="flex h-full items-center ">
         <View className="flex w-full flex-1 flex-col   ">
