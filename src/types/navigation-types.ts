@@ -14,3 +14,8 @@ export type LevelTwoBottomTabRoutes = {
 export type LevelThreeBottomTabRoutes = {
   listening: undefined;
 };
+
+export type CombinedRoutes =
+  | keyof LevelOneBottomTabRoutes
+  | keyof LevelTwoBottomTabRoutes
+  | keyof LevelThreeBottomTabRoutes;
