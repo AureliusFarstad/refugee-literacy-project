@@ -129,6 +129,13 @@ const Home = () => {
   return (
     <SafeAreaView className="flex-1   bg-white">
       <FocusAwareStatusBar />
+      <Pressable
+        onPress={() => {
+          router.push("/welcome-screen-modal");
+        }}
+      >
+        <Text>Welcome video</Text>
+      </Pressable>
 
       <View className="py-10">
         <FlatList
