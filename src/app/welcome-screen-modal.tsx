@@ -2,7 +2,7 @@ import WelcomeVideoAnimation from "assets/videos/welcome";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 
-import { CORRECT_ANSWER_3_MS_TIMEOUT } from "@/constants/timing";
+import { MS_300 } from "@/constants/timing";
 import useSound from "@/core/hooks/useSound";
 
 interface WelcomeScreenVideoRef {
@@ -74,7 +74,6 @@ export default function WelcomeScreen() {
   const { playSound } = useSound();
 
   const animateScreen = useCallback((slide: string) => {
-    console.log(`🌱 welcomeVideoRef.current`, welcomeVideoRef.current);
     setTimeout(() => {
       if (welcomeVideoRef.current && welcomeVideoRef.current.play) {
         welcomeVideoRef.current?.play();
@@ -82,8 +81,6 @@ export default function WelcomeScreen() {
         if (audio) {
           playSound(audio.source);
         }
-      } else {
-        console.log(`🍟🍟🍟`);
       }
     }, 1000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,7 +112,7 @@ export default function WelcomeScreen() {
   useEffect(() => {
     setTimeout(() => {
       initAnimation();
-    }, CORRECT_ANSWER_3_MS_TIMEOUT);
+    }, MS_300);
   }, [initAnimation]);
 
   return (
