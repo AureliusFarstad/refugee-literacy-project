@@ -4,6 +4,7 @@ import type { Sound } from "expo-av/build/Audio";
 import { router, usePathname } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
 
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
@@ -20,6 +21,11 @@ const WordSound = () => {
   const [isLowercase, setIsLowercase] = useState(false);
 
   const pathname = usePathname();
+
+  const { playGuideAudio } = useGuideAudio({
+    screenName: "word-matching",
+    module: "blending-module",
+  });
 
   const [activeActivity, setActiveActivity] = useState<IActivity>(
     levels[1].modules[0].sections[2].activities[0],
@@ -110,7 +116,7 @@ const WordSound = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Sound" />
+      <Header title="Sound" onPressGuide={playGuideAudio} />
       <View className="mt-5 px-5">
         <LetterCaseSwitch
           isLowercase={isLowercase}
