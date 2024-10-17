@@ -12,13 +12,7 @@ import AlphabetTracing from "@/ui/components/home/alphabet-tracing";
 import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import OverlayLetterAnimation from "@/ui/components/letter-formation/overlay-letter-animation";
 import Header from "@/ui/core/headers";
-import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
-import {
-  CustomPencilIcon,
-  EarIcon,
-  LettersNameIcon,
-  PencilIcon,
-} from "@/ui/icons";
+import { CustomPencilIcon, EarIcon, LettersNameIcon } from "@/ui/icons";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 type AnimatedLetterComponentRef = {
@@ -26,7 +20,6 @@ type AnimatedLetterComponentRef = {
 };
 
 const LetterFormation = () => {
-  const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
 
@@ -60,7 +53,6 @@ const LetterFormation = () => {
       if (soundResponse) {
         setSound(soundResponse);
       }
-      console.log("Playing Sound");
       await soundResponse.playAsync();
     } catch (error) {
       console.log("error in playSound", error);
@@ -188,19 +180,6 @@ const LetterFormation = () => {
           </View>
         </View>
       </View>
-
-      <DynamicModal ref={dynamicModalRef}>
-        <View className="rounded-lg bg-white p-4">
-          <Text>Letter formation activity</Text>
-          <View className="flex h-20 items-center justify-center">
-            <PencilIcon />
-          </View>
-          <Text className="mt-4">
-            Start your language learning adventure. Let A, B, C, and D be the
-            building blocks of your multilingual journey!
-          </Text>
-        </View>
-      </DynamicModal>
     </SafeAreaView>
   );
 };
