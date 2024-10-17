@@ -7,8 +7,10 @@ export type LevelOneBottomTabRoutes = {
 };
 export type LevelTwoBottomTabRoutes = {
   "letter-draggable": undefined;
-  draggable: undefined;
   "words-sound": undefined;
+  "blending-game": undefined;
+  "word-matching": undefined;
+  "blending-introduction": undefined;
 };
 
 export type LevelThreeBottomTabRoutes = {

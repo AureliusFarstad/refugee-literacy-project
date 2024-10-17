@@ -7,9 +7,10 @@ import { getGuides } from "@/utils/shared";
 
 type GuideAudioProps = {
   screenName: CombinedRoutes;
+  module?: keyof GuidanceType;
 };
 
-export const useGuideAudio = ({ screenName }: GuideAudioProps) => {
+export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
   const [sound, setSound] = useState<Sound>();
 
   const playSequentialSounds = async (playbackSources: AVPlaybackSource[]) => {
@@ -42,7 +43,7 @@ export const useGuideAudio = ({ screenName }: GuideAudioProps) => {
 
   const playGuideAudio = async () => {
     try {
-      const playbackSources = await getGuides(screenName);
+      const playbackSources = await getGuides(screenName, module);
       await playSequentialSounds(playbackSources);
     } catch (error) {
       console.log("error in playGuideAudio", error);

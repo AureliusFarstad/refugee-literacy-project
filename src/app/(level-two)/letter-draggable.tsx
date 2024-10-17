@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { SafeAreaView, TouchableOpacity, View } from "@/ui";
 import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import DragDrop from "@/ui/components/level-two/dragdrop";
@@ -39,9 +40,14 @@ const activeActivity = {
 const LetterDragDrop = () => {
   const [isLowercase, setIsLowercase] = useState(false);
 
+  const { playGuideAudio } = useGuideAudio({
+    screenName: "blending-introduction",
+    module: "blending-module",
+  });
+
   return (
     <SafeAreaView>
-      <Header title="Letter Draggable" />
+      <Header title="Letter Draggable" onPressGuide={playGuideAudio} />
 
       <View className="flex h-full items-center ">
         <View className="flex w-full flex-1 flex-col   ">

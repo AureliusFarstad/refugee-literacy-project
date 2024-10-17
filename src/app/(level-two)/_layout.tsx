@@ -28,8 +28,14 @@ const tabsIcons: TabIconsType = {
       secondaryColor="#E39AAB"
     />
   ),
-  draggable: (props: SvgProps) => <LetterFormationIcon {...props} />,
+  "word-matching": (props: SvgProps) => <LetterFormationIcon {...props} />,
   "words-sound": (props: SvgProps) => (
+    <EarTabBarIcon {...props} primaryColor="#F36889" secondaryColor="#E39AAB" />
+  ),
+  "blending-game": (props: SvgProps) => (
+    <EarTabBarIcon {...props} primaryColor="#F36889" secondaryColor="#E39AAB" />
+  ),
+  "blending-introduction": (props: SvgProps) => (
     <EarTabBarIcon {...props} primaryColor="#F36889" secondaryColor="#E39AAB" />
   ),
 };
@@ -52,6 +58,18 @@ const tabs: TabType[] = [
   {
     name: "words-sound",
     label: "Word Sound",
+  },
+  {
+    name: "word-matching",
+    label: "Word Matching",
+  },
+  {
+    name: "blending-game",
+    label: "Blending Game",
+  },
+  {
+    name: "blending-introduction",
+    label: "Blending Introduction",
   },
 ];
 

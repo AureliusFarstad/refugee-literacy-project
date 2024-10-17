@@ -4,22 +4,6 @@ import type { CombinedRoutes } from "@/types/navigation-types";
 
 type AudioFile = AVPlaybackSource;
 
-interface AudioSection {
-  "audio-files": AudioFile | AudioFile[];
-}
-
-interface AlphabetModule {
-  "letter-introduction": AudioSection;
-  "letter-formation": AudioSection;
-  "letter-sound": AudioSection;
-  "letter-name": AudioSection;
-  "letter-matching": AudioSection;
-}
-
-interface GuidanceType {
-  "alphabet-module": AlphabetModule;
-}
-
 const guidance: GuidanceType = {
   "alphabet-module": {
     "letter-introduction": {
@@ -51,16 +35,36 @@ const guidance: GuidanceType = {
       ],
     },
   },
+  "blending-module": {
+    "blending-game": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partA.mp3"),
+        require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partB.mp3"),
+        require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partC.mp3"),
+        require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partD.mp3"),
+      ],
+    },
+    "blending-introduction": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/guidance/blending-module/blending-introduction/blending1_lesson1_info.mp3"),
+      ],
+    },
+    "word-matching": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/guidance/blending-module/word-matching/blending1_game1_info.mp3"),
+      ],
+    },
+  },
 };
 
 export const getGuides = async (
   screenName: CombinedRoutes,
+  module: keyof GuidanceType = "alphabet-module",
 ): Promise<AudioFile[]> => {
   try {
-    const module = "alphabet-module" as const;
     if (guidance[module] && screenName in guidance[module]) {
       const audioFiles =
-        guidance[module][screenName as keyof AlphabetModule]["audio-files"];
+        guidance[module][screenName as keyof GuidanceMOdule]["audio-files"];
       return Array.isArray(audioFiles) ? audioFiles : [audioFiles];
     }
     throw new Error(`Screen name ${screenName} not found in guidance`);
