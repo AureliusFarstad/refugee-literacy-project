@@ -1,0 +1,29 @@
+{
+    "_comment": [
+        "This file contains the file paths for audio/character svg combinations of conversations in the app",
+        "The keys are the names of the conversations",
+        "profile_image is the svg file path for a character. relative to assets/images/conversation-profiles ",
+        "audio_file is the mp4 file path for the conversation audio. relative to assets/multilingual-audio/{language}/conversations"
+    ],
+    "how_are_you": {
+        "conversation_length": 4,
+        "conversation_assets": {
+            "1": {
+                "profile_image": "female-yellow.svg",
+                "audio_file": "how_are_you/conversation1_how_are_you_partA_female.mp3"
+            },
+            "2": {
+                "profile_image": "male-yellow.svg",
+                "audio_file": "how_are_you/conversation1_how_are_you_partB_male.mp3"
+            },
+            "3": {
+                "profile_image": "female-yellow.svg",
+                "audio_file": "how_are_you/conversation1_how_are_you_partC_female.mp3"
+            },
+            "4": {
+                "profile_image": "male-yellow.svg",
+                "audio_file": "how_are_you/conversation1_how_are_you_partD_male.mp3"
+            }
+        }
+    }
+}
