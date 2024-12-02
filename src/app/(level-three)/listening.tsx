@@ -37,7 +37,7 @@ const DATA: Message[] = [
     mediaType: "audio",
     englishAudioResources: {
       gender: "F",
-      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA.mp3"),
+      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_female.mp3"),
     },
     nativeAudioResources: {
       gender: "F",
@@ -52,7 +52,7 @@ const DATA: Message[] = [
     mediaType: "audio",
     englishAudioResources: {
       gender: "M",
-      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partB.mp3"),
+      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partB_male.mp3"),
     },
     nativeAudioResources: {
       gender: "M",
@@ -67,7 +67,7 @@ const DATA: Message[] = [
     mediaType: "audio",
     englishAudioResources: {
       gender: "F",
-      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partC.mp3"),
+      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partC_female.mp3"),
     },
     nativeAudioResources: {
       gender: "F",
@@ -82,7 +82,7 @@ const DATA: Message[] = [
     mediaType: "audio",
     englishAudioResources: {
       gender: "M",
-      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partD.mp3"),
+      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partD_male.mp3"),
     },
     nativeAudioResources: {
       gender: "M",
@@ -372,7 +372,7 @@ function Listening() {
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Sound" />
-      <View className=" bg-[#F0F0F0]" style={styles.listContainer}>
+      <View className=" " style={styles.listContainer}>
         <FlatList
           className=""
           data={DATA}
@@ -399,12 +399,14 @@ export default Listening;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#F0F0F0",
   },
   listContainer: {
     flex: 1,
-    backgroundColor: "#F0F0F0",
+    // backgroundColor: "#F0F0F0",
   },
   flatListContent: {
     flexGrow: 1,
+    // backgroundColor: "#F0F0F0",
   },
 });
