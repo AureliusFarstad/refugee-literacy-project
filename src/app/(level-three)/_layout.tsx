@@ -2,6 +2,7 @@ import { Tabs } from "expo-router";
 import React from "react";
 import type { SvgProps } from "react-native-svg";
 
+import { LEVEL_COLORS } from "@/constants/routes";
 import type { LevelThreeBottomTabRoutes } from "@/types/navigation-types";
 import { TeacherTipsIcon } from "@/ui/icons";
 import { IS_IOS } from "@/utils/layout";
@@ -20,8 +21,22 @@ const tabsIcons: TabIconsType = {
   listening: (props: SvgProps) => (
     <TeacherTipsIcon
       {...props}
-      primaryColor="#F36889"
-      secondaryColor="#E39AAB"
+      primaryColor={LEVEL_COLORS.levelThree.primary}
+      secondaryColor={LEVEL_COLORS.levelThree.secondary}
+    />
+  ),
+  "audio-ordering": (props: SvgProps) => (
+    <TeacherTipsIcon
+      {...props}
+      primaryColor={LEVEL_COLORS.levelThree.primary}
+      secondaryColor={LEVEL_COLORS.levelThree.secondary}
+    />
+  ),
+  "video-explanation": (props: SvgProps) => (
+    <TeacherTipsIcon
+      {...props}
+      primaryColor={LEVEL_COLORS.levelThree.primary}
+      secondaryColor={LEVEL_COLORS.levelThree.secondary}
     />
   ),
 };
@@ -41,6 +56,14 @@ const tabs: TabType[] = [
     name: "listening",
     label: "Listening",
   },
+  {
+    name: "audio-ordering",
+    label: "Audio",
+  },
+  {
+    name: "video-explanation",
+    label: "Video",
+  },
 ];
 
 export default function LevelThreeTabLayout() {
@@ -49,7 +72,7 @@ export default function LevelThreeTabLayout() {
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#F36889",
+          backgroundColor: LEVEL_COLORS.levelThree.primary,
           paddingTop: IS_IOS ? 16 : 4,
           height: IS_IOS ? 108 : 80,
           paddingHorizontal: 12,
