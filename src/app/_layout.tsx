@@ -72,6 +72,7 @@ function RootLayoutNav() {
       <Stack.Screen name="(level-one)" options={{ headerShown: false }} />
       <Stack.Screen name="(level-two)" options={{ headerShown: false }} />
       <Stack.Screen name="(level-three)" options={{ headerShown: false }} />
+      <Stack.Screen name="(level-four)" options={{ headerShown: false }} />
       <Stack.Screen
         name="modal"
         options={{
