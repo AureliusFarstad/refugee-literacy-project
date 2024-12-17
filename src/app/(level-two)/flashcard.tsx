@@ -76,7 +76,9 @@ const FlipCard = ({
   cardStyle,
   direction = "y",
   duration = 500,
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   RegularContent,
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   FlippedContent,
 }: {
   isFlipped: boolean;

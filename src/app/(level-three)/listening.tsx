@@ -102,7 +102,7 @@ type AudioButtonProps = {
 function AudioButton({ onPress, icon }: AudioButtonProps) {
   return (
     <TouchableOpacity
-      className="flex size-[40] flex-row items-center justify-center rounded-full bg-[#9E9E9E]"
+      className="flex size-[40] flex-row items-center justify-center rounded-full bg-[#EEEEEE]"
       onPress={onPress}
     >
       {icon}
@@ -120,9 +120,19 @@ function AudioControls({ onPlayEnglish, onPlayNative }: AudioControlsProps) {
     <MotiView
       from={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex h-[72px] flex-row items-center rounded-lg border border-[#FAFAFA] bg-[#D9D9D9] px-6 py-4"
+      className="flex h-[72px] flex-row items-center rounded-lg border border-[#FAFAFA] bg-[#F4F4F4] px-6 py-4"
     >
-      <AudioButton onPress={onPlayEnglish} icon={<EnSpeakerIcon />} />
+      <AudioButton
+        onPress={onPlayEnglish}
+        icon={
+          <EnSpeakerIcon
+            focused={true}
+            primaryColor="#F9C720"
+            secondaryColor="#FAECBB"
+            backgroundColor="#ffffff"
+          />
+        }
+      />
       <View className="w-2.5" />
       <AudioButton onPress={onPlayNative} icon={<NativeSpeakerIcon />} />
     </MotiView>
@@ -399,14 +409,15 @@ export default Listening;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F0F0F0",
+    backgroundColor: "#ffffff",
   },
   listContainer: {
     flex: 1,
-    // backgroundColor: "#F0F0F0",
+    backgroundColor: "#ffffff",
   },
   flatListContent: {
     flexGrow: 1,
+    backgroundColor: "#ffffff",
     // backgroundColor: "#F0F0F0",
   },
 });

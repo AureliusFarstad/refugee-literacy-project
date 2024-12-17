@@ -1236,11 +1236,6 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNSound (0.11.2):
-    - React-Core
-    - RNSound/Core (= 0.11.2)
-  - RNSound/Core (0.11.2):
-    - React-Core
   - RNSVG (14.2.0):
     - React-Core
   - SDWebImage (5.17.0):
@@ -1339,7 +1334,6 @@ DEPENDENCIES:
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
-  - RNSound (from `../node_modules/react-native-sound`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1518,8 +1512,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  RNSound:
-    :path: "../node_modules/react-native-sound"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -1613,7 +1605,6 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: bf604f2da947838513394d411364300d6e62e878
   RNReanimated: f1ce27e7d23e6f941024b862ad76a7fdae93dea9
   RNScreens: 17e2f657f1b09a71ec3c821368a04acbb7ebcb46
-  RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
   RNSVG: 963a95f1f5d512a13d11ffd50d351c87fb5c6890
   SDWebImage: 750adf017a315a280c60fde706ab1e552a3ae4e9
   SDWebImageAVIFCoder: 8348fef6d0ec69e129c66c9fe4d74fbfbf366112
@@ -1624,4 +1615,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 5a34216c5bfc196aa6191ad76edae3996648602b
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

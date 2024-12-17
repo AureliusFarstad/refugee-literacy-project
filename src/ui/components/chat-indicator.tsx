@@ -7,44 +7,50 @@ const ChatIndicator = () => {
       <MotiView
         from={{
           scale: 0.5,
+          backgroundColor: "#FDE7A1",
         }}
         animate={{
           scale: 1,
+          backgroundColor: "#FBD65C",
         }}
         transition={{
           loop: true,
           duration: 1500,
           delay: 300,
         }}
-        className="size-4 rounded-full bg-[#D9D9D9]"
+        className="size-4 rounded-full "
       />
       <MotiView
         from={{
           scale: 0.5,
+          backgroundColor: "#FCE184",
         }}
         animate={{
           scale: 1,
+          backgroundColor: "#FBD65C",
         }}
         transition={{
           loop: true,
           duration: 1500,
           delay: 700,
         }}
-        className="mx-0.5 size-4 rounded-full bg-[#D9D9D9]"
+        className="mx-0.5 size-4 rounded-full "
       />
       <MotiView
         from={{
           scale: 0.5,
+          backgroundColor: "#FDE7A1",
         }}
         animate={{
           scale: 1,
+          backgroundColor: "#FBD65C",
         }}
         transition={{
           loop: true,
           duration: 1500,
           delay: 1000,
         }}
-        className="size-4 rounded-full bg-[#D9D9D9]"
+        className="size-4 rounded-full "
       />
     </>
   );
