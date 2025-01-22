@@ -3,44 +3,47 @@ import React from "react";
 import type { SvgProps } from "react-native-svg";
 
 import { LEVEL_COLORS } from "@/constants/routes";
-import type { LevelTwoBottomTabRoutes } from "@/types/navigation-types";
-import {
-  EarTabBarIcon,
-  LetterFormationIcon,
-  TeacherTipsIcon,
-} from "@/ui/icons";
+import type { LevelFourBottomTabRoutes } from "@/types/navigation-types";
+import { TeacherTipsIcon } from "@/ui/icons";
 import { IS_IOS } from "@/utils/layout";
 
 type BarIconType = {
-  name: keyof LevelTwoBottomTabRoutes;
+  name: keyof LevelFourBottomTabRoutes;
   color: string;
   focused: boolean;
 };
 
 type TabIconsType = {
-  [key in keyof LevelTwoBottomTabRoutes]: (props: SvgProps) => JSX.Element;
+  [key in keyof LevelFourBottomTabRoutes]: (props: SvgProps) => JSX.Element;
 };
 
 const tabsIcons: TabIconsType = {
-  spelling: (props: SvgProps) => (
+  flashcard: (props: SvgProps) => (
     <TeacherTipsIcon
       {...props}
-      primaryColor={LEVEL_COLORS.levelTwo.primary}
-      secondaryColor={LEVEL_COLORS.levelTwo.secondary}
+      primaryColor={LEVEL_COLORS.levelFour.primary}
+      secondaryColor="#FFF6D7"
     />
   ),
-  "multiple-choice": (props: SvgProps) => (
-    <LetterFormationIcon
+  "video-explanation": (props: SvgProps) => (
+    <TeacherTipsIcon
       {...props}
-      primaryColor={LEVEL_COLORS.levelTwo.primary}
-      secondaryColor={LEVEL_COLORS.levelTwo.secondary}
+      primaryColor={LEVEL_COLORS.levelFour.primary}
+      secondaryColor="#FFF6D7"
     />
   ),
-  flashcard: (props: SvgProps) => (
-    <EarTabBarIcon
+  "picture-multiple-choice": (props: SvgProps) => (
+    <TeacherTipsIcon
       {...props}
-      primaryColor={LEVEL_COLORS.levelTwo.primary}
-      secondaryColor={LEVEL_COLORS.levelTwo.secondary}
+      primaryColor={LEVEL_COLORS.levelFour.primary}
+      secondaryColor="#FFF6D7"
+    />
+  ),
+  "audio-multiple-choice": (props: SvgProps) => (
+    <TeacherTipsIcon
+      {...props}
+      primaryColor={LEVEL_COLORS.levelFour.primary}
+      secondaryColor="#FFF6D7"
     />
   ),
 };
@@ -51,32 +54,36 @@ const BarIcon = ({ color, name, ...reset }: BarIconType) => {
 };
 
 type TabType = {
-  name: keyof LevelTwoBottomTabRoutes;
+  name: keyof LevelFourBottomTabRoutes;
   label: string;
 };
 
 const tabs: TabType[] = [
   {
-    name: "spelling",
-    label: "Spelling",
-  },
-  {
-    name: "multiple-choice",
-    label: "Multiple Choice",
-  },
-  {
     name: "flashcard",
-    label: "Flashcard",
+    label: "Introduction",
+  },
+  {
+    name: "video-explanation",
+    label: "Video",
+  },
+  {
+    name: "picture-multiple-choice",
+    label: "Audio",
+  },
+  {
+    name: "audio-multiple-choice",
+    label: "Audio",
   },
 ];
 
-export default function LevelTwoTabLayout() {
+export default function TabLayout() {
   return (
     <Tabs
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: LEVEL_COLORS.levelTwo.primary,
+          backgroundColor: LEVEL_COLORS.levelFour.primary,
           paddingTop: IS_IOS ? 16 : 4,
           height: IS_IOS ? 108 : 80,
           paddingHorizontal: 12,

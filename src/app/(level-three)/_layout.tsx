@@ -3,44 +3,40 @@ import React from "react";
 import type { SvgProps } from "react-native-svg";
 
 import { LEVEL_COLORS } from "@/constants/routes";
-import type { LevelTwoBottomTabRoutes } from "@/types/navigation-types";
-import {
-  EarTabBarIcon,
-  LetterFormationIcon,
-  TeacherTipsIcon,
-} from "@/ui/icons";
+import type { LevelThreeBottomTabRoutes } from "@/types/navigation-types";
+import { TeacherTipsIcon } from "@/ui/icons";
 import { IS_IOS } from "@/utils/layout";
 
 type BarIconType = {
-  name: keyof LevelTwoBottomTabRoutes;
+  name: keyof LevelThreeBottomTabRoutes;
   color: string;
   focused: boolean;
 };
 
 type TabIconsType = {
-  [key in keyof LevelTwoBottomTabRoutes]: (props: SvgProps) => JSX.Element;
+  [key in keyof LevelThreeBottomTabRoutes]: (props: SvgProps) => JSX.Element;
 };
 
 const tabsIcons: TabIconsType = {
-  spelling: (props: SvgProps) => (
+  listening: (props: SvgProps) => (
     <TeacherTipsIcon
       {...props}
-      primaryColor={LEVEL_COLORS.levelTwo.primary}
-      secondaryColor={LEVEL_COLORS.levelTwo.secondary}
+      primaryColor={LEVEL_COLORS.levelThree.primary}
+      secondaryColor={LEVEL_COLORS.levelThree.secondary}
     />
   ),
-  "multiple-choice": (props: SvgProps) => (
-    <LetterFormationIcon
+  "audio-ordering": (props: SvgProps) => (
+    <TeacherTipsIcon
       {...props}
-      primaryColor={LEVEL_COLORS.levelTwo.primary}
-      secondaryColor={LEVEL_COLORS.levelTwo.secondary}
+      primaryColor={LEVEL_COLORS.levelThree.primary}
+      secondaryColor={LEVEL_COLORS.levelThree.secondary}
     />
   ),
-  flashcard: (props: SvgProps) => (
-    <EarTabBarIcon
+  "video-explanation": (props: SvgProps) => (
+    <TeacherTipsIcon
       {...props}
-      primaryColor={LEVEL_COLORS.levelTwo.primary}
-      secondaryColor={LEVEL_COLORS.levelTwo.secondary}
+      primaryColor={LEVEL_COLORS.levelThree.primary}
+      secondaryColor={LEVEL_COLORS.levelThree.secondary}
     />
   ),
 };
@@ -51,32 +47,32 @@ const BarIcon = ({ color, name, ...reset }: BarIconType) => {
 };
 
 type TabType = {
-  name: keyof LevelTwoBottomTabRoutes;
+  name: keyof LevelThreeBottomTabRoutes;
   label: string;
 };
 
 const tabs: TabType[] = [
   {
-    name: "spelling",
-    label: "Spelling",
+    name: "listening",
+    label: "Listening",
   },
   {
-    name: "multiple-choice",
-    label: "Multiple Choice",
+    name: "audio-ordering",
+    label: "Audio",
   },
   {
-    name: "flashcard",
-    label: "Flashcard",
+    name: "video-explanation",
+    label: "Video",
   },
 ];
 
-export default function LevelTwoTabLayout() {
+export default function LevelThreeTabLayout() {
   return (
     <Tabs
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: LEVEL_COLORS.levelTwo.primary,
+          backgroundColor: LEVEL_COLORS.levelThree.primary,
           paddingTop: IS_IOS ? 16 : 4,
           height: IS_IOS ? 108 : 80,
           paddingHorizontal: 12,
@@ -94,6 +90,7 @@ export default function LevelTwoTabLayout() {
             name={name}
             options={{
               title: label,
+              headerShown: false,
               // eslint-disable-next-line react/no-unstable-nested-components
               tabBarIcon: ({ color, focused }) => (
                 <BarIcon name={name} color={color} focused={focused} />

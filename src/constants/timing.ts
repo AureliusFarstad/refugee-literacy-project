@@ -1,3 +1,3 @@
-export const CORRECT_ANSWER_TIMEOUT = 5000;
+export const FIVE_SEC = 5000;
 
-export const CORRECT_ANSWER_3_MS_TIMEOUT = 300;
+export const MS_300 = 300;

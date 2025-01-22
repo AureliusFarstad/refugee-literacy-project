@@ -1,39 +1,53 @@
 {
-    "_comment": [
-        "These are the audio files corresponding to the top right green audio button in the app",
-        "This audio explains the content and functions of the current screen",
-        "The audio file paths are relative to: assets/multilingual-audio/{language}/"
-    ],
-    "alphabet-module": {
-        "letter-introduction": {
-            "audio-files": [
-                "alphabet-module/letter-introduction/phonics1_lesson1_info_partA.mp3",
-                "alphabet-module/letter-introduction/phonics1_lesson1_info_partB.mp3",
-                "alphabet-module/letter-introduction/phonics1_lesson1_info_partC.mp3",
-                "alphabet-module/letter-introduction/phonics1_lesson1_info_partD.mp3",
-                "alphabet-module/letter-introduction/phonics1_lesson1_info_partE.mp3"
-            ]
-        },
-        "letter-formation": {
-            "audio-files": [
-                "alphabet-module/letter-formation/phonics1_practice1_info.mp3"
-            ]
-        },
-        "letter-sound": {
-            "audio-files": [
-                "alphabet-module/letter-sounds/phonics1_game1_info_partA.mp3",
-                "alphabet-module/letter-sounds/phonics1_game1_info_partB.mp3"
-            ]
-        },
-        "letter-name": {
-            "audio-files": [
-                "alphabet-module/letter-names/phonics1_game2_info.mp3"
-            ]
-        },
-        "letter-matching": {
-            "audio-files": [
-                "alphabet-module/letter-matching/phonics1_game3_info.mp3"
-            ]
-        }
+  "_comment": [
+    "These are the audio files corresponding to the top right green audio button in the app",
+    "This audio explains the content and functions of the current screen",
+    "The audio file paths are relative to: assets/multilingual-audio/{language}/"
+  ],
+  "alphabet-module": {
+    "letter-introduction": {
+      "audio-files": [
+        "alphabet-module/letter-introduction/phonics1_lesson1_info_partA.mp3",
+        "alphabet-module/letter-introduction/phonics1_lesson1_info_partB.mp3",
+        "alphabet-module/letter-introduction/phonics1_lesson1_info_partC.mp3",
+        "alphabet-module/letter-introduction/phonics1_lesson1_info_partD.mp3",
+        "alphabet-module/letter-introduction/phonics1_lesson1_info_partE.mp3"
+      ]
+    },
+    "letter-formation": {
+      "audio-files": [
+        "alphabet-module/letter-formation/phonics1_practice1_info.mp3"
+      ]
+    },
+    "letter-sound": {
+      "audio-files": [
+        "alphabet-module/letter-sounds/phonics1_game1_info_partA.mp3",
+        "alphabet-module/letter-sounds/phonics1_game1_info_partB.mp3"
+      ]
+    },
+    "letter-name": {
+      "audio-files": ["alphabet-module/letter-names/phonics1_game2_info.mp3"]
+    },
+    "letter-matching": {
+      "audio-files": ["alphabet-module/letter-matching/phonics1_game3_info.mp3"]
     }
+  },
+  "blending-module": {
+    "blending-game": {
+      "audio-files": [
+        "blending-module/blending-game/blending1_practice1_info_partA.mp3",
+        "blending-module/blending-game/blending1_practice1_info_partB.mp3",
+        "blending-module/blending-game/blending1_practice1_info_partC.mp3",
+        "blending-module/blending-game/blending1_practice1_info_partD.mp3"
+      ]
+    },
+    "blending-introduction": {
+      "audio-files": [
+        "blending-module/blending-introduction/blending1_lesson1_info.mp3"
+      ]
+    },
+    "word-matching": {
+      "audio-files": ["blending-module/word-matching/blending1_game1_info.mp3"]
+    }
+  }
 }

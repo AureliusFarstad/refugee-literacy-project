@@ -2,19 +2,18 @@ import clsx from "clsx";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import { router, usePathname } from "expo-router";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-import { CORRECT_ANSWER_TIMEOUT } from "@/constants/timing";
+import { FIVE_SEC } from "@/constants/timing";
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import Header from "@/ui/core/headers";
-import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
-import { EarIcon, LettersNameIcon } from "@/ui/icons";
+import { LettersNameIcon } from "@/ui/icons";
 import { getOptionsToRender } from "@/utils/level-one";
 
 const LetterName = () => {
-  const dynamicModalRef = useRef<DynamicModalRefType>(null);
   const { levels, updateLevels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
   const [tappedAnswer, setTappedAnswer] = useState<IOption>();
@@ -23,6 +22,10 @@ const LetterName = () => {
   const [isLowercase, setIsLowercase] = useState(false);
 
   const pathname = usePathname();
+
+  const { playGuideAudio } = useGuideAudio({
+    screenName: "letter-name",
+  });
 
   const [activeActivity, setActiveActivity] =
     useState<IActivityWithSoundAndName>(
@@ -116,7 +119,7 @@ const LetterName = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Name" modalRef={dynamicModalRef} />
+      <Header title="Name" onPressGuide={playGuideAudio} />
       <View className="px-5">
         <LetterCaseSwitch
           isLowercase={isLowercase}
@@ -210,7 +213,7 @@ const LetterName = () => {
                     setTappedAnswer(undefined);
                     initNextActivity();
                     router.back();
-                  }, CORRECT_ANSWER_TIMEOUT);
+                  }, FIVE_SEC);
                 } else {
                   setIncorrectAnswers((prevIncorrectAnswers) => [
                     ...prevIncorrectAnswers,
@@ -251,18 +254,6 @@ const LetterName = () => {
           ))}
         </View>
       </View>
-      <DynamicModal ref={dynamicModalRef}>
-        <View className="rounded-lg bg-white p-4">
-          <Text>Letter name activity</Text>
-          <View className="flex h-20 items-center justify-center">
-            <EarIcon />
-          </View>
-          <Text className="mt-4">
-            Start your language learning adventure. Let A, B, C, and D be the
-            building blocks of your multilingual journey!
-          </Text>
-        </View>
-      </DynamicModal>
     </SafeAreaView>
   );
 };
