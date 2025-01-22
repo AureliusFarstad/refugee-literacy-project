@@ -11,7 +11,7 @@ const ChatIndicator = () => {
         }}
         animate={{
           scale: 1,
-          backgroundColor: "#FBD65C",
+          backgroundColor: "#FDE7A1",
         }}
         transition={{
           loop: true,
@@ -27,19 +27,19 @@ const ChatIndicator = () => {
         }}
         animate={{
           scale: 1,
-          backgroundColor: "#FBD65C",
+          backgroundColor: "#FCE184",
         }}
         transition={{
           loop: true,
           duration: 1500,
           delay: 700,
         }}
-        className="mx-0.5 size-4 rounded-full "
+        className="mx-1 size-4 rounded-full "
       />
       <MotiView
         from={{
           scale: 0.5,
-          backgroundColor: "#FDE7A1",
+          backgroundColor: "#FBD65B",
         }}
         animate={{
           scale: 1,

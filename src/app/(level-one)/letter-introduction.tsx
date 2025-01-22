@@ -222,7 +222,7 @@ const LetterIntroduction = () => {
         }}
       >
         <View>
-          <View className=" ">
+          <View className=" border-yellow-500">
             <View className="flex items-center justify-center">
               <View className="flex flex-row rounded-full bg-colors-purple-200 p-4">
                 <TouchableOpacity

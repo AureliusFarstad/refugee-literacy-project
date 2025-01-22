@@ -296,9 +296,9 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
       onDragEnd={handleDragEnd}
       onBegin={handleBegin}
       onFinalize={handleFinalize}
-      style={{ height: 400, width: WIDTH }}
+      style={{ height: 500, width: WIDTH }}
     >
-      <View className="mb-10 mt-24 flex  border-4">
+      <View className="mb-10  flex px-4 ">
         {activeActivity.correctAnswer.alphabets.map((item, index) => {
           const offset: "first" | "second" | "third" =
             OFFSET_VALUES_FOR_INDICES[index];
@@ -312,7 +312,7 @@ export const DragDrop = ({ activeActivity }: DragDropProps) => {
                     : undefined
                 }
                 className={clsx(
-                  "z-50 my-10 flex w-3/4 items-center justify-center rounded-full  ",
+                  "z-50 my-10 flex w-3/4 items-center justify-center rounded-full py-4  ",
                   {
                     "bg-[#8AC65B]": dynamicData.value.elements[offset]?.content,
                     "bg-[#F7D6DE] border-4 border-dashed border-[#F36889]":

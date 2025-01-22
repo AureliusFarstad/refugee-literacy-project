@@ -6,6 +6,9 @@ import { MotiView } from "moti";
 import type { ReactNode } from "react";
 import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { Slider } from "react-native-awesome-slider";
+import { PauseIcon, PlayIcon } from "react-native-heroicons/solid";
+import { useSharedValue } from "react-native-reanimated";
 
 import useSound from "@/core/hooks/useSound";
 import { useLevelStore } from "@/core/store/levels";
@@ -168,6 +171,7 @@ function MessageRow({
     if (isAnimated) {
       return (
         <View className="flex h-[72] flex-row items-end justify-end">
+          {/* TODO: avatar enhancement */}
           {isEven && <View className="mr-4">{item.avatar}</View>}
           <AudioControls
             onPlayEnglish={() =>
@@ -252,6 +256,12 @@ function Listening() {
     step: "avatar",
     rowsAnimated: [],
   });
+
+  const [isSliding, setIsSliding] = useState(false);
+
+  const progressValue = useSharedValue(activeRow.number);
+  const min = useSharedValue(0);
+  const max = useSharedValue(DATA.length - 1);
 
   const onPlaybackStatusUpdate = useCallback(
     (playbackStatus: AVPlaybackStatus) => {
@@ -379,12 +389,132 @@ function Listening() {
     }
   };
 
+  /**
+   * @see https://claude.ai/chat/bf12bc91-c182-4c01-af70-25b9b42e579a
+   */
+
+  useEffect(() => {
+    progressValue.value = activeRow.number;
+  }, [activeRow.number, progressValue]);
+
+  const handleSliderChange = useCallback(
+    async (value: number) => {
+      const newIndex = Math.round(value);
+
+      // Stop current audio if playing
+      if (sound) {
+        await sound.stopAsync();
+        await sound.unloadAsync();
+      }
+
+      // Update active row state
+      setActiveRow({
+        number: newIndex,
+        step: "audio-controls",
+        rowsAnimated: Array.from({ length: newIndex }, (_, i) => i),
+      });
+
+      // Play audio for the new position
+      playSound(newIndex);
+    },
+    [sound, playSound],
+  );
+
+  const handleReplay = useCallback(async () => {
+    // Stop current audio if playing
+    if (sound) {
+      await sound.stopAsync();
+      await sound.unloadAsync();
+    }
+
+    // Reset all states
+    setActiveRow({
+      number: 0,
+      step: "avatar",
+      rowsAnimated: [],
+    });
+
+    progressValue.value = 0;
+    setIsSliding(false);
+    setStatus({
+      isLoaded: false,
+      isPlaying: false,
+      isBuffering: false,
+      didJustFinish: false,
+    });
+  }, [sound, progressValue]);
+
+  useEffect(() => {
+    if (!isSliding) {
+      progressValue.value = activeRow.number;
+    }
+  }, [activeRow.number, progressValue, isSliding]);
+
+  console.log(status);
+
+  const isConversationActive = useCallback(() => {
+    // Check if conversation is at the end
+    const isAtEnd = activeRow.number === DATA.length - 1;
+
+    // Check if the conversation is in a playing state
+    const isPlaying = status.isLoaded && status.isPlaying;
+
+    // Check if we're in an active step (avatar, chat-indicator, or playing audio)
+    const isActiveStep =
+      activeRow.step === "avatar" ||
+      activeRow.step === "chat-indicator" ||
+      (activeRow.step === "audio-controls" && !status.didJustFinish);
+
+    // Return true only if we're not at the end and either playing or in an active step
+    return !isAtEnd && (isPlaying || isActiveStep);
+  }, [
+    activeRow.number,
+    activeRow.step,
+    status.isLoaded,
+    status.isPlaying,
+    status.didJustFinish,
+  ]);
+
+  const isPlayingConversation = isConversationActive();
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Sound" />
+      <View className="flex h-10 flex-row px-4">
+        <TouchableOpacity
+          onPress={handleReplay}
+          className="mr-2 flex size-6 items-center justify-center"
+        >
+          <View className="flex size-6 items-center justify-center rounded-full bg-yellow-400">
+            {isPlayingConversation || !status.isPlaying ? (
+              <PauseIcon color={"white"} size={12} />
+            ) : (
+              <PlayIcon color={"white"} size={12} />
+            )}
+          </View>
+        </TouchableOpacity>
+        <Slider
+          style={{
+            height: 24,
+          }}
+          theme={{
+            bubbleTextColor: "#F9C720",
+            minimumTrackTintColor: "#F9C720",
+            maximumTrackTintColor: "#EEEEEE",
+            bubbleBackgroundColor: "#F9C720",
+          }}
+          progress={progressValue}
+          minimumValue={min}
+          maximumValue={max}
+          onSlidingStart={() => setIsSliding(true)}
+          onSlidingComplete={(value) => {
+            setIsSliding(false);
+            handleSliderChange(value);
+          }}
+        />
+      </View>
       <View className=" " style={styles.listContainer}>
         <FlatList
-          className=""
           data={DATA}
           renderItem={({ item, index }) => (
             <MessageRow
