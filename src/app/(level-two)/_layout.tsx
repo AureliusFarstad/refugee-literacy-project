@@ -2,6 +2,7 @@ import { Tabs } from "expo-router";
 import React from "react";
 import type { SvgProps } from "react-native-svg";
 
+import { LEVEL_COLORS } from "@/constants/routes";
 import type { LevelTwoBottomTabRoutes } from "@/types/navigation-types";
 import {
   EarTabBarIcon,
@@ -21,16 +22,26 @@ type TabIconsType = {
 };
 
 const tabsIcons: TabIconsType = {
-  "letter-draggable": (props: SvgProps) => (
+  spelling: (props: SvgProps) => (
     <TeacherTipsIcon
       {...props}
-      primaryColor="#F36889"
-      secondaryColor="#E39AAB"
+      primaryColor={LEVEL_COLORS.levelTwo.primary}
+      secondaryColor={LEVEL_COLORS.levelTwo.secondary}
     />
   ),
-  draggable: (props: SvgProps) => <LetterFormationIcon {...props} />,
-  "words-sound": (props: SvgProps) => (
-    <EarTabBarIcon {...props} primaryColor="#F36889" secondaryColor="#E39AAB" />
+  "multiple-choice": (props: SvgProps) => (
+    <LetterFormationIcon
+      {...props}
+      primaryColor={LEVEL_COLORS.levelTwo.primary}
+      secondaryColor={LEVEL_COLORS.levelTwo.secondary}
+    />
+  ),
+  flashcard: (props: SvgProps) => (
+    <EarTabBarIcon
+      {...props}
+      primaryColor={LEVEL_COLORS.levelTwo.primary}
+      secondaryColor={LEVEL_COLORS.levelTwo.secondary}
+    />
   ),
 };
 
@@ -46,12 +57,16 @@ type TabType = {
 
 const tabs: TabType[] = [
   {
-    name: "letter-draggable",
-    label: "Draggable",
+    name: "spelling",
+    label: "Spelling",
   },
   {
-    name: "words-sound",
-    label: "Word Sound",
+    name: "multiple-choice",
+    label: "Multiple Choice",
+  },
+  {
+    name: "flashcard",
+    label: "Flashcard",
   },
 ];
 
@@ -61,7 +76,7 @@ export default function LevelTwoTabLayout() {
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#F36889",
+          backgroundColor: LEVEL_COLORS.levelTwo.primary,
           paddingTop: IS_IOS ? 16 : 4,
           height: IS_IOS ? 108 : 80,
           paddingHorizontal: 12,

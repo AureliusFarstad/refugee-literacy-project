@@ -7,18 +7,13 @@ import { Alert, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Line } from "react-native-svg";
 
-import { CORRECT_ANSWER_3_MS_TIMEOUT } from "@/constants/timing";
+import { MS_300 } from "@/constants/timing";
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import AnimatedLetterComponent from "@/ui/components/home/animated-letter-component";
 import Header from "@/ui/core/headers";
-import { DynamicModal } from "@/ui/core/modal/dynamic-modal";
-import {
-  CustomPencilIcon,
-  EarIcon,
-  LettersNameIcon,
-  TeacherIcon,
-} from "@/ui/icons";
+import { CustomPencilIcon, EarIcon, LettersNameIcon } from "@/ui/icons";
 import { HEIGHT, IS_IOS, WIDTH } from "@/utils/layout";
 
 type AnimatedLetterComponentRef = {
@@ -77,8 +72,6 @@ const PageLinesSVG = () => {
 };
 
 const LetterIntroduction = () => {
-  const dynamicModalRef = useRef<DynamicModalRefType>(null);
-
   const { levels, updateLevels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
 
@@ -88,6 +81,10 @@ const LetterIntroduction = () => {
   const onAnimationStart = () => {
     setIsAnimating(true);
   };
+
+  const { playGuideAudio } = useGuideAudio({
+    screenName: "letter-introduction",
+  });
 
   // const [isUpdatingSession, setIsUpdatingSession] = useState(false);
   // const [tappedAnswer, setTappedAnswer] = useState<IOption>();
@@ -191,7 +188,7 @@ const LetterIntroduction = () => {
       if (updatedActiveActivity) {
         setActiveActivity(updatedActiveActivity);
       }
-    }, CORRECT_ANSWER_3_MS_TIMEOUT);
+    }, MS_300);
   };
 
   const onAnimationComplete = (letter: string) => {
@@ -216,7 +213,7 @@ const LetterIntroduction = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Introduction" modalRef={dynamicModalRef} />
+      <Header title="" onPressGuide={playGuideAudio} />
       <View
         className="flex flex-col justify-between"
         style={{
@@ -225,7 +222,7 @@ const LetterIntroduction = () => {
         }}
       >
         <View>
-          <View className=" ">
+          <View className=" border-yellow-500">
             <View className="flex items-center justify-center">
               <View className="flex flex-row rounded-full bg-colors-purple-200 p-4">
                 <TouchableOpacity
@@ -313,19 +310,6 @@ const LetterIntroduction = () => {
           </View>
         </View>
       </View>
-
-      <DynamicModal ref={dynamicModalRef}>
-        <View className="rounded-lg bg-white p-4">
-          <Text>Letter introduction activity</Text>
-          <View className="flex h-20 items-center justify-center">
-            <TeacherIcon />
-          </View>
-          <Text className="mt-4">
-            Start your language learning adventure. Let A, B, C, and D be the
-            building blocks of your multilingual journey!
-          </Text>
-        </View>
-      </DynamicModal>
     </SafeAreaView>
   );
 };

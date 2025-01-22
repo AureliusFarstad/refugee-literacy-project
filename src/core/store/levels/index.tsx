@@ -9,11 +9,11 @@ interface GlobalLevelState {
   updateLevels: (data: ILevel[]) => void;
 }
 
-const _useLevelStore = create<GlobalLevelState>((set) => ({
+const levelStore = create<GlobalLevelState>((set) => ({
   levels: INITIAL_LEVEL_STATE,
   updateLevels: (data: ILevel[]) => {
     set({ levels: data });
   },
 }));
 
-export const useLevelStore = createSelectors(_useLevelStore);
+export const useLevelStore = createSelectors(levelStore);

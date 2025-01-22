@@ -4,70 +4,20 @@ import React from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { LESSONS } from "@/constants/routes";
 import ProgressBar from "@/ui/components/home/progress-bar";
-import {
-  HOME_BANNER_IMAGE,
-  LESSON_FOUR_IMAGE,
-  LESSON_ONE_IMAGE,
-  LESSON_THREE_IMAGE,
-  LESSON_TWO_IMAGE,
-  TEACHER_TIP_IMAGE,
-} from "@/ui/components/illustrations/home";
+import { HOME_BANNER_IMAGE } from "@/ui/components/illustrations/home";
 import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { CheckIcon, DashesIcon, MultiLingualIcon } from "@/ui/icons";
 import { WIDTH } from "@/utils/layout";
 
-const LESSONS = [
-  {
-    id: "teacher-tip",
-    image: TEACHER_TIP_IMAGE,
-    title: "Teacher tip",
-    description: "Introduction to the alphabet",
-    path: "/(level-one)/letter-introduction",
-    isFinished: true,
-    progressBarColor: "bg-[#2B4AB0]",
-  },
-  {
-    id: "lesson-1",
-    image: LESSON_ONE_IMAGE,
-    title: "Lesson 1",
-    description: "Introduction to the alphabet",
-    path: "/(level-two)/letter-draggable",
-    isFinished: false,
-    progressBarColor: "bg-[#6D28D9]",
-  },
-  {
-    id: "lesson-2",
-    image: LESSON_TWO_IMAGE,
-    title: "Lesson 2",
-    description: "Introduction to the alphabet",
-    path: "/(level-two)/draggable",
-    isFinished: false,
-    progressBarColor: "bg-[#B43855]",
-  },
-  {
-    id: "lesson-3",
-    image: LESSON_THREE_IMAGE,
-    title: "Lesson 3",
-    description: "Introduction to the alphabet",
-    path: "/(level-one)/letter-introduction",
-    isFinished: false,
-    progressBarColor: "bg-[#CA8A04]",
-  },
-  {
-    id: "lesson-4",
-    image: LESSON_FOUR_IMAGE,
-    title: "Lesson 4",
-    description: "Introduction to the alphabet",
-    path: "/(level-one)/letter-introduction",
-    isFinished: false,
-    progressBarColor: "bg-[#C07027]",
-  },
-];
-
 const HomeHeader = () => {
   return (
-    <>
+    <Pressable
+      onPress={() => {
+        router.push("/welcome-screen-modal");
+      }}
+    >
       <View className="mb-10 flex w-full items-center">
         <View className="">
           <Image
@@ -79,10 +29,10 @@ const HomeHeader = () => {
           />
         </View>
       </View>
-      <View className="mb-10 bg-colors-green-500">
+      <View className="mb-10 hidden bg-colors-green-500">
         <Text className="py-2 text-center text-4xl text-white">1</Text>
       </View>
-    </>
+    </Pressable>
   );
 };
 
@@ -129,7 +79,30 @@ const Home = () => {
   return (
     <SafeAreaView className="flex-1   bg-white">
       <FocusAwareStatusBar />
-
+      <Pressable
+        className="hidden bg-colors-green-500 p-5"
+        onPress={() => {
+          router.push("/(level-three)/listening");
+        }}
+      >
+        <Text>Listening activity</Text>
+      </Pressable>
+      <Pressable
+        className="hidden bg-colors-green-500 p-5"
+        onPress={() => {
+          router.push("/audio-ordering");
+        }}
+      >
+        <Text>audio ordering</Text>
+      </Pressable>
+      <Pressable
+        className="hidden bg-colors-green-500 p-5"
+        onPress={() => {
+          router.push("/picture-multiple-choice");
+        }}
+      >
+        <Text>picture</Text>
+      </Pressable>
       <View className="py-10">
         <FlatList
           ListHeaderComponent={HomeHeader}

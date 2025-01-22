@@ -109,3 +109,37 @@ interface ILetterSoundAndNameProgress {
   uppercaseSoundCount: number;
   lowercaseSoundCount: number;
 }
+
+interface AudioPlayerStatus {
+  isLoaded: boolean;
+  isPlaying: boolean;
+  isBuffering: boolean;
+  positionMillis?: number;
+  durationMillis?: number;
+  didJustFinish: boolean;
+}
+
+interface AudioSection {
+  "audio-files": AudioFile | AudioFile[];
+}
+
+interface AlphabetModule {
+  "letter-introduction": AudioSection;
+  "letter-formation": AudioSection;
+  "letter-sound": AudioSection;
+  "letter-name": AudioSection;
+  "letter-matching": AudioSection;
+}
+
+interface BlendingModule {
+  "blending-game": AudioSection;
+  "blending-introduction": AudioSection;
+  "word-matching": AudioSection;
+}
+
+type GuidanceMOdule = AlphabetModule | BlendingModule;
+
+interface GuidanceType {
+  "alphabet-module": AlphabetModule;
+  "blending-module": BlendingModule;
+}

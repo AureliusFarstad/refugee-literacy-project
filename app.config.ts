@@ -11,10 +11,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: "refugee-literacy-project-app",
   version: Env.VERSION.toString(),
   orientation: "portrait",
-  icon: "./assets/icon.png",
+  icon: "./assets/images/icon.png",
   userInterfaceStyle: "automatic",
   splash: {
-    image: "./assets/splash.png",
+    image: "./assets/images/splash.png",
     resizeMode: "cover",
     backgroundColor: "#2E3C4B",
   },
@@ -31,13 +31,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: "./assets/adaptive-icon.png",
+      foregroundImage: "./assets/images/adaptive-icon.png",
       backgroundColor: "#2E3C4B",
     },
     package: Env.PACKAGE,
   },
   web: {
-    favicon: "./assets/favicon.png",
+    favicon: "./assets/images/favicon.png",
     bundler: "metro",
   },
   plugins: [
