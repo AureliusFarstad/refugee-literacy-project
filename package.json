@@ -68,6 +68,7 @@
     "react-dom": "18.2.0",
     "react-native": "0.73.6",
     "react-native-avoid-softinput": "^5.0.0",
+    "react-native-awesome-slider": "^2.9.0",
     "react-native-flash-message": "^0.4.2",
     "react-native-gesture-handler": "~2.14.1",
     "react-native-haptic-feedback": "^2.3.1",
