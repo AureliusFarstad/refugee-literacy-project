@@ -26,6 +26,8 @@ const AnimatedLetterComponent = forwardRef<
   const lowercaseRef = useRef<LetterRef>(null);
   const uppercaseRef = useRef<LetterRef>(null);
 
+  console.log({ name });
+
   const animateLowercase = () => {
     if (!isAnimating && lowercaseRef.current && lowercaseRef.current.play) {
       onAnimationStart();
@@ -55,11 +57,11 @@ const AnimatedLetterComponent = forwardRef<
 
   const lowerCaseLetterSvgProps = {
     onAnimationComplete: handleLowercaseComplete,
-    letter: name,
+    letter: "lowercase_" + name + "_pencil",
   };
   const uppercaseCaseLetterSvgProps = {
     onAnimationComplete: handleUppercaseComplete,
-    letter: name.toUpperCase(),
+    letter: "uppercase_" + name + "_pencil",
   };
 
   const renderLowercaseLetter = () => {
