@@ -87,6 +87,8 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
     },
     englishButtonContainer: {
       position: "absolute",
+      width: 40,
+      height: 40,
       left: 0,
     },
     word: {
