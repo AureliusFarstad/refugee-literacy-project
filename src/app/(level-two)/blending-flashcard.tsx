@@ -3,14 +3,10 @@ import { FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { LEVEL_COLORS } from "@/constants/routes";
-import type {
-  FlashCardColors,
-  FlashCardContent,
-} from "@/ui/components/blending-flashcard";
 import { BlendingFlashCard } from "@/ui/components/blending-flashcard";
 import Header from "@/ui/core/headers";
 
-const FLASH_CARDS: FlashCardContent[] = [
+const FLASH_CARDS = [
   {
     id: "1",
     letters: ["p", "a", "n"],
@@ -27,7 +23,7 @@ const FLASH_CARDS: FlashCardContent[] = [
   },
 ];
 
-const colors: FlashCardColors = {
+const colors = {
   background_color: "#F2EFF0",
   primary_color: LEVEL_COLORS.levelFour.primary,
   secondary_color: LEVEL_COLORS.levelFour.secondary,

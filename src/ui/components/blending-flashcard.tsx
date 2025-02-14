@@ -1,34 +1,38 @@
 import { Image } from "expo-image";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-
 import { ALPHABET_AUDIO_SOURCES } from "@/core/store/alphabet_sounds";
 import { Text } from "@/ui";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
 
-export type FlashCardColors = {
-  background_color: string;
-  primary_color: string;
-  secondary_color: string;
-  off_white_color: string;
-  off_black_color: string;
-};
-
-export type FlashCardContent = {
-  id: string;
-  letters: string[];
-  word: string;
-  image: string;
-};
-
-export type FlashCardProps = {
-  content: FlashCardContent;
-  colors: FlashCardColors;
+type FlashCardProps = {
+  content: {
+    id: string;
+    letters: string[];
+    word: string;
+    image: string;
+  };
+  colors: {
+    background_color: string;
+    primary_color: string;
+    secondary_color: string;
+    off_white_color: string;
+    off_black_color: string;
+  };
 };
 
 export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
+  // Shared button props for consistency
+  const iconButtonProps = {
+    primaryColor: colors.primary_color,
+    secondaryColor: colors.secondary_color,
+    offwhiteColor: colors.off_white_color,
+    offblackColor: colors.off_black_color,
+    backgroundColor: colors.background_color,
+  };
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -53,20 +57,19 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       justifyContent: "center",
       alignItems: "center",
       marginBottom: 20,
-      position: "relative", // Ensures absolute positioning works inside
+      position: "relative",
     },
     image: {
-      width: "80%",
-      height: "80%",
+      width: "100%",
+      height: 200,
+      borderRadius: 8,
     },
-    nativeButtonContainer: {
+    iconButton: {
       position: "absolute",
-      top: 0,
-      right: 0,
       width: 40,
       height: 40,
     },
-    nativeButtonBackground: {
+    nativeButtonOverlay: {
       position: "absolute",
       top: -10,
       right: -10,
@@ -85,17 +88,13 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       backgroundColor: colors.primary_color,
       alignSelf: "center",
     },
-    englishButtonContainer: {
-      position: "absolute",
-      width: 40,
-      height: 40,
-      left: 0,
+    text: {
+      color: colors.off_black_color,
+      fontWeight: "bold",
+      textAlign: "center",
     },
     word: {
       fontSize: 24,
-      fontWeight: "bold",
-      color: colors.off_black_color,
-      textAlign: "center",
     },
     lettersContainer: {
       paddingTop: 18,
@@ -112,77 +111,58 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       justifyContent: "center",
       alignItems: "center",
     },
-    letterText: {
-      color: colors.off_black_color,
+    letter: {
       fontSize: 20,
-      fontWeight: "bold",
     },
   });
 
   return (
     <View style={styles.container}>
-      {/* Card */}
+      {/* Background^ and Card */}
       <View style={styles.card}>
-        {/* Image Container */}
+        {/* Image  */}
         <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: content.image }}
-            style={{
-              width: "100%",
-              height: 200,
-              borderRadius: 8,
-            }}
-          />
+            <Image source={{ uri: content.image }} style={styles.image} />
 
-          <View style={styles.nativeButtonBackground} />
+            {/* Native Button */}
+            <View style={styles.nativeButtonOverlay} />
+            <View style={[styles.iconButton, { top: 0, right: 0 }]}>
+                <AnimatedAudioButton
+                audioSource={ALPHABET_AUDIO_SOURCES.a.sound}
+                width={40}
+                height={40}
+                >
+                <NativeButton {...iconButtonProps} />
+                </AnimatedAudioButton>
+            </View>
 
-          <View style={styles.nativeButtonContainer}>
-            <AnimatedAudioButton
-              audioSource={ALPHABET_AUDIO_SOURCES.a.sound}
-              width={40}
-              height={40}
-            >
-              <NativeButton
-                primaryColor={colors.primary_color}
-                secondaryColor={colors.secondary_color}
-                offwhiteColor={colors.off_white_color}
-                offblackColor={colors.off_black_color}
-                backgroundColor={colors.background_color}
-              />
-            </AnimatedAudioButton>
-          </View>
         </View>
 
-        {/* Word Display */}
+        {/* English Word Rectangular Button */}
         <AnimatedAudioButton
           audioSource={ALPHABET_AUDIO_SOURCES.a.sound}
           width={180}
           height={40}
         >
           <View style={styles.wordContainer}>
-            <View style={styles.englishButtonContainer}>
-              <EnglishButton
-                primaryColor={colors.primary_color}
-                secondaryColor={colors.secondary_color}
-                offwhiteColor={colors.off_white_color}
-                offblackColor={colors.off_black_color}
-                backgroundColor={colors.background_color}
-              />
+            <View style={[styles.iconButton, { left: 0 }]}>
+              <EnglishButton {...iconButtonProps} />
             </View>
-            <Text style={styles.word}>{content.word}</Text>
+            <Text style={[styles.text, styles.word]}>{content.word}</Text>
           </View>
         </AnimatedAudioButton>
 
-        {/* Letter Options */}
+        {/* Letter Buttons */}
         <View style={styles.lettersContainer}>
-          {content.letters.map((letter: string) => (
+          {content.letters.map((letter) => (
             <AnimatedAudioButton
+              key={letter}
               audioSource={ALPHABET_AUDIO_SOURCES[letter].sound}
               width={40}
               height={40}
             >
               <View style={styles.letterButton}>
-                <Text style={styles.letterText}>{letter}</Text>
+                <Text style={[styles.text, styles.letter]}>{letter}</Text>
               </View>
             </AnimatedAudioButton>
           ))}
