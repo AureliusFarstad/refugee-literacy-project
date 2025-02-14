@@ -173,7 +173,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
 
         {/* Letter Options */}
         <View style={styles.lettersContainer}>
-          {content.letters.map((letter: string ) => (
+          {content.letters.map((letter: string) => (
             <AnimatedAudioButton
               audioSource={ALPHABET_AUDIO_SOURCES[letter].sound}
               width={40}
