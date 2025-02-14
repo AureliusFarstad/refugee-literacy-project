@@ -43,6 +43,13 @@ const tabsIcons: TabIconsType = {
       secondaryColor={LEVEL_COLORS.levelTwo.secondary}
     />
   ),
+  blending_flashcard: (props: SvgProps) => (
+    <EarTabBarIcon
+      {...props}
+      primaryColor={LEVEL_COLORS.levelTwo.primary}
+      secondaryColor={LEVEL_COLORS.levelTwo.secondary}
+    />
+  ),
 };
 
 const BarIcon = ({ color, name, ...reset }: BarIconType) => {
