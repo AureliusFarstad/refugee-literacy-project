@@ -1,6 +1,7 @@
 import { Image } from "expo-image";
 import React from "react";
 import { StyleSheet, View } from "react-native";
+
 import { ALPHABET_AUDIO_SOURCES } from "@/core/store/alphabet_sounds";
 import { Text } from "@/ui";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
@@ -122,20 +123,19 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       <View style={styles.card}>
         {/* Image  */}
         <View style={styles.imageContainer}>
-            <Image source={{ uri: content.image }} style={styles.image} />
+          <Image source={{ uri: content.image }} style={styles.image} />
 
-            {/* Native Button */}
-            <View style={styles.nativeButtonOverlay} />
-            <View style={[styles.iconButton, { top: 0, right: 0 }]}>
-                <AnimatedAudioButton
-                audioSource={ALPHABET_AUDIO_SOURCES.a.sound}
-                width={40}
-                height={40}
-                >
-                <NativeButton {...iconButtonProps} />
-                </AnimatedAudioButton>
-            </View>
-
+          {/* Native Button */}
+          <View style={styles.nativeButtonOverlay} />
+          <View style={[styles.iconButton, { top: 0, right: 0 }]}>
+            <AnimatedAudioButton
+              audioSource={ALPHABET_AUDIO_SOURCES.a.sound}
+              width={40}
+              height={40}
+            >
+              <NativeButton {...iconButtonProps} />
+            </AnimatedAudioButton>
+          </View>
         </View>
 
         {/* English Word Rectangular Button */}
