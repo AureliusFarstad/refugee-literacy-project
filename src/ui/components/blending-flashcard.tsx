@@ -87,7 +87,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       height: 40,
       borderRadius: 20,
       backgroundColor: colors.primary_color,
-      alignSelf: "center",
+      // alignSelf: "center",
     },
     text: {
       color: colors.off_black_color,
@@ -96,6 +96,8 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
     },
     word: {
       fontSize: 24,
+      height: 40, // TODO: might change with font.
+      lineHeight: 40,
     },
     lettersContainer: {
       paddingTop: 18,
