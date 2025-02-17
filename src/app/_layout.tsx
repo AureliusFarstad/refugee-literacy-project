@@ -14,6 +14,7 @@ import { useCallback, useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { theme } from "@/core/useThemeConfig";
+import { LetterCaseProvider } from "@/ui/core/headers/letter-case-context";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -59,7 +60,9 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <ThemeProvider value={theme}>
-        <RootLayoutNav />
+        <LetterCaseProvider>
+          <RootLayoutNav />
+        </LetterCaseProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

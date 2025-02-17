@@ -1,260 +1,403 @@
-import clsx from "clsx";
-import { Audio } from "expo-av";
-import type { Sound } from "expo-av/build/Audio";
-import { router, usePathname } from "expo-router";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useRef, useState } from "react";
+import {
+  Animated,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import { useGuideAudio } from "@/core/hooks/useGuideAudio";
-import { useLevelStore } from "@/core/store/levels";
-import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
-import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
+import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import Header from "@/ui/core/headers";
-import { EarIcon } from "@/ui/icons";
-import { getOptionsToRender } from "@/utils/level-one";
+import { useLetterCase } from "@/ui/core/headers/letter-case-context";
+import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { EarButton } from "@/ui/icons/circular/ear-button";
 
-const MultipleChoice = () => {
-  const { levels, updateLevels } = useLevelStore();
-  const [sound, setSound] = useState<Sound>();
-  const [isUpdatingSession, setIsUpdatingSession] = useState(false);
-  const [tappedAnswer, setTappedAnswer] = useState<IOption>();
+interface WordSet {
+  correctAnswer: string;
+  options: string[];
+}
 
-  const [isLowercase, setIsLowercase] = useState(false);
+interface ColorTheme {
+  appBackgroundColor: string;
+  appWhiteColor: string;
+  appBlackColor: string;
+  appGreyColor: string;
+  appGreenColor: string;
+  appRedColor: string;
+  sectionPrimaryColor: string;
+  sectionSecondaryColor: string;
+}
 
-  const pathname = usePathname();
+interface WordChoiceScreenProps {
+  wordSets?: WordSet[];
+  audioSets?: Record<string, { file: any }>;
+  colors: ColorTheme;
+  onGameComplete?: () => void;
+}
 
-  const { playGuideAudio } = useGuideAudio({
-    screenName: "multiple-choice",
-    module: "blending-module",
+type AnimatedValue = Animated.Value;
+type AnimatedInterpolation = Animated.AnimatedInterpolation<number>;
+
+const DEFAULT_WORD_SETS: WordSet[] = [
+  { correctAnswer: "TAP", options: ["PAN", "TAP", "NAP"] },
+  { correctAnswer: "DOG", options: ["DOG", "LOG", "FOG"] },
+  { correctAnswer: "CAT", options: ["CAT", "CAP", "BAT"] },
+  { correctAnswer: "PIN", options: ["PEN", "PIN", "PAN"] },
+];
+
+type IBlending_Audio_Source = {
+  [key: string]: {
+    file: string;
+  };
+};
+
+const DEFAULT_AUDIO_SETS: IBlending_Audio_Source = {
+  TAP: {
+    file: require("assets/alphabet/audio/name/g.mp3"),
+  },
+  DOG: {
+    file: require("assets/alphabet/audio/name/h.mp3"),
+  },
+  CAT: {
+    file: require("assets/alphabet/audio/name/i.mp3"),
+  },
+  PIN: {
+    file: require("assets/alphabet/audio/name/j.mp3"),
+  },
+};
+
+const DEFAULT_COLORS: ColorTheme = {
+  appBackgroundColor: APP_COLORS.backgroundgrey,
+  appWhiteColor: APP_COLORS.offwhite,
+  appBlackColor: APP_COLORS.offblack,
+  appGreyColor: APP_COLORS.grey,
+  appGreenColor: APP_COLORS.green,
+  appRedColor: APP_COLORS.red,
+  sectionPrimaryColor: SECTION_COLORS.blending.primary,
+  sectionSecondaryColor: SECTION_COLORS.blending.light,
+};
+
+const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
+  wordSets = DEFAULT_WORD_SETS,
+  audioSets = DEFAULT_AUDIO_SETS,
+  colors = DEFAULT_COLORS,
+  onGameComplete,
+}) => {
+  const [currentSetIndex, setCurrentSetIndex] = useState<number>(0);
+  const [selectedWord, setSelectedWord] = useState<string | null>(null);
+  const [disabledWords, setDisabledWords] = useState<string[]>([]);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+
+  const shakeAnimation = useRef<AnimatedValue>(new Animated.Value(0)).current;
+  const flipAnimation = useRef<AnimatedValue>(new Animated.Value(0)).current;
+
+  const currentWordSet = wordSets[currentSetIndex];
+
+  const flipValue: AnimatedInterpolation = flipAnimation.interpolate({
+    inputRange: [0, 180],
+    outputRange: ["0deg", "180deg"],
   });
 
-  const [activeActivity, setActiveActivity] = useState<IActivity>(
-    levels[1].modules[0].sections[2].activities[0],
-  );
+  const backFlipValue: AnimatedInterpolation = flipAnimation.interpolate({
+    inputRange: [0, 180],
+    outputRange: ["180deg", "360deg"],
+  });
 
-  const optionsToRender = useMemo(
-    () =>
-      getOptionsToRender(activeActivity.options, activeActivity.correctAnswer),
-    [activeActivity],
-  );
+  const frontOpacity: AnimatedInterpolation = flipAnimation.interpolate({
+    inputRange: [0, 90, 180],
+    outputRange: [1, 0, 0],
+  });
 
-  /**
-   * 1. 6 letters, S,A,T,P,I,N
-   * 2. Save the progress
-   * 3. One by one do the mapping, show 3 of the rest of the five (have the option to show rest of 25 apart from the correct one)
-   * 4. Correct answer, show success
-   * 5. Wrong answer, show try again
-   * 6. Level completion UI
-   *
-   */
+  const backOpacity: AnimatedInterpolation = flipAnimation.interpolate({
+    inputRange: [0, 90, 180],
+    outputRange: [0, 0, 1],
+  });
 
-  const playSound = async () => {
-    try {
-      const { sound: soundResponse } = await Audio.Sound.createAsync(
-        activeActivity.audio,
-      );
-      if (soundResponse) {
-        setSound(soundResponse);
-      }
-      console.log("Playing Sound");
-      await soundResponse.playAsync();
-    } catch (error) {
-      console.log("error in playSound", error);
-      throw error;
-    }
+  const resetGame = (): void => {
+    flipAnimation.setValue(0);
+    setSelectedWord(null);
+    setDisabledWords([]);
+    setIsError(false);
+    setIsSuccess(false);
   };
 
-  useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
-
-  const initNextActivity = () => {
-    const currentIndex = levels[1].modules[0].sections[2].activities.findIndex(
-      (activity: IActivity) => activity.id === activeActivity.id,
-    );
-    let _nextActivity: IActivity;
-    if (
-      currentIndex === -1 ||
-      currentIndex === levels[1].modules[0].sections[2].activities.length - 1
-    ) {
-      // If current element is not found or is the last element, return the first element
-      _nextActivity = levels[1].modules[0].sections[2].activities[0];
+  const moveToNextSet = (): void => {
+    if (currentSetIndex < wordSets.length - 1) {
+      setCurrentSetIndex((prev) => prev + 1);
+      resetGame();
     } else {
-      // Return the next element in the array
-      _nextActivity =
-        levels[1].modules[0].sections[2].activities[currentIndex + 1];
-    }
-
-    if (_nextActivity) {
-      setActiveActivity(_nextActivity);
+      // Game finished. Resets the sets.
+      onGameComplete?.();
+      setCurrentSetIndex(0);
+      resetGame();
     }
   };
 
-  useEffect(() => {
-    if (pathname !== "/letter-sound") {
+  const startShake = (): void => {
+    Animated.sequence([
+      Animated.timing(shakeAnimation, {
+        toValue: 10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnimation, {
+        toValue: -10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnimation, {
+        toValue: 10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnimation, {
+        toValue: -10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnimation, {
+        toValue: 10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnimation, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setIsError(false);
+    });
+  };
+
+  const startFlip = (): void => {
+    Animated.timing(flipAnimation, {
+      toValue: 180,
+      duration: 800,
+      useNativeDriver: true,
+    }).start(() => {
+      // Wait for 1.5 seconds after flip completes before moving to next set
+      setTimeout(moveToNextSet, 1500);
+    });
+  };
+
+  const handleWordSelect = (word: string): void => {
+    if (disabledWords.includes(word)) {
       return;
     }
-    /**
-     * Check if each activity have been answered correctly twice if so means level completed
-     */
-    const activitiesInCurrentSection =
-      levels[1].modules[0].sections[2].activities;
-    const isCompleted = activitiesInCurrentSection.every((activity) => {
-      if (!activity.nameAndSoundActivityProgress) return false;
-      return Object.values(activity.nameAndSoundActivityProgress).every(
-        (count) => count >= 1,
-      );
-    });
 
-    if (isCompleted) {
-      console.log("done");
+    setSelectedWord(word);
+
+    if (word !== currentWordSet.correctAnswer) {
+      setIsError(true);
+      startShake();
+
+      setTimeout(() => {
+        setDisabledWords([...disabledWords, word]);
+        setSelectedWord(null);
+      }, 800);
+    } else {
+      setIsSuccess(true);
+      startFlip();
     }
-  }, [levels, activeActivity, pathname]);
+  };
+
+  const buttonStyles: ButtonColorProps = {
+    primaryColor: colors.sectionPrimaryColor,
+    secondaryColor: colors.sectionSecondaryColor,
+    offwhiteColor: colors.appWhiteColor,
+    offblackColor: colors.appBlackColor,
+    backgroundColor: colors.appBackgroundColor,
+  };
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.appBackgroundColor,
+    },
+    content: {
+      flex: 1,
+      padding: 20,
+      paddingBottom: 40,
+      justifyContent: "space-between", // Ensures top, middle, and bottom spacing
+      alignItems: "center",
+    },
+    progressContainer: {
+      height: 40,
+      alignItems: "center",
+      justifyContent: "center", // Centers the progress text
+    },
+    progressText: {
+      fontSize: 18,
+      fontWeight: "500",
+      color: colors.appBlackColor,
+    },
+    cardContainer: {
+      width: 280,
+      height: 260,
+      maxHeight: 260,
+      justifyContent: "center",
+      alignItems: "center",
+      alignSelf: "center", // Ensures it stays centered
+      flex: 1, // Takes up available space
+    },
+    cardFace: {
+      borderRadius: 16,
+      backgroundColor: "white",
+      position: "absolute",
+      justifyContent: "center",
+      alignItems: "center",
+      backfaceVisibility: "hidden",
+      width: "100%",
+      height: "100%",
+      borderWidth: 2,
+      borderStyle: "solid",
+      borderColor: colors.sectionPrimaryColor,
+    },
+    cardFront: {
+      zIndex: 1,
+    },
+    cardBack: {
+      backgroundColor: colors.sectionPrimaryColor,
+    },
+    cardBackText: {
+      fontSize: 36,
+      fontWeight: "bold",
+      color: colors.appWhiteColor,
+    },
+    choicesContainer: {
+      flexDirection: "row",
+      justifyContent: "center", // Centers buttons
+      flexWrap: "wrap",
+      alignItems: "center",
+      alignSelf: "center", // Center this container itself
+    },
+    choiceButton: {
+      backgroundColor: "white",
+      width: 80, // Fixed size
+      height: 80, // Fixed size
+      aspectRatio: 1, // Ensures square
+      borderRadius: 8,
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+    },
+    selectedButton: {
+      backgroundColor: colors.sectionPrimaryColor,
+    },
+    errorButton: {
+      backgroundColor: colors.appRedColor,
+    },
+    successButton: {
+      backgroundColor: colors.appGreenColor,
+    },
+    disabledButton: {
+      backgroundColor: colors.appGreyColor,
+    },
+    choiceText: {
+      fontSize: 24,
+      fontWeight: "500",
+    },
+    disabledText: {
+      color: colors.appWhiteColor,
+    },
+  });
+
+  const { isLowercase } = useLetterCase();
 
   return (
-    <SafeAreaView>
-      <Header title="Sound" onPressGuide={playGuideAudio} />
-      <View className="mt-5 px-5">
-        <LetterCaseSwitch
-          isLowercase={isLowercase}
-          setIsLowercase={setIsLowercase}
-          letter={"a"}
-          backgroundColor="#F36889"
-        />
-      </View>
+    <SafeAreaView style={styles.container}>
+      <Header title="Blending Multiple Choice" />
+      <View style={styles.content}>
+        <View style={styles.progressContainer}>
+          <Text style={styles.progressText}>
+            {currentSetIndex + 1} / {wordSets.length}
+          </Text>
+        </View>
 
-      <View className="flex items-center p-4">
-        <TouchableOpacity
-          onPress={playSound}
-          className="flex size-[110] items-center justify-center rounded-full bg-colors-red-500"
-        >
-          <EarIcon primaryColor="#F36889" />
-        </TouchableOpacity>
-        <View className="flex w-full flex-1 flex-row">
-          {optionsToRender.map((option, index) => (
-            <Pressable
-              key={option.id}
-              onPress={() => {
-                setTappedAnswer(option);
-                if (option.id === activeActivity.correctAnswer.id) {
-                  const _updatedLevels = levels.map((level: ILevel) => {
-                    if (level.id !== levels[1].id) return level;
-
-                    const _updatedModules = level.modules.map((sublevel) => {
-                      if (sublevel.id !== levels[1].modules[0].id)
-                        return sublevel;
-
-                      const _updatedSections = sublevel.sections.map(
-                        (section: ISection) => {
-                          if (
-                            section.id !== levels[1].modules[0].sections[2].id
-                          )
-                            return section;
-
-                          const _updatedActivities = section.activities.map(
-                            (activity: IActivity) => {
-                              if (activity.id !== activeActivity.id)
-                                return activity;
-
-                              const updatedProgress = {
-                                ...activity.nameAndSoundActivityProgress,
-                              } as ILetterSoundAndNameProgress;
-
-                              if (isLowercase && updatedProgress) {
-                                updatedProgress.lowercaseSoundCount += 1;
-                              } else if (!isLowercase && updatedProgress) {
-                                updatedProgress.uppercaseSoundCount += 1;
-                              }
-
-                              return {
-                                ...activity,
-                                nameAndSoundActivityProgress: {
-                                  ...updatedProgress,
-                                },
-                              };
-                            },
-                          );
-
-                          return {
-                            ...section,
-                            activities: _updatedActivities,
-                          };
-                        },
-                      );
-
-                      return {
-                        ...sublevel,
-                        sections: _updatedSections,
-                      };
-                    });
-
-                    return {
-                      ...level,
-                      modules: _updatedModules,
-                    };
-                  });
-
-                  setIsUpdatingSession(true);
-                  router.push({
-                    pathname: "/modal",
-                    params: { correctOption: option.title },
-                  });
-                  setTimeout(() => {
-                    setIsUpdatingSession(false);
-                    updateLevels(_updatedLevels);
-                    setTappedAnswer(undefined);
-                    initNextActivity();
-                    router.back();
-                  }, 1000);
-                } else {
-                  setIsUpdatingSession(true);
-                  setTimeout(() => {
-                    setIsUpdatingSession(false);
-                    setTappedAnswer(undefined);
-                    initNextActivity();
-                  }, 1000);
-                  console.log(activeActivity);
-                  console.log({ tappedAnswer });
-                  console.log(option.id, activeActivity.correctAnswer.id);
-                  console.log("wrong answer");
-                }
-              }}
-              className={clsx(
-                "absolute flex size-24 items-center justify-center rounded-full bg-colors-red-200",
-                {
-                  "left-10 top-40": index === 0,
-                  "left-36 top-72": index === 1,
-                  "right-0 top-40": index === 2,
-                  " bg-red-500 text-white":
-                    isUpdatingSession &&
-                    option.id === tappedAnswer?.id &&
-                    activeActivity.correctAnswer.id !== tappedAnswer.id,
-                  "bg-green-500":
-                    isUpdatingSession &&
-                    option.id === tappedAnswer?.id &&
-                    activeActivity.correctAnswer.id === tappedAnswer.id,
-                },
-              )}
+        <View style={styles.cardContainer}>
+          <Animated.View
+            style={[
+              styles.cardFace,
+              styles.cardFront,
+              {
+                opacity: frontOpacity,
+                transform: [{ rotateY: flipValue }],
+              },
+            ]}
+          >
+            <AnimatedAudioButton
+              audioSource={
+                (audioSets as Record<string, { file: any }>)[
+                  currentWordSet.correctAnswer
+                ].file
+              }
+              width={120}
+              height={120}
             >
-              <Text
-                className={clsx("text-4xl font-bold text-colors-red-500", {
-                  "text-white":
-                    (isUpdatingSession &&
-                      option.id === tappedAnswer?.id &&
-                      activeActivity.correctAnswer.id === tappedAnswer.id) ||
-                    (isUpdatingSession &&
-                      option.id === tappedAnswer?.id &&
-                      activeActivity.correctAnswer.id !== tappedAnswer.id),
-                })}
+              <View style={[{ width: 120, height: 120 }]}>
+                <EarButton {...buttonStyles} />
+              </View>
+            </AnimatedAudioButton>
+          </Animated.View>
+          <Animated.View
+            style={[
+              styles.cardFace,
+              styles.cardBack,
+              {
+                opacity: backOpacity,
+                transform: [{ rotateY: backFlipValue }],
+              },
+            ]}
+          >
+            <Text style={styles.cardBackText}>
+              {isLowercase
+                ? currentWordSet.correctAnswer.toLowerCase()
+                : currentWordSet.correctAnswer.toUpperCase()}
+            </Text>
+          </Animated.View>
+        </View>
+
+        <View style={[styles.choicesContainer]}>
+          {currentWordSet.options.map((word) => (
+            <TouchableOpacity
+              key={word}
+              onPress={() => handleWordSelect(word)}
+              disabled={disabledWords.includes(word) || isSuccess}
+              style={{ flex: 1 }}
+            >
+              <Animated.View
+                style={[
+                  styles.choiceButton,
+                  selectedWord === word && styles.selectedButton,
+                  isError && selectedWord === word && styles.errorButton,
+                  isSuccess &&
+                    word === currentWordSet.correctAnswer &&
+                    styles.successButton,
+                  disabledWords.includes(word) && styles.disabledButton,
+                  selectedWord === word && {
+                    transform: [
+                      {
+                        translateX: shakeAnimation,
+                      },
+                    ],
+                  },
+                ]}
               >
-                {isLowercase
-                  ? option.title.toLowerCase()
-                  : option.title.toUpperCase()}
-              </Text>
-            </Pressable>
+                <Text
+                  style={[
+                    styles.choiceText,
+                    disabledWords.includes(word) && styles.disabledText,
+                  ]}
+                >
+                  {isLowercase ? word.toLowerCase() : word.toUpperCase()}
+                </Text>
+              </Animated.View>
+            </TouchableOpacity>
           ))}
         </View>
       </View>
@@ -262,4 +405,4 @@ const MultipleChoice = () => {
   );
 };
 
-export default MultipleChoice;
+export default WordChoiceScreen;
