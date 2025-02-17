@@ -1,14 +1,11 @@
 import { Tabs } from "expo-router";
-import React, { Children } from "react";
-import type { SvgProps } from "react-native-svg";
-import { View, StyleSheet } from "react-native";
+import React from "react";
 
-import TabIconWrapper from '@/ui/icons/bottom-tab/bottom-tab-wrapper';
-import { TeacherIcon } from '@/ui/icons/bottom-tab/teacher-icon';
-import { EarIcon } from '@/ui/icons/bottom-tab/ear-icon';
-import { DragIcon } from '@/ui/icons/bottom-tab/drag-and-drop-icon'
-
-import { SECTION_COLORS, APP_COLORS } from "@/constants/routes";
+import { SECTION_COLORS } from "@/constants/routes";
+import TabIconWrapper from "@/ui/icons/bottom-tab/bottom-tab-wrapper";
+import { DragIcon } from "@/ui/icons/bottom-tab/drag-and-drop-icon";
+import { EarIcon } from "@/ui/icons/bottom-tab/ear-icon";
+import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
 import { IS_IOS } from "@/utils/layout";
 
 const sectionColor = SECTION_COLORS.blending;
@@ -64,7 +61,11 @@ export default function LevelTwoTabLayout() {
               title: label,
               // eslint-disable-next-line react/no-unstable-nested-components
               tabBarIcon: ({ focused }) => (
-                <TabIconWrapper focused={focused} sectionColor={sectionColor} icon={icon}/>
+                <TabIconWrapper
+                  focused={focused}
+                  sectionColor={sectionColor}
+                  icon={icon}
+                />
               ),
             }}
           />

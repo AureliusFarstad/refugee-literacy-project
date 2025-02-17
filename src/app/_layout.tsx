@@ -13,9 +13,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-import { LetterCaseProvider } from '@/ui/core/headers/letter-case-context';
-
 import { theme } from "@/core/useThemeConfig";
+import { LetterCaseProvider } from "@/ui/core/headers/letter-case-context";
 
 export {
   // Catch any errors thrown by the Layout component.

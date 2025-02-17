@@ -1,9 +1,10 @@
 // LetterCaseSwitch.tsx
-import { Switch } from "../checkbox"
-import { useLetterCase } from '@/ui/core/headers/letter-case-context'
+import { useLetterCase } from "@/ui/core/headers/letter-case-context";
+
+import { Switch } from "../checkbox";
 
 const LetterCaseSwitch = () => {
-  const { isLowercase, setIsLowercase } = useLetterCase()
+  const { isLowercase, setIsLowercase } = useLetterCase();
 
   return (
     <Switch.Root
@@ -16,10 +17,10 @@ const LetterCaseSwitch = () => {
       <Switch.Icon
         checked={isLowercase}
         label={"a"}
-        backgroundColor="#FAFAFA"      
+        backgroundColor="#FAFAFA"
       />
     </Switch.Root>
-  )
-}
+  );
+};
 
-export default LetterCaseSwitch
+export default LetterCaseSwitch;

@@ -2,7 +2,7 @@ type IBlending_Audio_Source = {
   [key: string]: {
     file: string;
   };
-}; 
+};
 
 export const BLENDING_AUDIO_SOURCES: IBlending_Audio_Source = {
   sit: {

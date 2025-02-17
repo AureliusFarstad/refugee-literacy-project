@@ -1,6 +1,7 @@
 import * as React from "react";
 import Svg, { Circle, Path } from "react-native-svg";
-import { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 
 export const EmptyHeadButton = ({
   primaryColor,

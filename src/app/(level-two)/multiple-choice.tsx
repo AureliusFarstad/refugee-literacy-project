@@ -1,15 +1,19 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Animated } from 'react-native';
+import React, { useRef, useState } from "react";
+import {
+  Animated,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
+import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import Header from "@/ui/core/headers";
-
-import { useLetterCase } from '@/ui/core/headers/letter-case-context';
-
-import { AnimatedAudioButton } from '@/ui/icons/animated-audio-button-wrapper';
-import { EarButton } from '@/ui/icons/circular/ear-button';
-
-import { SECTION_COLORS, APP_COLORS } from "@/constants/routes";
-import { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { useLetterCase } from "@/ui/core/headers/letter-case-context";
+import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { EarButton } from "@/ui/icons/circular/ear-button";
 
 interface WordSet {
   correctAnswer: string;
@@ -38,17 +42,17 @@ type AnimatedValue = Animated.Value;
 type AnimatedInterpolation = Animated.AnimatedInterpolation<number>;
 
 const DEFAULT_WORD_SETS: WordSet[] = [
-  { correctAnswer: 'TAP', options: ['PAN', 'TAP', 'NAP'] },
-  { correctAnswer: 'DOG', options: ['DOG', 'LOG', 'FOG'] },
-  { correctAnswer: 'CAT', options: ['CAT', 'CAP', 'BAT'] },
-  { correctAnswer: 'PIN', options: ['PEN', 'PIN', 'PAN'] },
+  { correctAnswer: "TAP", options: ["PAN", "TAP", "NAP"] },
+  { correctAnswer: "DOG", options: ["DOG", "LOG", "FOG"] },
+  { correctAnswer: "CAT", options: ["CAT", "CAP", "BAT"] },
+  { correctAnswer: "PIN", options: ["PEN", "PIN", "PAN"] },
 ];
 
 type IBlending_Audio_Source = {
   [key: string]: {
     file: string;
   };
-}; 
+};
 
 const DEFAULT_AUDIO_SETS: IBlending_Audio_Source = {
   TAP: {
@@ -80,14 +84,14 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
   wordSets = DEFAULT_WORD_SETS,
   audioSets = DEFAULT_AUDIO_SETS,
   colors = DEFAULT_COLORS,
-  onGameComplete
+  onGameComplete,
 }) => {
   const [currentSetIndex, setCurrentSetIndex] = useState<number>(0);
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [disabledWords, setDisabledWords] = useState<string[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  
+
   const shakeAnimation = useRef<AnimatedValue>(new Animated.Value(0)).current;
   const flipAnimation = useRef<AnimatedValue>(new Animated.Value(0)).current;
 
@@ -95,12 +99,12 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
 
   const flipValue: AnimatedInterpolation = flipAnimation.interpolate({
     inputRange: [0, 180],
-    outputRange: ['0deg', '180deg'],
+    outputRange: ["0deg", "180deg"],
   });
 
   const backFlipValue: AnimatedInterpolation = flipAnimation.interpolate({
     inputRange: [0, 180],
-    outputRange: ['180deg', '360deg'],
+    outputRange: ["180deg", "360deg"],
   });
 
   const frontOpacity: AnimatedInterpolation = flipAnimation.interpolate({
@@ -123,7 +127,7 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
 
   const moveToNextSet = (): void => {
     if (currentSetIndex < wordSets.length - 1) {
-      setCurrentSetIndex(prev => prev + 1);
+      setCurrentSetIndex((prev) => prev + 1);
       resetGame();
     } else {
       // Game finished. Resets the sets.
@@ -187,11 +191,11 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
     }
 
     setSelectedWord(word);
-    
+
     if (word !== currentWordSet.correctAnswer) {
       setIsError(true);
       startShake();
-      
+
       setTimeout(() => {
         setDisabledWords([...disabledWords, word]);
         setSelectedWord(null);
@@ -202,12 +206,12 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
     }
   };
 
-  const buttonStyles : ButtonColorProps = {
+  const buttonStyles: ButtonColorProps = {
     primaryColor: colors.sectionPrimaryColor,
     secondaryColor: colors.sectionSecondaryColor,
     offwhiteColor: colors.appWhiteColor,
     offblackColor: colors.appBlackColor,
-    backgroundColor: colors.appBackgroundColor
+    backgroundColor: colors.appBackgroundColor,
   };
 
   const styles = StyleSheet.create({
@@ -219,37 +223,37 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
       flex: 1,
       padding: 20,
       paddingBottom: 40,
-      justifyContent: 'space-between', // Ensures top, middle, and bottom spacing
-      alignItems: 'center',
+      justifyContent: "space-between", // Ensures top, middle, and bottom spacing
+      alignItems: "center",
     },
     progressContainer: {
       height: 40,
-      alignItems: 'center',
-      justifyContent: 'center', // Centers the progress text
+      alignItems: "center",
+      justifyContent: "center", // Centers the progress text
     },
     progressText: {
       fontSize: 18,
-      fontWeight: '500',
+      fontWeight: "500",
       color: colors.appBlackColor,
     },
     cardContainer: {
       width: 280,
       height: 260,
       maxHeight: 260,
-      justifyContent: 'center',
-      alignItems: 'center',
-      alignSelf: 'center', // Ensures it stays centered
+      justifyContent: "center",
+      alignItems: "center",
+      alignSelf: "center", // Ensures it stays centered
       flex: 1, // Takes up available space
     },
     cardFace: {
       borderRadius: 16,
-      backgroundColor: 'white',
-      position: 'absolute',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backfaceVisibility: 'hidden',
-      width: '100%',
-      height: '100%',
+      backgroundColor: "white",
+      position: "absolute",
+      justifyContent: "center",
+      alignItems: "center",
+      backfaceVisibility: "hidden",
+      width: "100%",
+      height: "100%",
       borderWidth: 2,
       borderStyle: "solid",
       borderColor: colors.sectionPrimaryColor,
@@ -262,25 +266,25 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
     },
     cardBackText: {
       fontSize: 36,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       color: colors.appWhiteColor,
     },
     choicesContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center', // Centers buttons
-      flexWrap: 'wrap',
-      alignItems: 'center',
-      alignSelf: 'center', // Center this container itself
+      flexDirection: "row",
+      justifyContent: "center", // Centers buttons
+      flexWrap: "wrap",
+      alignItems: "center",
+      alignSelf: "center", // Center this container itself
     },
     choiceButton: {
-      backgroundColor: 'white',
+      backgroundColor: "white",
       width: 80, // Fixed size
       height: 80, // Fixed size
       aspectRatio: 1, // Ensures square
       borderRadius: 8,
-      alignItems: 'center',
-      justifyContent: 'center',
-      alignSelf: 'center',
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
     },
     selectedButton: {
       backgroundColor: colors.sectionPrimaryColor,
@@ -296,20 +300,19 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
     },
     choiceText: {
       fontSize: 24,
-      fontWeight: '500',
+      fontWeight: "500",
     },
     disabledText: {
       color: colors.appWhiteColor,
-    }
+    },
   });
 
-  const { isLowercase } = useLetterCase()
+  const { isLowercase } = useLetterCase();
 
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Blending Multiple Choice" />
       <View style={styles.content}>
-
         <View style={styles.progressContainer}>
           <Text style={styles.progressText}>
             {currentSetIndex + 1} / {wordSets.length}
@@ -317,16 +320,22 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
         </View>
 
         <View style={styles.cardContainer}>
-          <Animated.View style={[
-            styles.cardFace,
-            styles.cardFront,
-            {
-              opacity: frontOpacity,
-              transform: [{ rotateY: flipValue }],
-            }
-          ]}>
-            <AnimatedAudioButton 
-              audioSource={(audioSets as Record<string, { file: any }>)[currentWordSet.correctAnswer].file}
+          <Animated.View
+            style={[
+              styles.cardFace,
+              styles.cardFront,
+              {
+                opacity: frontOpacity,
+                transform: [{ rotateY: flipValue }],
+              },
+            ]}
+          >
+            <AnimatedAudioButton
+              audioSource={
+                (audioSets as Record<string, { file: any }>)[
+                  currentWordSet.correctAnswer
+                ].file
+              }
               width={120}
               height={120}
             >
@@ -335,59 +344,65 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
               </View>
             </AnimatedAudioButton>
           </Animated.View>
-          <Animated.View style={[
-            styles.cardFace,
-            styles.cardBack,
-            {
-              opacity: backOpacity,
-              transform: [{ rotateY: backFlipValue }],
-            }
-          ]}>
-            <Text style={styles.cardBackText}>{isLowercase ? currentWordSet.correctAnswer.toLowerCase() : currentWordSet.correctAnswer.toUpperCase() }</Text>
+          <Animated.View
+            style={[
+              styles.cardFace,
+              styles.cardBack,
+              {
+                opacity: backOpacity,
+                transform: [{ rotateY: backFlipValue }],
+              },
+            ]}
+          >
+            <Text style={styles.cardBackText}>
+              {isLowercase
+                ? currentWordSet.correctAnswer.toLowerCase()
+                : currentWordSet.correctAnswer.toUpperCase()}
+            </Text>
           </Animated.View>
         </View>
-        
-        <View 
-          style={[
-            styles.choicesContainer
-          ]}
-        >
+
+        <View style={[styles.choicesContainer]}>
           {currentWordSet.options.map((word) => (
             <TouchableOpacity
               key={word}
               onPress={() => handleWordSelect(word)}
               disabled={disabledWords.includes(word) || isSuccess}
               style={{ flex: 1 }}
+            >
+              <Animated.View
+                style={[
+                  styles.choiceButton,
+                  selectedWord === word && styles.selectedButton,
+                  isError && selectedWord === word && styles.errorButton,
+                  isSuccess &&
+                    word === currentWordSet.correctAnswer &&
+                    styles.successButton,
+                  disabledWords.includes(word) && styles.disabledButton,
+                  selectedWord === word && {
+                    transform: [
+                      {
+                        translateX: shakeAnimation,
+                      },
+                    ],
+                  },
+                ]}
               >
-              <Animated.View style={[
-                styles.choiceButton,
-                selectedWord === word && styles.selectedButton,
-                isError && selectedWord === word && styles.errorButton,
-                isSuccess && word === currentWordSet.correctAnswer && styles.successButton,
-                disabledWords.includes(word) && styles.disabledButton,
-                selectedWord === word && {
-                  transform: [{
-                    translateX: shakeAnimation
-                  }]
-                }
-              ]}>
-                <Text 
+                <Text
                   style={[
                     styles.choiceText,
-                    disabledWords.includes(word) && styles.disabledText
+                    disabledWords.includes(word) && styles.disabledText,
                   ]}
                 >
-                  {isLowercase ? word.toLowerCase() : word.toUpperCase() }
+                  {isLowercase ? word.toLowerCase() : word.toUpperCase()}
                 </Text>
               </Animated.View>
-          </TouchableOpacity>
+            </TouchableOpacity>
           ))}
         </View>
       </View>
     </SafeAreaView>
   );
 };
-
-
 
 export default WordChoiceScreen;

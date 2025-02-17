@@ -2,12 +2,11 @@ import { router } from "expo-router";
 import { useCallback } from "react";
 import { Pressable, View } from "react-native";
 
-import { HomeButton } from "@/ui/icons/circular/home-button";
-import { EmptyHeadButton } from "@/ui/icons/circular/empty-head-button";
-import LetterCaseSwitch from "@/ui/components/global-letter-casing-switch";
-
 import { APP_COLORS } from "@/constants/routes";
-import { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import LetterCaseSwitch from "@/ui/components/global-letter-casing-switch";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { EmptyHeadButton } from "@/ui/icons/circular/empty-head-button";
+import { HomeButton } from "@/ui/icons/circular/home-button";
 
 const buttonColorProps: ButtonColorProps = {
   primaryColor: APP_COLORS.green,
@@ -35,7 +34,7 @@ const Header = ({ onPressGuide }: HeaderProps) => {
         <Pressable onPress={navigateToHome} className="p-2">
           <View style={[{ width: SIZE, height: SIZE }]}>
             <HomeButton {...buttonColorProps} />
-              {/* NativeWind does not work: <View className="w-40 h-40 p-0"> */}
+            {/* NativeWind does not work: <View className="w-40 h-40 p-0"> */}
           </View>
         </Pressable>
       </View>
@@ -49,7 +48,7 @@ const Header = ({ onPressGuide }: HeaderProps) => {
         <Pressable onPress={onPressGuide} className="p-2">
           <View style={[{ width: SIZE, height: SIZE }]}>
             <EmptyHeadButton {...buttonColorProps} />
-              {/* NativeWind does not work: <View className="w-40 h-40 p-0"> */}
+            {/* NativeWind does not work: <View className="w-40 h-40 p-0"> */}
           </View>
         </Pressable>
         {/* <View className="p-2">

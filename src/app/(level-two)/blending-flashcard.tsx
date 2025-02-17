@@ -1,11 +1,10 @@
 import React from "react";
-import { FlatList, StyleSheet, View, Text } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { SECTION_COLORS, APP_COLORS } from "@/constants/routes";
-
-import Header from "@/ui/core/headers";
+import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { BlendingFlashCard } from "@/ui/components/blending-flashcard";
+import Header from "@/ui/core/headers";
 
 const BLENDING_FLASHCARDS = [
   {
@@ -71,13 +70,13 @@ export default function FlashCardContainer() {
       width: "100%",
       backgroundColor: APP_COLORS.backgroundgrey,
       // paddingBottom: 1000, // TODO: See comment below.
-    }
+    },
   });
 
   return (
     <SafeAreaView>
       <Header title="Blending Flashcards" />
-      <View className="flex h-full w-full items-center">
+      <View className="flex size-full items-center">
         <FlatList
           style={styles.scrollable}
           data={BLENDING_FLASHCARDS}
@@ -90,7 +89,7 @@ export default function FlashCardContainer() {
         <View className="t-400">
           <Text>Hello.</Text>
         </View>
-      </View>  
+      </View>
     </SafeAreaView>
   );
 }

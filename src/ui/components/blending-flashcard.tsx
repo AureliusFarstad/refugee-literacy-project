@@ -2,11 +2,10 @@ import { Image } from "expo-image";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { useLetterCase } from '@/ui/core/headers/letter-case-context';
-
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
 import { BLENDING_AUDIO_SOURCES } from "@/assets/blending_sounds";
 import { Text } from "@/ui";
+import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
@@ -122,7 +121,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
     },
   });
 
-  const { isLowercase } = useLetterCase()
+  const { isLowercase } = useLetterCase();
 
   return (
     <View style={styles.container}>
@@ -155,7 +154,11 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
             <View style={[styles.iconButton, { left: 0 }]}>
               <EnglishButton {...iconButtonProps} />
             </View>
-            <Text style={[styles.text, styles.word]}>{isLowercase ? content.word.toLowerCase() : content.word.toUpperCase()}</Text>
+            <Text style={[styles.text, styles.word]}>
+              {isLowercase
+                ? content.word.toLowerCase()
+                : content.word.toUpperCase()}
+            </Text>
           </View>
         </AnimatedAudioButton>
 
@@ -169,7 +172,9 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
               height={40}
             >
               <View style={styles.letterButton}>
-                <Text style={[styles.text, styles.letter]}>{isLowercase ? letter.toLowerCase() : letter.toUpperCase()}</Text>
+                <Text style={[styles.text, styles.letter]}>
+                  {isLowercase ? letter.toLowerCase() : letter.toUpperCase()}
+                </Text>
               </View>
             </AnimatedAudioButton>
           ))}

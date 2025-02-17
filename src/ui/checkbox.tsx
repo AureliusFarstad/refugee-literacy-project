@@ -219,11 +219,7 @@ export const Radio = Object.assign(RadioBase, {
   Label,
 });
 
-export const SwitchIcon = ({
-  checked = false,
-  label,
-  backgroundColor,
-}: IconProps) => {
+export const SwitchIcon = ({ checked = false, label }: IconProps) => {
   const translateX = checked
     ? THUMB_OFFSET
     : WIDTH - THUMB_WIDTH - THUMB_OFFSET;

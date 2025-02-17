@@ -82,18 +82,20 @@ export const APP_COLORS = {
   offwhite: "#FAFAFA",
   grey: "#D4D4D8",
   backgroundgrey: "#F2EFF0",
-}
+};
 
 export type AppColorScheme = (typeof APP_COLORS)[keyof typeof APP_COLORS];
 
 export const SECTION_COLORS = {
-  blending: { // Blues
+  blending: {
+    // Blues
     primary: "#62A0EC",
     light: "#D7E9FF",
-    dark: "#006BB4"
-  }
-}
+    dark: "#006BB4",
+  },
+};
 
-export type SectionColorScheme = (typeof SECTION_COLORS)[keyof typeof SECTION_COLORS];
+export type SectionColorScheme =
+  (typeof SECTION_COLORS)[keyof typeof SECTION_COLORS];
 
 export type LevelColorScheme = (typeof LEVEL_COLORS)[keyof typeof LEVEL_COLORS];
