@@ -13,6 +13,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+import { LetterCaseProvider } from '@/ui/core/headers/letter-case-context';
+
 import { theme } from "@/core/useThemeConfig";
 
 export {
@@ -59,7 +61,9 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <ThemeProvider value={theme}>
-        <RootLayoutNav />
+        <LetterCaseProvider>
+          <RootLayoutNav />
+        </LetterCaseProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

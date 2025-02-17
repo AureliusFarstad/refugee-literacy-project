@@ -73,4 +73,27 @@ export const LEVEL_COLORS = {
   },
 } as const;
 
+export const APP_COLORS = {
+  green: "#62CC82",
+  lightgreen: "#C9FFD9",
+  darkgreen: "#00803C",
+  red: "#FF5A5F",
+  offblack: "#2F2F38",
+  offwhite: "#FAFAFA",
+  grey: "#D4D4D8",
+  backgroundgrey: "#F2EFF0",
+}
+
+export type AppColorScheme = (typeof APP_COLORS)[keyof typeof APP_COLORS];
+
+export const SECTION_COLORS = {
+  blending: { // Blues
+    primary: "#62A0EC",
+    light: "#D7E9FF",
+    dark: "#006BB4"
+  }
+}
+
+export type SectionColorScheme = (typeof SECTION_COLORS)[keyof typeof SECTION_COLORS];
+
 export type LevelColorScheme = (typeof LEVEL_COLORS)[keyof typeof LEVEL_COLORS];

@@ -1,12 +1,13 @@
 import React from "react";
-import { FlatList } from "react-native";
+import { FlatList, StyleSheet, View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { LEVEL_COLORS } from "@/constants/routes";
-import { BlendingFlashCard } from "@/ui/components/blending-flashcard";
-import Header from "@/ui/core/headers";
+import { SECTION_COLORS, APP_COLORS } from "@/constants/routes";
 
-const FLASH_CARDS = [
+import Header from "@/ui/core/headers";
+import { BlendingFlashCard } from "@/ui/components/blending-flashcard";
+
+const BLENDING_FLASHCARDS = [
   {
     id: "1",
     letters: ["p", "a", "n"],
@@ -52,30 +53,44 @@ const FLASH_CARDS = [
 ];
 
 const colors = {
-  background_color: "#F2EFF0",
-  primary_color: LEVEL_COLORS.levelFour.primary,
-  secondary_color: LEVEL_COLORS.levelFour.secondary,
-  off_white_color: "#FAFAFA",
-  off_black_color: "#313136",
+  background_color: APP_COLORS.backgroundgrey,
+  primary_color: SECTION_COLORS.blending.primary,
+  secondary_color: SECTION_COLORS.blending.light,
+  off_white_color: APP_COLORS.offwhite,
+  off_black_color: APP_COLORS.offblack,
 };
 
 export default function FlashCardContainer() {
-  return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#F2EFF0",
-      }}
-    >
-      <Header title="Blending Flashcards" />
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: APP_COLORS.backgroundgrey,
+    },
+    scrollable: {
+      flex: 1,
+      width: "100%",
+      backgroundColor: APP_COLORS.backgroundgrey,
+      // paddingBottom: 1000, // TODO: See comment below.
+    }
+  });
 
-      <FlatList
-        data={FLASH_CARDS}
-        renderItem={({ item }) => (
-          <BlendingFlashCard content={item} colors={colors} />
-        )}
-        keyExtractor={(item) => item.id}
-      />
+  return (
+    <SafeAreaView>
+      <Header title="Blending Flashcards" />
+      <View className="flex h-full w-full items-center">
+        <FlatList
+          style={styles.scrollable}
+          data={BLENDING_FLASHCARDS}
+          renderItem={({ item }) => (
+            <BlendingFlashCard content={item} colors={colors} />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+        {/* Help TODO: Om, I can't get a nice padding on the bottom of the scrollable area to align with the bottom tab bar*/}
+        <View className="t-400">
+          <Text>Hello.</Text>
+        </View>
+      </View>  
     </SafeAreaView>
   );
 }

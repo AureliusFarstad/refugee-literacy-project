@@ -1,13 +1,6 @@
 import * as React from "react";
 import Svg, { Circle, Path } from "react-native-svg";
-
-export type ButtonColorProps = {
-  primaryColor: string;
-  secondaryColor: string;
-  offwhiteColor: string;
-  offblackColor: string;
-  backgroundColor: string;
-};
+import { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 
 export const NativeButton = ({
   primaryColor,

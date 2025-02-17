@@ -235,7 +235,7 @@ export const SwitchIcon = ({
           style={{
             width: WIDTH,
             height: HEIGHT,
-            backgroundColor: "#D4D4D8",
+            backgroundColor: "#62CC82",
           }}
         />
       </View>
@@ -244,7 +244,7 @@ export const SwitchIcon = ({
           height: THUMB_HEIGHT,
           width: THUMB_WIDTH,
           position: "absolute",
-          backgroundColor: backgroundColor,
+          backgroundColor: "#FAFAFA",
           borderRadius: 18,
           right: 0,
         }}
