@@ -9,6 +9,7 @@ export type LevelTwoBottomTabRoutes = {
   spelling: undefined;
   "multiple-choice": undefined;
   flashcard: undefined;
+  blending_flashcard: undefined;
 };
 
 export type LevelThreeBottomTabRoutes = {
