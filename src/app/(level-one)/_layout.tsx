@@ -1,86 +1,70 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import type { SvgProps } from "react-native-svg";
 
-import type { LevelOneBottomTabRoutes } from "@/types/navigation-types";
-import {
-  EarTabBarIcon,
-  LetterFormationIcon,
-  LetterMatchingIcon,
-  LetterNameIcon,
-  TeacherTipsIcon,
-} from "@/ui/icons";
+import { SECTION_COLORS } from "@/constants/routes";
+import TabIconWrapper from "@/ui/icons/bottom-tab/bottom-tab-wrapper";
+import { ConnectIcon } from "@/ui/icons/bottom-tab/connect-icon";
+import { EarIcon } from "@/ui/icons/bottom-tab/ear-icon";
+import { NameIcon } from "@/ui/icons/bottom-tab/name-icon";
+import { PencilIcon } from "@/ui/icons/bottom-tab/pencil-icon";
+import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
 import { IS_IOS } from "@/utils/layout";
 
-type BarIconType = {
-  name: keyof LevelOneBottomTabRoutes;
-  color: string;
-  focused: boolean;
-};
-
-type TabIconsType = {
-  [key in keyof LevelOneBottomTabRoutes]: (props: SvgProps) => JSX.Element;
-};
-
-const tabsIcons: TabIconsType = {
-  "letter-introduction": (props: SvgProps) => <TeacherTipsIcon {...props} />,
-  "letter-formation": (props: SvgProps) => <LetterFormationIcon {...props} />,
-  "letter-sound": (props: SvgProps) => <EarTabBarIcon {...props} />,
-  "letter-name": (props: SvgProps) => <LetterNameIcon {...props} />,
-  "letter-matching": (props: SvgProps) => <LetterMatchingIcon {...props} />,
-};
-
-const BarIcon = ({ color, name, ...reset }: BarIconType) => {
-  const Icon = tabsIcons[name];
-  return <Icon color={color} {...reset} />;
-};
+const sectionColor = SECTION_COLORS.alphabet;
 
 type TabType = {
-  name: keyof LevelOneBottomTabRoutes;
+  name: string;
   label: string;
+  icon: (props: { lineColor: string }) => JSX.Element;
 };
 
 const tabs: TabType[] = [
   {
     name: "letter-introduction",
-    label: "Introduction",
+    label: "letter-introduction",
+    icon: TeacherIcon,
   },
   {
     name: "letter-formation",
-    label: "Formation",
+    label: "letter-formation",
+    icon: PencilIcon,
   },
   {
     name: "letter-sound",
-    label: "Sound",
+    label: "letter-sound",
+    icon: EarIcon,
   },
   {
     name: "letter-name",
-    label: "Name",
+    label: "letter-name",
+    icon: NameIcon,
   },
   {
     name: "letter-matching",
-    label: "Matching",
+    label: "letter-matching",
+    icon: ConnectIcon,
   },
 ];
 
-export default function TabLayout() {
+export default function LevelTwoTabLayout() {
   return (
     <Tabs
+      initialRouteName="flashcard"
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#C385F8",
+          backgroundColor: sectionColor.primary,
           paddingTop: IS_IOS ? 16 : 4,
           height: IS_IOS ? 108 : 80,
           paddingHorizontal: 12,
         },
-        tabBarInactiveTintColor: "white",
-        tabBarActiveTintColor: "black",
+        // tabBarInactiveTintColor: "white",
+        // tabBarActiveTintColor: "black",
         tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
       })}
     >
-      {tabs.map(({ name, label }) => {
+      {tabs.map(({ name, label, icon }) => {
         return (
           <Tabs.Screen
             key={name}
@@ -88,8 +72,12 @@ export default function TabLayout() {
             options={{
               title: label,
               // eslint-disable-next-line react/no-unstable-nested-components
-              tabBarIcon: ({ color, focused }) => (
-                <BarIcon name={name} color={color} focused={focused} />
+              tabBarIcon: ({ focused }) => (
+                <TabIconWrapper
+                  focused={focused}
+                  sectionColor={sectionColor}
+                  icon={icon}
+                />
               ),
             }}
           />
