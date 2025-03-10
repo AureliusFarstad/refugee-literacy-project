@@ -1,14 +1,13 @@
 import { Tabs } from "expo-router";
 import React from "react";
 
-import { IS_IOS } from "@/utils/layout";
 import { SECTION_COLORS } from "@/constants/routes";
-
 import TabIconWrapper from "@/ui/icons/bottom-tab/bottom-tab-wrapper";
 import { DragIcon } from "@/ui/icons/bottom-tab/drag-and-drop-icon";
 import { EarIcon } from "@/ui/icons/bottom-tab/ear-icon";
-import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
 import { FlashcardIcon } from "@/ui/icons/bottom-tab/flashcard-icon";
+import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
+import { IS_IOS } from "@/utils/layout";
 
 const sectionColor = SECTION_COLORS.vocabulary;
 
@@ -38,7 +37,7 @@ const tabs: TabType[] = [
     name: "audio-multiple-choice",
     label: "audio-multiple-choice",
     icon: DragIcon,
-  }
+  },
 ];
 
 export default function LevelTwoTabLayout() {
