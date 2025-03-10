@@ -1,100 +1,65 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import type { SvgProps } from "react-native-svg";
 
-import { LEVEL_COLORS } from "@/constants/routes";
-import type { LevelFourBottomTabRoutes } from "@/types/navigation-types";
-import { TeacherTipsIcon } from "@/ui/icons";
 import { IS_IOS } from "@/utils/layout";
+import { SECTION_COLORS } from "@/constants/routes";
 
-type BarIconType = {
-  name: keyof LevelFourBottomTabRoutes;
-  color: string;
-  focused: boolean;
-};
+import TabIconWrapper from "@/ui/icons/bottom-tab/bottom-tab-wrapper";
+import { DragIcon } from "@/ui/icons/bottom-tab/drag-and-drop-icon";
+import { EarIcon } from "@/ui/icons/bottom-tab/ear-icon";
+import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
+import { FlashcardIcon } from "@/ui/icons/bottom-tab/flashcard-icon";
 
-type TabIconsType = {
-  [key in keyof LevelFourBottomTabRoutes]: (props: SvgProps) => JSX.Element;
-};
-
-const tabsIcons: TabIconsType = {
-  flashcard: (props: SvgProps) => (
-    <TeacherTipsIcon
-      {...props}
-      primaryColor={LEVEL_COLORS.levelFour.primary}
-      secondaryColor="#FFF6D7"
-    />
-  ),
-  "video-explanation": (props: SvgProps) => (
-    <TeacherTipsIcon
-      {...props}
-      primaryColor={LEVEL_COLORS.levelFour.primary}
-      secondaryColor="#FFF6D7"
-    />
-  ),
-  "picture-multiple-choice": (props: SvgProps) => (
-    <TeacherTipsIcon
-      {...props}
-      primaryColor={LEVEL_COLORS.levelFour.primary}
-      secondaryColor="#FFF6D7"
-    />
-  ),
-  "audio-multiple-choice": (props: SvgProps) => (
-    <TeacherTipsIcon
-      {...props}
-      primaryColor={LEVEL_COLORS.levelFour.primary}
-      secondaryColor="#FFF6D7"
-    />
-  ),
-};
-
-const BarIcon = ({ color, name, ...reset }: BarIconType) => {
-  const Icon = tabsIcons[name];
-  return <Icon color={color} {...reset} />;
-};
+const sectionColor = SECTION_COLORS.vocabulary;
 
 type TabType = {
-  name: keyof LevelFourBottomTabRoutes;
+  name: string;
   label: string;
+  icon: (props: { lineColor: string }) => JSX.Element;
 };
 
 const tabs: TabType[] = [
   {
     name: "flashcard",
-    label: "Introduction",
+    label: "flashcard",
+    icon: FlashcardIcon,
   },
   {
     name: "video-explanation",
-    label: "Video",
+    label: "video-explanation",
+    icon: TeacherIcon,
   },
   {
     name: "picture-multiple-choice",
-    label: "Audio",
+    label: "picture-multiple-choiceg",
+    icon: EarIcon,
   },
   {
     name: "audio-multiple-choice",
-    label: "Audio",
-  },
+    label: "audio-multiple-choice",
+    icon: DragIcon,
+  }
 ];
 
-export default function TabLayout() {
+export default function LevelTwoTabLayout() {
   return (
     <Tabs
+      initialRouteName="flashcard"
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: LEVEL_COLORS.levelFour.primary,
+          backgroundColor: sectionColor.primary,
           paddingTop: IS_IOS ? 16 : 4,
           height: IS_IOS ? 108 : 80,
           paddingHorizontal: 12,
         },
-        tabBarInactiveTintColor: "white",
-        tabBarActiveTintColor: "black",
+        // tabBarInactiveTintColor: "white",
+        // tabBarActiveTintColor: "black",
         tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
       })}
     >
-      {tabs.map(({ name, label }) => {
+      {tabs.map(({ name, label, icon }) => {
         return (
           <Tabs.Screen
             key={name}
@@ -102,8 +67,12 @@ export default function TabLayout() {
             options={{
               title: label,
               // eslint-disable-next-line react/no-unstable-nested-components
-              tabBarIcon: ({ color, focused }) => (
-                <BarIcon name={name} color={color} focused={focused} />
+              tabBarIcon: ({ focused }) => (
+                <TabIconWrapper
+                  focused={focused}
+                  sectionColor={sectionColor}
+                  icon={icon}
+                />
               ),
             }}
           />
