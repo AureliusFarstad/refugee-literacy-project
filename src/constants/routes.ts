@@ -95,10 +95,10 @@ export const SECTION_COLORS = {
   },
   vocabulary: {
     // Greens
-    primary: '#F69F4E',
-    light: '#FAE7D6',
-    dark: '#9A5B00',
-  }
+    primary: "#F69F4E",
+    light: "#FAE7D6",
+    dark: "#9A5B00",
+  },
 };
 
 export type SectionColorScheme =

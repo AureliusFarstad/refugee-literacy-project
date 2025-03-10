@@ -6,8 +6,8 @@ import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
 import { BLENDING_AUDIO_SOURCES } from "@/assets/blending_sounds";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
+import { NativeButton } from "@/ui/icons/circular/native-button";
 import { SnailButton } from "@/ui/icons/circular/snail-button";
-import { NativeButton } from '@/ui/icons/circular/native-button';
 
 type VocabularyFlashCardProps = {
   content: {
@@ -24,7 +24,10 @@ type VocabularyFlashCardProps = {
   };
 };
 
-export const VocabularyFlashCard = ({ content, colors }: VocabularyFlashCardProps) => {
+export const VocabularyFlashCard = ({
+  content,
+  colors,
+}: VocabularyFlashCardProps) => {
   // Shared button props for consistency
   const iconButtonProps = {
     primaryColor: colors.primary_color,
@@ -119,7 +122,6 @@ export const VocabularyFlashCard = ({ content, colors }: VocabularyFlashCardProp
             </AnimatedAudioButton>
           </View>
         </View>
-
 
         {/* Audio Button Rows */}
         <View style={styles.buttonRow}>
