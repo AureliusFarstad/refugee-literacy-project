@@ -4,16 +4,14 @@ import { StyleSheet, View } from "react-native";
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
 import { BLENDING_AUDIO_SOURCES } from "@/assets/blending_sounds";
-import { Text } from "@/ui";
-import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
-import { NativeButton } from "@/ui/icons/circular/native-button";
+import { SnailButton } from "@/ui/icons/circular/snail-button";
+import { NativeButton } from '@/ui/icons/circular/native-button';
 
-type FlashCardProps = {
+type VocabularyFlashCardProps = {
   content: {
     id: string;
-    letters: string[];
     word: string;
     image: string;
   };
@@ -26,7 +24,7 @@ type FlashCardProps = {
   };
 };
 
-export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
+export const VocabularyFlashCard = ({ content, colors }: VocabularyFlashCardProps) => {
   // Shared button props for consistency
   const iconButtonProps = {
     primaryColor: colors.primary_color,
@@ -72,6 +70,24 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       width: 40,
       height: 40,
     },
+    buttonRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    englishButtonOverlay: {
+      // top: -10,
+      // right: -10,
+      width: 40,
+      height: 40,
+      backgroundColor: colors.off_white_color,
+    },
+    snailButtonOverlay: {
+      // top: -10,
+      // left: -10,
+      width: 40,
+      height: 40,
+      backgroundColor: colors.off_white_color,
+    },
     nativeButtonOverlay: {
       position: "absolute",
       top: -10,
@@ -81,47 +97,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       borderRadius: 30,
       backgroundColor: colors.off_white_color,
     },
-    wordContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      width: 180,
-      height: 40,
-      borderRadius: 20,
-      backgroundColor: colors.primary_color,
-      // alignSelf: "center",
-    },
-    text: {
-      color: colors.off_black_color,
-      fontWeight: "bold",
-      textAlign: "center",
-    },
-    word: {
-      fontSize: 24,
-      height: 40, // TODO: might change with font.
-      lineHeight: 40,
-    },
-    lettersContainer: {
-      paddingTop: 18,
-      flexDirection: "row",
-      justifyContent: "center",
-      flexWrap: "wrap",
-      gap: 25,
-    },
-    letterButton: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
-      backgroundColor: colors.primary_color,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    letter: {
-      fontSize: 20,
-    },
   });
-
-  const { isLowercase } = useLetterCase();
 
   return (
     <View style={styles.container}>
@@ -144,40 +120,30 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
           </View>
         </View>
 
-        {/* English Word Rectangular Button */}
-        <AnimatedAudioButton
-          audioSource={BLENDING_AUDIO_SOURCES[content.word].file}
-          width={180}
-          height={40}
-        >
-          <View style={styles.wordContainer}>
-            <View style={[styles.iconButton, { left: 0 }]}>
-              <EnglishButton {...iconButtonProps} />
-            </View>
-            <Text style={[styles.text, styles.word]}>
-              {isLowercase
-                ? content.word.toLowerCase()
-                : content.word.toUpperCase()}
-            </Text>
-          </View>
-        </AnimatedAudioButton>
 
-        {/* Letter Buttons */}
-        <View style={styles.lettersContainer}>
-          {content.letters.map((letter) => (
+        {/* Audio Button Rows */}
+        <View style={styles.buttonRow}>
+          {/* English Button */}
+          <View style={styles.englishButtonOverlay}>
             <AnimatedAudioButton
-              key={letter} // TODO: do we need this?
-              audioSource={ALPHABET_AUDIO_SOURCES[letter].sound}
+              audioSource={BLENDING_AUDIO_SOURCES[content.word].file}
               width={40}
               height={40}
             >
-              <View style={styles.letterButton}>
-                <Text style={[styles.text, styles.letter]}>
-                  {isLowercase ? letter.toLowerCase() : letter.toUpperCase()}
-                </Text>
-              </View>
+              <EnglishButton {...iconButtonProps} />
             </AnimatedAudioButton>
-          ))}
+          </View>
+
+          {/* Snail Buttons */}
+          <View style={styles.snailButtonOverlay}>
+            <AnimatedAudioButton
+              audioSource={BLENDING_AUDIO_SOURCES[content.word].file}
+              width={40}
+              height={40}
+            >
+              <SnailButton {...iconButtonProps} />
+            </AnimatedAudioButton>
+          </View>
         </View>
       </View>
     </View>
