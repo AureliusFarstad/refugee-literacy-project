@@ -7,11 +7,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import type { SvgProps } from "react-native-svg";
 
 import {
   BLENDING_AUDIO_SOURCES,
-  BLENDING_IMAGE_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
 } from "@/assets/blending";
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
