@@ -1,47 +1,25 @@
-import React, { useRef, useState } from "react";
-import {
-  Animated,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React from "react";
+import { SafeAreaView, StyleSheet, View } from "react-native";
+import { Text } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import type { SvgProps } from "react-native-svg";
 
 import {
   BLENDING_AUDIO_SOURCES,
+  BLENDING_IMAGE_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
 } from "@/assets/blending";
-import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
+import type { SectionColorTheme } from "@/constants/routes";
+import { WordChoiceScreen } from "@/ui/components/multiple-choice";
+import type { WordSet } from "@/ui/components/multiple-choice/types";
 import Header from "@/ui/core/headers";
 import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
-interface ColorTheme {
-  appBackgroundColor: string;
-  appWhiteColor: string;
-  appBlackColor: string;
-  appGreyColor: string;
-  appGreenColor: string;
-  appRedColor: string;
-  sectionPrimaryColor: string;
-  sectionSecondaryColor: string;
-}
-interface WordSet {
-  correctAnswer: string;
-  options: string[];
-}
-interface WordChoiceScreenProps {
-  wordSets?: WordSet[];
-  audioSets?: Record<string, { file: any }>;
-  // imageSets?: Record<string, { file: React.FC<SvgProps> }>;
-  colors: ColorTheme;
-  onGameComplete?: () => void;
-}
+import { HEIGHT, IS_IOS } from "@/utils/layout";
 
-type AnimatedValue = Animated.Value;
-type AnimatedInterpolation = Animated.AnimatedInterpolation<number>;
+import { SECTION_COLOR } from "./_layout";
 
 const GeneratedWordSets: WordSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   (word: string) => {
@@ -56,356 +34,133 @@ const GeneratedWordSets: WordSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   },
 );
 
-const DEFAULT_COLORS: ColorTheme = {
-  appBackgroundColor: APP_COLORS.backgroundgrey,
-  appWhiteColor: APP_COLORS.offwhite,
-  appBlackColor: APP_COLORS.offblack,
-  appGreyColor: APP_COLORS.grey,
-  appGreenColor: APP_COLORS.green,
-  appRedColor: APP_COLORS.red,
-  sectionPrimaryColor: SECTION_COLORS.blending.primary,
-  sectionSecondaryColor: SECTION_COLORS.blending.light,
+const buttonStyles: ButtonColorProps = {
+  // TODO: Refactor this out to _layout?
+  primaryColor: SECTION_COLOR.sectionPrimaryColor,
+  secondaryColor: SECTION_COLOR.sectionSecondaryColor,
+  offwhiteColor: SECTION_COLOR.appWhiteColor,
+  offblackColor: SECTION_COLOR.appBlackColor,
+  backgroundColor: SECTION_COLOR.appBackgroundColor,
 };
 
-const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
-  wordSets = GeneratedWordSets,
-  audioSets = BLENDING_AUDIO_SOURCES,
-  // imageSets = BLENDING_IMAGE_SOURCES,
-  colors = DEFAULT_COLORS,
-  onGameComplete,
-}) => {
-  const [currentSetIndex, setCurrentSetIndex] = useState<number>(0);
-  const [selectedWord, setSelectedWord] = useState<string | null>(null);
-  const [disabledWords, setDisabledWords] = useState<string[]>([]);
-  const [isError, setIsError] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+const RenderFrontCard = (word: string) => {
+  return (
+    <AnimatedAudioButton
+      audioSource={BLENDING_AUDIO_SOURCES[word].file}
+      width={120}
+      height={120}
+    >
+      <View style={[{ width: 120, height: 120 }]}>
+        <EarButton {...buttonStyles} />
+      </View>
+    </AnimatedAudioButton>
+  );
+};
 
-  const shakeAnimation = useRef<AnimatedValue>(new Animated.Value(0)).current;
-  const flipAnimation = useRef<AnimatedValue>(new Animated.Value(0)).current;
-
-  const currentWordSet = wordSets[currentSetIndex];
-
-  const flipValue: AnimatedInterpolation = flipAnimation.interpolate({
-    inputRange: [0, 180],
-    outputRange: ["0deg", "180deg"],
-  });
-
-  const backFlipValue: AnimatedInterpolation = flipAnimation.interpolate({
-    inputRange: [0, 180],
-    outputRange: ["180deg", "360deg"],
-  });
-
-  const frontOpacity: AnimatedInterpolation = flipAnimation.interpolate({
-    inputRange: [0, 90, 180],
-    outputRange: [1, 0, 0],
-  });
-
-  const backOpacity: AnimatedInterpolation = flipAnimation.interpolate({
-    inputRange: [0, 90, 180],
-    outputRange: [0, 0, 1],
-  });
-
-  const resetGame = (): void => {
-    flipAnimation.setValue(0);
-    setSelectedWord(null);
-    setDisabledWords([]);
-    setIsError(false);
-    setIsSuccess(false);
-  };
-
-  const moveToNextSet = (): void => {
-    if (currentSetIndex < wordSets.length - 1) {
-      setCurrentSetIndex((prev) => prev + 1);
-      resetGame();
-    } else {
-      // Game finished. Resets the sets.
-      onGameComplete?.();
-      setCurrentSetIndex(0);
-      resetGame();
-    }
-  };
-
-  const startShake = (): void => {
-    Animated.sequence([
-      Animated.timing(shakeAnimation, {
-        toValue: 10,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnimation, {
-        toValue: -10,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnimation, {
-        toValue: 10,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnimation, {
-        toValue: -10,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnimation, {
-        toValue: 10,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnimation, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      setIsError(false);
-    });
-  };
-
-  const startFlip = (): void => {
-    Animated.timing(flipAnimation, {
-      toValue: 180,
-      duration: 800,
-      useNativeDriver: true,
-    }).start(() => {
-      // Wait for 1.5 seconds after flip completes before moving to next set
-      setTimeout(moveToNextSet, 1500);
-    });
-  };
-
-  const handleWordSelect = (word: string): void => {
-    if (disabledWords.includes(word)) {
-      return;
-    }
-
-    setSelectedWord(word);
-
-    if (word !== currentWordSet.correctAnswer) {
-      setIsError(true);
-      startShake();
-
-      setTimeout(() => {
-        setDisabledWords([...disabledWords, word]);
-        setSelectedWord(null);
-      }, 800);
-    } else {
-      setIsSuccess(true);
-      startFlip();
-    }
-  };
-
-  const buttonStyles: ButtonColorProps = {
-    primaryColor: colors.sectionPrimaryColor,
-    secondaryColor: colors.sectionSecondaryColor,
-    offwhiteColor: colors.appWhiteColor,
-    offblackColor: colors.appBlackColor,
-    backgroundColor: colors.appBackgroundColor,
-  };
-
+const RenderBackCard = (word: string, colors: SectionColorTheme) => {
   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.appBackgroundColor,
-    },
-    content: {
-      flex: 1,
-      padding: 20,
-      paddingBottom: 40,
-      justifyContent: "space-between", // Ensures top, middle, and bottom spacing
-      alignItems: "center",
-    },
-    progressContainer: {
-      height: 40,
-      alignItems: "center",
-      justifyContent: "center", // Centers the progress text
-    },
-    progressText: {
-      fontSize: 18,
-      fontWeight: "500",
-      color: colors.appBlackColor,
-    },
     cardContainer: {
-      width: 280,
-      height: 260,
-      maxHeight: 260,
+      flex: 1,
+      display: "flex",
+      flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
-      alignSelf: "center", // Ensures it stays centered
-      flex: 1, // Takes up available space
-    },
-    cardFace: {
-      borderRadius: 16,
-      backgroundColor: "white",
-      position: "absolute",
-      justifyContent: "center",
-      alignItems: "center",
-      backfaceVisibility: "hidden",
-      width: "100%",
-      height: "100%",
-      borderWidth: 2,
-      borderStyle: "solid",
-      borderColor: colors.sectionPrimaryColor,
-    },
-    cardFront: {
-      zIndex: 1,
+      width: "100%", // Ensure the container has width
+      padding: 10,
     },
     cardBackImageContainer: {
-      width: "100%",
-      height: 200,
-      padding: 20,
-      backgroundColor: colors.appBackgroundColor,
-      borderRadius: 10,
+      width: "100%", // Full width of parent container
+      height: "70%", // 70% of parent container height
+      borderRadius: 12, // TODO: Check this value
+      backgroundColor: colors.appGreyColor, // TODO: Check this value
       justifyContent: "center",
       alignItems: "center",
-      marginBottom: 40,
-      position: "relative",
+      marginBottom: 20,
     },
     cardBackImage: {
-      // width: "100%",
-      // height: 200,
-      borderRadius: 8,
+      width: "100%",
+      height: "100%",
+      resizeMode: "contain", // This ensures the image fits while maintaining aspect ratio
     },
     cardBackText: {
-      fontSize: 36,
-      fontWeight: "bold",
-      color: colors.appWhiteColor,
-    },
-    choicesContainer: {
-      flexDirection: "row",
-      justifyContent: "center", // Centers buttons
-      flexWrap: "wrap",
-      alignItems: "center",
-      alignSelf: "center", // Center this container itself
-    },
-    choiceButton: {
-      backgroundColor: "white",
-      width: 80, // Fixed size
-      height: 80, // Fixed size
-      aspectRatio: 1, // Ensures square
-      borderRadius: 8,
-      alignItems: "center",
-      justifyContent: "center",
-      alignSelf: "center",
-    },
-    selectedButton: {
-      backgroundColor: colors.sectionPrimaryColor,
-    },
-    errorButton: {
-      backgroundColor: colors.appRedColor,
-    },
-    successButton: {
-      backgroundColor: colors.appGreenColor,
-    },
-    disabledButton: {
-      backgroundColor: colors.appGreyColor,
-    },
-    choiceText: {
       fontSize: 24,
-      fontWeight: "500",
-    },
-    disabledText: {
-      color: colors.appWhiteColor,
+      color: colors.appBlackColor,
+      textAlign: "center",
+      fontFamily: "sans-serif",
+      // letterSpacing: 2, // TODO: Maybe have letter spacing everywhere?
     },
   });
+
+  const SvgComponent = BLENDING_IMAGE_SOURCES[
+    word as keyof typeof BLENDING_IMAGE_SOURCES
+  ].file as React.FC<SvgProps>;
 
   const { isLowercase } = useLetterCase();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header title="Blending Multiple Choice" />
-      <View style={styles.content}>
-        {/* Progress Tracker TODO: Maybe remove? */}
-        <View style={styles.progressContainer}>
-          <Text style={styles.progressText}>
-            {currentSetIndex + 1} / {wordSets.length}
-          </Text>
-        </View>
+    <View style={styles.cardContainer}>
+      {/* Image */}
+      <View style={styles.cardBackImageContainer}>
+        <SvgComponent style={styles.cardBackImage} />
+      </View>
+      {/* Text */}
+      <Text style={styles.cardBackText}>
+        {isLowercase ? word.toLowerCase() : word.toUpperCase()}
+      </Text>
+    </View>
+  );
+};
 
-        {/* Card Front */}
-        <View style={styles.cardContainer}>
-          <Animated.View
-            style={[
-              styles.cardFace,
-              styles.cardFront,
-              {
-                opacity: frontOpacity,
-                transform: [{ rotateY: flipValue }],
-              },
-            ]}
-          >
-            {/* Audio Button */}
-            <AnimatedAudioButton
-              audioSource={
-                (audioSets as Record<string, { file: any }>)[
-                  currentWordSet.correctAnswer
-                ].file
-              }
-              width={120}
-              height={120}
-            >
-              <View style={[{ width: 120, height: 120 }]}>
-                <EarButton {...buttonStyles} />
-              </View>
-            </AnimatedAudioButton>
-          </Animated.View>
-          <Animated.View
-            style={[
-              styles.cardFace,
-              {
-                opacity: backOpacity,
-                transform: [{ rotateY: backFlipValue }],
-              },
-            ]}
-          >
-            <Text style={styles.cardBackText}>
-              {isLowercase
-                ? currentWordSet.correctAnswer.toLowerCase()
-                : currentWordSet.correctAnswer.toUpperCase()}
-            </Text>
-          </Animated.View>
-        </View>
+const RenderOption = (
+  word: string,
+  isSelected: boolean,
+  isDisabled: boolean,
+  isError: boolean,
+  isSuccess: boolean,
+  isCorrect: boolean,
+  colors: SectionColorTheme,
+) => {
+  const styles = {
+    optionText: {
+      fontSize: 24,
+    },
+    disabledText: {
+      color: colors.appWhiteColor,
+    },
+  };
 
-        <View style={[styles.choicesContainer]}>
-          {currentWordSet.options.map((word) => (
-            <TouchableOpacity
-              key={word}
-              onPress={() => handleWordSelect(word)}
-              disabled={disabledWords.includes(word) || isSuccess}
-              style={{ flex: 1 }}
-            >
-              <Animated.View
-                style={[
-                  styles.choiceButton,
-                  selectedWord === word && styles.selectedButton,
-                  isError && selectedWord === word && styles.errorButton,
-                  isSuccess &&
-                    word === currentWordSet.correctAnswer &&
-                    styles.successButton,
-                  disabledWords.includes(word) && styles.disabledButton,
-                  selectedWord === word && {
-                    transform: [
-                      {
-                        translateX: shakeAnimation,
-                      },
-                    ],
-                  },
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.choiceText,
-                    disabledWords.includes(word) && styles.disabledText,
-                  ]}
-                >
-                  {isLowercase ? word.toLowerCase() : word.toUpperCase()}
-                </Text>
-              </Animated.View>
-            </TouchableOpacity>
-          ))}
-        </View>
+  const { isLowercase } = useLetterCase();
+
+  return (
+    <Text style={[styles.optionText, isDisabled && styles.disabledText]}>
+      {isLowercase ? word.toLowerCase() : word.toUpperCase()}
+    </Text>
+  );
+};
+
+const AudioMultipleChoice = () => {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View
+        style={{
+          height:
+            HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
+          flex: 1,
+        }}
+      >
+        <Header title="Image Multiple Choice" />
+        <WordChoiceScreen
+          wordSets={GeneratedWordSets}
+          colors={SECTION_COLOR}
+          renderFrontCard={RenderFrontCard}
+          renderBackCard={RenderBackCard}
+          renderOption={RenderOption}
+        />
       </View>
     </SafeAreaView>
   );
 };
 
-export default WordChoiceScreen;
+export default AudioMultipleChoice;
