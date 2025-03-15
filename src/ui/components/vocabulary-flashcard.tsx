@@ -3,7 +3,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
-import { BLENDING_AUDIO_SOURCES } from "@/assets/blending_sounds";
+import { BLENDING_AUDIO_SOURCES } from "@/assets/blending/index";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";

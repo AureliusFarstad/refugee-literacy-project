@@ -1,7 +1,8 @@
 import { Tabs } from "expo-router";
 import React from "react";
 
-import { SECTION_COLORS } from "@/constants/routes";
+import type { SectionColorTheme } from "@/constants/routes";
+import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import TabIconWrapper from "@/ui/icons/bottom-tab/bottom-tab-wrapper";
 import { DragIcon } from "@/ui/icons/bottom-tab/drag-and-drop-icon";
 import { EarIcon } from "@/ui/icons/bottom-tab/ear-icon";
@@ -10,6 +11,18 @@ import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
 import { IS_IOS } from "@/utils/layout";
 
 const sectionColor = SECTION_COLORS.vocabulary;
+
+// Default color theme
+export const SECTION_COLOR: SectionColorTheme = {
+  appBackgroundColor: APP_COLORS.backgroundgrey,
+  appWhiteColor: APP_COLORS.offwhite,
+  appBlackColor: APP_COLORS.offblack,
+  appGreyColor: APP_COLORS.grey,
+  appGreenColor: APP_COLORS.green,
+  appRedColor: APP_COLORS.red,
+  sectionPrimaryColor: sectionColor.primary,
+  sectionSecondaryColor: sectionColor.light,
+};
 
 type TabType = {
   name: string;

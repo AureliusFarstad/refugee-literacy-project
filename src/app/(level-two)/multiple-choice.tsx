@@ -7,19 +7,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import type { SvgProps } from "react-native-svg";
 
+import {
+  BLENDING_AUDIO_SOURCES,
+  BLENDING_IMAGE_SOURCES,
+  BLENDING_WORD_LIST_BY_LEVEL,
+} from "@/assets/blending";
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import Header from "@/ui/core/headers";
 import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
-
-interface WordSet {
-  correctAnswer: string;
-  options: string[];
-}
-
 interface ColorTheme {
   appBackgroundColor: string;
   appWhiteColor: string;
@@ -30,10 +30,14 @@ interface ColorTheme {
   sectionPrimaryColor: string;
   sectionSecondaryColor: string;
 }
-
+interface WordSet {
+  correctAnswer: string;
+  options: string[];
+}
 interface WordChoiceScreenProps {
   wordSets?: WordSet[];
   audioSets?: Record<string, { file: any }>;
+  // imageSets?: Record<string, { file: React.FC<SvgProps> }>;
   colors: ColorTheme;
   onGameComplete?: () => void;
 }
@@ -41,33 +45,18 @@ interface WordChoiceScreenProps {
 type AnimatedValue = Animated.Value;
 type AnimatedInterpolation = Animated.AnimatedInterpolation<number>;
 
-const DEFAULT_WORD_SETS: WordSet[] = [
-  { correctAnswer: "TAP", options: ["PAN", "TAP", "NAP"] },
-  { correctAnswer: "DOG", options: ["DOG", "LOG", "FOG"] },
-  { correctAnswer: "CAT", options: ["CAT", "CAP", "BAT"] },
-  { correctAnswer: "PIN", options: ["PEN", "PIN", "PAN"] },
-];
-
-type IBlending_Audio_Source = {
-  [key: string]: {
-    file: string;
-  };
-};
-
-const DEFAULT_AUDIO_SETS: IBlending_Audio_Source = {
-  TAP: {
-    file: require("assets/alphabet/audio/name/g.mp3"),
+const GeneratedWordSets: WordSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
+  (word: string) => {
+    return {
+      correctAnswer: word,
+      options: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
+        (option) => option !== word,
+      )
+        .slice(0, 2)
+        .concat(word),
+    };
   },
-  DOG: {
-    file: require("assets/alphabet/audio/name/h.mp3"),
-  },
-  CAT: {
-    file: require("assets/alphabet/audio/name/i.mp3"),
-  },
-  PIN: {
-    file: require("assets/alphabet/audio/name/j.mp3"),
-  },
-};
+);
 
 const DEFAULT_COLORS: ColorTheme = {
   appBackgroundColor: APP_COLORS.backgroundgrey,
@@ -81,8 +70,9 @@ const DEFAULT_COLORS: ColorTheme = {
 };
 
 const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
-  wordSets = DEFAULT_WORD_SETS,
-  audioSets = DEFAULT_AUDIO_SETS,
+  wordSets = GeneratedWordSets,
+  audioSets = BLENDING_AUDIO_SOURCES,
+  // imageSets = BLENDING_IMAGE_SOURCES,
   colors = DEFAULT_COLORS,
   onGameComplete,
 }) => {
@@ -261,8 +251,21 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
     cardFront: {
       zIndex: 1,
     },
-    cardBack: {
-      backgroundColor: colors.sectionPrimaryColor,
+    cardBackImageContainer: {
+      width: "100%",
+      height: 200,
+      padding: 20,
+      backgroundColor: colors.appBackgroundColor,
+      borderRadius: 10,
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: 40,
+      position: "relative",
+    },
+    cardBackImage: {
+      // width: "100%",
+      // height: 200,
+      borderRadius: 8,
     },
     cardBackText: {
       fontSize: 36,
@@ -313,12 +316,14 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
     <SafeAreaView style={styles.container}>
       <Header title="Blending Multiple Choice" />
       <View style={styles.content}>
+        {/* Progress Tracker TODO: Maybe remove? */}
         <View style={styles.progressContainer}>
           <Text style={styles.progressText}>
             {currentSetIndex + 1} / {wordSets.length}
           </Text>
         </View>
 
+        {/* Card Front */}
         <View style={styles.cardContainer}>
           <Animated.View
             style={[
@@ -330,6 +335,7 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
               },
             ]}
           >
+            {/* Audio Button */}
             <AnimatedAudioButton
               audioSource={
                 (audioSets as Record<string, { file: any }>)[
@@ -347,7 +353,6 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
           <Animated.View
             style={[
               styles.cardFace,
-              styles.cardBack,
               {
                 opacity: backOpacity,
                 transform: [{ rotateY: backFlipValue }],

@@ -84,6 +84,18 @@ export const APP_COLORS = {
   backgroundgrey: "#F2EFF0",
 };
 
+// Color theme definition
+export interface SectionColorTheme {
+  appBackgroundColor: string;
+  appWhiteColor: string;
+  appBlackColor: string;
+  appGreyColor: string;
+  appGreenColor: string;
+  appRedColor: string;
+  sectionPrimaryColor: string;
+  sectionSecondaryColor: string;
+}
+
 export type AppColorScheme = (typeof APP_COLORS)[keyof typeof APP_COLORS];
 
 export const SECTION_COLORS = {
