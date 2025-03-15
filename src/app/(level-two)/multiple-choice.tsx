@@ -21,6 +21,7 @@ import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
 
+// TODO: Not sure if we want to generate these or have a static list.
 const GeneratedWordSets: WordSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   (word: string) => {
     return {
@@ -34,8 +35,8 @@ const GeneratedWordSets: WordSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   },
 );
 
+// TODO: Refactor this out to _layout?
 const buttonStyles: ButtonColorProps = {
-  // TODO: Refactor this out to _layout?
   primaryColor: SECTION_COLOR.sectionPrimaryColor,
   secondaryColor: SECTION_COLOR.sectionSecondaryColor,
   offwhiteColor: SECTION_COLOR.appWhiteColor,
