@@ -1,6 +1,5 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
-import { Text } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { SvgProps } from "react-native-svg";
 
@@ -20,9 +19,8 @@ import { EarButton } from "@/ui/icons/circular/ear-button";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
-
 // TODO: Not sure if we want to generate these or have a static list.
-const GeneratedWordSets: WordSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
+const generatedWordSets: WordSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   (word: string) => {
     return {
       correctAnswer: word,
@@ -153,7 +151,7 @@ const AudioMultipleChoice = () => {
       >
         <Header title="Image Multiple Choice" />
         <WordChoiceScreen
-          wordSets={GeneratedWordSets}
+          wordSets={generatedWordSets}
           colors={SECTION_COLOR}
           renderFrontCard={RenderFrontCard}
           renderBackCard={RenderBackCard}

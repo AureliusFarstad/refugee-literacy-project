@@ -1,10 +1,12 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { VocabularyFlashCard } from "@/ui/components/vocabulary-flashcard";
 import Header from "@/ui/core/headers";
+import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 const VOCABULARY_FLASHCARDS = [
   {
@@ -30,6 +32,7 @@ const colors = {
 };
 
 export default function FlashCardContainer() {
+  // TODO: Refactor StyleSheet out of function?
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -43,21 +46,28 @@ export default function FlashCardContainer() {
     },
   });
 
+  const insets = useSafeAreaInsets();
+
   return (
-    <SafeAreaView>
-      <Header title="Blending Flashcards" />
-      <View className="flex size-full items-center">
-        <FlatList
-          style={styles.scrollable}
-          data={VOCABULARY_FLASHCARDS}
-          renderItem={({ item }) => (
-            <VocabularyFlashCard content={item} colors={colors} />
-          )}
-          keyExtractor={(item) => item.id}
-        />
-        {/* Help TODO: Om, I can't get a nice padding on the bottom of the scrollable area to align with the bottom tab bar*/}
-        <View className="t-400">
-          <Text>Hello.</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View
+        style={{
+          height:
+            HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
+          flex: 1,
+        }}
+      >
+        <Header title="Blending Flashcards" />
+        <View className="flex size-full items-center">
+          <FlatList
+            style={styles.scrollable}
+            data={VOCABULARY_FLASHCARDS}
+            renderItem={({ item }) => (
+              <VocabularyFlashCard content={item} colors={colors} />
+            )}
+            keyExtractor={(item) => item.id}
+          />
+          {/* Help TODO: Om, I can't get a nice padding on the bottom of the scrollable area to align with the bottom tab bar*/}
         </View>
       </View>
     </SafeAreaView>

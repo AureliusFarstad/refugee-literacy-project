@@ -5,6 +5,12 @@ type IAlphabet_Audio_Sources = {
   };
 };
 
+// Only load files when needed // TODO: Maybe try this?
+// export const getAudioSource = (letter: string) => ({
+//   name: require(`assets/alphabet/audio/name/${letter}.mp3`),
+//   sound: require(`assets/alphabet/audio/sound/${letter}.mp3`)
+// }); // Dynamic asset loading not supported in RN?
+
 export const ALPHABET_AUDIO_SOURCES: IAlphabet_Audio_Sources = {
   a: {
     name: require("assets/alphabet/audio/name/a.mp3"),
