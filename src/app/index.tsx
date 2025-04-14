@@ -78,23 +78,6 @@ const Home = () => {
   return (
     <SafeAreaView className="flex-1   bg-white">
       <Pressable
-        className=" bg-colors-green-500 p-5"
-        onPress={() => {
-          router.push("/video-animation");
-        }}
-      >
-        <Text>Video animation</Text>
-      </Pressable>
-      <Pressable
-        className=" bg-colors-green-500 p-5"
-        onPress={() => {
-          router.push("/(level-two)/video-tab");
-        }}
-      >
-        <Text>Video tab animation</Text>
-      </Pressable>
-
-      <Pressable
         className="hidden bg-colors-green-500 p-5"
         onPress={() => {
           router.push("/picture-multiple-choice");
