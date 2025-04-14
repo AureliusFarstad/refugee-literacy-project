@@ -1,5 +1,5 @@
-import AvatarFemaleA from "assets/illustrations/avatar-f-a.svg";
-import AvatarMaleA from "assets/illustrations/avatar-m-a.svg";
+import AvatarFemaleA from "assets/images/conversation-profiles/female-yellow.svg";
+import AvatarMaleA from "assets/images/conversation-profiles/male-yellow.svg";
 
 type UserAvatarProps = {
   name: "a" | "b";

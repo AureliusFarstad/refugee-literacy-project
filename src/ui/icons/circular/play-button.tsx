@@ -3,13 +3,26 @@ import Svg, { Circle, Path } from "react-native-svg";
 
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 
+export interface PlayButtonProps extends ButtonColorProps {
+  width?: number;
+  height?: number;
+}
+
 export const PlayButton = ({
   primaryColor,
   offwhiteColor,
   offblackColor,
-}: ButtonColorProps) => {
+  width = 40,
+  height = 40,
+}: PlayButtonProps) => {
   return (
-    <Svg width="40" height="40" viewBox="0 0 40 40" fill="none" id="svg1">
+    <Svg
+      width={width}
+      height={height}
+      viewBox="0 0 40 40"
+      fill="none"
+      id="svg1"
+    >
       <Circle cx="20" cy="20" r="20" fill={primaryColor} id="circle1" />
       <Path
         fill={offwhiteColor}
