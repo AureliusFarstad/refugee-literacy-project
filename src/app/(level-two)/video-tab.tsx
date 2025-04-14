@@ -16,7 +16,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { APP_COLORS } from "@/constants/routes";
 import useSound from "@/core/hooks/useSound";
-import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EmptyHeadButton } from "@/ui/icons/circular/empty-head-button";
 import { HomeButton } from "@/ui/icons/circular/home-button";
@@ -293,8 +292,6 @@ const VideoTab = forwardRef<WelcomeScreenVideoRef>((props, ref) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <FocusAwareStatusBar />
-
       <View className="flex-row items-center justify-between p-4">
         <View className="flex-row items-center space-x-4">
           <Pressable onPress={navigateToHome} className="p-2">
@@ -358,10 +355,13 @@ const VideoTab = forwardRef<WelcomeScreenVideoRef>((props, ref) => {
             <BlurView
               intensity={40}
               tint="dark"
-              className="absolute flex size-full items-center justify-center"
+              className="absolute size-full  items-center justify-center"
             >
-              <View className="flex flex-row">
-                <Pressable onPress={initAnimation}>
+              <View className="flex flex-row  ">
+                <Pressable
+                  onPress={initAnimation}
+                  className="flex  items-center justify-center "
+                >
                   <PlayButton
                     backgroundColor="#FBD65B"
                     offblackColor="black"
@@ -372,7 +372,9 @@ const VideoTab = forwardRef<WelcomeScreenVideoRef>((props, ref) => {
                     width={80}
                   />
                 </Pressable>
-                <HomeButton {...buttonColorProps} />
+                <Pressable className="ml-4 w-[80]" onPress={navigateToHome}>
+                  <HomeButton {...buttonColorProps} />
+                </Pressable>
               </View>
             </BlurView>
           </Animated.View>
