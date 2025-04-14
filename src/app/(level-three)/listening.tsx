@@ -6,10 +6,17 @@ import type { ReactNode } from "react";
 import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { Slider } from "react-native-awesome-slider";
-import { useSharedValue } from "react-native-reanimated";
+import Animated, {
+  cancelAnimation,
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import useSound from "@/core/hooks/useSound";
 import { useLevelStore } from "@/core/store/levels";
 import { View } from "@/ui";
 import ChatIndicator from "@/ui/components/chat-indicator";
@@ -102,38 +109,131 @@ const DATA: Message[] = [
 
 const ItemSeparator = () => <View className="h-4 bg-[#F2EFF0]" />;
 
-type AudioButtonProps = {
+// Animated Audio Button Component
+type AnimatedAudioButtonProps = {
   onPress: () => void;
   icon: ReactNode;
+  isPlaying?: boolean;
+  width?: number;
+  height?: number;
+  borderColor?: string;
+  borderWidth?: number;
+  breatheDuration?: number;
+  className?: string;
 };
 
-function AudioButton({ onPress, icon }: AudioButtonProps) {
+function AnimatedAudioButton({
+  onPress,
+  icon,
+  isPlaying = false,
+  width = 40,
+  height = 40,
+  borderColor = "#F69F4E",
+  borderWidth = 2,
+  breatheDuration = 2000,
+  className,
+}: AnimatedAudioButtonProps) {
+  const borderOpacity = useSharedValue(0);
+
+  useEffect(() => {
+    if (isPlaying) {
+      startBreathingAnimation();
+    } else {
+      stopAnimation();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPlaying]);
+
+  useEffect(() => {
+    return () => {
+      cancelAnimation(borderOpacity);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const stopAnimation = () => {
+    cancelAnimation(borderOpacity);
+    borderOpacity.value = withTiming(0, { duration: 300 });
+  };
+
+  const startBreathingAnimation = () => {
+    borderOpacity.value = withSequence(
+      withTiming(0.6, { duration: breatheDuration / 2, easing: Easing.ease }),
+      withRepeat(
+        withSequence(
+          withTiming(1, { duration: breatheDuration / 2, easing: Easing.ease }),
+          withTiming(0.6, {
+            duration: breatheDuration / 2,
+            easing: Easing.ease,
+          }),
+        ),
+        -1,
+      ),
+    );
+  };
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: borderOpacity.value,
+  }));
+
   return (
     <TouchableOpacity
-      className="flex size-[40] flex-row items-center justify-center rounded-full"
+      style={[styles.animatedButtonContainer]}
       onPress={onPress}
+      className={className}
     >
-      {icon}
+      <Animated.View
+        style={[
+          styles.animatedBorder,
+          {
+            borderColor,
+            borderWidth,
+            width: width + borderWidth * 2,
+            height: height + borderWidth * 2,
+            borderRadius: (width + borderWidth * 2) / 2,
+          },
+          animatedStyle,
+        ]}
+      />
+      <View
+        style={[
+          styles.animatedButton,
+          { width, height, borderRadius: width / 2 },
+        ]}
+      >
+        {icon}
+      </View>
     </TouchableOpacity>
   );
 }
 
+type PlayingAudio = {
+  rowIndex: number;
+  type: "english" | "native" | "none";
+};
+
 type AudioControlsProps = {
   onPlayEnglish: () => void;
   onPlayNative: () => void;
-  isActive: boolean;
   item: Message;
   conversationComplete: boolean;
+  isPlayingEnglish?: boolean;
+  isPlayingNative?: boolean;
 };
 
 function AudioControls({
   onPlayEnglish,
   onPlayNative,
-  isActive,
   item,
   conversationComplete,
+  isPlayingEnglish = false,
+  isPlayingNative = false,
 }: AudioControlsProps) {
-  console.log(isActive);
+  const englishBorderColor =
+    item?.englishAudioResources.gender === "F" ? "#FBD65B" : "#F69F4E";
+  const nativeBorderColor =
+    item?.nativeAudioResources.gender === "F" ? "#FBD65B" : "#F69F4E";
+
   return (
     <MotiView
       from={{ opacity: 0 }}
@@ -142,13 +242,16 @@ function AudioControls({
         "flex h-[72px] flex-row items-center rounded-lg border-2 border-[#D9D9D966] bg-[#EDEDED] px-6 py-4 relative",
         {
           "bg-white border-[#FBD65B]": conversationComplete,
-          " border-[#F69F4E]":
+          "border-[#F69F4E]":
             item?.englishAudioResources.gender === "M" && conversationComplete,
         },
       )}
     >
-      <AudioButton
+      <AnimatedAudioButton
         onPress={onPlayEnglish}
+        isPlaying={isPlayingEnglish}
+        borderColor={englishBorderColor}
+        className="flex size-[40] flex-row items-center justify-center rounded-full"
         icon={
           item?.englishAudioResources?.gender === "F" ? (
             <FemaleEnglishAudioPlayedIcon isPlaying={!conversationComplete} />
@@ -160,8 +263,11 @@ function AudioControls({
 
       <View className="w-2.5" />
 
-      <AudioButton
+      <AnimatedAudioButton
         onPress={onPlayNative}
+        isPlaying={isPlayingNative}
+        borderColor={nativeBorderColor}
+        className="flex size-[40] flex-row items-center justify-center rounded-full"
         icon={
           item?.nativeAudioResources?.gender === "F" ? (
             <FemaleNativeAudioPlayedIcon isPlaying={!conversationComplete} />
@@ -184,18 +290,34 @@ type MessageRowProps = {
   item: Message;
   index: number;
   activeRow: ActiveRow;
-  playAudio: (source: AVPlaybackSource) => Promise<void>;
+  playAudio: (
+    source: AVPlaybackSource,
+    rowIndex: number,
+    type: "english" | "native",
+  ) => Promise<void>;
+  playingAudio: PlayingAudio;
 };
 
-function MessageRow({ item, index, activeRow, playAudio }: MessageRowProps) {
+function MessageRow({
+  item,
+  index,
+  activeRow,
+  playAudio,
+  playingAudio,
+}: MessageRowProps) {
   const isEven = index % 2 === 0;
   const isActive = activeRow.number === index;
   const isAnimated = activeRow.rowsAnimated?.includes(index);
   const conversationComplete = activeRow.step === "complete";
 
   // Only set conversationComplete to true for an item when the entire conversation is complete
-  // This ensures only completed conversations get the white background
   const isItemComplete = conversationComplete;
+
+  // Determine if audio is playing for this specific row
+  const isPlayingEnglish =
+    playingAudio.rowIndex === index && playingAudio.type === "english";
+  const isPlayingNative =
+    playingAudio.rowIndex === index && playingAudio.type === "native";
 
   const renderContent = () => {
     if (isAnimated || (conversationComplete && index === DATA.length - 1)) {
@@ -204,10 +326,15 @@ function MessageRow({ item, index, activeRow, playAudio }: MessageRowProps) {
           {isEven && <View className="mr-4">{item.avatar}</View>}
           <AudioControls
             item={item}
-            isActive={isActive}
             conversationComplete={isItemComplete}
-            onPlayEnglish={() => playAudio(item.englishAudioResources.source)}
-            onPlayNative={() => playAudio(item.nativeAudioResources.source)}
+            isPlayingEnglish={isPlayingEnglish}
+            isPlayingNative={isPlayingNative}
+            onPlayEnglish={() =>
+              playAudio(item.englishAudioResources.source, index, "english")
+            }
+            onPlayNative={() =>
+              playAudio(item.nativeAudioResources.source, index, "native")
+            }
           />
           {!isEven && <View className="ml-4">{item.avatar}</View>}
         </View>
@@ -239,12 +366,15 @@ function MessageRow({ item, index, activeRow, playAudio }: MessageRowProps) {
               {isEven && <View className="mr-4">{item.avatar}</View>}
               <AudioControls
                 item={item}
-                isActive={isActive}
                 conversationComplete={isItemComplete}
+                isPlayingEnglish={isPlayingEnglish}
+                isPlayingNative={isPlayingNative}
                 onPlayEnglish={() =>
-                  playAudio(item.englishAudioResources.source)
+                  playAudio(item.englishAudioResources.source, index, "english")
                 }
-                onPlayNative={() => playAudio(item.nativeAudioResources.source)}
+                onPlayNative={() =>
+                  playAudio(item.nativeAudioResources.source, index, "native")
+                }
               />
               {!isEven && <View className="ml-4">{item.avatar}</View>}
             </View>
@@ -286,7 +416,10 @@ function Listening() {
     didJustFinish: false,
   });
 
-  const { playSound: playAudio } = useSound();
+  const [playingAudio, setPlayingAudio] = useState<PlayingAudio>({
+    rowIndex: -1,
+    type: "none",
+  });
 
   const [activeRow, setActiveRow] = useState<ActiveRow>({
     number: 0,
@@ -310,10 +443,49 @@ function Listening() {
         }
       } else {
         setStatus(playbackStatus as any);
+
+        // Clear playing state when audio finishes
+        if (playbackStatus.didJustFinish) {
+          setPlayingAudio({ rowIndex: -1, type: "none" });
+        }
       }
     },
     [],
   );
+
+  // Modified to handle custom audio playback
+  const playAudio = async (
+    source: AVPlaybackSource,
+    rowIndex: number,
+    type: "english" | "native",
+  ) => {
+    try {
+      // Stop existing audio if playing
+      if (sound) {
+        await sound.stopAsync();
+        await sound.unloadAsync();
+      }
+
+      // Update playing state
+      setPlayingAudio({ rowIndex, type });
+
+      // Play the new audio
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        source,
+        {},
+        onPlaybackStatusUpdate,
+      );
+
+      setSound(newSound);
+      await newSound.playAsync();
+
+      return Promise.resolve();
+    } catch (error) {
+      console.error("Error playing audio:", error);
+      setPlayingAudio({ rowIndex: -1, type: "none" });
+      return Promise.reject(error);
+    }
+  };
 
   const playSound = useCallback(
     async (currentActiveNumber: number) => {
@@ -325,26 +497,18 @@ function Listening() {
 
         console.log(`Playing audio for row: ${currentActiveNumber}`);
         const currentRowAudio = DATA[currentActiveNumber];
-        console.log(
-          "Attempting to play audio:",
-          currentRowAudio.englishAudioResources.source,
-        );
 
-        const { sound: soundResponse } = await Audio.Sound.createAsync(
+        // Use the enhanced playAudio function
+        await playAudio(
           currentRowAudio.englishAudioResources.source,
-          {},
-          onPlaybackStatusUpdate,
+          currentActiveNumber,
+          "english",
         );
-        if (soundResponse) {
-          setSound(soundResponse);
-          console.log("Sound loaded successfully");
-        }
-        console.log("Playing Sound");
-        await soundResponse.playAsync();
       } catch (error) {
         console.error("Error in playSound:", error);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [onPlaybackStatusUpdate],
   );
 
@@ -409,8 +573,6 @@ function Listening() {
       : undefined;
   }, [sound]);
 
-  console.log({ activeRow });
-
   useEffect(() => {
     progressValue.value = activeRow.number;
   }, [activeRow.number, progressValue]);
@@ -422,6 +584,9 @@ function Listening() {
     if (sound) {
       await sound.stopAsync();
       await sound.unloadAsync();
+
+      // Clear playing state
+      setPlayingAudio({ rowIndex: -1, type: "none" });
     }
 
     // Update active row state
@@ -451,6 +616,9 @@ function Listening() {
         rowsAnimated: [],
       });
 
+      // Clear playing state
+      setPlayingAudio({ rowIndex: -1, type: "none" });
+
       progressValue.value = 0;
       setIsSliding(false);
       setStatus({
@@ -463,6 +631,9 @@ function Listening() {
       // If conversation is active, pause it
       if (sound && status.isPlaying) {
         await sound.pauseAsync();
+
+        // Clear playing state
+        setPlayingAudio({ rowIndex: -1, type: "none" });
       }
     }
   };
@@ -551,6 +722,7 @@ function Listening() {
               index={index}
               activeRow={activeRow}
               playAudio={playAudio}
+              playingAudio={playingAudio}
             />
           )}
           showsVerticalScrollIndicator={false}
@@ -577,5 +749,18 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingBottom: 0,
     backgroundColor: "#F2EFF0",
+  },
+  animatedButtonContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  animatedBorder: {
+    position: "absolute",
+    borderStyle: "solid",
+  },
+  animatedButton: {
+    zIndex: 2,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
