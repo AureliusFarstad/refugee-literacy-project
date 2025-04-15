@@ -1,5 +1,3 @@
-import { Audio } from "expo-av";
-import type { Sound } from "expo-av/build/Audio";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   findNodeHandle,
@@ -15,15 +13,10 @@ import {
 } from "react-native-gesture-handler";
 import type { SharedValue } from "react-native-reanimated";
 import Reanimated, {
-  cancelAnimation,
-  Easing,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
-  withRepeat,
-  withSequence,
   withSpring,
-  withTiming,
 } from "react-native-reanimated";
 
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
@@ -44,26 +37,18 @@ type Position = {
 };
 
 type AudioSource = {
-  file: any; // Using 'any' type for required assets
+  file: string;
   letter: string;
 };
 
 // Mock data with proper typing
 const VOCABULARY_AUDIO_SOURCES: Record<string, AudioSource> = {
-  a: {
-    file: require("../../../assets/alphabet/audio/name/a.mp3"),
-    letter: "A",
-  },
-  b: {
-    file: require("../../../assets/alphabet/audio/name/b.mp3"),
-    letter: "B",
-  },
-  c: {
-    file: require("../../../assets/alphabet/audio/name/c.mp3"),
-    letter: "C",
-  },
+  a: { file: "audio_a.mp3", letter: "A" },
+  b: { file: "audio_b.mp3", letter: "B" },
+  c: { file: "audio_c.mp3", letter: "C" },
 };
 
+// Button colors - now defining the three color properties for each button
 // Using ButtonColorProps as our color configuration type
 type ButtonColorConfig = ButtonColorProps;
 
@@ -126,6 +111,10 @@ const SPRING_CONFIG: { damping: number; stiffness: number } = {
   stiffness: 100,
 };
 
+// Using imported ButtonColorProps type instead of redefining it
+
+// Remove this EnglishButton implementation since we're importing it from "@/ui/icons/circular/english-button"
+
 // Props for the button component
 interface DraggableButtonProps {
   item: ButtonItem;
@@ -138,11 +127,7 @@ interface DraggableButtonProps {
   targetPosition: Position | null;
   isPlaced?: boolean;
   isCorrect?: boolean | null;
-  isPlaying?: boolean;
   onMarkDisabled?: (buttonId: string) => void;
-  breatheDuration?: number;
-  animationBorderColor?: string;
-  animationBorderWidth?: number;
 }
 
 const DraggableAudioGame: React.FC = () => {
@@ -157,10 +142,6 @@ const DraggableAudioGame: React.FC = () => {
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean | null>(null);
   const [disabledButtons, setDisabledButtons] = useState<string[]>([]);
 
-  // Audio playback tracking
-  const [playingButtonId, setPlayingButtonId] = useState<string | null>(null);
-  const currentSound = useRef<Sound | null>(null);
-
   // Reference to target drop circle
   const dropCircleRef = useRef<View | null>(null);
 
@@ -171,113 +152,10 @@ const DraggableAudioGame: React.FC = () => {
     { id: "c", word: "c" },
   ];
 
-  // Function to play audio - simplified for reliability
-  const playAudio = useCallback(
-    async (audioFile: any, buttonId: string): Promise<void> => {
-      console.log("Playing audio for button:", buttonId);
-
-      // Stop any currently playing audio
-      if (currentSound.current) {
-        try {
-          await currentSound.current.stopAsync();
-          await currentSound.current.unloadAsync();
-        } catch (e) {
-          console.error("Error cleaning up previous sound:", e);
-        }
-        currentSound.current = null;
-      }
-
-      // Set this button as the playing one
-      setPlayingButtonId(buttonId);
-
-      try {
-        const { sound } = await Audio.Sound.createAsync(audioFile, {
-          shouldPlay: true,
-        });
-
-        // Store the current sound
-        currentSound.current = sound;
-
-        // Create a variable to track if this specific sound instance has been handled
-        let isHandled = false;
-
-        // Listen for playback status updates
-        sound.setOnPlaybackStatusUpdate((status) => {
-          if (isHandled) return;
-
-          if (!status.isLoaded) return;
-
-          if (status.didJustFinish) {
-            console.log(`Audio finished for button ${buttonId}`);
-            isHandled = true;
-
-            // Force update the playing button ID state
-            setPlayingButtonId((prevId) => {
-              if (prevId === buttonId) {
-                console.log(
-                  `Clearing playing button ID from ${prevId} to null`,
-                );
-                return null;
-              }
-              return prevId;
-            });
-
-            // Unload the sound
-            sound.unloadAsync();
-            if (currentSound.current === sound) {
-              currentSound.current = null;
-            }
-          }
-        });
-
-        // Add a safety timeout
-        const timeoutId = setTimeout(() => {
-          if (isHandled) return;
-
-          isHandled = true;
-          console.log(`Safety timeout reached for button ${buttonId}`);
-
-          setPlayingButtonId((prevId) => {
-            if (prevId === buttonId) {
-              console.log(
-                `Clearing playing button ID from ${prevId} to null (timeout)`,
-              );
-              return null;
-            }
-            return prevId;
-          });
-
-          try {
-            sound.unloadAsync();
-            if (currentSound.current === sound) {
-              currentSound.current = null;
-            }
-          } catch (e) {
-            console.error("Error cleaning up sound in timeout:", e);
-          }
-        }, 5000);
-
-        // Set up cleanup but don't return it directly
-        // This fixes the "Type '() => void' is not assignable to type 'void'" error
-        setTimeout(() => {
-          clearTimeout(timeoutId);
-        }, 6000);
-      } catch (error) {
-        console.error("Error playing audio:", error);
-        setPlayingButtonId(null);
-      }
-    },
-    [],
-  );
-
-  // Clean up sound when component unmounts
-  useEffect(() => {
-    return () => {
-      if (currentSound.current) {
-        currentSound.current.unloadAsync();
-        currentSound.current = null;
-      }
-    };
+  // Function to play audio
+  const playAudio = useCallback((audioFile: string): void => {
+    console.log("Playing audio:", audioFile);
+    // Actual audio playback implementation would go here
   }, []);
 
   // Function to get the absolute position of the target drop circle
@@ -366,7 +244,7 @@ const DraggableAudioGame: React.FC = () => {
             key={item.id}
             item={item}
             onAudioPlay={() =>
-              playAudio(VOCABULARY_AUDIO_SOURCES[item.word].file, item.id)
+              playAudio(VOCABULARY_AUDIO_SOURCES[item.word].file)
             }
             onDragStart={() => setIsCardActive(true)}
             onDragEnd={(pos, isInTarget) =>
@@ -378,7 +256,6 @@ const DraggableAudioGame: React.FC = () => {
             isPlaced={placedButtonId === item.id}
             isCorrect={placedButtonId === item.id ? isCorrectAnswer : null}
             disabled={disabledButtons.includes(item.id)}
-            isPlaying={playingButtonId === item.id}
             onMarkDisabled={(buttonId: string) =>
               setDisabledButtons((prev) => [...prev, buttonId])
             }
@@ -400,12 +277,8 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   targetPosition,
   isPlaced,
   isCorrect,
-  isPlaying = false,
   disabled = false,
   onMarkDisabled,
-  breatheDuration = 2000,
-  animationBorderColor = "#4CAF50",
-  animationBorderWidth = 4,
 }) => {
   // Track position of button
   const translateX: SharedValue<number> = useSharedValue<number>(0);
@@ -420,9 +293,6 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 
   // Track start time of touch
   const touchStartTime: SharedValue<number> = useSharedValue<number>(0);
-
-  // Animation for audio playback
-  const borderOpacity: SharedValue<number> = useSharedValue<number>(0);
 
   // Track original position (where the button starts in the button pool)
   const buttonRef = useRef<Reanimated.View | null>(null);
@@ -484,63 +354,10 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
     translateY,
   ]);
 
-  // Function to stop breathing animation
-  const stopAnimation = useCallback(() => {
-    cancelAnimation(borderOpacity);
-    borderOpacity.value = withTiming(0, { duration: 500 });
-  }, [borderOpacity]);
-
-  // Function to start breathing animation
-  const startBreathingAnimation = useCallback(() => {
-    // Reset opacity before starting animation
-    borderOpacity.value = 0;
-
-    // Start the animation sequence
-    borderOpacity.value = withSequence(
-      withTiming(0.6, { duration: breatheDuration / 2, easing: Easing.ease }),
-      withRepeat(
-        withSequence(
-          withTiming(1, { duration: breatheDuration / 2, easing: Easing.ease }),
-          withTiming(0.6, {
-            duration: breatheDuration / 2,
-            easing: Easing.ease,
-          }),
-        ),
-        -1,
-      ),
-    );
-  }, [borderOpacity, breatheDuration]);
-
-  // Control animation based on isPlaying prop
-  useEffect(() => {
-    console.log(`Button ${item.id} isPlaying changed to: ${isPlaying}`);
-
-    if (isPlaying) {
-      console.log(`Starting animation for button ${item.id}`);
-      startBreathingAnimation();
-    } else {
-      console.log(`Stopping animation for button ${item.id}`);
-      stopAnimation();
-    }
-
-    // Add an explicit return function to stop animation on unmount or change
-    return () => {
-      console.log(`Cleanup animation for button ${item.id}`);
-      cancelAnimation(borderOpacity);
-      borderOpacity.value = 0;
-    };
-  }, [
-    isPlaying,
-    item.id,
-    startBreathingAnimation,
-    stopAnimation,
-    borderOpacity,
-  ]);
-
   // Define tap gesture
   const tapGesture = Gesture.Tap()
     .onStart(() => {
-      if (!isDragging.value && !disabled && !isPlaying) {
+      if (!isDragging.value && !disabled) {
         runOnJS(onAudioPlay)();
       }
     })
@@ -614,17 +431,12 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   // Combine gestures
   const gesture = Gesture.Exclusive(dragGesture, tapGesture);
 
-  // Animation style for position
-  const animatedPositionStyle = useAnimatedStyle(() => ({
+  // Animation style
+  const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: translateX.value },
       { translateY: translateY.value },
     ],
-  }));
-
-  // Animation style for breathing border
-  const animatedBorderStyle = useAnimatedStyle(() => ({
-    opacity: borderOpacity.value,
   }));
 
   // Determine the button color configuration based on state
@@ -656,22 +468,8 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
     <GestureDetector gesture={gesture}>
       <Reanimated.View
         ref={buttonRef}
-        style={[styles.audioButtonContainer, animatedPositionStyle]}
+        style={[styles.audioButtonContainer, animatedStyle]}
       >
-        {/* Animated border for audio playback */}
-        <Reanimated.View
-          style={[
-            styles.animatedBorder,
-            {
-              borderColor: animationBorderColor,
-              borderWidth: animationBorderWidth,
-              width: BUTTON_SIZE + animationBorderWidth * 2,
-              height: BUTTON_SIZE + animationBorderWidth * 2,
-              borderRadius: (BUTTON_SIZE + animationBorderWidth * 2) / 2,
-            },
-            animatedBorderStyle,
-          ]}
-        />
         <EnglishButton {...iconButtonProps} />
       </Reanimated.View>
     </GestureDetector>
@@ -774,12 +572,6 @@ const styles = StyleSheet.create({
     height: BUTTON_SIZE,
     alignItems: "center",
     justifyContent: "center",
-    position: "relative",
-  },
-  animatedBorder: {
-    position: "absolute",
-    borderStyle: "solid",
-    zIndex: -1,
   },
 });
 

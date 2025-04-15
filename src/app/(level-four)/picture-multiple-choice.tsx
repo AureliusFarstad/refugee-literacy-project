@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { SvgProps } from "react-native-svg";
 
 import {
-  VOCABULARY_AUDIO_SOURCES,
+  ENGLISH_VOCABULARY_AUDIO_SOURCES,
   VOCABULARY_IMAGE_SOURCES,
   VOCABULARY_WORD_LIST_BY_LEVEL,
 } from "@/assets/vocabulary";
@@ -55,7 +55,7 @@ const RenderFrontCard = (word: string) => {
   return (
     <View style={styles.container}>
       <AnimatedAudioButton
-        audioSource={VOCABULARY_AUDIO_SOURCES[word].file}
+        audioSource={ENGLISH_VOCABULARY_AUDIO_SOURCES[word].normal_speed}
         width={100}
         height={100}
       >
@@ -64,7 +64,7 @@ const RenderFrontCard = (word: string) => {
         </View>
       </AnimatedAudioButton>
       <AnimatedAudioButton
-        audioSource={VOCABULARY_AUDIO_SOURCES[word].file}
+        audioSource={ENGLISH_VOCABULARY_AUDIO_SOURCES[word].snail_speed}
         width={100}
         height={100}
       >
