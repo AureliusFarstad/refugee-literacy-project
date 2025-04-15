@@ -43,7 +43,7 @@ const tabs: TabType[] = [
   },
   {
     name: "picture-multiple-choice",
-    label: "picture-multiple-choiceg",
+    label: "picture-multiple-choice",
     icon: EarIcon,
   },
   {
