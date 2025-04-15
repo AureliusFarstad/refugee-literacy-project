@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
@@ -56,11 +56,8 @@ export default function FlashCardContainer() {
             <BlendingFlashCard content={item} colors={colors} />
           )}
           keyExtractor={(item) => item.id}
+          ListFooterComponent={<View className="h-80" />}
         />
-        {/* Help TODO: Om, I can't get a nice padding on the bottom of the scrollable area to align with the bottom tab bar*/}
-        <View className="t-400">
-          <Text>Hello.</Text>
-        </View>
       </View>
     </SafeAreaView>
   );

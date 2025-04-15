@@ -1,7 +1,13 @@
-import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useRef, useState } from "react";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import type { SvgProps } from "react-native-svg";
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import {
   BLENDING_AUDIO_SOURCES,
@@ -58,6 +64,27 @@ const RenderFrontCard = (word: string) => {
 
 const RenderBackCard = (word: string, colors: SectionColorTheme) => {
   const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#fafafa",
+    },
+    content: {
+      flex: 1,
+      padding: 20,
+      paddingBottom: 40,
+      justifyContent: "space-between", // Ensures top, middle, and bottom spacing
+      alignItems: "center",
+    },
+    progressContainer: {
+      height: 40,
+      alignItems: "center",
+      justifyContent: "center", // Centers the progress text
+    },
+    progressText: {
+      fontSize: 18,
+      fontWeight: "500",
+      color: colors.appBlackColor,
+    },
     cardContainer: {
       flex: 1,
       display: "flex",

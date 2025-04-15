@@ -45,6 +45,11 @@ const tabs: TabType[] = [
     label: "spelling",
     icon: DragIcon,
   },
+  {
+    name: "video-tab",
+    label: "Video Tab",
+    icon: DragIcon,
+  },
 ];
 
 export default function LevelTwoTabLayout() {

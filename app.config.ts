@@ -41,12 +41,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundler: "metro",
   },
   plugins: [
-    [
-      "expo-font",
-      {
-        fonts: ["./assets/fonts/Inter.ttf"],
-      },
-    ],
+    ["expo-font"],
     "expo-localization",
     "expo-router",
     [
