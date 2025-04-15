@@ -84,14 +84,44 @@ export const APP_COLORS = {
   backgroundgrey: "#F2EFF0",
 };
 
+// Color theme definition
+export interface SectionColorTheme {
+  appBackgroundColor: string;
+  appWhiteColor: string;
+  appBlackColor: string;
+  appGreyColor: string;
+  appGreenColor: string;
+  appRedColor: string;
+  sectionPrimaryColor: string;
+  sectionSecondaryColor: string;
+}
+
 export type AppColorScheme = (typeof APP_COLORS)[keyof typeof APP_COLORS];
 
 export const SECTION_COLORS = {
+  alphabet: {
+    // Purples
+    primary: "#C385F8",
+    light: "#EFE3FA",
+    dark: "#9C28DD",
+  },
   blending: {
     // Blues
     primary: "#62A0EC",
     light: "#D7E9FF",
     dark: "#006BB4",
+  },
+  vocabulary: {
+    // Oranges
+    primary: "#F69F4E",
+    light: "#FAE7D6",
+    dark: "#9A5B00",
+  },
+  speaking: {
+    // Yellows
+    primary: "#FBD65B",
+    light: "#FAE8AB",
+    dark: "#7D6700",
   },
 };
 

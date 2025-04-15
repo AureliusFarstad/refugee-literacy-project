@@ -1,9 +1,9 @@
-import { Image } from "expo-image";
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import type { SvgProps } from "react-native-svg";
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
-import { BLENDING_AUDIO_SOURCES } from "@/assets/blending_sounds";
+import { BLENDING_AUDIO_SOURCES } from "@/assets/blending/index";
 import { Text } from "@/ui";
 import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
@@ -15,7 +15,7 @@ type FlashCardProps = {
     id: string;
     letters: string[];
     word: string;
-    image: string;
+    svg: React.FC<SvgProps>;
   };
   colors: {
     background_color: string;
@@ -129,7 +129,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       <View style={styles.card}>
         {/* Image  */}
         <View style={styles.imageContainer}>
-          <Image source={{ uri: content.image }} style={styles.image} />
+          <content.svg style={styles.image} />
 
           {/* Native Button */}
           <View style={styles.nativeButtonOverlay} />
@@ -166,7 +166,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
         <View style={styles.lettersContainer}>
           {content.letters.map((letter) => (
             <AnimatedAudioButton
-              key={letter}
+              key={letter} // TODO: do we need this?
               audioSource={ALPHABET_AUDIO_SOURCES[letter].sound}
               width={40}
               height={40}
