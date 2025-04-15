@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
 import {
   Animated,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import Header from "@/ui/core/headers";
@@ -217,7 +217,7 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.appBackgroundColor,
+      backgroundColor: "#fafafa",
     },
     content: {
       flex: 1,

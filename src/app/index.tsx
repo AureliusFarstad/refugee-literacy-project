@@ -7,7 +7,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LESSONS } from "@/constants/routes";
 import ProgressBar from "@/ui/components/home/progress-bar";
 import { HOME_BANNER_IMAGE } from "@/ui/components/illustrations/home";
-import { FocusAwareStatusBar } from "@/ui/focus-aware-status-bar";
 import { CheckIcon, DashesIcon, MultiLingualIcon } from "@/ui/icons";
 import { WIDTH } from "@/utils/layout";
 
@@ -78,23 +77,6 @@ const Home = () => {
 
   return (
     <SafeAreaView className="flex-1   bg-white">
-      <FocusAwareStatusBar />
-      <Pressable
-        className="hidden bg-colors-green-500 p-5"
-        onPress={() => {
-          router.push("/(level-three)/listening");
-        }}
-      >
-        <Text>Listening activity</Text>
-      </Pressable>
-      <Pressable
-        className="hidden bg-colors-green-500 p-5"
-        onPress={() => {
-          router.push("/audio-ordering");
-        }}
-      >
-        <Text>audio ordering</Text>
-      </Pressable>
       <Pressable
         className="hidden bg-colors-green-500 p-5"
         onPress={() => {

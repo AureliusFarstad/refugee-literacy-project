@@ -27,6 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
+          <string>refugeeliteracy</string>
           <string>com.refugee-literacy-project.development</string>
         </array>
       </dict>
@@ -39,6 +40,8 @@
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>12.0</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
@@ -54,11 +57,15 @@
     <string>Allow $(PRODUCT_NAME) to save photos</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your photos</string>
+    <key>NSUserActivityTypes</key>
+    <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+    </array>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
     <array>
-      <string>armv7</string>
+      <string>arm64</string>
     </array>
     <key>UIRequiresFullScreen</key>
     <false/>
