@@ -88,29 +88,6 @@ interface DraggableButtonProps {
 // CONSTANTS
 // ------------------------------------------------------------
 
-const VOCABULARY_FLASHCARDS = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
-  (word: string) => {
-    return {
-      id: word,
-      svg: VOCABULARY_IMAGE_SOURCES[
-        word as keyof typeof VOCABULARY_IMAGE_SOURCES
-      ].file, // TODO: Improve syntax here with types?
-      english_normal_speed:
-        ENGLISH_VOCABULARY_AUDIO_SOURCES[
-          word as keyof typeof ENGLISH_VOCABULARY_AUDIO_SOURCES
-        ].normal_speed,
-      english_snail_speed:
-        ENGLISH_VOCABULARY_AUDIO_SOURCES[
-          word as keyof typeof ENGLISH_VOCABULARY_AUDIO_SOURCES
-        ].snail_speed,
-      native_file:
-        NATIVE_VOCABULARY_AUDIO_SOURCES[
-          word as keyof typeof NATIVE_VOCABULARY_AUDIO_SOURCES
-        ].file,
-    };
-  },
-);
-
 type GameSet = {
   correctAnswer: string;
   options: string[];
@@ -443,6 +420,36 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
     translateY,
   ]);
 
+  useEffect(() => {
+    // Immediately reset position to origin when key/item changes
+    translateX.value = 0;
+    translateY.value = 0;
+    savedPosition.value = { x: 0, y: 0 };
+
+    // Schedule measuring after layout
+    const measureButton = () => {
+      if (buttonRef.current) {
+        buttonRef.current.measure((x, y, width, height, pageX, pageY) => {
+          if (pageX > 0 && pageY > 0) {
+            setButtonOrigin({
+              x: pageX,
+              y: pageY,
+              width: width || BUTTON_SIZE,
+              height: height || BUTTON_SIZE,
+            });
+          } else {
+            // Retry measurement if it failed
+            setTimeout(measureButton, 100);
+          }
+        });
+      }
+    };
+
+    // Use a slightly longer delay to ensure layout is complete
+    const timerId = setTimeout(measureButton, 200);
+    return () => clearTimeout(timerId);
+  }, [item.id, translateX, translateY, savedPosition]);
+
   // Function to stop breathing animation
   const stopAnimation = useCallback(() => {
     cancelAnimation(borderOpacity);
@@ -530,8 +537,8 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
       if (isDragging.value) {
         const droppedX: number = event.absoluteX;
         const droppedY: number = event.absoluteY;
-        // Separate the detection of valid drop area from the actual visual target
-        // This is what determines IF we should snap, not WHERE to snap to
+
+        // Detect if in drop area
         const isInDropArea: boolean =
           droppedY <
             (HEIGHT +
@@ -546,9 +553,9 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 
         isDragging.value = false;
 
-        // If we're in the drop area AND we have a valid target position, snap to target
+        // If we're in the drop area and have a valid target position, snap to target
         if (isInDropArea && targetPosition && buttonOrigin) {
-          // Calculate center points of both the target and button
+          // Calculate center points
           const targetCenterX =
             targetPosition.x + (targetPosition.width || BUTTON_SIZE) / 2;
           const targetCenterY =
@@ -558,16 +565,20 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
           const buttonCenterY =
             buttonOrigin.y + (buttonOrigin.height || BUTTON_SIZE) / 2;
 
-          // Calculate the offset needed to align centers
+          // Calculate offset to align centers
           const offsetX = targetCenterX - buttonCenterX;
           const offsetY = targetCenterY - buttonCenterY;
 
           // Apply spring animation to move to target
           translateX.value = withSpring(offsetX, SPRING_CONFIG);
           translateY.value = withSpring(offsetY, SPRING_CONFIG);
+        } else {
+          // IMPORTANT: If not in drop area, always snap back to origin
+          translateX.value = withSpring(0, SPRING_CONFIG);
+          translateY.value = withSpring(0, SPRING_CONFIG);
         }
 
-        // Notify parent component about the drag end
+        // Notify parent component
         runOnJS(onDragEnd)(
           { x: droppedX, y: droppedY },
           isInDropArea && targetPosition !== null,
@@ -662,21 +673,111 @@ const DraggableAudioGame: React.FC = () => {
   const [playingButtonId, setPlayingButtonId] = useState<string | null>(null);
   const currentSound = useRef<Sound | null>(null);
 
+  // Game state
+  const [currentGameSetIndex, setCurrentGameSetIndex] = useState(0);
+  const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
+
   // Reference to target drop circle
   const dropCircleRef = useRef<View>(null);
 
-  // Available audio buttons
-  const availableButtons: ButtonItem[] = generatedGameSets[0].options.map(
-    (word: string) => {
-      return { id: word, word: word };
-    },
-  );
+  // Function to shuffle array
+  const shuffleArray = useCallback((array: string[]) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  }, []);
 
-  const CORRECT_BUTTON_ID: string = generatedGameSets[0].correctAnswer;
+  // Function to get the absolute position of the target drop circle
+  const measureDropCircle = useCallback((): void => {
+    console.log("Attempting to measure drop circle");
+
+    // Give a little more time for layout to complete
+    setTimeout(() => {
+      if (dropCircleRef.current) {
+        dropCircleRef.current.measure((x, y, width, height, pageX, pageY) => {
+          console.log("Drop circle measured at:", {
+            x,
+            y,
+            width,
+            height,
+            pageX,
+            pageY,
+          });
+
+          if (width > 0 && height > 0 && pageX > 0 && pageY > 0) {
+            // Store the position with explicit values to avoid undefined issues
+            setTargetPosition({
+              x: pageX,
+              y: pageY,
+              width: width || BUTTON_SIZE,
+              height: height || BUTTON_SIZE,
+            });
+          } else {
+            // Retry if measurement failed
+            console.log("Measurement failed, retrying...");
+            setTimeout(measureDropCircle, 200);
+          }
+        });
+      }
+    }, 100);
+  }, []);
+
+  const resetAllButtonPositions = useCallback(() => {
+    // Cancel any ongoing animations that might interfere
+    if (currentSound.current) {
+      currentSound.current.stopAsync().catch(() => {});
+      currentSound.current.unloadAsync().catch(() => {});
+      currentSound.current = null;
+    }
+
+    // First clear all states
+    setPlayingButtonId(null);
+    setIsCardActive(false);
+    setDisabledButtons([]);
+    setPlacedButtonId(null);
+    setIsCorrectAnswer(null);
+
+    // Schedule the next game setup after state updates have completed
+    setTimeout(() => {
+      // Get current game set and shuffle options
+      const currentGameSet = generatedGameSets[currentGameSetIndex];
+      if (currentGameSet) {
+        const shuffled = shuffleArray([...currentGameSet.options]); // Create a new array to avoid reference issues
+        setShuffledOptions(shuffled);
+
+        // Force re-measurement after layout is updated with a longer delay
+        setTimeout(measureDropCircle, 300);
+      }
+    }, 50);
+  }, [currentGameSetIndex, measureDropCircle, shuffleArray]);
+
+  useEffect(() => {
+    resetAllButtonPositions();
+  }, [currentGameSetIndex, resetAllButtonPositions]);
+
+  useEffect(() => {
+    if (generatedGameSets.length > 0 && shuffledOptions.length === 0) {
+      const initialGameSet = generatedGameSets[0];
+      const shuffled = shuffleArray(initialGameSet.options);
+      setShuffledOptions(shuffled);
+    }
+  }, [shuffledOptions.length, shuffleArray]);
+
+  // Current game data
+  const currentGameSet = generatedGameSets[currentGameSetIndex];
+  const CORRECT_BUTTON_ID: string = currentGameSet.correctAnswer;
   const Svg =
     VOCABULARY_IMAGE_SOURCES[
       CORRECT_BUTTON_ID as keyof typeof VOCABULARY_IMAGE_SOURCES
     ];
+
+  // Available audio buttons using shuffled options
+  const availableButtons: ButtonItem[] = shuffledOptions.map((word: string) => {
+    return { id: word, word: word };
+  });
 
   // Function to play audio - simplified for reliability
   const playAudio = useCallback(
@@ -787,39 +888,6 @@ const DraggableAudioGame: React.FC = () => {
     };
   }, []);
 
-  // Function to get the absolute position of the target drop circle
-  const measureDropCircle = useCallback((): void => {
-    console.log("Attempting to measure drop circle");
-    if (dropCircleRef.current) {
-      // Modern way to measure components
-      dropCircleRef.current.measure((x, y, width, height, pageX, pageY) => {
-        console.log("Drop circle measured at:", {
-          x,
-          y,
-          width,
-          height,
-          pageX,
-          pageY,
-        });
-
-        if (width > 0 && height > 0 && pageX > 0 && pageY > 0) {
-          setTargetPosition({
-            x: pageX,
-            y: pageY,
-            width,
-            height,
-          });
-          console.log("Target position updated to:", {
-            x: pageX,
-            y: pageY,
-            width,
-            height,
-          });
-        }
-      });
-    }
-  }, []);
-
   // Measure the drop circle position when the component mounts
   useEffect(() => {
     // Use setTimeout to ensure the layout is complete before measuring
@@ -845,7 +913,24 @@ const DraggableAudioGame: React.FC = () => {
         const isCorrect = buttonId === CORRECT_BUTTON_ID;
         setIsCorrectAnswer(isCorrect);
 
-        // Don't add to disabled list here - moved to the button component where the timer exists
+        // If answer is correct, set a timeout to advance to next game
+        if (isCorrect) {
+          // Slight delay to show the correct feedback
+          setTimeout(() => {
+            // Stop any ongoing animations or sounds
+            if (currentSound.current) {
+              currentSound.current.stopAsync().catch(() => {});
+              currentSound.current.unloadAsync().catch(() => {});
+              currentSound.current = null;
+            }
+            setPlayingButtonId(null);
+
+            // Move to next game set, loop back to beginning if at end
+            setCurrentGameSetIndex(
+              (prevIndex) => (prevIndex + 1) % generatedGameSets.length,
+            );
+          }, 1500); // Wait 1.5 seconds before advancing
+        }
       } else if (placedButtonId === buttonId) {
         setPlacedButtonId(null);
         setIsCorrectAnswer(null);
@@ -907,7 +992,7 @@ const DraggableAudioGame: React.FC = () => {
       <View style={styles.buttonPool}>
         {availableButtons.map((item: ButtonItem, index: number) => (
           <DraggableButton
-            key={item.id}
+            key={`${item.id}-${currentGameSetIndex}`}
             item={item}
             onAudioPlay={() =>
               playAudio(
@@ -919,7 +1004,7 @@ const DraggableAudioGame: React.FC = () => {
             onDragEnd={(pos, isInTarget) =>
               handleDragEnd(pos, item.id, isInTarget, CORRECT_BUTTON_ID)
             }
-            buttonColor={BUTTON_COLORS[index]}
+            buttonColor={BUTTON_COLORS[index % BUTTON_COLORS.length]}
             targetPosition={targetPosition}
             isPlaced={placedButtonId === item.id}
             isCorrect={placedButtonId === item.id ? isCorrectAnswer : null}
