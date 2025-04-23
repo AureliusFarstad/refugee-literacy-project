@@ -1,7 +1,7 @@
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { findNodeHandle, StyleSheet, UIManager, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -19,6 +19,7 @@ import Reanimated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   ENGLISH_VOCABULARY_AUDIO_SOURCES,
@@ -27,11 +28,17 @@ import {
   VOCABULARY_WORD_LIST_BY_LEVEL,
 } from "@/assets/vocabulary";
 import { APP_COLORS } from "@/constants/routes";
+import Header from "@/ui/core/headers";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
-import { WIDTH } from "@/utils/layout";
+import {
+  BOTTOM_TAB_HEIGHT,
+  HEADER_HEIGHT,
+  HEIGHT,
+  WIDTH,
+} from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
 
@@ -67,7 +74,6 @@ interface DraggableButtonProps {
   onDragStart: () => void;
   onDragEnd: (position: Position, isInTarget: boolean) => void;
   buttonColor: ButtonColorConfig;
-  // buttonText: string;
   targetPosition: Position | null;
   isPlaced?: boolean;
   isCorrect?: boolean | null;
@@ -82,28 +88,28 @@ interface DraggableButtonProps {
 // CONSTANTS
 // ------------------------------------------------------------
 
-// const VOCABULARY_FLASHCARDS = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
-//   (word: string) => {
-//     return {
-//       id: word,
-//       svg: VOCABULARY_IMAGE_SOURCES[
-//         word as keyof typeof VOCABULARY_IMAGE_SOURCES
-//       ].file, // TODO: Improve syntax here with types?
-//       english_normal_speed:
-//         ENGLISH_VOCABULARY_AUDIO_SOURCES[
-//           word as keyof typeof ENGLISH_VOCABULARY_AUDIO_SOURCES
-//         ].normal_speed,
-//       english_snail_speed:
-//         ENGLISH_VOCABULARY_AUDIO_SOURCES[
-//           word as keyof typeof ENGLISH_VOCABULARY_AUDIO_SOURCES
-//         ].snail_speed,
-//       native_file:
-//         NATIVE_VOCABULARY_AUDIO_SOURCES[
-//           word as keyof typeof NATIVE_VOCABULARY_AUDIO_SOURCES
-//         ].file,
-//     };
-//   },
-// );
+const VOCABULARY_FLASHCARDS = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
+  (word: string) => {
+    return {
+      id: word,
+      svg: VOCABULARY_IMAGE_SOURCES[
+        word as keyof typeof VOCABULARY_IMAGE_SOURCES
+      ].file, // TODO: Improve syntax here with types?
+      english_normal_speed:
+        ENGLISH_VOCABULARY_AUDIO_SOURCES[
+          word as keyof typeof ENGLISH_VOCABULARY_AUDIO_SOURCES
+        ].normal_speed,
+      english_snail_speed:
+        ENGLISH_VOCABULARY_AUDIO_SOURCES[
+          word as keyof typeof ENGLISH_VOCABULARY_AUDIO_SOURCES
+        ].snail_speed,
+      native_file:
+        NATIVE_VOCABULARY_AUDIO_SOURCES[
+          word as keyof typeof NATIVE_VOCABULARY_AUDIO_SOURCES
+        ].file,
+    };
+  },
+);
 
 type GameSet = {
   correctAnswer: string;
@@ -124,33 +130,26 @@ const generatedGameSets: GameSet[] = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   },
 );
 
-// // Mock data with proper typing
-// const VOCABULARY_AUDIO_SOURCES: Record<string, AudioSource> = {
-//   'a': { file: require("../../../assets/alphabet/audio/name/a.mp3"), letter: 'A' },
-//   'b': { file: require("../../../assets/alphabet/audio/name/b.mp3"), letter: 'B' },
-//   'c': { file: require("../../../assets/alphabet/audio/name/c.mp3"), letter: 'C' },
-// };
-
-// Button color configurations
+// Button color configurations # TODO: Refactor out colors to constants
 const BUTTON_COLORS: ButtonColorConfig[] = [
   {
-    primaryColor: "#F8A5D1",
-    offwhiteColor: "#FFFFFF",
-    offblackColor: "#222222",
+    primaryColor: "#FFABDE",
+    offwhiteColor: "#FAFAFA",
+    offblackColor: "#3F3F46",
     secondaryColor: "#D282AE",
     backgroundColor: "#FFF0F6",
   }, // Pink
   {
-    primaryColor: "#B999FF",
-    offwhiteColor: "#FFFFFF",
-    offblackColor: "#222222",
+    primaryColor: "#C385F8",
+    offwhiteColor: "#FAFAFA",
+    offblackColor: "#3F3F46",
     secondaryColor: "#9A7DE0",
     backgroundColor: "#F5F0FF",
   }, // Purple
   {
-    primaryColor: "#7FC2FF",
-    offwhiteColor: "#FFFFFF",
-    offblackColor: "#222222",
+    primaryColor: "#62A0EC",
+    offwhiteColor: "#FAFAFA",
+    offblackColor: "#3F3F46",
     secondaryColor: "#5BA3E0",
     backgroundColor: "#EFF6FF",
   }, // Blue
@@ -167,25 +166,25 @@ const NATIVE_BUTTON_COLOR: ButtonColorProps = {
 
 // Feedback color configurations
 const CORRECT_COLORS: ButtonColorConfig = {
-  primaryColor: "#4CAF50",
-  offwhiteColor: "#FFFFFF",
-  offblackColor: "#228B22",
+  primaryColor: "#62CC82",
+  offwhiteColor: "#FAFAFA",
+  offblackColor: "#3F3F46",
   secondaryColor: "#2E8B57",
   backgroundColor: "#E8F5E9",
 };
 
 const INCORRECT_COLORS: ButtonColorConfig = {
-  primaryColor: "#F44336",
-  offwhiteColor: "#FFFFFF",
-  offblackColor: "#B22222",
+  primaryColor: "#FF5A5F",
+  offwhiteColor: "#FAFAFA",
+  offblackColor: "#3F3F46",
   secondaryColor: "#D32F2F",
   backgroundColor: "#FFEBEE",
 };
 
 const DISABLED_COLORS: ButtonColorConfig = {
-  primaryColor: "#AAAAAA",
-  offwhiteColor: "#DDDDDD",
-  offblackColor: "#666666",
+  primaryColor: "#F2EFF0",
+  offwhiteColor: "#FAFAFA",
+  offblackColor: "#D4D4D8",
   secondaryColor: "#888888",
   backgroundColor: "#F5F5F5",
 };
@@ -193,7 +192,6 @@ const DISABLED_COLORS: ButtonColorConfig = {
 // Layout and animation constants
 const BUTTON_SIZE: number = 80;
 const FLASHCARD_HEIGHT: number = 350;
-// const CORRECT_BUTTON_ID: string = 'a';
 const DRAG_DELAY_MS: number = 100;
 const INCORRECT_FEEDBACK_DURATION_MS: number = 2000;
 const SPRING_CONFIG: { damping: number; stiffness: number } = {
@@ -208,8 +206,13 @@ const SPRING_CONFIG: { damping: number; stiffness: number } = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: "#f5f5f5",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    backgroundColor: "#FFFFFF",
+  },
+  flashcardContainer: {
+    flex: 1,
+    justifyContent: "center", // Center the flashcard vertically
   },
   flashcard: {
     height: FLASHCARD_HEIGHT,
@@ -217,13 +220,15 @@ const styles = StyleSheet.create({
     borderColor: "#FFA500",
     borderRadius: 12,
     backgroundColor: "#FFFFFF",
-    marginBottom: 20,
+    marginHorizontal: 16,
     padding: 16,
-    position: "relative",
+    flexDirection: "column",
   },
   flashcardActive: {
+    borderWidth: 2,
+    borderColor: "#F69F4E",
     borderStyle: "dashed",
-    backgroundColor: "#FFF8E0",
+    backgroundColor: "#FAE7D6",
   },
   imageContainer: {
     width: "100%",
@@ -238,8 +243,6 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     borderRadius: 8,
-    // width: "100%",
-    // height: 200,
   },
   nativeButtonOverlay: {
     position: "absolute",
@@ -256,7 +259,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   iconButtonActive: {
-    backgroundColor: "#FFF8E0",
+    backgroundColor: "#FAE7D6",
   },
   characterContainer: {
     width: "100%",
@@ -299,34 +302,34 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   dropCircleContainer: {
-    position: "absolute",
-    bottom: 40,
-    left: "50%",
-    marginLeft: -40,
-    width: BUTTON_SIZE,
-    height: BUTTON_SIZE,
-    alignItems: "center",
-    justifyContent: "center",
+    flex: 1, // Take remaining space in the flashcard
+    justifyContent: "center", // Center vertically
+    alignItems: "center", // Center horizontally
   },
   emptyDropCircle: {
     width: BUTTON_SIZE,
     height: BUTTON_SIZE,
     borderRadius: BUTTON_SIZE / 2,
-    borderWidth: 4,
-    borderColor: "#F36889",
+    borderWidth: 2,
+    borderColor: "#F69F4E",
     borderStyle: "dashed",
-    backgroundColor: "#F7D6DE",
+    backgroundColor: "#FAE7D6",
     alignItems: "center",
     justifyContent: "center",
   },
   buttonPool: {
+    width: "100%",
     flexDirection: "row",
     justifyContent: "space-evenly",
+    alignItems: "center",
     paddingVertical: 20,
-    backgroundColor: "#FFF2E6",
-    borderWidth: 1,
-    borderColor: "#FFA500",
-    borderStyle: "dashed",
+    borderWidth: 2,
+    borderColor: "#F69F4E",
+    // borderStyle: "dashed",
+    backgroundColor: "#FAE7D6",
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
   },
   audioButtonContainer: {
     width: BUTTON_SIZE,
@@ -352,7 +355,6 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   onDragStart,
   onDragEnd,
   buttonColor,
-  // buttonText,
   targetPosition,
   isPlaced,
   isCorrect,
@@ -381,29 +383,30 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   const borderOpacity: SharedValue<number> = useSharedValue<number>(0);
 
   // Track original position (where the button starts in the button pool)
-  const buttonRef = useRef<Reanimated.View | null>(null);
+  const buttonRef = useRef<Reanimated.View>(null);
   const [buttonOrigin, setButtonOrigin] = useState<Position | null>(null);
 
   // Get button's original position
   useEffect(() => {
-    if (buttonRef.current) {
-      const nodeHandle = findNodeHandle(buttonRef.current);
-      if (nodeHandle) {
-        UIManager.measure(
-          nodeHandle,
-          (
-            x: number,
-            y: number,
-            width: number,
-            height: number,
-            pageX: number,
-            pageY: number,
-          ) => {
-            setButtonOrigin({ x: pageX, y: pageY, width, height });
-          },
-        );
+    const measureButton = () => {
+      if (buttonRef.current) {
+        buttonRef.current.measure((x, y, width, height, pageX, pageY) => {
+          console.log(`Button ${item.id} measured at:`, {
+            x,
+            y,
+            width,
+            height,
+            pageX,
+            pageY,
+          });
+          setButtonOrigin({ x: pageX, y: pageY, width, height });
+        });
       }
-    }
+    };
+
+    // Slight delay to ensure component is rendered
+    const timerId = setTimeout(measureButton, 100);
+    return () => clearTimeout(timerId);
   }, [item.id]);
 
   // Reset incorrect button after feedback duration
@@ -527,42 +530,47 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
       if (isDragging.value) {
         const droppedX: number = event.absoluteX;
         const droppedY: number = event.absoluteY;
-        const isInFlashcard: boolean =
-          droppedY < FLASHCARD_HEIGHT &&
-          droppedY > 0 &&
+        // Separate the detection of valid drop area from the actual visual target
+        // This is what determines IF we should snap, not WHERE to snap to
+        const isInDropArea: boolean =
+          droppedY <
+            (HEIGHT +
+              HEADER_HEIGHT +
+              FLASHCARD_HEIGHT -
+              BOTTOM_TAB_HEIGHT -
+              120) /
+              2 &&
+          droppedY > HEADER_HEIGHT && // Add a minimum bound
           droppedX > 0 &&
           droppedX < WIDTH;
 
         isDragging.value = false;
 
-        if (isInFlashcard && targetPosition && buttonOrigin) {
-          // Center button in the target
-          const targetCenterX: number =
+        // If we're in the drop area AND we have a valid target position, snap to target
+        if (isInDropArea && targetPosition && buttonOrigin) {
+          // Calculate center points of both the target and button
+          const targetCenterX =
             targetPosition.x + (targetPosition.width || BUTTON_SIZE) / 2;
-          const targetCenterY: number =
+          const targetCenterY =
             targetPosition.y + (targetPosition.height || BUTTON_SIZE) / 2;
-          const buttonCenterX: number =
+          const buttonCenterX =
             buttonOrigin.x + (buttonOrigin.width || BUTTON_SIZE) / 2;
-          const buttonCenterY: number =
+          const buttonCenterY =
             buttonOrigin.y + (buttonOrigin.height || BUTTON_SIZE) / 2;
 
-          translateX.value = withSpring(
-            targetCenterX - buttonCenterX,
-            SPRING_CONFIG,
-          );
-          translateY.value = withSpring(
-            targetCenterY - buttonCenterY,
-            SPRING_CONFIG,
-          );
-        } else {
-          // Return to original position
-          translateX.value = withSpring(0, SPRING_CONFIG);
-          translateY.value = withSpring(0, SPRING_CONFIG);
+          // Calculate the offset needed to align centers
+          const offsetX = targetCenterX - buttonCenterX;
+          const offsetY = targetCenterY - buttonCenterY;
+
+          // Apply spring animation to move to target
+          translateX.value = withSpring(offsetX, SPRING_CONFIG);
+          translateY.value = withSpring(offsetY, SPRING_CONFIG);
         }
 
+        // Notify parent component about the drag end
         runOnJS(onDragEnd)(
           { x: droppedX, y: droppedY },
-          isInFlashcard && targetPosition !== null,
+          isInDropArea && targetPosition !== null,
         );
       }
     });
@@ -655,7 +663,7 @@ const DraggableAudioGame: React.FC = () => {
   const currentSound = useRef<Sound | null>(null);
 
   // Reference to target drop circle
-  const dropCircleRef = useRef<View | null>(null);
+  const dropCircleRef = useRef<View>(null);
 
   // Available audio buttons
   const availableButtons: ButtonItem[] = generatedGameSets[0].options.map(
@@ -781,23 +789,34 @@ const DraggableAudioGame: React.FC = () => {
 
   // Function to get the absolute position of the target drop circle
   const measureDropCircle = useCallback((): void => {
+    console.log("Attempting to measure drop circle");
     if (dropCircleRef.current) {
-      const nodeHandle = findNodeHandle(dropCircleRef.current);
-      if (nodeHandle) {
-        UIManager.measure(
-          nodeHandle,
-          (
-            x: number,
-            y: number,
-            width: number,
-            height: number,
-            pageX: number,
-            pageY: number,
-          ) => {
-            setTargetPosition({ x: pageX, y: pageY, width, height });
-          },
-        );
-      }
+      // Modern way to measure components
+      dropCircleRef.current.measure((x, y, width, height, pageX, pageY) => {
+        console.log("Drop circle measured at:", {
+          x,
+          y,
+          width,
+          height,
+          pageX,
+          pageY,
+        });
+
+        if (width > 0 && height > 0 && pageX > 0 && pageY > 0) {
+          setTargetPosition({
+            x: pageX,
+            y: pageY,
+            width,
+            height,
+          });
+          console.log("Target position updated to:", {
+            x: pageX,
+            y: pageY,
+            width,
+            height,
+          });
+        }
+      });
     }
   }, []);
 
@@ -838,54 +857,53 @@ const DraggableAudioGame: React.FC = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       {/* Flashcard */}
-      <View
-        style={[styles.flashcard, isCardActive && styles.flashcardActive]}
-        onLayout={() => setTimeout(measureDropCircle, 100)}
-      >
-        {/* Character container */}
-        {/* <View style={styles.characterContainer}>
-          <View style={styles.characterImageContainer}>
-            <View style={styles.characterImage} />
+      <View style={styles.flashcardContainer}>
+        <View
+          style={[styles.flashcard, isCardActive && styles.flashcardActive]}
+          // onLayout={() => setTimeout(measureDropCircle, 100)}
+          onLayout={() => {
+            console.log("Flashcard layout complete");
+            // Delay measurement to ensure child components are laid out
+            setTimeout(measureDropCircle, 100);
+          }}
+        >
+          <View style={styles.imageContainer}>
+            <Svg.file
+              style={styles.image}
+              height="60%"
+              width="60%"
+              preserveAspectRatio="xMidYMid meet"
+            />
+
+            {/* Native Button */}
+            <View
+              style={[
+                styles.nativeButtonOverlay,
+                isCardActive && styles.iconButtonActive,
+              ]}
+            />
+            <View style={[styles.iconButton, { top: 0, right: 0 }]}>
+              <AnimatedAudioButton
+                audioSource={
+                  NATIVE_VOCABULARY_AUDIO_SOURCES[CORRECT_BUTTON_ID].file
+                }
+                width={40}
+                height={40}
+              >
+                <NativeButton {...NATIVE_BUTTON_COLOR} />
+              </AnimatedAudioButton>
+            </View>
           </View>
-          <View style={styles.speechBubble}><Text>😊</Text></View>
-          <View style={styles.soundIcon}><Text>🔊</Text></View>
-        </View> */}
 
-        <View style={styles.imageContainer}>
-          <Svg.file
-            style={styles.image}
-            height="60%"
-            width="60%"
-            preserveAspectRatio="xMidYMid meet"
-          />
-
-          {/* Native Button */}
-          <View
-            style={[
-              styles.nativeButtonOverlay,
-              isCardActive && styles.iconButtonActive,
-            ]}
-          />
-          <View style={[styles.iconButton, { top: 0, right: 0 }]}>
-            <AnimatedAudioButton
-              audioSource={
-                NATIVE_VOCABULARY_AUDIO_SOURCES[CORRECT_BUTTON_ID].file
-              }
-              width={40}
-              height={40}
-            >
-              <NativeButton {...NATIVE_BUTTON_COLOR} />
-            </AnimatedAudioButton>
+          {/* Drop target */}
+          {/* <View style={styles.dropAreaContainer}> */}
+          <View style={styles.dropCircleContainer}>
+            <View ref={dropCircleRef} style={styles.emptyDropCircle} />
           </View>
-        </View>
-
-        {/* Drop target */}
-        <View style={styles.dropCircleContainer}>
-          <View ref={dropCircleRef} style={styles.emptyDropCircle} />
         </View>
       </View>
-
       {/* Button Pool */}
+      {/* TODO: Make only top border dashed: https://github.com/facebook/react-native/issues/7838 */}
       <View style={styles.buttonPool}>
         {availableButtons.map((item: ButtonItem, index: number) => (
           <DraggableButton
@@ -902,7 +920,6 @@ const DraggableAudioGame: React.FC = () => {
               handleDragEnd(pos, item.id, isInTarget, CORRECT_BUTTON_ID)
             }
             buttonColor={BUTTON_COLORS[index]}
-            // buttonText={""} // TODO: Deprecate?
             targetPosition={targetPosition}
             isPlaced={placedButtonId === item.id}
             isCorrect={placedButtonId === item.id ? isCorrectAnswer : null}
@@ -918,4 +935,32 @@ const DraggableAudioGame: React.FC = () => {
   );
 };
 
-export default DraggableAudioGame;
+// Update the Screen component styles
+const Screen = () => {
+  const screenStyles = StyleSheet.create({
+    safeareaview: {
+      flex: 1,
+      backgroundColor: "#FFFFFF", // Changed from red
+    },
+    content: {
+      flex: 1,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between", // Space between header, game, bottom tab bar
+    },
+  });
+
+  return (
+    <SafeAreaView
+      style={screenStyles.safeareaview}
+      edges={["top", "left", "right"]}
+    >
+      <View style={screenStyles.content}>
+        <Header title="Audio Multiple Choice" />
+        <DraggableAudioGame />
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default Screen;
