@@ -46,8 +46,8 @@ const tabs: TabType[] = [
     icon: DragIcon,
   },
   {
-    name: "video-tab",
-    label: "Video Tab",
+    name: "audio-multiple-choice",
+    label: "audio-multiple-choice",
     icon: DragIcon,
   },
 ];

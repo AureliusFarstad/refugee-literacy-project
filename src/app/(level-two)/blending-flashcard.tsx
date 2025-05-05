@@ -41,7 +41,6 @@ export default function FlashCardContainer() {
       flex: 1,
       width: "100%",
       backgroundColor: APP_COLORS.backgroundgrey,
-      // paddingBottom: 1000, // TODO: See comment below.
     },
   });
 
@@ -56,7 +55,7 @@ export default function FlashCardContainer() {
             <BlendingFlashCard content={item} colors={colors} />
           )}
           keyExtractor={(item) => item.id}
-          ListFooterComponent={<View className="h-80" />}
+          ListFooterComponent={<View className="h-40" />}
         />
       </View>
     </SafeAreaView>

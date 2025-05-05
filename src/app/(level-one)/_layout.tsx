@@ -49,7 +49,7 @@ const tabs: TabType[] = [
 export default function LevelTwoTabLayout() {
   return (
     <Tabs
-      initialRouteName="flashcard"
+      initialRouteName="letter-introduction"
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {

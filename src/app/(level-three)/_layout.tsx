@@ -8,7 +8,7 @@ import { DragIcon } from "@/ui/icons/bottom-tab/drag-and-drop-icon";
 import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
 import { IS_IOS } from "@/utils/layout";
 
-const sectionColor = SECTION_COLORS.speaking;
+export const sectionColor = SECTION_COLORS.speaking;
 
 type TabType = {
   name: string;

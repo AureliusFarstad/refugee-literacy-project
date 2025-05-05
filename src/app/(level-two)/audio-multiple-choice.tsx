@@ -40,13 +40,12 @@ import {
   WIDTH,
 } from "@/utils/layout";
 
-import { SECTION_COLOR } from "./_layout";
-
+import { SECTION_COLOR } from "./_layout"
 // ------------------------------------------------------------
 // TYPE DEFINITIONS
 // ------------------------------------------------------------
 
-type ButtonItem = {
+type ButtonItem = { // Used for draggable buttons
   id: string;
   word: string;
 };
@@ -58,13 +57,66 @@ type Position = {
   height?: number;
 };
 
-// type AudioSource = {
-//   file: any; // Using 'any' type for required assets
-//   letter: string;
-// };
+// COLORS: Maybe move to icons folder were ButtonColorProps is from.
 
-// ButtonColorProps is our color configuration type
-type ButtonColorConfig = ButtonColorProps;
+// Button color configurations # TODO: Refactor out colors to constants
+const BUTTON_COLORS: ButtonColorProps[] = [
+  { // Pink
+    primaryColor: "#FFABDE",
+    offwhiteColor: "#FAFAFA",
+    offblackColor: "#3F3F46",
+    secondaryColor: "#D282AE",
+    backgroundColor: "#FFF0F6",
+  },
+  { // Purple
+    primaryColor: "#C385F8",
+    offwhiteColor: "#FAFAFA",
+    offblackColor: "#3F3F46",
+    secondaryColor: "#9A7DE0",
+    backgroundColor: "#F5F0FF",
+  },
+  { // Blue
+    primaryColor: "#62A0EC",
+    offwhiteColor: "#FAFAFA",
+    offblackColor: "#3F3F46",
+    secondaryColor: "#5BA3E0",
+    backgroundColor: "#EFF6FF",
+  }, 
+];
+
+// TODO: Move to layout
+const NATIVE_BUTTON_COLOR: ButtonColorProps = {
+  primaryColor: SECTION_COLOR.sectionPrimaryColor,
+  secondaryColor: SECTION_COLOR.sectionSecondaryColor,
+  offwhiteColor: SECTION_COLOR.appWhiteColor,
+  offblackColor: SECTION_COLOR.appBlackColor,
+  backgroundColor: SECTION_COLOR.appGreyColor,
+};
+
+// Feedback color configurations
+const CORRECT_COLORS: ButtonColorProps = {
+  primaryColor: "#62CC82",
+  offwhiteColor: "#FAFAFA",
+  offblackColor: "#3F3F46",
+  secondaryColor: "#2E8B57",
+  backgroundColor: "#E8F5E9",
+};
+
+const INCORRECT_COLORS: ButtonColorProps = {
+  primaryColor: "#FF5A5F",
+  offwhiteColor: "#FAFAFA",
+  offblackColor: "#3F3F46",
+  secondaryColor: "#D32F2F",
+  backgroundColor: "#FFEBEE",
+};
+
+const DISABLED_COLORS: ButtonColorProps = {
+  primaryColor: "#F2EFF0",
+  offwhiteColor: "#FAFAFA",
+  offblackColor: "#D4D4D8",
+  secondaryColor: "#888888",
+  backgroundColor: "#F5F5F5",
+};
 
 // Props for the DraggableButton component
 interface DraggableButtonProps {
@@ -73,7 +125,7 @@ interface DraggableButtonProps {
   onAudioPlay: () => void;
   onDragStart: () => void;
   onDragEnd: (position: Position, isInTarget: boolean) => void;
-  buttonColor: ButtonColorConfig;
+  buttonColor: ButtonColorProps;
   targetPosition: Position | null;
   isPlaced?: boolean;
   isCorrect?: boolean | null;
@@ -93,7 +145,7 @@ type GameSet = {
   options: string[];
 };
 
-// TODO: Not sure if we want to generate these or have a static list... AI HERE
+// TODO: Not sure if we want to generate these or have a static list...
 const generatedGameSets: GameSet[] = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   (word: string) => {
     return {
@@ -106,65 +158,6 @@ const generatedGameSets: GameSet[] = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
     };
   },
 );
-
-// Button color configurations # TODO: Refactor out colors to constants
-const BUTTON_COLORS: ButtonColorConfig[] = [
-  {
-    primaryColor: "#FFABDE",
-    offwhiteColor: "#FAFAFA",
-    offblackColor: "#3F3F46",
-    secondaryColor: "#D282AE",
-    backgroundColor: "#FFF0F6",
-  }, // Pink
-  {
-    primaryColor: "#C385F8",
-    offwhiteColor: "#FAFAFA",
-    offblackColor: "#3F3F46",
-    secondaryColor: "#9A7DE0",
-    backgroundColor: "#F5F0FF",
-  }, // Purple
-  {
-    primaryColor: "#62A0EC",
-    offwhiteColor: "#FAFAFA",
-    offblackColor: "#3F3F46",
-    secondaryColor: "#5BA3E0",
-    backgroundColor: "#EFF6FF",
-  }, // Blue
-];
-
-// TODO: Move to layout
-const NATIVE_BUTTON_COLOR: ButtonColorProps = {
-  primaryColor: SECTION_COLOR.sectionPrimaryColor,
-  secondaryColor: SECTION_COLOR.sectionSecondaryColor,
-  offwhiteColor: SECTION_COLOR.appWhiteColor,
-  offblackColor: SECTION_COLOR.appBlackColor,
-  backgroundColor: SECTION_COLOR.appGreyColor,
-};
-
-// Feedback color configurations
-const CORRECT_COLORS: ButtonColorConfig = {
-  primaryColor: "#62CC82",
-  offwhiteColor: "#FAFAFA",
-  offblackColor: "#3F3F46",
-  secondaryColor: "#2E8B57",
-  backgroundColor: "#E8F5E9",
-};
-
-const INCORRECT_COLORS: ButtonColorConfig = {
-  primaryColor: "#FF5A5F",
-  offwhiteColor: "#FAFAFA",
-  offblackColor: "#3F3F46",
-  secondaryColor: "#D32F2F",
-  backgroundColor: "#FFEBEE",
-};
-
-const DISABLED_COLORS: ButtonColorConfig = {
-  primaryColor: "#F2EFF0",
-  offwhiteColor: "#FAFAFA",
-  offblackColor: "#D4D4D8",
-  secondaryColor: "#888888",
-  backgroundColor: "#F5F5F5",
-};
 
 // Layout and animation constants
 const BUTTON_SIZE: number = 80;
@@ -194,7 +187,7 @@ const styles = StyleSheet.create({
   flashcard: {
     height: FLASHCARD_HEIGHT,
     borderWidth: 2,
-    borderColor: "#FFA500",
+    borderColor: SECTION_COLOR.sectionPrimaryColor,
     borderRadius: 12,
     backgroundColor: "#FFFFFF",
     marginHorizontal: 16,
@@ -203,7 +196,7 @@ const styles = StyleSheet.create({
   },
   flashcardActive: {
     borderWidth: 2,
-    borderColor: "#F69F4E",
+    borderColor: SECTION_COLOR.sectionPrimaryColor,
     borderStyle: "dashed",
     backgroundColor: "#FAE7D6",
   },
@@ -236,47 +229,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   iconButtonActive: {
-    backgroundColor: "#FAE7D6",
-  },
-  characterContainer: {
-    width: "100%",
-    height: "60%",
-    backgroundColor: "#FFEE99",
-    borderRadius: 8,
-    position: "relative",
-  },
-  characterImageContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
-  },
-  characterImage: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#DDD",
-    borderRadius: 60,
-  },
-  speechBubble: {
-    position: "absolute",
-    top: 20,
-    left: 20,
-    width: 40,
-    height: 40,
-    backgroundColor: "#FFEE66",
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  soundIcon: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-    width: 40,
-    height: 40,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: SECTION_COLOR.sectionSecondaryColor,
   },
   dropCircleContainer: {
     flex: 1, // Take remaining space in the flashcard
@@ -288,9 +241,9 @@ const styles = StyleSheet.create({
     height: BUTTON_SIZE,
     borderRadius: BUTTON_SIZE / 2,
     borderWidth: 2,
-    borderColor: "#F69F4E",
+    borderColor: SECTION_COLOR.sectionPrimaryColor,
     borderStyle: "dashed",
-    backgroundColor: "#FAE7D6",
+    backgroundColor: SECTION_COLOR.sectionSecondaryColor,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -301,9 +254,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 20,
     borderWidth: 2,
-    borderColor: "#F69F4E",
+    borderColor: SECTION_COLOR.sectionPrimaryColor,
     // borderStyle: "dashed",
-    backgroundColor: "#FAE7D6",
+    backgroundColor: SECTION_COLOR.sectionSecondaryColor,
     borderLeftWidth: 0,
     borderRightWidth: 0,
     borderBottomWidth: 0,
@@ -339,7 +292,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   disabled = false,
   onMarkDisabled,
   breatheDuration = 2000,
-  animationBorderColor = "#4CAF50",
+  animationBorderColor = "#4CAF50", // TODO: Refactor our green color?
   animationBorderWidth = 4,
 }) => {
   // Track position of button
@@ -603,7 +556,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   }));
 
   // Determine the button color configuration based on state
-  const getButtonColorConfig = (): ButtonColorProps => {
+  const getButtonColorProps = (): ButtonColorProps => {
     if (disabled) {
       return DISABLED_COLORS;
     }
@@ -616,7 +569,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   };
 
   // Get the current color configuration
-  const currentColors = getButtonColorConfig();
+  const currentColors = getButtonColorProps();
 
   // Create props for EnglishButton
   const iconButtonProps: ButtonColorProps = {
