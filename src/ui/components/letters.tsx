@@ -48,7 +48,7 @@ const LetterTapMatching = () => {
       id: string;
       value: string;
     }[]
-  >();
+  >([]);
 
   const panResponder = useRef(
     PanResponder.create({

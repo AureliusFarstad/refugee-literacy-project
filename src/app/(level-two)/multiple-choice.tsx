@@ -1,13 +1,10 @@
-import React, { useRef, useState } from "react";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import type { SvgProps } from "react-native-svg";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 import {
-  Animated,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import type { SvgProps } from "react-native-svg";
 
 import {
   BLENDING_AUDIO_SOURCES,

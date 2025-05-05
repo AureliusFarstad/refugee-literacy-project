@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import React from "react";
+import type { JSX } from "react/jsx-runtime";
 
 import type { SectionColorTheme } from "@/constants/routes";
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";

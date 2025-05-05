@@ -44,7 +44,10 @@ const LetterTapMatching = () => {
   const pathRef = useRef<string>("");
   const startPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
+  // @ts-ignore
+
   const tappedPath = useRef<Path>();
+  // @ts-ignore
 
   const layoutValuesRef = useRef<
     {
@@ -157,6 +160,7 @@ const LetterTapMatching = () => {
         const updatedPaths = [...paths, tappedPath.current];
         setPaths(updatedPaths);
       }
+      // @ts-ignore
       tappedPath.current = undefined;
       setSelectedLeft(null);
       if (matchedPairs.length + 1 === leftLetters.length) {

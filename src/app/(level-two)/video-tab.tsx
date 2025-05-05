@@ -83,7 +83,7 @@ const VideoTab = forwardRef<WelcomeScreenVideoRef>((props, ref) => {
   const [showOverlay, setShowOverlay] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
   const overlayOpacity = useRef(new Animated.Value(1)).current;
-  const lastSlideTimer = useRef<NodeJS.Timeout | null>(null);
+  const lastSlideTimer = useRef<number>(null);
 
   // Slider state using useSharedValue for better performance
   const progressValue = useSharedValue(0);
@@ -91,7 +91,7 @@ const VideoTab = forwardRef<WelcomeScreenVideoRef>((props, ref) => {
   const max = useSharedValue(SLIDES.length - 1);
 
   // Animation timers
-  const animationTimers = useRef<NodeJS.Timeout[]>([]);
+  const animationTimers = useRef<number[]>([]);
 
   const [lowerCaseLetterSvgProp, setLowerCaseLetterSvgProp] = useState({
     onAnimationComplete: () => handleAnimationComplete(),

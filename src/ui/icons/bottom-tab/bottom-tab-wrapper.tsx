@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 import { StyleSheet, View } from "react-native";
 
 import type { SectionColorScheme } from "@/constants/routes";
