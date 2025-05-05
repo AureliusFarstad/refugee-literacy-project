@@ -1,6 +1,5 @@
-import type { AVPlaybackSource, AVPlaybackStatus } from "expo-av";
-import { Audio } from "expo-av";
-import type { Sound } from "expo-av/build/Audio";
+import type { AudioStatus } from "expo-audio";
+import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import { MotiView } from "moti";
 import type { ReactNode } from "react";
 import React, { useCallback, useEffect, useState } from "react";
@@ -19,7 +18,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useLevelStore } from "@/core/store/levels";
 import { View } from "@/ui";
-import ChatIndicator from "@/ui/components/chat-indicator";
 import {
   FemaleEnglishAudioPlayedIcon,
   FemaleNativeAudioPlayedIcon,
@@ -35,14 +33,14 @@ import { cn } from "@/utils/helpers";
 type Message = {
   id: string;
   avatar: ReactNode;
-  mediaType: "audio" | "video" | "chat";
+  mediaType: "audio" | "video";
   englishAudioResources: {
     gender: string;
-    source: AVPlaybackSource;
+    source: any; // Using any for simplicity, but should match what expo-audio expects
   };
   nativeAudioResources: {
     gender: string;
-    source: AVPlaybackSource;
+    source: any; // Using any for simplicity, but should match what expo-audio expects
     lang: string;
   };
 };
@@ -109,7 +107,6 @@ const DATA: Message[] = [
 
 const ItemSeparator = () => <View className="h-4 bg-[#F2EFF0]" />;
 
-// Animated Audio Button Component
 type AnimatedAudioButtonProps = {
   onPress: () => void;
   icon: ReactNode;
@@ -282,7 +279,7 @@ function AudioControls({
 
 type ActiveRow = {
   number: number;
-  step: "avatar" | "chat-indicator" | "audio-controls" | "complete";
+  step: "avatar" | "audio-controls" | "complete";
   rowsAnimated?: number[];
 };
 
@@ -290,11 +287,7 @@ type MessageRowProps = {
   item: Message;
   index: number;
   activeRow: ActiveRow;
-  playAudio: (
-    source: AVPlaybackSource,
-    rowIndex: number,
-    type: "english" | "native",
-  ) => Promise<void>;
+  playAudio: (rowIndex: number, type: "english" | "native") => void;
   playingAudio: PlayingAudio;
 };
 
@@ -329,12 +322,8 @@ function MessageRow({
             conversationComplete={isItemComplete}
             isPlayingEnglish={isPlayingEnglish}
             isPlayingNative={isPlayingNative}
-            onPlayEnglish={() =>
-              playAudio(item.englishAudioResources.source, index, "english")
-            }
-            onPlayNative={() =>
-              playAudio(item.nativeAudioResources.source, index, "native")
-            }
+            onPlayEnglish={() => playAudio(index, "english")}
+            onPlayNative={() => playAudio(index, "native")}
           />
           {!isEven && <View className="ml-4">{item.avatar}</View>}
         </View>
@@ -349,16 +338,6 @@ function MessageRow({
               <View className={isEven ? "mr-4" : "ml-4"}>{item.avatar}</View>
             </View>
           );
-        case "chat-indicator":
-          return (
-            <View className="flex h-[72] flex-row items-end justify-end">
-              {isEven && <View className="mr-4">{item.avatar}</View>}
-              <View className="flex h-10 flex-row items-center justify-center">
-                <ChatIndicator />
-              </View>
-              {!isEven && <View className="ml-4">{item.avatar}</View>}
-            </View>
-          );
         case "audio-controls":
         case "complete":
           return (
@@ -369,12 +348,8 @@ function MessageRow({
                 conversationComplete={isItemComplete}
                 isPlayingEnglish={isPlayingEnglish}
                 isPlayingNative={isPlayingNative}
-                onPlayEnglish={() =>
-                  playAudio(item.englishAudioResources.source, index, "english")
-                }
-                onPlayNative={() =>
-                  playAudio(item.nativeAudioResources.source, index, "native")
-                }
+                onPlayEnglish={() => playAudio(index, "english")}
+                onPlayNative={() => playAudio(index, "native")}
               />
               {!isEven && <View className="ml-4">{item.avatar}</View>}
             </View>
@@ -401,21 +376,13 @@ function MessageRow({
 
 function Listening() {
   const { levels: _levels } = useLevelStore();
-  const [sound, setSound] = useState<Sound>();
-  const [status, setStatus] = useState<
-    AVPlaybackStatus & {
-      isLoaded: boolean;
-      isPlaying: boolean;
-      isBuffering: boolean;
-      didJustFinish: boolean;
-    }
-  >({
-    isLoaded: false,
-    isPlaying: false,
-    isBuffering: false,
-    didJustFinish: false,
-  });
 
+  // Now we'll use the useAudioPlayer hook instead of manually managing sounds
+  const [activeSource, setActiveSource] = useState<any>(null);
+  const player = useAudioPlayer(activeSource);
+  const [audioStatus, setAudioStatus] = useState<AudioStatus>();
+
+  // Track which audio is currently playing
   const [playingAudio, setPlayingAudio] = useState<PlayingAudio>({
     rowIndex: -1,
     type: "none",
@@ -433,62 +400,55 @@ function Listening() {
   const min = useSharedValue(0);
   const max = useSharedValue(DATA.length - 1);
 
-  const onPlaybackStatusUpdate = useCallback(
-    (playbackStatus: AVPlaybackStatus) => {
-      if (!playbackStatus.isLoaded) {
-        if (playbackStatus.error) {
-          console.log(
-            `Encountered a fatal error during playback: ${playbackStatus.error}`,
-          );
-        }
-      } else {
-        setStatus(playbackStatus as any);
+  // Use the useAudioPlayerStatus hook to track audio status
+  const playerStatus = useAudioPlayerStatus(player);
 
-        // Clear playing state when audio finishes
-        if (playbackStatus.didJustFinish) {
-          setPlayingAudio({ rowIndex: -1, type: "none" });
+  // Update our local status whenever playerStatus changes
+  useEffect(() => {
+    if (playerStatus) {
+      setAudioStatus(playerStatus);
+
+      // Clear playing state when audio finishes
+      if (playerStatus.didJustFinish) {
+        setPlayingAudio({ rowIndex: -1, type: "none" });
+      }
+    }
+  }, [playerStatus]);
+
+  // Modified to use expo-audio hooks API
+  const playAudio = useCallback(
+    (rowIndex: number, type: "english" | "native") => {
+      try {
+        // Stop existing audio if playing
+        if (player && player.playing) {
+          player.pause();
         }
+
+        // Get the source for the selected audio
+        const source =
+          type === "english"
+            ? DATA[rowIndex].englishAudioResources.source
+            : DATA[rowIndex].nativeAudioResources.source;
+
+        // Update the source and playing state
+        setActiveSource(source);
+        setPlayingAudio({ rowIndex, type });
+
+        // The player will automatically update with the new source
+        // and we can just play it
+        if (player) {
+          player.play();
+        }
+      } catch (error) {
+        console.error("Error playing audio:", error);
+        setPlayingAudio({ rowIndex: -1, type: "none" });
       }
     },
-    [],
+    [player],
   );
 
-  // Modified to handle custom audio playback
-  const playAudio = async (
-    source: AVPlaybackSource,
-    rowIndex: number,
-    type: "english" | "native",
-  ) => {
-    try {
-      // Stop existing audio if playing
-      if (sound) {
-        await sound.stopAsync();
-        await sound.unloadAsync();
-      }
-
-      // Update playing state
-      setPlayingAudio({ rowIndex, type });
-
-      // Play the new audio
-      const { sound: newSound } = await Audio.Sound.createAsync(
-        source,
-        {},
-        onPlaybackStatusUpdate,
-      );
-
-      setSound(newSound);
-      await newSound.playAsync();
-
-      return Promise.resolve();
-    } catch (error) {
-      console.error("Error playing audio:", error);
-      setPlayingAudio({ rowIndex: -1, type: "none" });
-      return Promise.reject(error);
-    }
-  };
-
   const playSound = useCallback(
-    async (currentActiveNumber: number) => {
+    (currentActiveNumber: number) => {
       try {
         if (currentActiveNumber >= DATA.length) {
           console.log("Reached the end of messages");
@@ -496,36 +456,19 @@ function Listening() {
         }
 
         console.log(`Playing audio for row: ${currentActiveNumber}`);
-        const currentRowAudio = DATA[currentActiveNumber];
 
-        // Use the enhanced playAudio function
-        await playAudio(
-          currentRowAudio.englishAudioResources.source,
-          currentActiveNumber,
-          "english",
-        );
+        // Play the English audio by default
+        playAudio(currentActiveNumber, "english");
       } catch (error) {
         console.error("Error in playSound:", error);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onPlaybackStatusUpdate],
+    [playAudio],
   );
-
-  const _initializeTimeline = useCallback(() => {
-    console.log("Initializing timeline");
-    setActiveRow({
-      number: 0,
-      step: "avatar",
-      rowsAnimated: [],
-    });
-  }, []);
 
   const moveToNextStep = useCallback(() => {
     setActiveRow((prev) => {
       if (prev.step === "avatar") {
-        return { ...prev, step: "chat-indicator" };
-      } else if (prev.step === "chat-indicator") {
         return { ...prev, step: "audio-controls" };
       } else if (prev.step === "audio-controls") {
         const nextNumber = prev.number + 1;
@@ -549,45 +492,35 @@ function Listening() {
   }, []);
 
   useEffect(() => {
-    if (activeRow.step === "avatar" || activeRow.step === "chat-indicator") {
-      const timer = setTimeout(moveToNextStep, 2000);
+    if (activeRow.step === "avatar") {
+      // Increased delay for better visibility of the avatar step
+      const timer = setTimeout(moveToNextStep, 1000);
       return () => clearTimeout(timer);
     } else if (activeRow.step === "audio-controls") {
-      playSound(activeRow.number).catch((error) =>
-        console.error("Error playing sound:", error),
-      );
+      playSound(activeRow.number);
     }
   }, [activeRow.step, activeRow.number, playSound, moveToNextStep]);
 
   useEffect(() => {
-    if (status.didJustFinish) {
+    if (audioStatus?.didJustFinish) {
       moveToNextStep();
     }
-  }, [status.didJustFinish, moveToNextStep]);
-
-  useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
+  }, [audioStatus?.didJustFinish, moveToNextStep]);
 
   useEffect(() => {
     progressValue.value = activeRow.number;
   }, [activeRow.number, progressValue]);
 
-  const handleSliderChange = async (value: number) => {
+  const handleSliderChange = (value: number) => {
     const newIndex = Math.round(value);
 
     // Stop current audio if playing
-    if (sound) {
-      await sound.stopAsync();
-      await sound.unloadAsync();
-
-      // Clear playing state
-      setPlayingAudio({ rowIndex: -1, type: "none" });
+    if (player && player.playing) {
+      player.pause();
     }
+
+    // Clear playing state
+    setPlayingAudio({ rowIndex: -1, type: "none" });
 
     // Update active row state
     setActiveRow({
@@ -600,13 +533,12 @@ function Listening() {
     playSound(newIndex);
   };
 
-  const handleReplay = async () => {
+  const handleReplay = () => {
     // If conversation is complete or not active, restart
     if (activeRow.step === "complete" || !isConversationActive()) {
       // Stop current audio if playing
-      if (sound) {
-        await sound.stopAsync();
-        await sound.unloadAsync();
+      if (player && player.playing) {
+        player.pause();
       }
 
       // Reset all states
@@ -621,16 +553,10 @@ function Listening() {
 
       progressValue.value = 0;
       setIsSliding(false);
-      setStatus({
-        isLoaded: false,
-        isPlaying: false,
-        isBuffering: false,
-        didJustFinish: false,
-      });
     } else {
       // If conversation is active, pause it
-      if (sound && status.isPlaying) {
-        await sound.pauseAsync();
+      if (player && player.playing) {
+        player.pause();
 
         // Clear playing state
         setPlayingAudio({ rowIndex: -1, type: "none" });
@@ -651,13 +577,12 @@ function Listening() {
     }
 
     // Check if the conversation is in a playing state
-    const isPlaying = status.isLoaded && status.isPlaying;
+    const isPlaying = player && player.playing;
 
     // Check if we're in an active step
     const isActiveStep =
       activeRow.step === "avatar" ||
-      activeRow.step === "chat-indicator" ||
-      (activeRow.step === "audio-controls" && !status.didJustFinish);
+      (activeRow.step === "audio-controls" && !audioStatus?.didJustFinish);
 
     return isPlaying || isActiveStep;
   };

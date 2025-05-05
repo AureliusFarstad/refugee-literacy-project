@@ -43,6 +43,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     "expo-web-browser",
+    "expo-audio",
     ["expo-font"],
     "expo-localization",
     "expo-router",
