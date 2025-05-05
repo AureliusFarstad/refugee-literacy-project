@@ -1,7 +1,8 @@
-import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 import {
   ENGLISH_VOCABULARY_AUDIO_SOURCES,

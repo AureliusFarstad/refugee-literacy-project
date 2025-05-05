@@ -287,7 +287,9 @@ const VideoTab = forwardRef<WelcomeScreenVideoRef>((props, ref) => {
   }, [isAnimating, overlayOpacity, clearAllTimers]);
 
   const navigateToHome = useCallback(() => {
-    router.back();
+    router.navigate({
+      pathname: "/",
+    });
   }, []);
 
   return (

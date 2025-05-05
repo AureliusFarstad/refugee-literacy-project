@@ -50,7 +50,7 @@ const tabs: TabType[] = [
 export default function LevelTwoTabLayout() {
   return (
     <Tabs
-      initialRouteName="flashcard"
+      backBehavior="order"
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {

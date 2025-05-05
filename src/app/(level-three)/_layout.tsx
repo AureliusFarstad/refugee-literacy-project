@@ -39,6 +39,7 @@ export default function LevelTwoTabLayout() {
   return (
     <Tabs
       initialRouteName="listening"
+      backBehavior="order"
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {
