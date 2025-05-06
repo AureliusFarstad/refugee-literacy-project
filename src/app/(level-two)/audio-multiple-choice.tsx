@@ -1,7 +1,7 @@
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -22,11 +22,10 @@ import Reanimated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
-  ENGLISH_VOCABULARY_AUDIO_SOURCES,
-  NATIVE_VOCABULARY_AUDIO_SOURCES,
-  VOCABULARY_IMAGE_SOURCES,
-  VOCABULARY_WORD_LIST_BY_LEVEL,
-} from "@/assets/vocabulary";
+  BLENDING_IMAGE_SOURCES,
+  BLENDING_WORD_LIST_BY_LEVEL,
+  BLENDING_AUDIO_SOURCES
+} from "@/assets/blending";
 import { APP_COLORS } from "@/constants/routes";
 import Header from "@/ui/core/headers";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
@@ -41,6 +40,9 @@ import {
 } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
+
+// TODO: PLUG IN NATIVE AUDIO SOURCES...
+
 // ------------------------------------------------------------
 // TYPE DEFINITIONS
 // ------------------------------------------------------------
@@ -150,11 +152,11 @@ type GameSet = {
 };
 
 // TODO: Not sure if we want to generate these or have a static list...
-const generatedGameSets: GameSet[] = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
+const generatedGameSets: GameSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   (word: string) => {
     return {
       correctAnswer: word,
-      options: VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
+      options: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
         (option) => option !== word,
       )
         .slice(0, 2)
@@ -182,7 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: APP_COLORS.backgroundgrey,
   },
   flashcardContainer: {
     flex: 1,
@@ -193,7 +195,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: SECTION_COLOR.sectionPrimaryColor,
     borderRadius: 12,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: APP_COLORS.offwhite,
     marginHorizontal: 16,
     padding: 16,
     flexDirection: "column",
@@ -236,26 +238,18 @@ const styles = StyleSheet.create({
     backgroundColor: SECTION_COLOR.sectionSecondaryColor,
   },
   row: {
-    // borderWidth: 1,  // Border for the row
-    // borderStyle: "solid",
-    // borderColor: SECTION_COLOR.sectionPrimaryColor,
     flex: 1, // Take remaining space in the flashcard
     flexDirection: "row", // Align items in a row
     alignItems: "center", // Center vertically
     justifyContent: "space-evenly", // Space items evenly
   },
   text: {
-    // flex: 1,
     fontSize: 40,
     color: SECTION_COLOR.appBlackColor,
     fontWeight: "bold",
     textAlign: "center",
   },
   dropCircleContainer: {
-    // borderStyle: "solid",
-    // borderWidth: 2,
-    // borderColor: "red",
-    flex: 1, // Take remaining space in the flashcard
     justifyContent: "center", // Center vertically
     alignItems: "center", // Center horizontally
   },
@@ -746,8 +740,8 @@ const DraggableAudioGame: React.FC = () => {
   const currentGameSet = generatedGameSets[currentGameSetIndex];
   const CORRECT_BUTTON_ID: string = currentGameSet.correctAnswer;
   const Svg =
-    VOCABULARY_IMAGE_SOURCES[
-      CORRECT_BUTTON_ID as keyof typeof VOCABULARY_IMAGE_SOURCES
+    BLENDING_IMAGE_SOURCES[
+      CORRECT_BUTTON_ID as keyof typeof BLENDING_IMAGE_SOURCES
     ];
 
   // Available audio buttons using shuffled options
@@ -946,7 +940,7 @@ const DraggableAudioGame: React.FC = () => {
             <View style={[styles.iconButton, { top: 0, right: 0 }]}>
               <AnimatedAudioButton
                 audioSource={
-                  NATIVE_VOCABULARY_AUDIO_SOURCES[CORRECT_BUTTON_ID].file
+                  BLENDING_AUDIO_SOURCES[CORRECT_BUTTON_ID].file // TODO: Update native source here.
                 }
                 width={40}
                 height={40}
@@ -958,9 +952,8 @@ const DraggableAudioGame: React.FC = () => {
 
           {/* A row with Text and Drop Target Next to each other */}
           <View style={styles.row}>
-            <Text style={styles.text}>
-              Hello
-            </Text>
+            <Text style={styles.text}>{CORRECT_BUTTON_ID}</Text>
+             {/*TODO: Use capitalization.*/}
             {/* Drop target */}
             <View style={styles.dropCircleContainer}>
               <View ref={dropCircleRef} style={styles.emptyDropCircle} />
@@ -977,7 +970,7 @@ const DraggableAudioGame: React.FC = () => {
             item={item}
             onAudioPlay={() =>
               playAudio(
-                ENGLISH_VOCABULARY_AUDIO_SOURCES[item.word].normal_speed,
+                BLENDING_AUDIO_SOURCES[item.word].file,
                 item.id,
               )
             }

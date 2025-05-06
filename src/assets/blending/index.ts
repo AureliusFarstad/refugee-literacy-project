@@ -19,6 +19,7 @@ export const BLENDING_WORD_LIST_BY_LEVEL: IBlending_Word_List = {
   LEVEL_1: ["tin", "pin", "pan", "ant", "in", "tap"],
 };
 
+// TODO: Update these
 export const BLENDING_AUDIO_SOURCES: IBlending_Audio_Source = {
   tin: {
     file: require("assets/alphabet/audio/name/b.mp3"),

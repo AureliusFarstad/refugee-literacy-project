@@ -23,6 +23,8 @@ const BLENDING_FLASHCARDS = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   },
 );
 
+// TODO: PLUG IN NATIVE AUDIO SOURCES...
+
 const colors = {
   background_color: APP_COLORS.backgroundgrey,
   primary_color: SECTION_COLORS.blending.primary,
