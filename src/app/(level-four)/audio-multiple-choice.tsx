@@ -46,7 +46,8 @@ import { SECTION_COLOR } from "./_layout";
 // TYPE DEFINITIONS
 // ------------------------------------------------------------
 
-type ButtonItem = { // Used for draggable buttons
+type ButtonItem = {
+  // Used for draggable buttons
   id: string;
   word: string;
 };
@@ -62,27 +63,30 @@ type Position = {
 
 // Button color configurations # TODO: Refactor out colors to constants
 const BUTTON_COLORS: ButtonColorProps[] = [
-  { // Pink
+  {
+    // Pink
     primaryColor: "#FFABDE",
     offwhiteColor: "#FAFAFA",
     offblackColor: "#3F3F46",
     secondaryColor: "#D282AE",
     backgroundColor: "#FFF0F6",
   },
-  { // Purple
+  {
+    // Purple
     primaryColor: "#C385F8",
     offwhiteColor: "#FAFAFA",
     offblackColor: "#3F3F46",
     secondaryColor: "#9A7DE0",
     backgroundColor: "#F5F0FF",
   },
-  { // Blue
+  {
+    // Blue
     primaryColor: "#62A0EC",
     offwhiteColor: "#FAFAFA",
     offblackColor: "#3F3F46",
     secondaryColor: "#5BA3E0",
     backgroundColor: "#EFF6FF",
-  }, 
+  },
 ];
 
 // TODO: Move to layout

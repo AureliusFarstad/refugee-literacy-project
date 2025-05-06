@@ -1,7 +1,7 @@
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -40,12 +40,13 @@ import {
   WIDTH,
 } from "@/utils/layout";
 
-import { SECTION_COLOR } from "./_layout"
+import { SECTION_COLOR } from "./_layout";
 // ------------------------------------------------------------
 // TYPE DEFINITIONS
 // ------------------------------------------------------------
 
-type ButtonItem = { // Used for draggable buttons
+type ButtonItem = {
+  // Used for draggable buttons
   id: string;
   word: string;
 };
@@ -61,27 +62,30 @@ type Position = {
 
 // Button color configurations # TODO: Refactor out colors to constants
 const BUTTON_COLORS: ButtonColorProps[] = [
-  { // Pink
+  {
+    // Pink
     primaryColor: "#FFABDE",
     offwhiteColor: "#FAFAFA",
     offblackColor: "#3F3F46",
     secondaryColor: "#D282AE",
     backgroundColor: "#FFF0F6",
   },
-  { // Purple
+  {
+    // Purple
     primaryColor: "#C385F8",
     offwhiteColor: "#FAFAFA",
     offblackColor: "#3F3F46",
     secondaryColor: "#9A7DE0",
     backgroundColor: "#F5F0FF",
   },
-  { // Blue
-    primaryColor: "#62A0EC",
+  {
+    // Orange
+    primaryColor: "#F69F4E",
     offwhiteColor: "#FAFAFA",
     offblackColor: "#3F3F46",
-    secondaryColor: "#5BA3E0",
-    backgroundColor: "#EFF6FF",
-  }, 
+    secondaryColor: "#FAE7D6",
+    backgroundColor: "#EFF6FF", // Unused color
+  },
 ];
 
 // TODO: Move to layout
@@ -198,7 +202,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: SECTION_COLOR.sectionPrimaryColor,
     borderStyle: "dashed",
-    backgroundColor: "#FAE7D6",
+    backgroundColor: SECTION_COLOR.sectionSecondaryColor,
   },
   imageContainer: {
     width: "100%",
@@ -231,7 +235,26 @@ const styles = StyleSheet.create({
   iconButtonActive: {
     backgroundColor: SECTION_COLOR.sectionSecondaryColor,
   },
+  row: {
+    // borderWidth: 1,  // Border for the row
+    // borderStyle: "solid",
+    // borderColor: SECTION_COLOR.sectionPrimaryColor,
+    flex: 1, // Take remaining space in the flashcard
+    flexDirection: "row", // Align items in a row
+    alignItems: "center", // Center vertically
+    justifyContent: "space-evenly", // Space items evenly
+  },
+  text: {
+    // flex: 1,
+    fontSize: 40,
+    color: SECTION_COLOR.appBlackColor,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
   dropCircleContainer: {
+    // borderStyle: "solid",
+    // borderWidth: 2,
+    // borderColor: "red",
     flex: 1, // Take remaining space in the flashcard
     justifyContent: "center", // Center vertically
     alignItems: "center", // Center horizontally
@@ -933,10 +956,15 @@ const DraggableAudioGame: React.FC = () => {
             </View>
           </View>
 
-          {/* Drop target */}
-          {/* <View style={styles.dropAreaContainer}> */}
-          <View style={styles.dropCircleContainer}>
-            <View ref={dropCircleRef} style={styles.emptyDropCircle} />
+          {/* A row with Text and Drop Target Next to each other */}
+          <View style={styles.row}>
+            <Text style={styles.text}>
+              Hello
+            </Text>
+            {/* Drop target */}
+            <View style={styles.dropCircleContainer}>
+              <View ref={dropCircleRef} style={styles.emptyDropCircle} />
+            </View>
           </View>
         </View>
       </View>
