@@ -279,7 +279,15 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
       }
     }
     // No cleanup function - we manage the timeout manually
-  }, [isPlaced, isCorrect, onDragEnd, onMarkDisabled, translateX, translateY, item.id]);
+  }, [
+    isPlaced,
+    isCorrect,
+    onDragEnd,
+    onMarkDisabled,
+    translateX,
+    translateY,
+    item.id,
+  ]);
 
   // Effect for handling the initial setup
   useEffect(() => {
