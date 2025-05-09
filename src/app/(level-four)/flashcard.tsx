@@ -11,9 +11,14 @@ import {
   VOCABULARY_WORD_LIST_BY_LEVEL,
 } from "@/assets/vocabulary";
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { VocabularyFlashCard } from "@/ui/components/vocabulary-flashcard";
-import Header from "@/ui/core/headers";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
+
+const Footer = () => {
+  return <View className="h-40" />;
+};
 
 // TODO: Maybe construct in assets/blending/index.ts?
 const VOCABULARY_FLASHCARDS = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
@@ -63,6 +68,10 @@ export default function FlashCardContainer() {
   });
 
   const insets = useSafeAreaInsets();
+  // TODO: update with correct resource
+  const { isPlaying, playGuideAudio } = useGuideAudio({
+    screenName: "letter-introduction",
+  });
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -73,7 +82,12 @@ export default function FlashCardContainer() {
           flex: 1,
         }}
       >
-        <Header title="Blending Flashcards" />
+        <GuidanceAudioHeader
+          title="Blending Flashcards"
+          isPlaying={isPlaying}
+          onPressGuide={playGuideAudio}
+          colorType="DEFAULT"
+        />
         <View className="flex size-full items-center">
           <FlatList
             style={styles.scrollable}
@@ -82,6 +96,7 @@ export default function FlashCardContainer() {
               <VocabularyFlashCard content={item} colors={colors} />
             )}
             keyExtractor={(item) => item.id}
+            ListFooterComponent={Footer}
           />
           {/* Help TODO: Om, I can't get a nice padding on the bottom of the scrollable area to align with the bottom tab bar*/}
         </View>

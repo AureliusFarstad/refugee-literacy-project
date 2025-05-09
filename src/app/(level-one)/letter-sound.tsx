@@ -9,7 +9,7 @@ import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
-import Header from "@/ui/core/headers";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { LettersNameIcon } from "@/ui/icons";
 import { getOptionsToRender } from "@/utils/level-one";
 
@@ -21,7 +21,7 @@ const LetterSound = () => {
 
   const [isLowercase, setIsLowercase] = useState(false);
 
-  const { playGuideAudio } = useGuideAudio({
+  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
     screenName: "letter-sound",
   });
 
@@ -116,7 +116,13 @@ const LetterSound = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Name" onPressGuide={playGuideAudio} />
+      <GuidanceAudioHeader
+        title="Sound"
+        isPlaying={isPlayingGuidanceAudio}
+        onPressGuide={playGuideAudio}
+        colorType="NATIVE_BUTTON_COLOR"
+      />
+
       <View className=" px-5">
         <LetterCaseSwitch
           isLowercase={isLowercase}

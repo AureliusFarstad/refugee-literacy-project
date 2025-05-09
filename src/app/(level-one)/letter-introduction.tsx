@@ -12,7 +12,7 @@ import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import AnimatedLetterComponent from "@/ui/components/home/animated-letter-component";
-import Header from "@/ui/core/headers";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { CustomPencilIcon, EarIcon, LettersNameIcon } from "@/ui/icons";
 import { HEIGHT, IS_IOS, WIDTH } from "@/utils/layout";
 
@@ -82,7 +82,7 @@ const LetterIntroduction = () => {
     setIsAnimating(true);
   };
 
-  const { playGuideAudio } = useGuideAudio({
+  const { playGuideAudio, isPlaying } = useGuideAudio({
     screenName: "letter-introduction",
   });
 
@@ -213,7 +213,12 @@ const LetterIntroduction = () => {
 
   return (
     <SafeAreaView>
-      <Header title="" onPressGuide={playGuideAudio} />
+      <GuidanceAudioHeader
+        title="Sound"
+        isPlaying={isPlaying}
+        onPressGuide={playGuideAudio}
+        colorType="NATIVE_BUTTON_COLOR"
+      />
       <View
         className="flex flex-col justify-between"
         style={{

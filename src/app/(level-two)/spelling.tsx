@@ -4,7 +4,7 @@ import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { SafeAreaView, TouchableOpacity, View } from "@/ui";
 import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import DragDrop from "@/ui/components/level-two/dragdrop";
-import Header from "@/ui/core/headers";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { EarIcon } from "@/ui/icons";
 
 const activeActivity = {
@@ -40,14 +40,19 @@ const activeActivity = {
 const Spelling = () => {
   const [isLowercase, setIsLowercase] = useState(false);
 
-  const { playGuideAudio } = useGuideAudio({
+  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
     screenName: "spelling",
     module: "blending-module",
   });
 
   return (
     <SafeAreaView>
-      <Header title="Letter Draggable" onPressGuide={playGuideAudio} />
+      <GuidanceAudioHeader
+        title="Sound"
+        isPlaying={isPlayingGuidanceAudio}
+        onPressGuide={playGuideAudio}
+        colorType="DEFAULT"
+      />
 
       <View className="flex h-full items-center ">
         <View className="flex w-full flex-1 flex-col   ">

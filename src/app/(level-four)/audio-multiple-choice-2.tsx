@@ -157,7 +157,7 @@ const BUTTON_COLORS: ButtonColorConfig[] = [
 ];
 
 // TODO: Move to layout
-const NATIVE_BUTTON_COLOR: ButtonColorProps = {
+export const NATIVE_BUTTON_COLOR: ButtonColorProps = {
   primaryColor: SECTION_COLOR.sectionPrimaryColor,
   secondaryColor: SECTION_COLOR.sectionSecondaryColor,
   offwhiteColor: SECTION_COLOR.appWhiteColor,

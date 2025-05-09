@@ -16,6 +16,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { View } from "@/ui";
 import {
@@ -24,7 +25,7 @@ import {
   MaleEnglishAudioPlayedIcon,
   MaleNativeAudioPlayedIcon,
 } from "@/ui/components/listening/icons";
-import Header from "@/ui/core/headers";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { PauseButton } from "@/ui/icons/circular/pause-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
 import { UserAvatar } from "@/ui/illustrations";
@@ -589,9 +590,19 @@ function Listening() {
 
   const conversationActive = isConversationActive();
 
+  const { isPlaying, playGuideAudio } = useGuideAudio({
+    screenName: "letter-formation",
+  });
+
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-      <Header title="Sound" />
+      <GuidanceAudioHeader
+        title="Sound"
+        isPlaying={isPlaying}
+        onPressGuide={playGuideAudio}
+        colorType="NATIVE_BUTTON_COLOR"
+      />
+
       <View className="flex h-20 flex-row items-center bg-[#F2EFF0] px-4">
         <TouchableOpacity
           onPress={handleReplay}

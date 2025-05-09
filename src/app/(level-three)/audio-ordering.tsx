@@ -3,7 +3,7 @@ import React from "react";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { SafeAreaView, View } from "@/ui";
 import DragDrop from "@/ui/components/conversation/dragdrop";
-import Header from "@/ui/core/headers";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 
 const activeActivity = {
   options: [
@@ -37,14 +37,18 @@ const activeActivity = {
 };
 
 const AudioOrdering = () => {
-  const { playGuideAudio } = useGuideAudio({
-    screenName: "audio-ordering",
-    module: "blending-module",
+  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+    screenName: "letter-formation",
   });
 
   return (
     <SafeAreaView>
-      <Header title="AudioOrdering" onPressGuide={playGuideAudio} />
+      <GuidanceAudioHeader
+        title="Sound"
+        isPlaying={isPlayingGuidanceAudio}
+        onPressGuide={playGuideAudio}
+        colorType="NATIVE_BUTTON_COLOR"
+      />
       <View className="flex h-full items-center ">
         <View className="flex w-full flex-1 flex-col   ">
           <DragDrop activeActivity={activeActivity} />
