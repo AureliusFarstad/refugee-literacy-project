@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import React from "react";
+import type { JSX } from "react/jsx-runtime";
 
 import { SECTION_COLORS } from "@/constants/routes";
 import TabIconWrapper from "@/ui/icons/bottom-tab/bottom-tab-wrapper";
@@ -49,6 +50,7 @@ const tabs: TabType[] = [
 export default function LevelTwoTabLayout() {
   return (
     <Tabs
+      backBehavior="order"
       initialRouteName="letter-introduction"
       screenOptions={({}) => ({
         headerShown: false,

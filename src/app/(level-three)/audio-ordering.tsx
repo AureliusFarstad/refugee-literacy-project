@@ -19,13 +19,13 @@ import type {
   GameSet,
 } from "@/ui/components/audio-multiple-choice-component";
 import AudioMultipleChoice from "@/ui/components/audio-multiple-choice-component";
-import Header from "@/ui/core/headers";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
 import { UserAvatar } from "@/ui/illustrations";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
+import GuidanceAudioHeader from "@/ui/core/guidance-audio-header";
 import { sectionColor } from "./_layout";
 
 const primaryColor = SECTION_COLORS.speaking;
@@ -253,11 +253,6 @@ const createConversationDestinationComponent: DestinationFunction<
 const Screen = () => {
   const insets = useSafeAreaInsets();
 
-  const { playGuideAudio } = useGuideAudio({
-    screenName: "audio-ordering",
-    module: "blending-module",
-  });
-
   // Convert dialogueCounter to state so it persists between renders
   const [dialogueCounter, setDialogueCounter] = useState(0);
 
@@ -457,6 +452,17 @@ const Screen = () => {
     }
   };
 
+  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+    screenName: "letter-formation",
+    module: "blending-module",
+  });
+
+  // TODO: Maybe use some of these styles
+  // <SafeAreaView>
+  //   <View className="flex h-full items-center ">
+  //     <View className="flex w-full flex-1 flex-col   ">
+  //       <DragDrop activeActivity={activeActivity} />
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View
@@ -466,7 +472,12 @@ const Screen = () => {
           backgroundColor: APP_COLORS.backgroundgrey,
         }}
       >
-        <Header title="AudioOrdering" onPressGuide={playGuideAudio} />
+        <GuidanceAudioHeader
+          title="Sound"
+          isPlaying={isPlayingGuidanceAudio}
+          onPressGuide={playGuideAudio}
+          colorType="NATIVE_BUTTON_COLOR"
+        />
         <View style={styles.overflowContainer}>
           {/* Bottom-anchored content that can overflow at the top */}
           <View style={styles.bottomAnchoredContent}>{renderContent()}</View>

@@ -12,8 +12,11 @@ type GuideAudioProps = {
 
 export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
   const [sound, setSound] = useState<Sound>();
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const playSequentialSounds = async (playbackSources: AVPlaybackSource[]) => {
+    setIsPlaying(true);
+
     for (const source of playbackSources) {
       try {
         if (sound) {
@@ -45,9 +48,23 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
     try {
       const playbackSources = await getGuides(screenName, module);
       await playSequentialSounds(playbackSources);
+      setIsPlaying(false);
     } catch (error) {
       console.log("error in playGuideAudio", error);
+      setIsPlaying(false);
       throw error;
+    }
+  };
+
+  const stopGuideAudio = async () => {
+    if (sound) {
+      try {
+        await sound.stopAsync();
+        await sound.unloadAsync();
+        setSound(undefined);
+      } catch (error) {
+        console.error("Error stopping sound:", error);
+      }
     }
   };
 
@@ -61,5 +78,7 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
 
   return {
     playGuideAudio,
+    stopGuideAudio,
+    isPlaying,
   };
 };

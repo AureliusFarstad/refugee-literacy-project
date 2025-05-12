@@ -11,7 +11,7 @@ const LetterCaseSwitch = () => {
       checked={isLowercase}
       onChange={setIsLowercase}
       accessibilityLabel="switch"
-      className="pb-2"
+      className="rounded-full"
       backgroundColor="#FAFAFA"
     >
       <Switch.Icon

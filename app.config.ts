@@ -5,6 +5,7 @@ import { ClientEnv, Env } from "./env";
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: Env.NAME,
+  newArchEnabled: true,
   description: `${Env.NAME} Mobile App`,
   owner: Env.EXPO_ACCOUNT_OWNER,
   scheme: Env.SCHEME,
@@ -41,6 +42,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundler: "metro",
   },
   plugins: [
+    "expo-web-browser",
+    "expo-audio",
     ["expo-font"],
     "expo-localization",
     "expo-router",

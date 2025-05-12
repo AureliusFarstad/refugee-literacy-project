@@ -978,7 +978,6 @@ const DraggableAudioGame: React.FC = () => {
   );
 };
 
-// Update the Screen component styles
 const Screen = () => {
   const screenStyles = StyleSheet.create({
     safeareaview: {

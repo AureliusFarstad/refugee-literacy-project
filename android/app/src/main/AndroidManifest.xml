@@ -27,7 +27,6 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="refugeeliteracy"/>
-        <data android:scheme="com.refugee_literacy_project.development"/>
         <data android:scheme="exp+refugee-literacy-project-app"/>
       </intent-filter>
     </activity>

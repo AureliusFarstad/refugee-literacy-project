@@ -10,7 +10,7 @@ import Svg, { Path as SvgPath } from "react-native-svg";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Text, TouchableOpacity } from "@/ui";
-import Header from "@/ui/core/headers";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { shuffleLetters } from "@/utils/level-one";
 
 type Path = {
@@ -30,7 +30,7 @@ const LetterTapMatching = () => {
 
   const insets = useSafeAreaInsets();
 
-  const { playGuideAudio } = useGuideAudio({
+  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
     screenName: "letter-matching",
   });
 
@@ -44,7 +44,10 @@ const LetterTapMatching = () => {
   const pathRef = useRef<string>("");
   const startPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
+  // @ts-ignore
+
   const tappedPath = useRef<Path>();
+  // @ts-ignore
 
   const layoutValuesRef = useRef<
     {
@@ -157,6 +160,7 @@ const LetterTapMatching = () => {
         const updatedPaths = [...paths, tappedPath.current];
         setPaths(updatedPaths);
       }
+      // @ts-ignore
       tappedPath.current = undefined;
       setSelectedLeft(null);
       if (matchedPairs.length + 1 === leftLetters.length) {
@@ -378,7 +382,13 @@ const LetterTapMatching = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Header title="Matching" onPressGuide={playGuideAudio} />
+      <GuidanceAudioHeader
+        title="Sound"
+        isPlaying={isPlayingGuidanceAudio}
+        onPressGuide={playGuideAudio}
+        colorType="NATIVE_BUTTON_COLOR"
+      />
+
       <View className="relative flex flex-row justify-between border-yellow-500  px-10">
         {renderLetters(leftLetters, handleLeftLetterPress, false)}
         <View {...panResponder.panHandlers} className="z-10 flex-1">

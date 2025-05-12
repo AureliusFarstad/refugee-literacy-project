@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { JSX } from "react/jsx-runtime";
 import Svg, { Path } from "react-native-svg";
 
 export function EarIcon({ lineColor }: { lineColor: string }): JSX.Element {

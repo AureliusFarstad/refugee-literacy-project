@@ -73,7 +73,7 @@ export const DragDrop = ({ activeActivity, isLowercase }: DragDropProps) => {
 
   const { playSound } = useSound();
 
-  const undoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const undoTimeoutRef = useRef<number>(null);
 
   const updateCounter = useCallback(() => {
     setCounter((prev) => prev + 1);
