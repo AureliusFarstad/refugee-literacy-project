@@ -13,13 +13,20 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { NATIVE_BUTTON_COLOR } from "@/app/(level-four)/audio-multiple-choice-2";
 import { APP_COLORS } from "@/constants/routes";
 import LetterCaseSwitch from "@/ui/components/global-letter-casing-switch";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EmptyHeadButton } from "@/ui/icons/circular/empty-head-button";
 import { HomeButton } from "@/ui/icons/circular/home-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
+
+const NATIVE_BUTTON_COLOR: ButtonColorProps = {
+  primaryColor: "blue",
+  secondaryColor: APP_COLORS.lightgreen,
+  offwhiteColor: APP_COLORS.offwhite,
+  offblackColor: APP_COLORS.offblack,
+  backgroundColor: APP_COLORS.backgroundgrey,
+};
 
 const buttonColorProps: ButtonColorProps = {
   primaryColor: APP_COLORS.green,

@@ -242,7 +242,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   const buttonRef = useRef<Reanimated.View>(null);
   const [buttonOrigin, setButtonOrigin] = useState<Position | null>(null);
   const hasSetTimeoutRef = useRef(false);
-  const timeoutIdRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const timeoutIdRef = useRef<number | undefined>(undefined);
 
   // Styles
   const styles = StyleSheet.create({
@@ -606,7 +606,11 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 
 const DefaultUseDestinationComponent = (
   isCardActive: boolean,
-): [DestinationComponentType, RefObject<View>, RefObject<View>] => {
+): [
+  DestinationComponentType,
+  RefObject<View | null>,
+  RefObject<View | null>,
+] => {
   const styles = StyleSheet.create({
     flashcardContainer: {
       flex: 1,

@@ -19,12 +19,12 @@ import type {
   GameSet,
 } from "@/ui/components/audio-multiple-choice-component";
 import AudioMultipleChoice from "@/ui/components/audio-multiple-choice-component";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
 import { UserAvatar } from "@/ui/illustrations";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
-import GuidanceAudioHeader from "@/ui/core/guidance-audio-header";
 
 import { sectionColor } from "./_layout";
 
@@ -131,7 +131,7 @@ type DestinationFunction<T> = (
   props: T,
 ) => (
   isCardActive: boolean,
-) => [DestinationComponentType, RefObject<View>, RefObject<View>];
+) => [DestinationComponentType, RefObject<View | null>, RefObject<View | null>];
 
 const CompletedCard: React.FC<CompletedCardProps> = ({
   gender = "male", // Default parameter using destructuring
@@ -199,7 +199,11 @@ const createConversationDestinationComponent: DestinationFunction<
   // This returns a function that matches the original signature expected by AudioMultipleChoice
   return (
     isCardActive: boolean,
-  ): [DestinationComponentType, RefObject<View>, RefObject<View>] => {
+  ): [
+    DestinationComponentType,
+    RefObject<View | null>,
+    RefObject<View | null>,
+  ] => {
     const dropCircleRef = useRef<View>(null);
     const destinationContainerRef = useRef<View>(null);
 
@@ -245,8 +249,8 @@ const createConversationDestinationComponent: DestinationFunction<
         )}
       </View>
     );
-
-    return [SpeakerCard, dropCircleRef, destinationContainerRef];
+    // silence the error:
+    return [SpeakerCard, dropCircleRef, destinationContainerRef]; //
   };
 };
 
