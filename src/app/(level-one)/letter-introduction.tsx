@@ -12,8 +12,10 @@ import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import AnimatedLetterComponent from "@/ui/components/home/animated-letter-component";
-import Header from "@/ui/core/headers";
-import { CustomPencilIcon, EarIcon, LettersNameIcon } from "@/ui/icons";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
+import { EarButton } from "@/ui/icons/circular/ear-button";
+import { NameButton } from "@/ui/icons/circular/name-button";
+import { PencilButton } from "@/ui/icons/circular/pencil-button";
 import { HEIGHT, IS_IOS, WIDTH } from "@/utils/layout";
 
 type AnimatedLetterComponentRef = {
@@ -82,7 +84,7 @@ const LetterIntroduction = () => {
     setIsAnimating(true);
   };
 
-  const { playGuideAudio } = useGuideAudio({
+  const { playGuideAudio, isPlaying } = useGuideAudio({
     screenName: "letter-introduction",
   });
 
@@ -212,8 +214,13 @@ const LetterIntroduction = () => {
   }, [activitiesInCurrentSection, levels]);
 
   return (
-    <SafeAreaView>
-      <Header title="" onPressGuide={playGuideAudio} />
+    <SafeAreaView className="bg-[#F2EFF0]">
+      <GuidanceAudioHeader
+        title="Sound"
+        isPlaying={isPlaying}
+        onPressGuide={playGuideAudio}
+        colorType="NATIVE_BUTTON_COLOR"
+      />
       <View
         className="flex flex-col justify-between"
         style={{
@@ -222,34 +229,48 @@ const LetterIntroduction = () => {
         }}
       >
         <View>
-          <View className=" border-yellow-500">
-            <View className="flex items-center justify-center">
-              <View className="flex flex-row rounded-full bg-colors-purple-200 p-4">
-                <TouchableOpacity
-                  onPress={async () => {
-                    try {
-                      await playSound(activeActivity.sound.alphabeticAudioSrc);
-                      incrementProgress("ALPHABETIC_SOUND");
-                    } catch (error) {}
-                  }}
-                  className="mr-2 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
-                >
-                  <LettersNameIcon />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={async () => {
-                    try {
-                      await playSound(activeActivity.sound.phoneticAudioSrc);
-                      incrementProgress("PHONETIC_SOUND");
-                    } catch (error) {}
-                  }}
-                  className=" flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
-                >
-                  <EarIcon />
-                </TouchableOpacity>
+          <View className=" border-yellow-500 ">
+            <View className="mx-4  overflow-hidden rounded-xl border-2 border-purple-500 bg-white ">
+              <View className="mt-4 flex items-center justify-center ">
+                <View className="flex flex-row rounded-full p-4">
+                  <TouchableOpacity
+                    onPress={async () => {
+                      try {
+                        await playSound(
+                          activeActivity.sound.alphabeticAudioSrc,
+                        );
+                        incrementProgress("ALPHABETIC_SOUND");
+                      } catch (error) {}
+                    }}
+                    className="mr-4 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
+                  >
+                    <NameButton
+                      backgroundColor="#C385F8"
+                      offblackColor="#000000"
+                      offwhiteColor="#FFFFFF"
+                      primaryColor="#C385F8"
+                      secondaryColor="#FFFFFF"
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      try {
+                        await playSound(activeActivity.sound.phoneticAudioSrc);
+                        incrementProgress("PHONETIC_SOUND");
+                      } catch (error) {}
+                    }}
+                    className=" flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
+                  >
+                    <EarButton
+                      backgroundColor="#C385F8"
+                      offblackColor="#000000"
+                      offwhiteColor="#FFFFFF"
+                      primaryColor="#C385F8"
+                      secondaryColor="#FFFFFF"
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-            <View className="mx-4  h-[320] overflow-hidden  ">
               <PageLinesSVG />
               <AnimatedLetterComponent
                 ref={animatedLetterRef}
@@ -259,27 +280,39 @@ const LetterIntroduction = () => {
                 onAnimationStart={onAnimationStart}
                 isAnimating={isAnimating}
               />
+              <View className="mb-8 flex flex-row items-center justify-evenly">
+                <TouchableOpacity
+                  onPress={() => {
+                    animatedLetterRef?.current?.animateLowercase();
+                  }}
+                >
+                  <PencilButton
+                    backgroundColor="#C385F8"
+                    offblackColor="#000000"
+                    offwhiteColor="#FFFFFF"
+                    primaryColor="#C385F8"
+                    secondaryColor="#FFFFFF"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    animatedLetterRef?.current?.animateUppercase();
+                  }}
+                >
+                  <PencilButton
+                    backgroundColor="#C385F8"
+                    offblackColor="#000000"
+                    offwhiteColor="#FFFFFF"
+                    primaryColor="#C385F8"
+                    secondaryColor="#FFFFFF"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
 
         <View className="flex w-full flex-col justify-between">
-          <View className="mb-8 flex flex-row items-center justify-evenly">
-            <TouchableOpacity
-              onPress={() => {
-                animatedLetterRef?.current?.animateLowercase();
-              }}
-            >
-              <CustomPencilIcon size={44} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                animatedLetterRef?.current?.animateUppercase();
-              }}
-            >
-              <CustomPencilIcon size={44} />
-            </TouchableOpacity>
-          </View>
           <View className="flex w-full flex-row items-center justify-around px-[10px]">
             {activitiesInCurrentSection.map((activity, index) => (
               <Pressable

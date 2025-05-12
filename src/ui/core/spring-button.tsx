@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import React, { useEffect } from "react";
+import type { JSX } from "react/jsx-runtime";
 import type { GestureResponderEvent } from "react-native";
 import { TouchableOpacity } from "react-native";
 import Animated, {

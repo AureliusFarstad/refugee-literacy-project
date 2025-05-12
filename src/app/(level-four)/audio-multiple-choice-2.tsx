@@ -157,7 +157,7 @@ const BUTTON_COLORS: ButtonColorConfig[] = [
 ];
 
 // TODO: Move to layout
-const NATIVE_BUTTON_COLOR: ButtonColorProps = {
+export const NATIVE_BUTTON_COLOR: ButtonColorProps = {
   primaryColor: SECTION_COLOR.sectionPrimaryColor,
   secondaryColor: SECTION_COLOR.sectionSecondaryColor,
   offwhiteColor: SECTION_COLOR.appWhiteColor,
@@ -408,7 +408,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 
   // Reset incorrect button after feedback duration
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | undefined;
+    let timeoutId: number;
 
     if (isPlaced === true && isCorrect === false) {
       timeoutId = setTimeout(() => {
@@ -817,6 +817,8 @@ const DraggableAudioGame: React.FC = () => {
       position: Position,
       buttonId: string,
       isInTarget: boolean,
+      // FIX: already defined in the function scope
+      // eslint-disable-next-line @typescript-eslint/no-shadow
       CORRECT_BUTTON_ID: string,
     ): void => {
       setIsCardActive(false);

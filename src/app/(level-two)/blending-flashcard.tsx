@@ -7,8 +7,9 @@ import {
   BLENDING_WORD_LIST_BY_LEVEL,
 } from "@/assets/blending";
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { BlendingFlashCard } from "@/ui/components/blending-flashcard";
-import Header from "@/ui/core/headers";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 
 // TODO: Maybe construct in assets/blending/index.ts?
 const BLENDING_FLASHCARDS = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
@@ -45,9 +46,18 @@ export default function FlashCardContainer() {
     },
   });
 
+  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+    screenName: "audio-multiple-choice",
+  });
+
   return (
     <SafeAreaView>
-      <Header title="Blending Flashcards" />
+      <GuidanceAudioHeader
+        title="Sound"
+        isPlaying={isPlayingGuidanceAudio}
+        onPressGuide={playGuideAudio}
+        colorType="NATIVE_BUTTON_COLOR"
+      />
       <View className="flex size-full items-center">
         <FlatList
           style={styles.scrollable}

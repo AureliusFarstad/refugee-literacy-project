@@ -452,7 +452,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 
   // Reset incorrect button after feedback duration
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | undefined;
+    let timeoutId: number;
 
     if (isPlaced === true && isCorrect === false) {
       timeoutId = setTimeout(() => {

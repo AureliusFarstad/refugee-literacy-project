@@ -1,16 +1,25 @@
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { SafeAreaView, Text, View } from "@/ui";
-import Header from "@/ui/core/headers";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 const VideoExplanation = () => {
   const insets = useSafeAreaInsets();
+  const { playGuideAudio, isPlaying } = useGuideAudio({
+    screenName: "letter-formation",
+  });
 
   return (
     <SafeAreaView>
-      <Header title="Formation" />
+      <GuidanceAudioHeader
+        title="Sound"
+        isPlaying={isPlaying}
+        onPressGuide={playGuideAudio}
+        colorType="NATIVE_BUTTON_COLOR"
+      />
       <View
         style={{
           height:

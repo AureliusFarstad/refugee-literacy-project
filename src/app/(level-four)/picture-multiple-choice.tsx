@@ -8,9 +8,10 @@ import {
   VOCABULARY_IMAGE_SOURCES,
   VOCABULARY_WORD_LIST_BY_LEVEL,
 } from "@/assets/vocabulary";
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { WordChoiceScreen } from "@/ui/components/multiple-choice";
 import type { WordSet } from "@/ui/components/multiple-choice/types";
-import Header from "@/ui/core/headers";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
@@ -142,6 +143,9 @@ const RenderOption = (
 
 const AudioMultipleChoice = () => {
   const insets = useSafeAreaInsets();
+  const { isPlaying, playGuideAudio } = useGuideAudio({
+    screenName: "letter-formation",
+  });
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -152,7 +156,13 @@ const AudioMultipleChoice = () => {
           flex: 1,
         }}
       >
-        <Header title="Image Multiple Choice" />
+        {/* TODO: add correct source */}
+        <GuidanceAudioHeader
+          title="Sound"
+          isPlaying={isPlaying}
+          onPressGuide={playGuideAudio}
+        />
+
         <WordChoiceScreen
           wordSets={generatedWordSets}
           colors={SECTION_COLOR}

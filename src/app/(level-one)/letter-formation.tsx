@@ -11,7 +11,7 @@ import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import AlphabetTracing from "@/ui/components/home/alphabet-tracing";
 import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import OverlayLetterAnimation from "@/ui/components/letter-formation/overlay-letter-animation";
-import Header from "@/ui/core/headers";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { CustomPencilIcon, EarIcon, LettersNameIcon } from "@/ui/icons";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
@@ -40,7 +40,7 @@ const LetterFormation = () => {
     setIsAnimating(true);
   };
 
-  const { playGuideAudio } = useGuideAudio({
+  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
     screenName: "letter-formation",
   });
 
@@ -83,7 +83,12 @@ const LetterFormation = () => {
 
   return (
     <SafeAreaView>
-      <Header title="Formation" onPressGuide={playGuideAudio} />
+      <GuidanceAudioHeader
+        title="Formation"
+        onPressGuide={playGuideAudio}
+        isPlaying={isPlayingGuidanceAudio}
+        colorType="NATIVE_BUTTON_COLOR"
+      />
       <View
         style={{
           height:

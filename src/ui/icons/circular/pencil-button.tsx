@@ -9,7 +9,7 @@ export const PencilButton = ({
   offblackColor,
 }: ButtonColorProps) => {
   return (
-    <Svg viewBox="0 0 40 40" fill="none" id="svg8">
+    <Svg width={72} height={72} viewBox="0 0 40 40" fill="none" id="svg8">
       <Circle cx="20" cy="20" r="20" fill={primaryColor} id="circle1" />
       <Path
         fill={offblackColor}
