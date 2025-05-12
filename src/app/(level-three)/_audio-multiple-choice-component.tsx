@@ -1,7 +1,8 @@
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
+import type { ReactElement, RefObject } from "react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -19,30 +20,14 @@ import Reanimated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   BLENDING_AUDIO_SOURCES,
-  BLENDING_IMAGE_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
 } from "@/assets/blending";
 import { APP_COLORS } from "@/constants/routes";
-import { useGuideAudio } from "@/core/hooks/useGuideAudio";
-import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
-import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
-import { NativeButton } from "@/ui/icons/circular/native-button";
-import {
-  BOTTOM_TAB_HEIGHT,
-  HEADER_HEIGHT,
-  HEIGHT,
-  WIDTH,
-} from "@/utils/layout";
-
-import { SECTION_COLOR } from "./_layout";
-
-// TODO: PLUG IN NATIVE AUDIO SOURCES...
 
 // ------------------------------------------------------------
 // TYPE DEFINITIONS
@@ -51,7 +36,6 @@ import { SECTION_COLOR } from "./_layout";
 type ButtonItem = {
   // Used for draggable buttons
   id: string;
-  word: string;
 };
 
 type Position = {
@@ -61,10 +45,70 @@ type Position = {
   height?: number;
 };
 
-// COLORS: Maybe move to icons folder were ButtonColorProps is from.
+interface DraggableButtonProps {
+  item: ButtonItem;
+  disabled?: boolean;
+  onAudioPlay: () => void;
+  onDragStart: () => void;
+  onDragEnd: (position: Position, isInTarget: boolean) => void;
+  buttonColor: ButtonColorProps;
+  targetPosition: Position | null;
+  destinationArea: Position | null;
+  isPlaced?: boolean;
+  isCorrect?: boolean | null;
+  isPlaying?: boolean;
+  onMarkDisabled?: (buttonId: string) => void;
+  breatheDuration?: number;
+  animationBorderColor?: string;
+  animationBorderWidth?: number;
+}
 
-// Button color configurations # TODO: Refactor out colors to constants
-const BUTTON_COLORS: ButtonColorProps[] = [
+type GameSet = {
+  correctAnswer: string;
+  options: string[];
+};
+
+// ------------------------------------------------------------
+// GAME CONSTANTS
+// ------------------------------------------------------------
+
+const BUTTON_SIZE: number = 80;
+const DRAG_DELAY_MS: number = 100;
+const INCORRECT_FEEDBACK_DURATION_MS: number = 2000;
+const SPRING_CONFIG: { damping: number; stiffness: number } = {
+  damping: 15,
+  stiffness: 100,
+};
+
+// ------------------------------------------------------------
+// COLOR DEFINITIONS
+// ------------------------------------------------------------
+
+const CORRECT_BUTTON_COLORS: ButtonColorProps = {
+  primaryColor: "#62CC82",
+  offwhiteColor: "#FAFAFA",
+  offblackColor: "#3F3F46",
+  secondaryColor: "#2E8B57",
+  backgroundColor: "#E8F5E9",
+};
+
+const INCORRECT_BUTTON_COLORS: ButtonColorProps = {
+  primaryColor: "#FF5A5F",
+  offwhiteColor: "#FAFAFA",
+  offblackColor: "#3F3F46",
+  secondaryColor: "#D32F2F",
+  backgroundColor: "#FFEBEE",
+};
+
+const DISABLED_BUTTON_COLORS: ButtonColorProps = {
+  primaryColor: "#F2EFF0",
+  offwhiteColor: "#FAFAFA",
+  offblackColor: "#D4D4D8",
+  secondaryColor: "#888888",
+  backgroundColor: "#F5F5F5",
+};
+
+const DEFAULT_BUTTON_COLORS: ButtonColorProps[] = [
   {
     // Pink
     primaryColor: "#FFABDE",
@@ -91,207 +135,11 @@ const BUTTON_COLORS: ButtonColorProps[] = [
   },
 ];
 
-// TODO: Move to layout
-const NATIVE_BUTTON_COLOR: ButtonColorProps = {
-  primaryColor: SECTION_COLOR.sectionPrimaryColor,
-  secondaryColor: SECTION_COLOR.sectionSecondaryColor,
-  offwhiteColor: SECTION_COLOR.appWhiteColor,
-  offblackColor: SECTION_COLOR.appBlackColor,
-  backgroundColor: SECTION_COLOR.appGreyColor,
+const DEFAULT_SECTION_COLOR = {
+  primary: "#62A0EC",
+  light: "#D7E9FF",
+  dark: "#006BB4",
 };
-
-// Feedback color configurations
-const CORRECT_COLORS: ButtonColorProps = {
-  primaryColor: "#62CC82",
-  offwhiteColor: "#FAFAFA",
-  offblackColor: "#3F3F46",
-  secondaryColor: "#2E8B57",
-  backgroundColor: "#E8F5E9",
-};
-
-const INCORRECT_COLORS: ButtonColorProps = {
-  primaryColor: "#FF5A5F",
-  offwhiteColor: "#FAFAFA",
-  offblackColor: "#3F3F46",
-  secondaryColor: "#D32F2F",
-  backgroundColor: "#FFEBEE",
-};
-
-const DISABLED_COLORS: ButtonColorProps = {
-  primaryColor: "#F2EFF0",
-  offwhiteColor: "#FAFAFA",
-  offblackColor: "#D4D4D8",
-  secondaryColor: "#888888",
-  backgroundColor: "#F5F5F5",
-};
-
-// Props for the DraggableButton component
-interface DraggableButtonProps {
-  item: ButtonItem;
-  disabled?: boolean;
-  onAudioPlay: () => void;
-  onDragStart: () => void;
-  onDragEnd: (position: Position, isInTarget: boolean) => void;
-  buttonColor: ButtonColorProps;
-  targetPosition: Position | null;
-  isPlaced?: boolean;
-  isCorrect?: boolean | null;
-  isPlaying?: boolean;
-  onMarkDisabled?: (buttonId: string) => void;
-  breatheDuration?: number;
-  animationBorderColor?: string;
-  animationBorderWidth?: number;
-}
-
-// ------------------------------------------------------------
-// CONSTANTS
-// ------------------------------------------------------------
-
-type GameSet = {
-  correctAnswer: string;
-  options: string[];
-};
-
-// TODO: Not sure if we want to generate these or have a static list...
-const generatedGameSets: GameSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
-  (word: string) => {
-    return {
-      correctAnswer: word,
-      options: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
-        (option) => option !== word,
-      )
-        .slice(0, 2)
-        .concat(word),
-    };
-  },
-);
-
-// Layout and animation constants
-const BUTTON_SIZE: number = 80;
-const FLASHCARD_HEIGHT: number = 350;
-const DRAG_DELAY_MS: number = 100;
-const INCORRECT_FEEDBACK_DURATION_MS: number = 2000;
-const SPRING_CONFIG: { damping: number; stiffness: number } = {
-  damping: 15,
-  stiffness: 100,
-};
-
-// ------------------------------------------------------------
-// STYLES
-// ------------------------------------------------------------
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    backgroundColor: APP_COLORS.backgroundgrey,
-  },
-  flashcardContainer: {
-    flex: 1,
-    justifyContent: "center", // Center the flashcard vertically
-  },
-  flashcard: {
-    height: FLASHCARD_HEIGHT,
-    borderWidth: 2,
-    borderColor: SECTION_COLOR.sectionPrimaryColor,
-    borderRadius: 12,
-    backgroundColor: APP_COLORS.offwhite,
-    marginHorizontal: 16,
-    padding: 16,
-    flexDirection: "column",
-  },
-  flashcardActive: {
-    borderWidth: 2,
-    borderColor: SECTION_COLOR.sectionPrimaryColor,
-    borderStyle: "dashed",
-    backgroundColor: SECTION_COLOR.sectionSecondaryColor,
-  },
-  imageContainer: {
-    width: "100%",
-    height: 200,
-    backgroundColor: APP_COLORS.backgroundgrey,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-    position: "relative",
-  },
-  image: {
-    width: 100,
-    borderRadius: 8,
-  },
-  nativeButtonOverlay: {
-    position: "absolute",
-    top: -10,
-    right: -10,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: APP_COLORS.offwhite,
-  },
-  iconButton: {
-    position: "absolute",
-    width: 40,
-    height: 40,
-  },
-  iconButtonActive: {
-    backgroundColor: SECTION_COLOR.sectionSecondaryColor,
-  },
-  row: {
-    flex: 1, // Take remaining space in the flashcard
-    flexDirection: "row", // Align items in a row
-    alignItems: "center", // Center vertically
-    justifyContent: "space-evenly", // Space items evenly
-  },
-  text: {
-    fontSize: 40,
-    color: SECTION_COLOR.appBlackColor,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  dropCircleContainer: {
-    justifyContent: "center", // Center vertically
-    alignItems: "center", // Center horizontally
-  },
-  emptyDropCircle: {
-    width: BUTTON_SIZE,
-    height: BUTTON_SIZE,
-    borderRadius: BUTTON_SIZE / 2,
-    borderWidth: 2,
-    borderColor: SECTION_COLOR.sectionPrimaryColor,
-    borderStyle: "dashed",
-    backgroundColor: SECTION_COLOR.sectionSecondaryColor,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonPool: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    paddingVertical: 20,
-    borderWidth: 2,
-    borderColor: SECTION_COLOR.sectionPrimaryColor,
-    // borderStyle: "dashed",
-    backgroundColor: SECTION_COLOR.sectionSecondaryColor,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-  },
-  audioButtonContainer: {
-    width: BUTTON_SIZE,
-    height: BUTTON_SIZE,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-  },
-  animatedBorder: {
-    position: "absolute",
-    borderStyle: "solid",
-    zIndex: -1,
-  },
-});
 
 // ------------------------------------------------------------
 // DRAGGABLE BUTTON COMPONENT
@@ -304,6 +152,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   onDragEnd,
   buttonColor,
   targetPosition,
+  destinationArea,
   isPlaced,
   isCorrect,
   isPlaying = false,
@@ -334,6 +183,21 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   const buttonRef = useRef<Reanimated.View>(null);
   const [buttonOrigin, setButtonOrigin] = useState<Position | null>(null);
 
+  const styles = StyleSheet.create({
+    audioButtonContainer: {
+      width: BUTTON_SIZE,
+      height: BUTTON_SIZE,
+      alignItems: "center",
+      justifyContent: "center",
+      position: "relative",
+    },
+    animatedBorder: {
+      position: "absolute",
+      borderStyle: "solid",
+      zIndex: -1,
+    },
+  });
+
   // Get button's original position
   useEffect(() => {
     const measureButton = () => {
@@ -357,39 +221,84 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
     return () => clearTimeout(timerId);
   }, [item.id]);
 
-  // Reset incorrect button after feedback duration
-  useEffect(() => {
-    let timeoutId: number;
+  const hasSetTimeoutRef = useRef(false);
+  const timeoutIdRef = useRef<number | undefined>(undefined);
 
-    if (isPlaced === true && isCorrect === false) {
-      timeoutId = setTimeout(() => {
+  // Reset incorrect button after feedback duration
+  // Effect for handling state changes
+  useEffect(() => {
+    console.log(
+      `Button ${item.id} isPlaced: ${isPlaced}, isCorrect: ${isCorrect}, hasTimeout: ${hasSetTimeoutRef.current}`,
+    );
+
+    // Only set a timeout if not already set and the button is incorrectly placed
+    if (isPlaced === true && isCorrect === false && !hasSetTimeoutRef.current) {
+      console.log(`Setting timeout for button ${item.id}`);
+      hasSetTimeoutRef.current = true;
+
+      // Store the timeout ID in the ref
+      timeoutIdRef.current = setTimeout(() => {
+        console.log(`TIMEOUT EXECUTED for button ${item.id}`);
+
         // Reset position with animation
         translateX.value = withSpring(0, SPRING_CONFIG);
         translateY.value = withSpring(0, SPRING_CONFIG);
 
-        // Notify parent component about the reset
-        runOnJS(onDragEnd)({ x: 0, y: 0 }, false);
+        // Notify parent
+        onDragEnd({ x: 0, y: 0 }, false);
 
-        // Mark the button as disabled
+        // Mark as disabled
         if (onMarkDisabled) {
-          runOnJS(onMarkDisabled)(item.id);
+          console.log(`Marking button ${item.id} as disabled`);
+          onMarkDisabled(item.id);
         }
+
+        // Reset timeout flag
+        hasSetTimeoutRef.current = false;
+        timeoutIdRef.current = undefined;
       }, INCORRECT_FEEDBACK_DURATION_MS);
     }
 
-    // Clean up timeout on unmount or when dependencies change
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
+    // Reset the timeout flag if button is no longer incorrectly placed
+    if (
+      !(isPlaced === true && isCorrect === false) &&
+      hasSetTimeoutRef.current
+    ) {
+      console.log(`Resetting timeout flag for button ${item.id}`);
+      hasSetTimeoutRef.current = false;
+
+      // Optionally clear the timeout if you want to cancel it
+      // when the button state changes to not incorrectly placed
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+        timeoutIdRef.current = undefined;
+      }
+    }
+    // No cleanup function - we manage the timeout manually
   }, [
     isPlaced,
     isCorrect,
     onDragEnd,
     onMarkDisabled,
-    item.id,
     translateX,
     translateY,
+    item.id,
   ]);
+
+  // Effect for handling the initial setup
+  useEffect(() => {
+    // This runs once on mount
+    console.log(`Button ${item.id} mounted`);
+
+    // Cleanup on true unmount
+    return () => {
+      console.log(`Button ${item.id} UNMOUNTING FOR REAL`);
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+        timeoutIdRef.current = undefined;
+      }
+    };
+  }, [item.id]); // Empty dependency array = runs only on mount/unmount
 
   useEffect(() => {
     // Immediately reset position to origin when key/item changes
@@ -509,18 +418,12 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
         const droppedX: number = event.absoluteX;
         const droppedY: number = event.absoluteY;
 
-        // Detect if in drop area
-        const isInDropArea: boolean =
-          droppedY <
-            (HEIGHT +
-              HEADER_HEIGHT +
-              FLASHCARD_HEIGHT -
-              BOTTOM_TAB_HEIGHT -
-              120) /
-              2 &&
-          droppedY > HEADER_HEIGHT && // Add a minimum bound
-          droppedX > 0 &&
-          droppedX < WIDTH;
+        const isInDropArea: boolean = destinationArea
+          ? droppedX >= destinationArea.x &&
+            droppedX <= destinationArea.x + (destinationArea.width || 0) &&
+            droppedY >= destinationArea.y &&
+            droppedY <= destinationArea.y + (destinationArea.height || 0)
+          : false;
 
         isDragging.value = false;
 
@@ -576,11 +479,11 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   // Determine the button color configuration based on state
   const getButtonColorProps = (): ButtonColorProps => {
     if (disabled) {
-      return DISABLED_COLORS;
+      return DISABLED_BUTTON_COLORS;
     }
 
     if (isPlaced) {
-      return isCorrect ? CORRECT_COLORS : INCORRECT_COLORS;
+      return isCorrect ? CORRECT_BUTTON_COLORS : INCORRECT_BUTTON_COLORS;
     }
 
     return buttonColor;
@@ -625,15 +528,123 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 };
 
 // ------------------------------------------------------------
+// DEFAULT DESTINATION COMPONENT
+// ------------------------------------------------------------
+
+type DestinationComponentType = () => ReactElement;
+
+const DefaultUseDestinationComponent = (
+  isCardActive: boolean,
+  measureDropCircle: () => void,
+): [
+  DestinationComponentType,
+  RefObject<View | null>,
+  RefObject<View | null>,
+] => {
+  const styles = StyleSheet.create({
+    flashcardContainer: {
+      flex: 1,
+      justifyContent: "center", // Center the flashcard vertically
+    },
+    flashcard: {
+      height: 100,
+      width: 100,
+      borderWidth: 2,
+      borderColor: "blue",
+      borderRadius: 12,
+      backgroundColor: "white",
+      marginHorizontal: 16,
+      padding: 16,
+      flexDirection: "column",
+    },
+    flashcardActive: {
+      borderWidth: 2,
+      borderColor: "red",
+      borderStyle: "dashed",
+      backgroundColor: "green",
+    },
+    dropCircleContainer: {
+      justifyContent: "center", // Center vertically
+      alignItems: "center", // Center horizontally
+    },
+    emptyDropCircle: {
+      width: BUTTON_SIZE,
+      height: BUTTON_SIZE,
+      borderRadius: BUTTON_SIZE / 2,
+      borderWidth: 2,
+      borderColor: "purple",
+      borderStyle: "dashed",
+      backgroundColor: "black",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+
+  const dropCircleRef = useRef<View | null>(null);
+  const destinationContainerRef = useRef<View | null>(null); // New ref for entire destination area
+
+  const DestinationComponent = () => (
+    <View style={styles.flashcardContainer}>
+      <View
+        style={[styles.flashcard, isCardActive && styles.flashcardActive]}
+        onLayout={() => {
+          // console.log("Flashcard layout complete");
+          setTimeout(measureDropCircle, 100);
+        }}
+        ref={destinationContainerRef}
+      >
+        <View style={styles.dropCircleContainer}>
+          <View ref={dropCircleRef} style={styles.emptyDropCircle} />
+        </View>
+      </View>
+    </View>
+  );
+
+  return [DestinationComponent, dropCircleRef, destinationContainerRef];
+};
+
+const generatedGameSets: GameSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
+  (word: string) => {
+    return {
+      correctAnswer: word,
+      options: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
+        (option) => option !== word,
+      )
+        .slice(0, 2)
+        .concat(word),
+    };
+  },
+);
+
+const defaultGameSet = generatedGameSets[0];
+
+// ------------------------------------------------------------
 // MAIN COMPONENT
 // ------------------------------------------------------------
 
-const DraggableAudioGame: React.FC = () => {
+const defaultOnCorrectAnswer = () => {
+  console.log("Correct answer!");
+};
+
+const AudioMultipleChoice: React.FC<{
+  useDestinationComponent?: typeof DefaultUseDestinationComponent;
+  gameSet?: GameSet;
+  buttonColors?: ButtonColorProps[];
+  sectionColorTheme?: any;
+  onCorrectAnswer?: () => void;
+}> = ({
+  useDestinationComponent = DefaultUseDestinationComponent,
+  gameSet = defaultGameSet,
+  buttonColors = DEFAULT_BUTTON_COLORS,
+  sectionColorTheme = DEFAULT_SECTION_COLOR,
+  onCorrectAnswer = defaultOnCorrectAnswer,
+}) => {
   // State for tracking if the flashcard is in "active" state (being dragged over)
   const [isCardActive, setIsCardActive] = useState<boolean>(false);
 
   // Store the target drop circle position
   const [targetPosition, setTargetPosition] = useState<Position | null>(null);
+  const [destinationArea, setDestinationArea] = useState<Position | null>(null);
 
   // Track which button is currently placed in the target
   const [placedButtonId, setPlacedButtonId] = useState<string | null>(null);
@@ -645,11 +656,7 @@ const DraggableAudioGame: React.FC = () => {
   const currentSound = useRef<Sound | null>(null);
 
   // Game state
-  const [currentGameSetIndex, setCurrentGameSetIndex] = useState(0);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
-
-  // Reference to target drop circle
-  const dropCircleRef = useRef<View>(null);
 
   // Function to shuffle array
   const shuffleArray = useCallback((array: string[]) => {
@@ -661,89 +668,129 @@ const DraggableAudioGame: React.FC = () => {
     return newArray;
   }, []);
 
+  const [DestinationComponent, dropCircleRef, destinationContainerRef] =
+    useDestinationComponent(isCardActive, () => measureDropCircle());
+
+  const measureDestinationArea = useCallback((): void => {
+    console.log("Measuring destination area...");
+    setTimeout(() => {
+      if (destinationContainerRef.current) {
+        destinationContainerRef.current.measure(
+          (x, y, width, height, pageX, pageY) => {
+            console.log("Destination area measured at:", {
+              x,
+              y,
+              width,
+              height,
+              pageX,
+              pageY,
+            });
+
+            if (width > 0 && height > 0 && pageX > 0 && pageY > 0) {
+              setDestinationArea({
+                x: pageX,
+                y: pageY,
+                width: width,
+                height: height,
+              });
+            } else {
+              // Retry if measurement failed
+              console.log("Destination area measurement failed, retrying...");
+              setTimeout(measureDestinationArea, 200);
+            }
+          },
+        );
+      }
+    }, 100);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Function to get the absolute position of the target drop circle
   const measureDropCircle = useCallback((): void => {
-    console.log("Attempting to measure drop circle");
-
     // Give a little more time for layout to complete
     setTimeout(() => {
       if (dropCircleRef.current) {
-        dropCircleRef.current.measure((x, y, width, height, pageX, pageY) => {
-          console.log("Drop circle measured at:", {
-            x,
-            y,
-            width,
-            height,
-            pageX,
-            pageY,
-          });
-
-          if (width > 0 && height > 0 && pageX > 0 && pageY > 0) {
-            // Store the position with explicit values to avoid undefined issues
-            setTargetPosition({
-              x: pageX,
-              y: pageY,
-              width: width || BUTTON_SIZE,
-              height: height || BUTTON_SIZE,
+        dropCircleRef.current.measure(
+          (x: any, y: any, width: any, height: any, pageX: any, pageY: any) => {
+            console.log("Drop circle measured at:", {
+              x,
+              y,
+              width,
+              height,
+              pageX,
+              pageY,
             });
-          } else {
-            // Retry if measurement failed
-            console.log("Measurement failed, retrying...");
-            setTimeout(measureDropCircle, 200);
-          }
-        });
+
+            if (width > 0 && height > 0 && pageX > 0 && pageY > 0) {
+              // Store the position with explicit values to avoid undefined issues
+              setTargetPosition({
+                x: pageX,
+                y: pageY,
+                width: width || BUTTON_SIZE,
+                height: height || BUTTON_SIZE,
+              });
+            } else {
+              // Retry if measurement failed
+              console.log("Measurement failed, retrying...");
+              setTimeout(measureDropCircle, 200);
+            }
+          },
+        );
       }
     }, 100);
-  }, []);
+  }, [dropCircleRef]);
 
-  const resetAllButtonPositions = useCallback(() => {
-    // Cancel any ongoing animations that might interfere
-    if (currentSound.current) {
-      currentSound.current.stopAsync().catch(() => {});
-      currentSound.current.unloadAsync().catch(() => {});
-      currentSound.current = null;
-    }
+  // Measure both areas when component mounts
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      measureDropCircle();
+      measureDestinationArea();
+    }, 500);
 
-    // First clear all states
-    setPlayingButtonId(null);
-    setIsCardActive(false);
-    setDisabledButtons([]);
-    setPlacedButtonId(null);
-    setIsCorrectAnswer(null);
+    return () => clearTimeout(timerId);
+  }, [measureDropCircle, measureDestinationArea]);
 
-    // Schedule the next game setup after state updates have completed
-    setTimeout(() => {
-      // Get current game set and shuffle options
-      const currentGameSet = generatedGameSets[currentGameSetIndex];
-      if (currentGameSet) {
-        const shuffled = shuffleArray([...currentGameSet.options]); // Create a new array to avoid reference issues
-        setShuffledOptions(shuffled);
-
-        // Force re-measurement after layout is updated with a longer delay
-        setTimeout(measureDropCircle, 300);
-      }
-    }, 50);
-  }, [currentGameSetIndex, measureDropCircle, shuffleArray]);
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      flexDirection: "column",
+      justifyContent: "space-between",
+      backgroundColor: APP_COLORS.backgroundgrey,
+    },
+    buttonPool: {
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      paddingVertical: 20,
+      borderWidth: 2,
+      borderColor: sectionColorTheme.primary,
+      // borderStyle: "dashed",
+      backgroundColor: sectionColorTheme.light,
+      borderLeftWidth: 0,
+      borderRightWidth: 0,
+      borderBottomWidth: 0,
+    },
+    audioButtonContainer: {
+      width: BUTTON_SIZE,
+      height: BUTTON_SIZE,
+      alignItems: "center",
+      justifyContent: "center",
+      position: "relative",
+    },
+    animatedBorder: {
+      position: "absolute",
+      borderStyle: "solid",
+      zIndex: -1,
+    },
+  });
 
   useEffect(() => {
-    resetAllButtonPositions();
-  }, [currentGameSetIndex, resetAllButtonPositions]);
-
-  useEffect(() => {
-    if (generatedGameSets.length > 0 && shuffledOptions.length === 0) {
-      const initialGameSet = generatedGameSets[0];
-      const shuffled = shuffleArray(initialGameSet.options);
-      setShuffledOptions(shuffled);
-    }
-  }, [shuffledOptions.length, shuffleArray]);
+    const shuffled = shuffleArray(gameSet.options);
+    setShuffledOptions(shuffled);
+  }, [gameSet.options, shuffleArray]);
 
   // Current game data
-  const currentGameSet = generatedGameSets[currentGameSetIndex];
-  const CORRECT_BUTTON_ID: string = currentGameSet.correctAnswer;
-  const Svg =
-    BLENDING_IMAGE_SOURCES[
-      CORRECT_BUTTON_ID as keyof typeof BLENDING_IMAGE_SOURCES
-    ];
+  const CORRECT_BUTTON_ID: string = gameSet.correctAnswer;
 
   // Available audio buttons using shuffled options
   const availableButtons: ButtonItem[] = shuffledOptions.map((word: string) => {
@@ -875,13 +922,14 @@ const DraggableAudioGame: React.FC = () => {
       position: Position,
       buttonId: string,
       isInTarget: boolean,
-      // FIX: already defined in the function scope
-      // eslint-disable-next-line @typescript-eslint/no-shadow
       CORRECT_BUTTON_ID: string,
     ): void => {
       setIsCardActive(false);
 
+      console.log("Drag ended for button:", buttonId);
+
       if (isInTarget) {
+        console.log("Button placed in target area:", buttonId);
         setPlacedButtonId(buttonId);
         const isCorrect = buttonId === CORRECT_BUTTON_ID;
         setIsCorrectAnswer(isCorrect);
@@ -897,11 +945,10 @@ const DraggableAudioGame: React.FC = () => {
               currentSound.current = null;
             }
             setPlayingButtonId(null);
-
+            if (onCorrectAnswer) {
+              onCorrectAnswer();
+            }
             // Move to next game set, loop back to beginning if at end
-            setCurrentGameSetIndex(
-              (prevIndex) => (prevIndex + 1) % generatedGameSets.length,
-            );
           }, 1500); // Wait 1.5 seconds before advancing
         }
       } else if (placedButtonId === buttonId) {
@@ -909,77 +956,29 @@ const DraggableAudioGame: React.FC = () => {
         setIsCorrectAnswer(null);
       }
     },
-    [placedButtonId],
+    [placedButtonId], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      {/* Flashcard */}
-      <View style={styles.flashcardContainer}>
-        <View
-          style={[styles.flashcard, isCardActive && styles.flashcardActive]}
-          // onLayout={() => setTimeout(measureDropCircle, 100)}
-          onLayout={() => {
-            console.log("Flashcard layout complete");
-            // Delay measurement to ensure child components are laid out
-            setTimeout(measureDropCircle, 100);
-          }}
-        >
-          <View style={styles.imageContainer}>
-            <Svg.file
-              style={styles.image}
-              height="60%"
-              width="60%"
-              preserveAspectRatio="xMidYMid meet"
-            />
-
-            {/* Native Button */}
-            <View
-              style={[
-                styles.nativeButtonOverlay,
-                isCardActive && styles.iconButtonActive,
-              ]}
-            />
-            <View style={[styles.iconButton, { top: 0, right: 0 }]}>
-              <AnimatedAudioButton
-                audioSource={
-                  BLENDING_AUDIO_SOURCES[CORRECT_BUTTON_ID].file // TODO: Update native source here.
-                }
-                width={40}
-                height={40}
-              >
-                <NativeButton {...NATIVE_BUTTON_COLOR} />
-              </AnimatedAudioButton>
-            </View>
-          </View>
-
-          {/* A row with Text and Drop Target Next to each other */}
-          <View style={styles.row}>
-            <Text style={styles.text}>{CORRECT_BUTTON_ID}</Text>
-            {/*TODO: Use capitalization.*/}
-            {/* Drop target */}
-            <View style={styles.dropCircleContainer}>
-              <View ref={dropCircleRef} style={styles.emptyDropCircle} />
-            </View>
-          </View>
-        </View>
-      </View>
+      <DestinationComponent />
       {/* Button Pool */}
       {/* TODO: Make only top border dashed: https://github.com/facebook/react-native/issues/7838 */}
       <View style={styles.buttonPool}>
         {availableButtons.map((item: ButtonItem, index: number) => (
           <DraggableButton
-            key={`${item.id}-${currentGameSetIndex}`}
+            key={`${item.id}`}
             item={item}
             onAudioPlay={() =>
-              playAudio(BLENDING_AUDIO_SOURCES[item.word].file, item.id)
+              playAudio(BLENDING_AUDIO_SOURCES[item.id].file, item.id)
             }
             onDragStart={() => setIsCardActive(true)}
             onDragEnd={(pos, isInTarget) =>
               handleDragEnd(pos, item.id, isInTarget, CORRECT_BUTTON_ID)
             }
-            buttonColor={BUTTON_COLORS[index % BUTTON_COLORS.length]}
+            buttonColor={buttonColors[index % buttonColors.length]}
             targetPosition={targetPosition}
+            destinationArea={destinationArea} // Pass the measured destination area
             isPlaced={placedButtonId === item.id}
             isCorrect={placedButtonId === item.id ? isCorrectAnswer : null}
             disabled={disabledButtons.includes(item.id)}
@@ -994,44 +993,4 @@ const DraggableAudioGame: React.FC = () => {
   );
 };
 
-
-
-// Update the Screen component styles
-const Screen = () => {
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
-    screenName: "letter-formation",
-    module: "blending-module",
-  });
-  
-  const screenStyles = StyleSheet.create({
-    safeareaview: {
-      flex: 1,
-      backgroundColor: "#FFFFFF", // Changed from red
-    },
-    content: {
-      flex: 1,
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between", // Space between header, game, bottom tab bar
-    },
-  });
-
-  return (
-    <SafeAreaView
-      style={screenStyles.safeareaview}
-      edges={["top", "left", "right"]}
-    >
-      <View style={screenStyles.content}>
-        <GuidanceAudioHeader
-          title="Sound"
-          isPlaying={isPlayingGuidanceAudio}
-          onPressGuide={playGuideAudio}
-          colorType="NATIVE_BUTTON_COLOR"
-        />
-        <DraggableAudioGame />
-      </View>
-    </SafeAreaView>
-  );
-};
-
-export default Screen;
+export default AudioMultipleChoice;

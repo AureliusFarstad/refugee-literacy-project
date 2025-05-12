@@ -28,7 +28,8 @@ import {
   VOCABULARY_WORD_LIST_BY_LEVEL,
 } from "@/assets/vocabulary";
 import { APP_COLORS } from "@/constants/routes";
-import Header from "@/ui/core/headers";
+import { useGuideAudio } from "@/core/hooks/useGuideAudio";
+import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
@@ -90,7 +91,7 @@ const BUTTON_COLORS: ButtonColorProps[] = [
 ];
 
 // TODO: Move to layout
-const NATIVE_BUTTON_COLOR: ButtonColorProps = {
+export const NATIVE_BUTTON_COLOR: ButtonColorProps = {
   primaryColor: SECTION_COLOR.sectionPrimaryColor,
   secondaryColor: SECTION_COLOR.sectionSecondaryColor,
   offwhiteColor: SECTION_COLOR.appWhiteColor,
@@ -346,7 +347,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 
   // Reset incorrect button after feedback duration
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | undefined;
+    let timeoutId: number | undefined;
 
     if (isPlaced === true && isCorrect === false) {
       timeoutId = setTimeout(() => {
@@ -992,13 +993,22 @@ const Screen = () => {
     },
   });
 
+  const { isPlaying, playGuideAudio } = useGuideAudio({
+    screenName: "audio-multiple-choice",
+  });
+
   return (
     <SafeAreaView
       style={screenStyles.safeareaview}
       edges={["top", "left", "right"]}
     >
       <View style={screenStyles.content}>
-        <Header title="Audio Multiple Choice" />
+        <GuidanceAudioHeader
+          title="Audio Multiple Choice"
+          isPlaying={isPlaying}
+          onPressGuide={playGuideAudio}
+          colorType="DEFAULT"
+        />
         <DraggableAudioGame />
       </View>
     </SafeAreaView>

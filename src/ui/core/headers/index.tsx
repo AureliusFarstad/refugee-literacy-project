@@ -4,12 +4,20 @@ import { useCallback } from "react";
 import { Pressable, View } from "react-native";
 import Svg, { Circle, Path } from "react-native-svg";
 
-import { NATIVE_BUTTON_COLOR } from "@/app/(level-four)/audio-multiple-choice-2";
 import { APP_COLORS } from "@/constants/routes";
 import LetterCaseSwitch from "@/ui/components/global-letter-casing-switch";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { HomeButton } from "@/ui/icons/circular/home-button";
+
+// TODO: This shouldn't be a constant. varies based on section?
+const NATIVE_BUTTON_COLOR: ButtonColorProps = {
+  primaryColor: APP_COLORS.green,
+  secondaryColor: APP_COLORS.lightgreen,
+  offwhiteColor: APP_COLORS.offwhite,
+  offblackColor: APP_COLORS.offblack,
+  backgroundColor: APP_COLORS.backgroundgrey,
+};
 
 export const NativeButton = ({
   primaryColor,
