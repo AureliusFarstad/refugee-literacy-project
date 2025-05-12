@@ -994,15 +994,13 @@ const DraggableAudioGame: React.FC = () => {
   );
 };
 
-
-
 // Update the Screen component styles
 const Screen = () => {
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
     screenName: "letter-formation",
     module: "blending-module",
   });
-  
+
   const screenStyles = StyleSheet.create({
     safeareaview: {
       flex: 1,
