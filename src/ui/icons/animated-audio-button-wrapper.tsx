@@ -133,12 +133,17 @@ export const AnimatedAudioButton = ({
 
 const styles = StyleSheet.create({
   container: {
+    // borderColor: "red", // Border for debugging
+    // borderWidth: 2,
+    // borderStyle: "solid",
     alignItems: "center",
     justifyContent: "center",
   },
   border: {
     position: "absolute",
     borderStyle: "solid",
+    // borderColor: "purple", // Border for debugging
+    // borderWidth: 2,
   },
   button: {
     zIndex: 2,

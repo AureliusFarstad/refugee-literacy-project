@@ -24,6 +24,8 @@ const BLENDING_FLASHCARDS = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   },
 );
 
+// TODO: PLUG IN NATIVE AUDIO SOURCES...
+
 const colors = {
   background_color: APP_COLORS.backgroundgrey,
   primary_color: SECTION_COLORS.blending.primary,
@@ -42,7 +44,6 @@ export default function FlashCardContainer() {
       flex: 1,
       width: "100%",
       backgroundColor: APP_COLORS.backgroundgrey,
-      // paddingBottom: 1000, // TODO: See comment below.
     },
   });
 
@@ -66,7 +67,7 @@ export default function FlashCardContainer() {
             <BlendingFlashCard content={item} colors={colors} />
           )}
           keyExtractor={(item) => item.id}
-          ListFooterComponent={<View className="h-80" />}
+          ListFooterComponent={<View className="h-40" />}
         />
       </View>
     </SafeAreaView>

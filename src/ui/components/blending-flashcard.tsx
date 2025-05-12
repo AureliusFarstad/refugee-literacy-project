@@ -26,6 +26,8 @@ type FlashCardProps = {
   };
 };
 
+// TODO: PLUG IN NATIVE AUDIO SOURCES...
+
 export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
   // Shared button props for consistency
   const iconButtonProps = {
