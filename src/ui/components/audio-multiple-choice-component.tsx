@@ -8,7 +8,6 @@ import {
   GestureDetector,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
-import type { SharedValue } from "react-native-reanimated";
 import Reanimated, {
   cancelAnimation,
   Easing,
@@ -21,26 +20,17 @@ import Reanimated, {
   withTiming,
 } from "react-native-reanimated";
 
-import {
-  BLENDING_AUDIO_SOURCES,
-  BLENDING_WORD_LIST_BY_LEVEL,
-} from "@/assets/blending";
+import { BLENDING_AUDIO_SOURCES } from "@/assets/blending";
 import { APP_COLORS } from "@/constants/routes";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
-import {
-  BOTTOM_TAB_HEIGHT,
-  HEADER_HEIGHT,
-  HEIGHT,
-  WIDTH,
-} from "@/utils/layout";
 
 // ------------------------------------------------------------
 // TYPE DEFINITIONS
 // ------------------------------------------------------------
 
 type ButtonItem = {
-  // Used for draggable buttons
+  audioFile: string;
   id: string;
 };
 
@@ -59,6 +49,7 @@ interface DraggableButtonProps {
   onDragEnd: (position: Position, isInTarget: boolean) => void;
   buttonColor: ButtonColorProps;
   targetPosition: Position | null;
+  destinationArea: Position | null;
   isPlaced?: boolean;
   isCorrect?: boolean | null;
   isPlaying?: boolean;
@@ -68,19 +59,24 @@ interface DraggableButtonProps {
   animationBorderWidth?: number;
 }
 
-type GameSet = {
-  correctAnswer: string;
-  options: string[];
+export type GameSet = {
+  correctAnswerId: string;
+  options: {
+    id: string;
+    audioFile: any;
+  }[];
 };
 
+export type DestinationComponentType = () => ReactElement;
+
 // ------------------------------------------------------------
-// GAME CONSTANTS
+// CONSTANTS
 // ------------------------------------------------------------
 
-const BUTTON_SIZE: number = 80;
-const DRAG_DELAY_MS: number = 100;
-const INCORRECT_FEEDBACK_DURATION_MS: number = 2000;
-const SPRING_CONFIG: { damping: number; stiffness: number } = {
+const BUTTON_SIZE = 80;
+const DRAG_DELAY_MS = 100;
+const INCORRECT_FEEDBACK_DURATION_MS = 2000;
+const SPRING_CONFIG = {
   damping: 15,
   stiffness: 100,
 };
@@ -147,6 +143,68 @@ const DEFAULT_SECTION_COLOR = {
 };
 
 // ------------------------------------------------------------
+// HELPER FUNCTIONS
+// ------------------------------------------------------------
+
+// Function to shuffle array
+const shuffleArray = (array: string[]): string[] => {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+};
+
+const shuffleGameSet = (gameSet: GameSet): GameSet => {
+  const shuffledOptions = shuffleArray(
+    gameSet.options.map((option) => option.id),
+  );
+  return {
+    ...gameSet,
+    options: shuffledOptions.map(
+      (id) => gameSet.options.find((option) => option.id === id)!,
+    ),
+  };
+};
+
+// // Generate game sets
+// const generateGameSets = (): GameSet[] => {
+//   return BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map((word: string) => {
+//     return {
+//       correctAnswer: word,
+//       options: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
+//         (option) => option !== word,
+//       )
+//         .slice(0, 2)
+//         .concat(word),
+//     };
+//   });
+// };
+
+// Generate defaultGameSet
+const defaultGameSet: GameSet = {
+  correctAnswerId: "tin",
+  options: [
+    {
+      id: "tin",
+      audioFile: BLENDING_AUDIO_SOURCES.tin.file,
+    },
+    {
+      id: "pin",
+      audioFile: BLENDING_AUDIO_SOURCES.pin.file,
+    },
+    {
+      id: "pan",
+      audioFile: BLENDING_AUDIO_SOURCES.pan.file,
+    },
+  ],
+};
+
+// const generatedGameSets = generateGameSets();
+// export const defaultGameSet = generatedGameSets[0];
+
+// ------------------------------------------------------------
 // DRAGGABLE BUTTON COMPONENT
 // ------------------------------------------------------------
 
@@ -157,36 +215,36 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   onDragEnd,
   buttonColor,
   targetPosition,
+  destinationArea,
   isPlaced,
   isCorrect,
   isPlaying = false,
   disabled = false,
   onMarkDisabled,
   breatheDuration = 2000,
-  animationBorderColor = "#4CAF50", // TODO: Refactor our green color?
+  animationBorderColor = "#4CAF50",
   animationBorderWidth = 4,
 }) => {
-  // Track position of button
-  const translateX: SharedValue<number> = useSharedValue<number>(0);
-  const translateY: SharedValue<number> = useSharedValue<number>(0);
-  const savedPosition: SharedValue<{ x: number; y: number }> = useSharedValue<{
-    x: number;
-    y: number;
-  }>({ x: 0, y: 0 });
+  // Animated values for position
+  const translateX = useSharedValue<number>(0);
+  const translateY = useSharedValue<number>(0);
+  const savedPosition = useSharedValue<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
 
-  // Track if currently dragging
-  const isDragging: SharedValue<boolean> = useSharedValue<boolean>(false);
+  // Animation and interaction states
+  const isDragging = useSharedValue<boolean>(false);
+  const touchStartTime = useSharedValue<number>(0);
+  const borderOpacity = useSharedValue<number>(0);
 
-  // Track start time of touch
-  const touchStartTime: SharedValue<number> = useSharedValue<number>(0);
-
-  // Animation for audio playback
-  const borderOpacity: SharedValue<number> = useSharedValue<number>(0);
-
-  // Track original position (where the button starts in the button pool)
+  // Refs and state
   const buttonRef = useRef<Reanimated.View>(null);
   const [buttonOrigin, setButtonOrigin] = useState<Position | null>(null);
+  const hasSetTimeoutRef = useRef(false);
+  const timeoutIdRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
+  // Styles
   const styles = StyleSheet.create({
     audioButtonContainer: {
       width: BUTTON_SIZE,
@@ -202,47 +260,53 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
     },
   });
 
-  // Get button's original position
+  // Measure button position - only once when mounted
+
   useEffect(() => {
+    console.log(
+      `[TRACE] Button ${item.id} - Initial measurement effect running`,
+    );
+
     const measureButton = () => {
       if (buttonRef.current) {
         buttonRef.current.measure((x, y, width, height, pageX, pageY) => {
-          console.log(`Button ${item.id} measured at:`, {
-            x,
-            y,
-            width,
-            height,
-            pageX,
-            pageY,
-          });
-          setButtonOrigin({ x: pageX, y: pageY, width, height });
+          if (pageX > 0 && pageY > 0) {
+            console.log(
+              `[MEASURE] Button ${item.id} - setting initial position: ${pageX},${pageY}`,
+            );
+            setButtonOrigin({ x: pageX, y: pageY, width, height });
+          }
         });
       }
     };
 
-    // Slight delay to ensure component is rendered
     const timerId = setTimeout(measureButton, 100);
-    return () => clearTimeout(timerId);
-  }, [item.id]);
+    return () => {
+      console.log(
+        `[TRACE] Button ${item.id} - Initial measurement effect cleanup`,
+      );
+      clearTimeout(timerId);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Removed item.id - just for logging
 
-  const hasSetTimeoutRef = useRef(false);
-  const timeoutIdRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  // Handle incorrect button reset
 
-  // Reset incorrect button after feedback duration
-  // Effect for handling state changes
   useEffect(() => {
     console.log(
-      `Button ${item.id} isPlaced: ${isPlaced}, isCorrect: ${isCorrect}, hasTimeout: ${hasSetTimeoutRef.current}`,
+      `[TRACE] Button ${item.id} - Incorrect reset effect running - isPlaced: ${isPlaced}, isCorrect: ${isCorrect}`,
     );
 
-    // Only set a timeout if not already set and the button is incorrectly placed
     if (isPlaced === true && isCorrect === false && !hasSetTimeoutRef.current) {
-      console.log(`Setting timeout for button ${item.id}`);
+      console.log(
+        `[STATE] Button ${item.id} - Setting timeout for incorrect button`,
+      );
       hasSetTimeoutRef.current = true;
 
-      // Store the timeout ID in the ref
       timeoutIdRef.current = setTimeout(() => {
-        console.log(`TIMEOUT EXECUTED for button ${item.id}`);
+        console.log(
+          `[EVENT] Button ${item.id} - Incorrect button timeout executed`,
+        );
 
         // Reset position with animation
         translateX.value = withSpring(0, SPRING_CONFIG);
@@ -253,7 +317,6 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 
         // Mark as disabled
         if (onMarkDisabled) {
-          console.log(`Marking button ${item.id} as disabled`);
           onMarkDisabled(item.id);
         }
 
@@ -268,84 +331,92 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
       !(isPlaced === true && isCorrect === false) &&
       hasSetTimeoutRef.current
     ) {
-      console.log(`Resetting timeout flag for button ${item.id}`);
+      console.log(
+        `[STATE] Button ${item.id} - Clearing incorrect button timeout`,
+      );
       hasSetTimeoutRef.current = false;
 
-      // Optionally clear the timeout if you want to cancel it
-      // when the button state changes to not incorrectly placed
       if (timeoutIdRef.current) {
         clearTimeout(timeoutIdRef.current);
         timeoutIdRef.current = undefined;
       }
     }
-    // No cleanup function - we manage the timeout manually
-  }, [
-    isPlaced,
-    isCorrect,
-    onDragEnd,
-    onMarkDisabled,
-    translateX,
-    translateY,
-    item.id,
-  ]);
 
-  // Effect for handling the initial setup
-  useEffect(() => {
-    // This runs once on mount
-    console.log(`Button ${item.id} mounted`);
-
-    // Cleanup on true unmount
     return () => {
-      console.log(`Button ${item.id} UNMOUNTING FOR REAL`);
+      console.log(`[TRACE] Button ${item.id} - Incorrect reset effect cleanup`);
+    };
+  }, [isPlaced, isCorrect, onDragEnd, onMarkDisabled, item.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Removed translateX and translateY from dependencies to avoid unnecessary re-renders
+
+  // Initial setup and cleanup
+  useEffect(() => {
+    // Removed logging
+    return () => {
       if (timeoutIdRef.current) {
         clearTimeout(timeoutIdRef.current);
         timeoutIdRef.current = undefined;
       }
     };
-  }, [item.id]); // Empty dependency array = runs only on mount/unmount
+  }, []);
+
+  // Reset position when item changes - with memoized measurements
 
   useEffect(() => {
-    // Immediately reset position to origin when key/item changes
+    console.log(`[TRACE] Button ${item.id} - Position reset effect running`);
+
     translateX.value = 0;
     translateY.value = 0;
     savedPosition.value = { x: 0, y: 0 };
 
-    // Schedule measuring after layout
-    const measureButton = () => {
-      if (buttonRef.current) {
-        buttonRef.current.measure((x, y, width, height, pageX, pageY) => {
-          if (pageX > 0 && pageY > 0) {
-            setButtonOrigin({
-              x: pageX,
-              y: pageY,
-              width: width || BUTTON_SIZE,
-              height: height || BUTTON_SIZE,
-            });
-          } else {
-            // Retry measurement if it failed
-            setTimeout(measureButton, 100);
-          }
-        });
-      }
+    // Only measure if we don't have a valid position yet
+    if (!buttonOrigin || buttonOrigin.x <= 0 || buttonOrigin.y <= 0) {
+      console.log(
+        `[STATE] Button ${item.id} - No valid position, will measure`,
+      );
+
+      const measureButton = () => {
+        if (buttonRef.current) {
+          buttonRef.current.measure((x, y, width, height, pageX, pageY) => {
+            if (pageX > 0 && pageY > 0) {
+              console.log(
+                `[MEASURE] Button ${item.id} - Updated position: ${pageX},${pageY}`,
+              );
+              setButtonOrigin({
+                x: pageX,
+                y: pageY,
+                width: width || BUTTON_SIZE,
+                height: height || BUTTON_SIZE,
+              });
+            }
+          });
+        }
+      };
+
+      const timerId = setTimeout(measureButton, 200);
+      return () => {
+        console.log(
+          `[TRACE] Button ${item.id} - Position reset effect cleanup`,
+        );
+        clearTimeout(timerId);
+      };
+    }
+
+    return () => {
+      console.log(
+        `[TRACE] Button ${item.id} - Position reset effect cleanup (no measurement)`,
+      );
     };
+  }, [item.id, buttonOrigin]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // Use a slightly longer delay to ensure layout is complete
-    const timerId = setTimeout(measureButton, 200);
-    return () => clearTimeout(timerId);
-  }, [item.id, translateX, translateY, savedPosition]);
-
-  // Function to stop breathing animation
+  // Animation control functions
   const stopAnimation = useCallback(() => {
     cancelAnimation(borderOpacity);
     borderOpacity.value = withTiming(0, { duration: 500 });
   }, [borderOpacity]);
 
-  // Function to start breathing animation
   const startBreathingAnimation = useCallback(() => {
-    // Reset opacity before starting animation
     borderOpacity.value = 0;
 
-    // Start the animation sequence
     borderOpacity.value = withSequence(
       withTiming(0.6, { duration: breatheDuration / 2, easing: Easing.ease }),
       withRepeat(
@@ -363,31 +434,32 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 
   // Control animation based on isPlaying prop
   useEffect(() => {
-    console.log(`Button ${item.id} isPlaying changed to: ${isPlaying}`);
+    console.log(
+      `[TRACE] Button ${item.id} - Animation effect running - isPlaying: ${isPlaying}`,
+    );
 
     if (isPlaying) {
-      console.log(`Starting animation for button ${item.id}`);
+      console.log(`[ANIM] Button ${item.id} - Starting animation`);
       startBreathingAnimation();
     } else {
-      console.log(`Stopping animation for button ${item.id}`);
+      console.log(`[ANIM] Button ${item.id} - Stopping animation`);
       stopAnimation();
     }
 
-    // Add an explicit return function to stop animation on unmount or change
     return () => {
-      console.log(`Cleanup animation for button ${item.id}`);
+      console.log(`[TRACE] Button ${item.id} - Animation effect cleanup`);
       cancelAnimation(borderOpacity);
       borderOpacity.value = 0;
     };
   }, [
     isPlaying,
-    item.id,
     startBreathingAnimation,
     stopAnimation,
     borderOpacity,
+    item.id, // Added for tracing only
   ]);
 
-  // Define tap gesture
+  // Gesture handling
   const tapGesture = Gesture.Tap()
     .onStart(() => {
       if (!isDragging.value && !disabled && !isPlaying) {
@@ -397,7 +469,6 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
     .maxDuration(250)
     .enabled(!disabled);
 
-  // Define drag gesture
   const dragGesture = Gesture.Pan()
     .onStart(() => {
       if (disabled) return;
@@ -419,16 +490,15 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
     .onEnd((event) => {
       if (disabled) return;
       if (isDragging.value) {
-        const droppedX: number = event.absoluteX;
-        const droppedY: number = event.absoluteY;
+        const droppedX = event.absoluteX;
+        const droppedY = event.absoluteY;
 
-        // Detect if in drop area TODO: FIX THIS LOGIC...
-        const isInDropArea: boolean =
-          droppedY <
-            (HEIGHT + HEADER_HEIGHT + 200 - BOTTOM_TAB_HEIGHT - 120) / 2 &&
-          droppedY > HEADER_HEIGHT && // Add a minimum bound
-          droppedX > 0 &&
-          droppedX < WIDTH;
+        const isInDropArea = destinationArea
+          ? droppedX >= destinationArea.x &&
+            droppedX <= destinationArea.x + (destinationArea.width || 0) &&
+            droppedY >= destinationArea.y &&
+            droppedY <= destinationArea.y + (destinationArea.height || 0)
+          : false;
 
         isDragging.value = false;
 
@@ -452,7 +522,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
           translateX.value = withSpring(offsetX, SPRING_CONFIG);
           translateY.value = withSpring(offsetY, SPRING_CONFIG);
         } else {
-          // IMPORTANT: If not in drop area, always snap back to origin
+          // If not in drop area, snap back to origin
           translateX.value = withSpring(0, SPRING_CONFIG);
           translateY.value = withSpring(0, SPRING_CONFIG);
         }
@@ -468,7 +538,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   // Combine gestures
   const gesture = Gesture.Exclusive(dragGesture, tapGesture);
 
-  // Animation style for position
+  // Animation styles
   const animatedPositionStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: translateX.value },
@@ -476,12 +546,11 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
     ],
   }));
 
-  // Animation style for breathing border
   const animatedBorderStyle = useAnimatedStyle(() => ({
     opacity: borderOpacity.value,
   }));
 
-  // Determine the button color configuration based on state
+  // Button color selection based on state
   const getButtonColorProps = (): ButtonColorProps => {
     if (disabled) {
       return DISABLED_BUTTON_COLORS;
@@ -494,7 +563,6 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
     return buttonColor;
   };
 
-  // Get the current color configuration
   const currentColors = getButtonColorProps();
 
   // Create props for EnglishButton
@@ -536,12 +604,9 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 // DEFAULT DESTINATION COMPONENT
 // ------------------------------------------------------------
 
-type DestinationComponentType = () => ReactElement;
-
 const DefaultUseDestinationComponent = (
   isCardActive: boolean,
-  measureDropCircle: () => void,
-): [DestinationComponentType, RefObject<View>] => {
+): [DestinationComponentType, RefObject<View>, RefObject<View>] => {
   const styles = StyleSheet.create({
     flashcardContainer: {
       flex: 1,
@@ -549,6 +614,7 @@ const DefaultUseDestinationComponent = (
     },
     flashcard: {
       height: 100,
+      width: 100,
       borderWidth: 2,
       borderColor: "blue",
       borderRadius: 12,
@@ -581,124 +647,73 @@ const DefaultUseDestinationComponent = (
   });
 
   const dropCircleRef = useRef<View>(null);
+  const destinationContainerRef = useRef<View>(null); // New ref for entire destination area
 
-  const DestinationComponent = () => (
-    <View style={styles.flashcardContainer}>
-      <View
-        style={[styles.flashcard, isCardActive && styles.flashcardActive]}
-        onLayout={() => {
-          // console.log("Flashcard layout complete");
-          setTimeout(measureDropCircle, 100);
-        }}
-      >
-        <View style={styles.dropCircleContainer}>
-          <View ref={dropCircleRef} style={styles.emptyDropCircle} />
+  // Use memo to prevent unnecessary re-renders
+
+  const DestinationComponent = React.useCallback(
+    () => (
+      <View style={styles.flashcardContainer}>
+        <View
+          style={[styles.flashcard, isCardActive && styles.flashcardActive]}
+          ref={destinationContainerRef}
+        >
+          <View style={styles.dropCircleContainer}>
+            <View ref={dropCircleRef} style={styles.emptyDropCircle} />
+          </View>
         </View>
       </View>
-    </View>
+    ),
+    [isCardActive], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  return [DestinationComponent, dropCircleRef];
+  return [DestinationComponent, dropCircleRef, destinationContainerRef];
 };
-
-const generatedGameSets: GameSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
-  (word: string) => {
-    return {
-      correctAnswer: word,
-      options: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
-        (option) => option !== word,
-      )
-        .slice(0, 2)
-        .concat(word),
-    };
-  },
-);
-
-const defaultGameSet = generatedGameSets[0];
 
 // ------------------------------------------------------------
 // MAIN COMPONENT
 // ------------------------------------------------------------
 
-const AudioMultipleChoice: React.FC<{
+const defaultOnCorrectAnswer = () => {
+  console.log("Correct answer!");
+};
+
+interface AudioMultipleChoiceProps {
   useDestinationComponent?: typeof DefaultUseDestinationComponent;
-  gameSet?: GameSet;
+  gameSet: GameSet;
   buttonColors?: ButtonColorProps[];
   sectionColorTheme?: any;
-}> = ({
+  onCorrectAnswer?: () => void;
+}
+
+const AudioMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
   useDestinationComponent = DefaultUseDestinationComponent,
   gameSet = defaultGameSet,
   buttonColors = DEFAULT_BUTTON_COLORS,
   sectionColorTheme = DEFAULT_SECTION_COLOR,
+  onCorrectAnswer = defaultOnCorrectAnswer,
 }) => {
-  // State for tracking if the flashcard is in "active" state (being dragged over)
+  // State
   const [isCardActive, setIsCardActive] = useState<boolean>(false);
-
-  // Store the target drop circle position
   const [targetPosition, setTargetPosition] = useState<Position | null>(null);
-
-  // Track which button is currently placed in the target
+  const [destinationArea, setDestinationArea] = useState<Position | null>(null);
   const [placedButtonId, setPlacedButtonId] = useState<string | null>(null);
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean | null>(null);
   const [disabledButtons, setDisabledButtons] = useState<string[]>([]);
-
-  // Audio playback tracking
   const [playingButtonId, setPlayingButtonId] = useState<string | null>(null);
+  const [shuffledOptions, setShuffledOptions] = useState<GameSet>(gameSet);
+
+  // Refs
   const currentSound = useRef<Sound | null>(null);
 
-  // Game state
-  const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
+  // Constants for current game
+  const CORRECT_BUTTON_ID: string = gameSet.correctAnswerId;
 
-  // Function to shuffle array
-  const shuffleArray = useCallback((array: string[]) => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-  }, []);
+  // Setup destination component
+  const [DestinationComponent, dropCircleRef, destinationContainerRef] =
+    useDestinationComponent(isCardActive);
 
-  const [DestinationComponent, dropCircleRef] = useDestinationComponent(
-    isCardActive,
-    () => measureDropCircle(),
-  );
-
-  // Function to get the absolute position of the target drop circle
-  const measureDropCircle = useCallback((): void => {
-    // Give a little more time for layout to complete
-    setTimeout(() => {
-      if (dropCircleRef.current) {
-        dropCircleRef.current.measure(
-          (x: any, y: any, width: any, height: any, pageX: any, pageY: any) => {
-            // console.log("Drop circle measured at:", {
-            //   x,
-            //   y,
-            //   width,
-            //   height,
-            //   pageX,
-            //   pageY,
-            // });
-
-            if (width > 0 && height > 0 && pageX > 0 && pageY > 0) {
-              // Store the position with explicit values to avoid undefined issues
-              setTargetPosition({
-                x: pageX,
-                y: pageY,
-                width: width || BUTTON_SIZE,
-                height: height || BUTTON_SIZE,
-              });
-            } else {
-              // Retry if measurement failed
-              console.log("Measurement failed, retrying...");
-              setTimeout(measureDropCircle, 200);
-            }
-          },
-        );
-      }
-    }, 100);
-  }, [dropCircleRef]);
-
+  // Styles
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -714,7 +729,6 @@ const AudioMultipleChoice: React.FC<{
       paddingVertical: 20,
       borderWidth: 2,
       borderColor: sectionColorTheme.primary,
-      // borderStyle: "dashed",
       backgroundColor: sectionColorTheme.light,
       borderLeftWidth: 0,
       borderRightWidth: 0,
@@ -734,23 +748,170 @@ const AudioMultipleChoice: React.FC<{
     },
   });
 
+  // Measurement callbacks
+  const measureDestinationArea = useCallback((): void => {
+    console.log(`[TRACE] AudioMultipleChoice - measureDestinationArea called`);
+
+    // Simplified measurement with fewer log statements
+    setTimeout(() => {
+      if (destinationContainerRef.current) {
+        destinationContainerRef.current.measure(
+          (x, y, width, height, pageX, pageY) => {
+            if (width > 0 && height > 0 && pageX > 0 && pageY > 0) {
+              console.log(
+                `[MEASURE] Destination area measured successfully: ${pageX},${pageY}`,
+              );
+              setDestinationArea({
+                x: pageX,
+                y: pageY,
+                width: width,
+                height: height,
+              });
+            } else {
+              console.log(
+                `[MEASURE] Destination area measurement failed, retrying once`,
+              );
+              // Retry once with logging
+              setTimeout(() => {
+                if (destinationContainerRef.current) {
+                  destinationContainerRef.current.measure(
+                    (x, y, width, height, pageX, pageY) => {
+                      if (width > 0 && height > 0 && pageX > 0 && pageY > 0) {
+                        console.log(
+                          `[MEASURE] Destination area retry successful: ${pageX},${pageY}`,
+                        );
+                        setDestinationArea({
+                          x: pageX,
+                          y: pageY,
+                          width: width,
+                          height: height,
+                        });
+                      } else {
+                        console.log(
+                          `[MEASURE] Destination area measurement failed after retry`,
+                        );
+                      }
+                    },
+                  );
+                }
+              }, 200);
+            }
+          },
+        );
+      }
+    }, 100);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const measureDropCircle = useCallback((): void => {
+    console.log(`[TRACE] AudioMultipleChoice - measureDropCircle called`);
+
+    // Only measure once with minimal logging
+    setTimeout(() => {
+      if (dropCircleRef.current) {
+        dropCircleRef.current.measure((x, y, width, height, pageX, pageY) => {
+          if (width > 0 && height > 0 && pageX > 0 && pageY > 0) {
+            console.log(
+              `[MEASURE] Drop circle measured successfully: ${pageX},${pageY}`,
+            );
+            setTargetPosition({
+              x: pageX,
+              y: pageY,
+              width: width || BUTTON_SIZE,
+              height: height || BUTTON_SIZE,
+            });
+          } else {
+            console.log(
+              `[MEASURE] Drop circle measurement failed, retrying once`,
+            );
+            // Retry once without logging
+            setTimeout(() => {
+              if (dropCircleRef.current) {
+                dropCircleRef.current.measure(
+                  (x, y, width, height, pageX, pageY) => {
+                    if (width > 0 && height > 0 && pageX > 0 && pageY > 0) {
+                      console.log(
+                        `[MEASURE] Drop circle retry successful: ${pageX},${pageY}`,
+                      );
+                      setTargetPosition({
+                        x: pageX,
+                        y: pageY,
+                        width: width || BUTTON_SIZE,
+                        height: height || BUTTON_SIZE,
+                      });
+                    } else {
+                      console.log(
+                        `[MEASURE] Drop circle measurement failed after retry`,
+                      );
+                    }
+                  },
+                );
+              }
+            }, 200);
+          }
+        });
+      }
+    }, 100);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const measurementsCompleteRef = useRef(false);
+
+  // Then in the component's initialization effect:
   useEffect(() => {
-    const shuffled = shuffleArray(gameSet.options);
+    console.log(
+      `[TRACE] AudioMultipleChoice - Initial measurement effect running`,
+    );
+
+    if (!measurementsCompleteRef.current) {
+      const timerId = setTimeout(() => {
+        console.log(
+          `[MEASURE] AudioMultipleChoice - Starting initial measurements`,
+        );
+        measureDropCircle();
+        measureDestinationArea();
+        measurementsCompleteRef.current = true;
+      }, 500);
+
+      return () => {
+        clearTimeout(timerId);
+      };
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Initialize shuffled options
+  useEffect(() => {
+    console.log(
+      `[TRACE] AudioMultipleChoice - Shuffle options effect running - options: ${gameSet.options.length}`,
+    );
+
+    const shuffled = shuffleGameSet(gameSet);
     setShuffledOptions(shuffled);
-  }, [gameSet.options, shuffleArray]);
 
-  // Current game data
-  const CORRECT_BUTTON_ID: string = gameSet.correctAnswer;
+    return () => {
+      console.log(
+        `[TRACE] AudioMultipleChoice - Shuffle options effect cleanup`,
+      );
+    };
+  }, [gameSet.options]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Available audio buttons using shuffled options
-  const availableButtons: ButtonItem[] = shuffledOptions.map((word: string) => {
-    return { id: word, word: word };
-  });
+  // Clean up sound when component unmounts
+  useEffect(() => {
+    console.log(`[TRACE] AudioMultipleChoice - Sound cleanup effect mounted`);
 
-  // Function to play audio - simplified for reliability
+    return () => {
+      console.log(
+        `[TRACE] AudioMultipleChoice - Sound cleanup running on unmount`,
+      );
+      if (currentSound.current) {
+        currentSound.current.unloadAsync();
+        currentSound.current = null;
+      }
+    };
+  }, []);
+
+  // Audio playback function
   const playAudio = useCallback(
     async (audioFile: any, buttonId: string): Promise<void> => {
-      console.log("Playing audio for button:", buttonId);
+      // Removed excessive logging
 
       // Stop any currently playing audio
       if (currentSound.current) {
@@ -784,15 +945,11 @@ const AudioMultipleChoice: React.FC<{
           if (!status.isLoaded) return;
 
           if (status.didJustFinish) {
-            console.log(`Audio finished for button ${buttonId}`);
             isHandled = true;
 
             // Force update the playing button ID state
             setPlayingButtonId((prevId) => {
               if (prevId === buttonId) {
-                console.log(
-                  `Clearing playing button ID from ${prevId} to null`,
-                );
                 return null;
               }
               return prevId;
@@ -811,13 +968,9 @@ const AudioMultipleChoice: React.FC<{
           if (isHandled) return;
 
           isHandled = true;
-          console.log(`Safety timeout reached for button ${buttonId}`);
 
           setPlayingButtonId((prevId) => {
             if (prevId === buttonId) {
-              console.log(
-                `Clearing playing button ID from ${prevId} to null (timeout)`,
-              );
               return null;
             }
             return prevId;
@@ -833,8 +986,7 @@ const AudioMultipleChoice: React.FC<{
           }
         }, 5000);
 
-        // Set up cleanup but don't return it directly
-        // This fixes the "Type '() => void' is not assignable to type 'void'" error
+        // Clean up timeout
         setTimeout(() => {
           clearTimeout(timeoutId);
         }, 6000);
@@ -846,46 +998,33 @@ const AudioMultipleChoice: React.FC<{
     [],
   );
 
-  // Clean up sound when component unmounts
-  useEffect(() => {
-    return () => {
-      if (currentSound.current) {
-        currentSound.current.unloadAsync();
-        currentSound.current = null;
-      }
-    };
-  }, []);
-
-  // Measure the drop circle position when the component mounts
-  useEffect(() => {
-    // Use setTimeout to ensure the layout is complete before measuring
-    const timerId = setTimeout(() => {
-      measureDropCircle();
-    }, 500);
-
-    return () => clearTimeout(timerId);
-  }, [measureDropCircle]);
-
   // Handle drag end for buttons
   const handleDragEnd = useCallback(
     (
       position: Position,
       buttonId: string,
       isInTarget: boolean,
-      CORRECT_BUTTON_ID: string,
+      correctButtonId: string,
     ): void => {
+      console.log(
+        `[EVENT] Button ${buttonId} - Drag ended - isInTarget: ${isInTarget}`,
+      );
+
       setIsCardActive(false);
 
-      console.log("Drag ended for button:", buttonId);
-
       if (isInTarget) {
-        console.log("Button placed in target area:", buttonId);
+        console.log(
+          `[STATE] Button ${buttonId} - Placed in target - correct: ${buttonId === correctButtonId}`,
+        );
         setPlacedButtonId(buttonId);
-        const isCorrect = buttonId === CORRECT_BUTTON_ID;
+        const isCorrect = buttonId === correctButtonId;
         setIsCorrectAnswer(isCorrect);
 
         // If answer is correct, set a timeout to advance to next game
         if (isCorrect) {
+          console.log(
+            `[EVENT] Button ${buttonId} - Correct answer, will call onCorrectAnswer in 1.5s`,
+          );
           // Slight delay to show the correct feedback
           setTimeout(() => {
             // Stop any ongoing animations or sounds
@@ -895,37 +1034,41 @@ const AudioMultipleChoice: React.FC<{
               currentSound.current = null;
             }
             setPlayingButtonId(null);
-
-            // Move to next game set, loop back to beginning if at end
+            if (onCorrectAnswer) {
+              onCorrectAnswer();
+            }
           }, 1500); // Wait 1.5 seconds before advancing
         }
       } else if (placedButtonId === buttonId) {
+        console.log(`[STATE] Button ${buttonId} - Removed from placement`);
         setPlacedButtonId(null);
         setIsCorrectAnswer(null);
       }
     },
-    [placedButtonId],
+    [placedButtonId, onCorrectAnswer],
   );
+
+  // Prepare available buttons
+  const availableButtons: ButtonItem[] = shuffledOptions.options;
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <DestinationComponent />
+
       {/* Button Pool */}
-      {/* TODO: Make only top border dashed: https://github.com/facebook/react-native/issues/7838 */}
       <View style={styles.buttonPool}>
         {availableButtons.map((item: ButtonItem, index: number) => (
           <DraggableButton
             key={`${item.id}`}
             item={item}
-            onAudioPlay={() =>
-              playAudio(BLENDING_AUDIO_SOURCES[item.id].file, item.id)
-            }
+            onAudioPlay={() => playAudio(item.audioFile, item.id)}
             onDragStart={() => setIsCardActive(true)}
             onDragEnd={(pos, isInTarget) =>
               handleDragEnd(pos, item.id, isInTarget, CORRECT_BUTTON_ID)
             }
             buttonColor={buttonColors[index % buttonColors.length]}
             targetPosition={targetPosition}
+            destinationArea={destinationArea}
             isPlaced={placedButtonId === item.id}
             isCorrect={placedButtonId === item.id ? isCorrectAnswer : null}
             disabled={disabledButtons.includes(item.id)}

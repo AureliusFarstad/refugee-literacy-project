@@ -22,9 +22,9 @@ import Reanimated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
+  BLENDING_AUDIO_SOURCES,
   BLENDING_IMAGE_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
-  BLENDING_AUDIO_SOURCES
 } from "@/assets/blending";
 import { APP_COLORS } from "@/constants/routes";
 import Header from "@/ui/core/headers";
@@ -953,7 +953,7 @@ const DraggableAudioGame: React.FC = () => {
           {/* A row with Text and Drop Target Next to each other */}
           <View style={styles.row}>
             <Text style={styles.text}>{CORRECT_BUTTON_ID}</Text>
-             {/*TODO: Use capitalization.*/}
+            {/*TODO: Use capitalization.*/}
             {/* Drop target */}
             <View style={styles.dropCircleContainer}>
               <View ref={dropCircleRef} style={styles.emptyDropCircle} />
@@ -969,10 +969,7 @@ const DraggableAudioGame: React.FC = () => {
             key={`${item.id}-${currentGameSetIndex}`}
             item={item}
             onAudioPlay={() =>
-              playAudio(
-                BLENDING_AUDIO_SOURCES[item.word].file,
-                item.id,
-              )
+              playAudio(BLENDING_AUDIO_SOURCES[item.word].file, item.id)
             }
             onDragStart={() => setIsCardActive(true)}
             onDragEnd={(pos, isInTarget) =>
