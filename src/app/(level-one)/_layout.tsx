@@ -51,6 +51,7 @@ export default function LevelTwoTabLayout() {
   return (
     <Tabs
       backBehavior="order"
+      initialRouteName="letter-introduction"
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {

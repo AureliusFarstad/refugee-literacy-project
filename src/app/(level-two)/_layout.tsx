@@ -42,13 +42,13 @@ const tabs: TabType[] = [
     icon: EarIcon,
   },
   {
-    name: "spelling",
-    label: "spelling",
+    name: "audio-multiple-choice",
+    label: "audio-multiple-choice",
     icon: DragIcon,
   },
   {
-    name: "video-tab",
-    label: "Video Tab",
+    name: "spelling",
+    label: "spelling",
     icon: DragIcon,
   },
 ];
