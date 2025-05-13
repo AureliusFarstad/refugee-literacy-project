@@ -1,266 +1,191 @@
-import clsx from "clsx";
-import { Audio } from "expo-av";
-import type { Sound } from "expo-av/build/Audio";
-import { router, usePathname } from "expo-router";
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
-import { FIVE_SEC } from "@/constants/timing";
+import {
+  ALPHABET_LETTER_LIST_BY_LEVEL,
+} from "@/assets/alphabet";
+import {
+  ALPHABET_AUDIO_SOURCES
+} from "@/assets/alphabet_sounds";
+import type { SectionColorTheme } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
-import { useLevelStore } from "@/core/store/levels";
-import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
-import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
+import { WordChoiceScreen } from "@/ui/components/multiple-choice";
+import type { WordSet } from "@/ui/components/multiple-choice/types";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
-import { LettersNameIcon } from "@/ui/icons";
-import { getOptionsToRender } from "@/utils/level-one";
+import { useLetterCase } from "@/ui/core/headers/letter-case-context";
+import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { HEIGHT, IS_IOS } from "@/utils/layout";
 
-const LetterName = () => {
-  const { levels, updateLevels } = useLevelStore();
-  const [sound, setSound] = useState<Sound>();
-  const [tappedAnswer, setTappedAnswer] = useState<IOption>();
-  const [incorrectAnswers, setIncorrectAnswers] = useState<string[]>([]);
+import { SECTION_COLOR } from "./_layout";
+import { APP_COLORS } from "@/constants/routes";
+import { NameButton } from "@/ui/icons/circular/name-button";
 
-  const [isLowercase, setIsLowercase] = useState(false);
+// TODO: Refactor this color logic...
+const sectionColorTheme: SectionColorTheme = {
+  appBackgroundColor: APP_COLORS.backgroundgrey,
+  appWhiteColor: APP_COLORS.offwhite,
+  appBlackColor: APP_COLORS.offblack,
+  appGreyColor: APP_COLORS.grey,
+  appGreenColor: APP_COLORS.green,
+  appRedColor: APP_COLORS.red,
+  sectionPrimaryColor: SECTION_COLOR.primary,
+  sectionSecondaryColor: SECTION_COLOR.dark,
+};
 
-  const pathname = usePathname();
+// TODO: Not sure if we want to generate these or have a static list.
+const generatedLetterSets: WordSet[] = ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1.map(
+  (letter: string) => {
+    return {
+      correctAnswer: letter,
+      options: ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1.filter(
+        (option) => option !== letter,
+      )
+        .slice(0, 2)
+        .concat(letter),
+    };
+  },
+);
 
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
-    screenName: "letter-name",
+// TODO: Refactor this out to _layout?
+const buttonStyles: ButtonColorProps = {
+  primaryColor: SECTION_COLOR.primary,
+  secondaryColor: SECTION_COLOR.dark,
+  offwhiteColor: APP_COLORS.offwhite,
+  offblackColor: APP_COLORS.offblack,
+  backgroundColor: APP_COLORS.backgroundgrey,
+};
+
+const RenderFrontCard = (letter: string) => {
+  return (
+    <AnimatedAudioButton
+      audioSource={ALPHABET_AUDIO_SOURCES[letter].name}
+      width={120}
+      height={120}
+    >
+      <View style={[{ width: 120, height: 120 }]}>
+        <NameButton {...buttonStyles} />
+      </View>
+    </AnimatedAudioButton>
+  );
+};
+
+const RenderBackCard = (letter: string, colors: SectionColorTheme) => {
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: APP_COLORS.backgroundgrey,
+    },
+    content: {
+      flex: 1,
+      padding: 20,
+      paddingBottom: 40,
+      justifyContent: "space-between", // Ensures top, middle, and bottom spacing
+      alignItems: "center",
+    },
+    progressContainer: {
+      height: 40,
+      alignItems: "center",
+      justifyContent: "center", // Centers the progress text
+    },
+    progressText: {
+      fontSize: 18,
+      fontWeight: "500",
+      color: colors.appBlackColor,
+    },
+    cardContainer: {
+      flex: 1,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      width: "100%", // Ensure the container has width
+      padding: 10,
+    },
+    cardBackText: {
+      fontSize: 24,
+      color: colors.appBlackColor,
+      textAlign: "center",
+      fontFamily: "sans-serif",
+      // letterSpacing: 2, // TODO: Maybe have letter spacing everywhere?
+    },
   });
 
-  const [activeActivity, setActiveActivity] =
-    useState<IActivityWithSoundAndName>(
-      levels[0].modules[0].sections[3].activities[0],
-    );
-
-  const optionsToRender = useMemo(
-    () =>
-      getOptionsToRender(activeActivity.options, activeActivity?.correctAnswer),
-    [activeActivity],
-  );
-
-  /**
-   * 1. 6 letters, S,A,T,P,I,N
-   * 2. Save the progress
-   * 3. One by one do the mapping, show 3 of the rest of the five (have the option to show rest of 25 apart from the correct one)
-   * 4. Correct answer, show success
-   * 5. Wrong answer, show try again
-   * 6. Level completion UI
-   *
-   */
-
-  const playSound = async () => {
-    try {
-      const { sound: soundResponse } = await Audio.Sound.createAsync(
-        activeActivity.audio,
-      );
-      if (soundResponse) {
-        setSound(soundResponse);
-      }
-      console.log("Playing Sound");
-      await soundResponse.playAsync();
-    } catch (error) {
-      console.log("error in playSound", error);
-      throw error;
-    }
-  };
-
-  useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
-
-  const initNextActivity = () => {
-    const currentIndex = levels[0].modules[0].sections[3].activities.findIndex(
-      (activity: IActivity) => activity.id === activeActivity.id,
-    );
-    let _nextActivity: IActivity;
-    if (
-      currentIndex === -1 ||
-      currentIndex === levels[0].modules[0].sections[3].activities.length - 1
-    ) {
-      // If current element is not found or is the last element, return the first element
-      _nextActivity = levels[0].modules[0].sections[3].activities[0];
-    } else {
-      // Return the next element in the array
-      _nextActivity =
-        levels[0].modules[0].sections[3].activities[currentIndex + 1];
-    }
-
-    if (_nextActivity) {
-      setActiveActivity(_nextActivity);
-    }
-  };
-
-  useEffect(() => {
-    if (pathname !== "/letter-name") {
-      return;
-    }
-
-    /**
-     * Check if each activity have been answered correctly twice if so means level completed
-     */
-    const activitiesInCurrentSection =
-      levels[0].modules[0].sections[2].activities;
-    const isCompleted = activitiesInCurrentSection.every((activity) => {
-      if (!activity.nameAndSoundActivityProgress) return false;
-      return Object.values(activity.nameAndSoundActivityProgress).every(
-        (count) => count >= 1,
-      );
-    });
-
-    if (isCompleted) {
-      console.log("done");
-      // router.navigate("/(level-one)/letter-matching");
-    }
-  }, [levels, activeActivity, pathname]);
+  const { isLowercase } = useLetterCase();
 
   return (
-    <SafeAreaView>
-      <GuidanceAudioHeader
-        title="Sound"
-        isPlaying={isPlayingGuidanceAudio}
-        onPressGuide={playGuideAudio}
-        colorType="NATIVE_BUTTON_COLOR"
-      />
-      <View className="px-5">
-        <LetterCaseSwitch
-          isLowercase={isLowercase}
-          setIsLowercase={setIsLowercase}
-          letter={"A"}
-          backgroundColor="#C385F8"
+    <View style={styles.cardContainer}>
+      {/* Text */}
+      <Text style={styles.cardBackText}>
+        {isLowercase ? letter.toLowerCase() : letter.toUpperCase()}
+      </Text>
+    </View>
+  );
+};
+
+const RenderOption = (
+  letter: string,
+  isSelected: boolean,
+  isDisabled: boolean,
+  isError: boolean,
+  isSuccess: boolean,
+  isCorrect: boolean,
+  colors: SectionColorTheme,
+) => {
+  const styles = {
+    optionText: {
+      fontSize: 24,
+    },
+    disabledText: {
+      color: colors.appWhiteColor,
+    },
+  };
+
+  const { isLowercase } = useLetterCase();
+
+  return (
+    <Text style={[styles.optionText, isDisabled && styles.disabledText]}>
+      {isLowercase ? letter.toLowerCase() : letter.toUpperCase()}
+    </Text>
+  );
+};
+
+const LetterNameScreen = () => {
+  const insets = useSafeAreaInsets();
+  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+    screenName: "multiple-choice",
+    module: "alphabet-module",
+  });
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View
+        style={{
+          height:
+            HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
+          flex: 1,
+        }}
+      >
+        <GuidanceAudioHeader
+          title="Sound"
+          isPlaying={isPlayingGuidanceAudio}
+          onPressGuide={playGuideAudio}
+          colorType="DEFAULT"
         />
-      </View>
-      <View className="flex items-center p-4">
-        <TouchableOpacity
-          onPress={playSound}
-          className="flex size-[110] items-center justify-center rounded-full bg-colors-purple-500"
-        >
-          <LettersNameIcon />
-        </TouchableOpacity>
-        <View className="flex w-full flex-1 flex-row">
-          {optionsToRender.map((option, index) => (
-            <Pressable
-              key={option.id}
-              onPress={() => {
-                setTappedAnswer(option);
-                if (option.id === activeActivity.correctAnswer.id) {
-                  setIncorrectAnswers([]);
-
-                  const _updatedLevels = levels.map((level: ILevel) => {
-                    if (level.id !== levels[0].id) return level;
-
-                    const _updatedModules = level.modules.map((sublevel) => {
-                      if (sublevel.id !== levels[0].modules[0].id)
-                        return sublevel;
-
-                      const _updatedSections = sublevel.sections.map(
-                        (section: ISection) => {
-                          if (
-                            section.id !== levels[0].modules[0].sections[3].id
-                          )
-                            return section;
-
-                          const _updatedActivities = section.activities.map(
-                            (activity: IActivity) => {
-                              if (activity.id !== activeActivity.id)
-                                return activity;
-
-                              const updatedProgress = {
-                                ...activity.nameAndSoundActivityProgress,
-                              } as ILetterSoundAndNameProgress;
-
-                              if (isLowercase && updatedProgress) {
-                                updatedProgress.lowercaseSoundCount += 1;
-                              } else if (!isLowercase && updatedProgress) {
-                                updatedProgress.uppercaseSoundCount += 1;
-                              }
-
-                              return {
-                                ...activity,
-                                nameAndSoundActivityProgress: {
-                                  ...updatedProgress,
-                                },
-                              };
-                            },
-                          );
-
-                          return {
-                            ...section,
-                            activities: _updatedActivities,
-                          };
-                        },
-                      );
-
-                      return {
-                        ...sublevel,
-                        sections: _updatedSections,
-                      };
-                    });
-
-                    return {
-                      ...level,
-                      modules: _updatedModules,
-                    };
-                  });
-                  playSound();
-
-                  router.push({
-                    pathname: "/modal",
-                    params: {
-                      correctOption: option.title,
-                    },
-                  });
-                  setTimeout(() => {
-                    updateLevels(_updatedLevels);
-                    setTappedAnswer(undefined);
-                    initNextActivity();
-                    router.back();
-                  }, FIVE_SEC);
-                } else {
-                  setIncorrectAnswers((prevIncorrectAnswers) => [
-                    ...prevIncorrectAnswers,
-                    option.id,
-                  ]);
-                }
-              }}
-              className={clsx(
-                "absolute flex  size-24 items-center justify-center rounded-full bg-colors-purple-200",
-                {
-                  "left-10 top-40": index === 0,
-                  "left-36 top-72": index === 1,
-                  "right-0 top-40": index === 2,
-                  " bg-red-500 text-white":
-                    // isUpdatingSession &&
-                    // option.id === tappedAnswer?.id &&
-                    incorrectAnswers.includes(option.id),
-                  // activeActivity.correctAnswer.id !== tappedAnswer.id,
-                  "text-green-400":
-                    option.id === tappedAnswer?.id &&
-                    activeActivity.correctAnswer.id === tappedAnswer.id,
-                },
-              )}
-            >
-              <Text
-                className={clsx("text-4xl font-bold  text-colors-purple-500", {
-                  "  text-white":
-                    (option.id === tappedAnswer?.id &&
-                      activeActivity.correctAnswer.id !== tappedAnswer.id) ||
-                    incorrectAnswers.includes(option.id),
-                })}
-              >
-                {isLowercase
-                  ? option.title.toLowerCase()
-                  : option.title.toUpperCase()}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
+        <WordChoiceScreen
+          wordSets={generatedLetterSets}
+          colors={sectionColorTheme}
+          renderFrontCard={RenderFrontCard}
+          renderBackCard={RenderBackCard}
+          renderOption={RenderOption}
+        />
       </View>
     </SafeAreaView>
   );
 };
 
-export default LetterName;
+export default LetterNameScreen;

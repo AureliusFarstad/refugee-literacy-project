@@ -11,7 +11,7 @@ import { PencilIcon } from "@/ui/icons/bottom-tab/pencil-icon";
 import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
 import { IS_IOS } from "@/utils/layout";
 
-const sectionColor = SECTION_COLORS.alphabet;
+export const SECTION_COLOR = SECTION_COLORS.alphabet;
 
 type TabType = {
   name: string;
@@ -55,7 +55,7 @@ export default function LevelTwoTabLayout() {
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: sectionColor.primary,
+          backgroundColor: SECTION_COLOR.primary,
           paddingTop: IS_IOS ? 16 : 4,
           height: IS_IOS ? 108 : 80,
           paddingHorizontal: 12,
@@ -77,7 +77,7 @@ export default function LevelTwoTabLayout() {
               tabBarIcon: ({ focused }) => (
                 <TabIconWrapper
                   focused={focused}
-                  sectionColor={sectionColor}
+                  sectionColor={SECTION_COLOR}
                   icon={icon}
                 />
               ),
