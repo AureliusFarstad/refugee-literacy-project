@@ -5,13 +5,10 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-import {
-  ALPHABET_LETTER_LIST_BY_LEVEL,
-} from "@/assets/alphabet";
-import {
-  ALPHABET_AUDIO_SOURCES
-} from "@/assets/alphabet_sounds";
+import { ALPHABET_LETTER_LIST_BY_LEVEL } from "@/assets/alphabet";
+import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
 import type { SectionColorTheme } from "@/constants/routes";
+import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { WordChoiceScreen } from "@/ui/components/multiple-choice";
 import type { WordSet } from "@/ui/components/multiple-choice/types";
@@ -19,11 +16,10 @@ import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { NameButton } from "@/ui/icons/circular/name-button";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
-import { APP_COLORS } from "@/constants/routes";
-import { NameButton } from "@/ui/icons/circular/name-button";
 
 // TODO: Refactor this color logic...
 const sectionColorTheme: SectionColorTheme = {
@@ -38,8 +34,8 @@ const sectionColorTheme: SectionColorTheme = {
 };
 
 // TODO: Not sure if we want to generate these or have a static list.
-const generatedLetterSets: WordSet[] = ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1.map(
-  (letter: string) => {
+const generatedLetterSets: WordSet[] =
+  ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1.map((letter: string) => {
     return {
       correctAnswer: letter,
       options: ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1.filter(
@@ -48,8 +44,7 @@ const generatedLetterSets: WordSet[] = ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1.map
         .slice(0, 2)
         .concat(letter),
     };
-  },
-);
+  });
 
 // TODO: Refactor this out to _layout?
 const buttonStyles: ButtonColorProps = {
