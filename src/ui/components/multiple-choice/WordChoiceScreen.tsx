@@ -68,6 +68,7 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
       flexDirection: "column",
       justifyContent: "space-evenly", // Change from space-between to center
       backgroundColor: colors.appBackgroundColor,
+      zIndex: 0,
     },
   });
 
