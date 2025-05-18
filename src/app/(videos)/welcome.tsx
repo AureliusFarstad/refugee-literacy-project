@@ -1,0 +1,76 @@
+import welcome from "assets/videos/welcome-dict";
+import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { APP_COLORS } from "@/constants/routes";
+import type { AnimationCollection } from "@/ui/components/interactive-video-player";
+import InteractiveVideoPlayer from "@/ui/components/interactive-video-player";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+
+export const screenOptions = {
+  headerShown: false,
+};
+
+// Example usage in your VideoTab component
+const WelcomeVideo = () => {
+  const sectionButtonColorProps: ButtonColorProps = {
+    primaryColor: APP_COLORS.green,
+    secondaryColor: APP_COLORS.lightgreen,
+    offwhiteColor: APP_COLORS.offwhite,
+    offblackColor: APP_COLORS.offblack,
+    backgroundColor: APP_COLORS.backgroundgrey,
+  };
+
+  const welcomeAnimationCollection: AnimationCollection = {
+    svgatorDict: welcome,
+    segments: [
+      {
+        audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partA.mp3"),
+        svgatorDictKey: "welcome_screen_1",
+        animationDuration: 0,
+      },
+      {
+        audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partB.mp3"),
+        svgatorDictKey: "welcome_screen_2",
+        animationDuration: 0,
+      },
+      {
+        audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partC.mp3"),
+        svgatorDictKey: "welcome_screen_3",
+        animationDuration: 6000,
+      },
+      {
+        audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partD.mp3"),
+        svgatorDictKey: "welcome_screen_4",
+        animationDuration: 0,
+      },
+      {
+        audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partE.mp3"),
+        svgatorDictKey: "welcome_screen_5",
+        animationDuration: 0,
+      },
+    ],
+  };
+
+  return (
+    <SafeAreaView
+      style={styles.container}
+      edges={["right", "bottom", "left"]} // Exclude 'top' edge
+    >
+      <InteractiveVideoPlayer
+        animationCollection={welcomeAnimationCollection}
+        buttonColorProps={sectionButtonColorProps}
+      />
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: APP_COLORS.offwhite,
+    marginBottom: -40,
+  },
+});
+
+export default WelcomeVideo;

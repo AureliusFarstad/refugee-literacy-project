@@ -24,8 +24,8 @@ const tabs: TabType[] = [
     icon: ConversationIcon,
   },
   {
-    name: "video-explanation",
-    label: "video-explanation",
+    name: "video-tab",
+    label: "video-tab",
     icon: TeacherIcon,
   },
   {

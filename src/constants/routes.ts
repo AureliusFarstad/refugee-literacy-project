@@ -12,7 +12,7 @@ export const LESSONS = [
     image: TEACHER_TIP_IMAGE,
     title: "Teacher tip",
     description: "Section 1 Introduction to the alphabet",
-    path: "teacher-tip-modal",
+    path: "/(videos)/little-and-often",
     isFinished: true,
     progressBarColor: "bg-[#2B4AB0]",
   },

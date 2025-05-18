@@ -70,44 +70,31 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(level-one)" options={{ headerShown: false }} />
       <Stack.Screen name="(level-two)" options={{ headerShown: false }} />
       <Stack.Screen name="(level-three)" options={{ headerShown: false }} />
       <Stack.Screen name="(level-four)" options={{ headerShown: false }} />
+      {/* Define video screens (maybe don't need this:) */}
       <Stack.Screen
-        name="modal"
+        name="(videos)/welcome"
         options={{
           animation: "slide_from_bottom",
-          presentation: "containedModal",
+          presentation: "fullScreenModal",
           headerShown: false,
           headerShadowVisible: false,
         }}
       />
       <Stack.Screen
-        name="welcome-screen-modal"
+        name="(videos)/little-and-often"
         options={{
           animation: "slide_from_bottom",
-          presentation: "containedModal",
-          headerShown: false,
-          headerShadowVisible: false,
-        }}
-      />
-      <Stack.Screen
-        name="teacher-tip-modal"
-        options={{
-          animation: "slide_from_bottom",
-          presentation: "containedModal",
-          headerShown: false,
-          headerShadowVisible: false,
-        }}
-      />
-      <Stack.Screen
-        name="video-animation"
-        options={{
-          animation: "slide_from_bottom",
-          presentation: "containedModal",
+          presentation: "fullScreenModal",
           headerShown: false,
           headerShadowVisible: false,
         }}
