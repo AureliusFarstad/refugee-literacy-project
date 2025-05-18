@@ -126,7 +126,7 @@ const VideoPlayer = forwardRef(
       restart: () => {
         console.log("=== RESTART METHOD CALLED ===");
         injectJavaScript(`
-          console.log('--- PAUSE DEBUG START ---');
+          console.log('--- RESTART DEBUG START ---');
           const svg = document.querySelector('svg');
           
           if (!svg) {
