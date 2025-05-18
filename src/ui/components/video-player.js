@@ -226,9 +226,8 @@ const VideoPlayer = forwardRef(
           console.log('=== SETUP DEBUG END ===');
         `);
       }
-
-    // Dependency missing: injectJavaScript
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // Dependency missing: injectJavaScript
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isWebViewReady]);
 
     const { newProps, styles } = SVGatorPlayer.getWebViewProps(
