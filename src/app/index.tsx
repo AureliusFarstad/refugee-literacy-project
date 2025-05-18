@@ -14,7 +14,7 @@ const HomeHeader = () => {
   return (
     <Pressable
       onPress={() => {
-        router.push("/welcome-screen-modal");
+        router.push("/(videos)/welcome");
       }}
     >
       <View className="mb-10 flex w-full items-center">
@@ -45,7 +45,6 @@ const Home = () => {
         className="flex px-5"
         onPress={() => {
           router.push(item.path as never);
-          // router.push("/modal")
         }}
       >
         <View className="flex flex-row">

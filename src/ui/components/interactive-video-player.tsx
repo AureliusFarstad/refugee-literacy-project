@@ -1,369 +1,444 @@
+/* eslint-disable unused-imports/no-unused-vars */
+// TODO: Resolve eventually:
+// 117:5   error  'resumeSound' is assigned a value but never used. Allowed unused vars must match /^_/u                            unused-imports/no-unused-vars
+// 120:16  error  'isAudioPlaying' is assigned a value but never used. Allowed unused vars must match /^_/u                         unused-imports/no-unused-vars
+
+import welcome from "assets/videos/welcome-dict";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Animated, Pressable, StyleSheet, View } from "react-native";
 import { Slider } from "react-native-awesome-slider";
 import { useSharedValue } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import useSound from "@/core/hooks/useSound";
+import { APP_COLORS } from "@/constants/routes";
+import useSound from "@/core/hooks/useSoundExtended";
+import VideoPlayer from "@/ui/components/video-player";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { HomeButton } from "@/ui/icons/circular/home-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
 
-// Types
-export type VideoInput = {
-  audio: string;
-  svgator: string;
+const defaultButtonColorProps: ButtonColorProps = {
+  primaryColor: APP_COLORS.green,
+  secondaryColor: APP_COLORS.lightgreen,
+  offwhiteColor: APP_COLORS.offwhite,
+  offblackColor: APP_COLORS.offblack,
+  backgroundColor: APP_COLORS.backgroundgrey,
 };
 
-export interface InteractiveVideoPlayerRef {
-  play?: () => void;
-  pause?: () => void;
-  reset?: () => void;
+interface VideoPlayerRef {
+  play: () => void;
+  pause: () => void;
+  restart: () => void;
 }
 
-interface InteractiveVideoPlayerProps {
-  videoInputs: VideoInput[];
-  buttonColorProps: ButtonColorProps;
-  videoComponent: React.ComponentType<any>;
-  slideDuration?: number; // Duration in milliseconds (default: 10000)
-  onComplete?: () => void;
-  onSlideChange?: (currentSlide: VideoInput, index: number) => void;
-  showHomeButton?: boolean;
-  onHomePress?: () => void;
-  playButtonColor?: string;
-  playButtonSize?: number;
+interface AnimationSegment {
+  audio: any;
+  svgatorDictKey: string;
+  animationDuration: number;
+}
+interface SvgatorDictionary {
+  [key: string]: string;
 }
 
-const SIZE = 40;
+export interface AnimationCollection {
+  svgatorDict: SvgatorDictionary;
+  segments: AnimationSegment[];
+}
 
-const InteractiveVideoPlayer = forwardRef<
-  InteractiveVideoPlayerRef,
-  InteractiveVideoPlayerProps
->(
-  (
+const defaultAnimationCollection: AnimationCollection = {
+  svgatorDict: welcome,
+  segments: [
     {
-      videoInputs,
-      buttonColorProps,
-      videoComponent: VideoComponent,
-      slideDuration = 10000,
-      onComplete,
-      onSlideChange,
-      showHomeButton = true,
-      onHomePress,
-      playButtonColor = "#FBD65B",
-      playButtonSize = 80,
+      audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partA.mp3"),
+      svgatorDictKey: "welcome_screen_1",
+      animationDuration: 0,
     },
-    ref,
-  ) => {
-    const videoRef = useRef<any>(null);
-    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-    const [showOverlay, setShowOverlay] = useState(true);
-    const [isAnimating, setIsAnimating] = useState(false);
-    const overlayOpacity = useRef(new Animated.Value(1)).current;
-    const lastSlideTimer = useRef<number | null>(null);
+    {
+      audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partB.mp3"),
+      svgatorDictKey: "welcome_screen_2",
+      animationDuration: 0,
+    },
+    {
+      audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partC.mp3"),
+      svgatorDictKey: "welcome_screen_3",
+      animationDuration: 6000,
+    },
+    {
+      audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partD.mp3"),
+      svgatorDictKey: "welcome_screen_4",
+      animationDuration: 0,
+    },
+  ],
+};
 
-    // Slider state
-    const progressValue = useSharedValue(0);
-    const min = useSharedValue(0);
-    const max = useSharedValue(Math.max(0, videoInputs.length - 1));
+const InteractiveVideoPlayer = ({
+  animationCollection = defaultAnimationCollection,
+  buttonColorProps = defaultButtonColorProps,
+}: {
+  animationCollection?: AnimationCollection;
+  buttonColorProps?: ButtonColorProps;
+}) => {
+  const navigateToHome = () => {
+    router.navigate({
+      pathname: "/",
+    });
+  };
 
-    // Animation timers
-    const animationTimers = useRef<number[]>([]);
+  const homeColorProps: ButtonColorProps = {
+    primaryColor: APP_COLORS.green,
+    secondaryColor: APP_COLORS.lightgreen,
+    offwhiteColor: APP_COLORS.offwhite,
+    offblackColor: APP_COLORS.offblack,
+    backgroundColor: APP_COLORS.backgroundgrey,
+  };
 
-    const { playSound } = useSound();
+  // Player state management
+  const [currentSegmentIndex, setCurrentSegmentIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(true);
+  const [svgContent, setSvgContent] = useState<string | null>(null);
 
-    // Current slide data
-    const currentSlide = videoInputs[currentSlideIndex] || videoInputs[0];
+  // Completion tracking
+  const [audioCompleted, setAudioCompleted] = useState(false);
+  const [animationCompleted, setAnimationCompleted] = useState(false);
+  const nextSegmentTimerRef = useRef<number | null>(null);
 
-    // Update progress when slide changes
-    useEffect(() => {
-      progressValue.value = currentSlideIndex;
-    }, [currentSlideIndex, progressValue]);
+  // Animation for the overlay
+  const overlayOpacityValue = useRef(new Animated.Value(1)).current;
+  const overlayOpacity = overlayOpacityValue;
 
-    // Update max value when videoInputs change
-    useEffect(() => {
-      max.value = Math.max(0, videoInputs.length - 1);
-    }, [videoInputs.length, max]);
+  // Player reference for play/pause control
+  const playerRef = useRef<VideoPlayerRef>(null);
 
-    // Call onSlideChange when slide changes
-    useEffect(() => {
-      if (onSlideChange && currentSlide) {
-        onSlideChange(currentSlide, currentSlideIndex);
+  // Audio management using the useSound hook
+  // @ts-ignore
+  const {
+    playSound,
+    stopSound,
+    pauseSound,
+    // @ts-ignore - unused var
+    resumeSound,
+    cleanup,
+    // @ts-ignore -
+    isPlaying: isAudioPlaying,
+  } = useSound();
+
+  // Add a timer reference to track animation completion
+  const animationTimerRef = useRef<number | null>(null);
+
+  // 1. Segment loading useEffect - loads content and auto-plays if needed
+  useEffect(() => {
+    if (!animationCollection) return;
+
+    // Get the current segment
+    const segment = animationCollection.segments[currentSegmentIndex];
+    setSvgContent(animationCollection.svgatorDict[segment.svgatorDictKey]);
+
+    // Clear any pending timers
+    if (nextSegmentTimerRef.current) {
+      clearTimeout(nextSegmentTimerRef.current);
+      nextSegmentTimerRef.current = null;
+    }
+
+    if (animationTimerRef.current) {
+      clearTimeout(animationTimerRef.current);
+      animationTimerRef.current = null;
+    }
+
+    // Stop any existing audio
+    stopSound();
+
+    // Reset completion tracking
+    setAudioCompleted(false);
+
+    // IMPORTANT: For animation with duration 0, immediately set as completed
+    // Do this BEFORE any other animation logic
+    if (segment.animationDuration === 0) {
+      console.log("Setting animation completed to true for zero duration");
+      setAnimationCompleted(true);
+    } else {
+      // Only reset animation completed if we have an actual animation
+      setAnimationCompleted(false);
+    }
+
+    // Auto-play for any segment change if we're in playing mode
+    if (isPlaying && currentSegmentIndex > 0) {
+      // Short timeout to ensure content is loaded
+      const timeoutId = setTimeout(() => {
+        setShowOverlay(false);
+
+        // Only start animation if it has a duration
+        if (segment.animationDuration > 0 && playerRef.current) {
+          playerRef.current.play();
+
+          // Set a timer to mark animation as complete after the duration
+          animationTimerRef.current = setTimeout(() => {
+            console.log("Animation timer completed");
+            setAnimationCompleted(true);
+          }, segment.animationDuration);
+        } else {
+          setAnimationCompleted(true);
+        }
+
+        // Play audio
+        if (segment.audio) {
+          playSound(segment.audio)
+            .then((sound) => {
+              if (sound) {
+                sound.setOnPlaybackStatusUpdate((status) => {
+                  if (status.isLoaded && status.didJustFinish) {
+                    console.log("Audio completed");
+                    setAudioCompleted(true);
+                  }
+                });
+              }
+            })
+            .catch((error) => {
+              console.error("Error playing sound:", error);
+              setAudioCompleted(true);
+            });
+        } else {
+          setAudioCompleted(true);
+        }
+      }, 50);
+
+      return () => {
+        clearTimeout(timeoutId);
+        if (animationTimerRef.current) {
+          clearTimeout(animationTimerRef.current);
+        }
+      };
+    }
+  }, [
+    currentSegmentIndex,
+    animationCollection,
+    isPlaying,
+    stopSound,
+    playSound,
+  ]);
+
+  // Handle play button press
+  const handlePlay = useCallback(() => {
+    const currentSegment = animationCollection.segments[currentSegmentIndex];
+
+    // Set playing state
+    setIsPlaying(true);
+    setShowOverlay(false);
+
+    // Only play animation if it has a duration
+    if (currentSegment.animationDuration > 0 && playerRef.current) {
+      playerRef.current.restart();
+
+      // Clear any existing animation timer
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
       }
-    }, [currentSlide, currentSlideIndex, onSlideChange]);
 
-    // Expose methods to parent component
-    useImperativeHandle(ref, () => ({
-      play: initAnimation,
-      pause: handlePause,
-      reset: resetToInitialState,
-    }));
+      // Set a timer to mark animation as complete after the duration
+      animationTimerRef.current = setTimeout(() => {
+        console.log("Play button: Animation timer completed");
+        setAnimationCompleted(true);
+      }, currentSegment.animationDuration);
+    }
+    // For zero-duration, we already set animationCompleted to true in the segment loading effect
 
-    // Clear all animation timers
-    const clearAllTimers = useCallback(() => {
-      animationTimers.current.forEach((timer) => clearTimeout(timer));
-      animationTimers.current = [];
+    // Play audio
+    if (currentSegment.audio) {
+      playSound(currentSegment.audio)
+        .then((sound) => {
+          if (sound) {
+            sound.setOnPlaybackStatusUpdate((status) => {
+              if (status.isLoaded && status.didJustFinish) {
+                console.log("Play button: Audio completed");
+                setAudioCompleted(true);
+              }
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error playing sound:", error);
+          setAudioCompleted(true);
+        });
+    } else {
+      setAudioCompleted(true);
+    }
+  }, [currentSegmentIndex, animationCollection, playSound]);
 
-      if (lastSlideTimer.current) {
-        clearTimeout(lastSlideTimer.current);
-        lastSlideTimer.current = null;
-      }
-    }, []);
-
-    const resetToInitialState = useCallback(() => {
-      clearAllTimers();
+  // Handle pause button press
+  const handlePause = useCallback(() => {
+    if (playerRef.current) {
+      // Call pause command on the player reference
+      playerRef.current.pause();
+      setIsPlaying(false);
       setShowOverlay(true);
-      setIsAnimating(false);
-      setCurrentSlideIndex(0);
-      progressValue.value = 0;
 
-      Animated.timing(overlayOpacity, {
+      // Pause audio if playing
+      pauseSound();
+
+      // Clear animation completion timer when paused
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
+        animationTimerRef.current = null;
+      }
+    }
+  }, [pauseSound]);
+
+  // Cleanup audio and timers when component unmounts
+  useEffect(() => {
+    return () => {
+      cleanup();
+      // Clear any pending timers
+      if (nextSegmentTimerRef.current) {
+        clearTimeout(nextSegmentTimerRef.current);
+      }
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
+      }
+    };
+  }, [cleanup]);
+
+  // Keep the animation complete handler as a fallback
+  // but don't rely on it as the primary mechanism
+  const handleAnimationComplete = useCallback(() => {
+    console.log("Animation complete callback fired");
+    setAnimationCompleted(true);
+  }, []);
+
+  // Handle overlay visibility changes
+  useEffect(() => {
+    if (showOverlay) {
+      // Show overlay with animation
+      overlayOpacityValue.setValue(0);
+      Animated.timing(overlayOpacityValue, {
         toValue: 1,
         duration: 300,
         useNativeDriver: true,
       }).start();
-    }, [clearAllTimers, overlayOpacity, progressValue]);
+    } else {
+      // Hide overlay with animation
+      Animated.timing(overlayOpacityValue, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [showOverlay, overlayOpacityValue]);
 
-    const playSlide = useCallback(
-      (slide: VideoInput, index: number) => {
-        setCurrentSlideIndex(index);
-
-        setTimeout(() => {
-          if (videoRef.current?.play) {
-            videoRef.current.play();
-          }
-
-          if (slide.audio) {
-            const audioSource = slide.audio;
-            playSound(audioSource);
-          }
-        }, 1000);
-      },
-      [playSound],
-    );
-
-    const initAnimation = useCallback(() => {
-      try {
-        // Clear any existing timers
-        clearAllTimers();
-
-        // Hide overlay and start animations
-        setIsAnimating(true);
-        setShowOverlay(false);
-
-        // Fade out overlay
-        Animated.timing(overlayOpacity, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }).start();
-
-        // Reset to first slide
-        setCurrentSlideIndex(0);
-        progressValue.value = 0;
-
-        // Set up animation sequence
-        videoInputs.forEach((slide, index) => {
-          const timer = setTimeout(() => {
-            playSlide(slide, index);
-          }, index * slideDuration);
-
-          animationTimers.current.push(timer);
-        });
-
-        // Set a timer for when all animations should be completed
-        const totalDuration = videoInputs.length * slideDuration;
-        lastSlideTimer.current = setTimeout(() => {
-          if (onComplete) {
-            onComplete();
-          }
-          resetToInitialState();
-        }, totalDuration);
-      } catch (error) {
-        console.error("Error in initAnimation:", error);
-        resetToInitialState();
-      }
-    }, [
-      clearAllTimers,
-      overlayOpacity,
-      progressValue,
-      videoInputs,
-      slideDuration,
-      playSlide,
-      onComplete,
-      resetToInitialState,
-    ]);
-
-    // Handle slider value change
-    const handleSliderChange = useCallback(
-      (value: number) => {
-        // Clear existing timers
-        clearAllTimers();
-
-        // Move to the selected slide
-        const slideIndex = Math.floor(value);
-        if (slideIndex >= 0 && slideIndex < videoInputs.length) {
-          const selectedSlide = videoInputs[slideIndex];
-          playSlide(selectedSlide, slideIndex);
-
-          // Setup remaining slides
-          for (let i = slideIndex + 1; i < videoInputs.length; i++) {
-            const timer = setTimeout(
-              () => {
-                const nextSlide = videoInputs[i];
-                playSlide(nextSlide, i);
-              },
-              (i - slideIndex) * slideDuration,
-            );
-
-            animationTimers.current.push(timer);
-          }
-
-          // Set a timer for when all animations should be completed after slider change
-          const remainingDuration =
-            (videoInputs.length - slideIndex) * slideDuration;
-          lastSlideTimer.current = setTimeout(() => {
-            if (onComplete) {
-              onComplete();
-            }
-            resetToInitialState();
-          }, remainingDuration);
+  // Effect to handle segment completion and advance to next
+  useEffect(() => {
+    if (audioCompleted && animationCompleted && isPlaying) {
+      // Wait 1 second before proceeding to next segment
+      nextSegmentTimerRef.current = setTimeout(() => {
+        if (currentSegmentIndex < animationCollection.segments.length - 1) {
+          // Simply go to next segment - auto-play will happen in the segment loading effect
+          setCurrentSegmentIndex((prev) => prev + 1);
+        } else {
+          // End of all segments, reset to original state
+          setIsPlaying(false);
+          setShowOverlay(true);
+          setCurrentSegmentIndex(0);
         }
-      },
-      [
-        clearAllTimers,
-        videoInputs,
-        slideDuration,
-        playSlide,
-        onComplete,
-        resetToInitialState,
-      ],
-    );
-
-    // Handle tap on the animation area to pause
-    const handlePause = useCallback(() => {
-      if (isAnimating) {
-        setShowOverlay(true);
-        setIsAnimating(false);
-        overlayOpacity.setValue(1);
-
-        // Clear animation timers
-        clearAllTimers();
-      }
-    }, [isAnimating, overlayOpacity, clearAllTimers]);
-
-    const navigateToHome = useCallback(() => {
-      if (onHomePress) {
-        onHomePress();
-      } else {
-        router.navigate({
-          pathname: "/",
-        });
-      }
-    }, [onHomePress]);
-
-    // Don't render if no video inputs
-    if (!videoInputs || videoInputs.length === 0) {
-      return null;
+      }, 1300);
     }
 
-    return (
-      <SafeAreaView style={styles.container}>
-        <View className="flex-row items-center justify-between p-4">
-          <View className="flex-row items-center space-x-4">
-            <Pressable onPress={navigateToHome} className="p-2">
-              <View style={[{ width: SIZE, height: SIZE }]}>
-                <HomeButton {...buttonColorProps} />
-              </View>
-            </Pressable>
-          </View>
-          <View className="flex-1 flex-row items-center pl-2 pr-16">
-            <View style={styles.sliderContainer}>
-              <Slider
-                style={styles.slider}
-                sliderHeight={8}
-                theme={{
-                  bubbleTextColor: buttonColorProps.primaryColor,
-                  minimumTrackTintColor: buttonColorProps.primaryColor,
-                  maximumTrackTintColor: "#D4D4D8",
-                  bubbleBackgroundColor: "#ffffff",
-                }}
-                progress={progressValue}
-                minimumValue={min}
-                maximumValue={max}
-                onSlidingComplete={handleSliderChange}
-                disable={showOverlay || !isAnimating}
-              />
+    return () => {
+      if (nextSegmentTimerRef.current) {
+        clearTimeout(nextSegmentTimerRef.current);
+      }
+    };
+  }, [
+    audioCompleted,
+    animationCompleted,
+    currentSegmentIndex,
+    animationCollection,
+    isPlaying,
+  ]);
+
+  const progressValue = useSharedValue(0);
+  const min = useSharedValue(0);
+  const max = useSharedValue(animationCollection.segments.length - 1);
+
+  useEffect(() => {
+    // Update progress whenever current segment changes
+    progressValue.value = currentSegmentIndex;
+  }, [currentSegmentIndex, progressValue]);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Top Bar */}
+      <View className="flex-row items-center justify-between p-4">
+        {/* Home Button */}
+        <View className="flex-row items-center space-x-4">
+          <Pressable onPress={navigateToHome} className="p-2">
+            <View style={[{ width: 40, height: 40 }]}>
+              <HomeButton {...homeColorProps} />
             </View>
+          </Pressable>
+        </View>
+        {/* Progress Bar */}
+        <View className="flex-1 flex-row items-center pl-2 pr-20">
+          <View style={styles.sliderContainer}>
+            <Slider
+              style={styles.slider}
+              sliderHeight={8}
+              theme={{
+                bubbleTextColor: APP_COLORS.green,
+                minimumTrackTintColor: APP_COLORS.green,
+                maximumTrackTintColor: APP_COLORS.grey,
+                bubbleBackgroundColor: APP_COLORS.offwhite,
+              }}
+              progress={progressValue}
+              minimumValue={min}
+              maximumValue={max}
+            />
           </View>
         </View>
+      </View>
 
-        <View className="flex-1 items-center justify-center">
-          <Pressable
-            style={StyleSheet.absoluteFill}
-            onPress={handlePause}
-            disabled={!isAnimating}
+      {/* Video Screen */}
+      <View className="flex-1 items-center justify-center">
+        {/* Overlay To Pause */}
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={handlePause}
+          disabled={!isPlaying}
+        >
+          {/* Animation Itself */}
+          <VideoPlayer
+            ref={playerRef}
+            // @ts-ignore
+            svgContent={svgContent}
+            onAnimationComplete={handleAnimationComplete}
+          />
+        </Pressable>
+
+        {/* Overlay When Paused */}
+        {showOverlay && (
+          <Animated.View
+            style={[StyleSheet.absoluteFill, { opacity: overlayOpacity }]}
           >
-            <VideoComponent
-              ref={videoRef}
-              svgator={currentSlide.svgator}
-              onAnimationComplete={() => {
-                console.log(
-                  "Animation completed for slide:",
-                  currentSlideIndex,
-                );
-              }}
-            />
-          </Pressable>
-
-          {/* Overlay with play button */}
-          {showOverlay && (
-            <Animated.View
-              style={[StyleSheet.absoluteFill, { opacity: overlayOpacity }]}
+            <BlurView
+              intensity={40}
+              tint="dark"
+              className="absolute size-full items-center justify-center"
             >
-              <BlurView
-                intensity={40}
-                tint="dark"
-                className="absolute size-full items-center justify-center"
-              >
-                <View className="flex flex-row">
-                  <Pressable
-                    onPress={initAnimation}
-                    className="flex items-center justify-center"
-                  >
-                    <PlayButton
-                      backgroundColor={playButtonColor}
-                      offblackColor="black"
-                      offwhiteColor="white"
-                      primaryColor={playButtonColor}
-                      secondaryColor="white"
-                      height={playButtonSize}
-                      width={playButtonSize}
-                    />
-                  </Pressable>
-                  {showHomeButton && (
-                    <Pressable className="ml-4 w-[80]" onPress={navigateToHome}>
-                      <HomeButton {...buttonColorProps} />
-                    </Pressable>
-                  )}
-                </View>
-              </BlurView>
-            </Animated.View>
-          )}
-        </View>
-      </SafeAreaView>
-    );
-  },
-);
+              <View className="flex flex-row">
+                <Pressable
+                  onPress={handlePlay}
+                  className="flex items-center justify-center"
+                >
+                  <PlayButton width={80} height={80} {...buttonColorProps} />
+                </Pressable>
+              </View>
+            </BlurView>
+          </Animated.View>
+        )}
+      </View>
+    </SafeAreaView>
+  );
+};
 
 export default InteractiveVideoPlayer;
 

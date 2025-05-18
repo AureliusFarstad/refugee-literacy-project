@@ -18,7 +18,7 @@ const VideoTab = () => {
   };
 
   // REPLACE with correct SVG animation
-  const imAnimationCollection: AnimationCollection = {
+  const youAnimationCollection: AnimationCollection = {
     svgatorDict: welcome,
     segments: [
       {
@@ -46,7 +46,7 @@ const VideoTab = () => {
 
   return (
     <InteractiveVideoPlayer
-      animationCollection={imAnimationCollection}
+      animationCollection={youAnimationCollection}
       buttonColorProps={sectionButtonColorProps}
     />
   );

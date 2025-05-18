@@ -11,7 +11,7 @@ import { FlashcardIcon } from "@/ui/icons/bottom-tab/flashcard-icon";
 import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
 import { IS_IOS } from "@/utils/layout";
 
-const sectionColor = SECTION_COLORS.vocabulary;
+export const sectionColor = SECTION_COLORS.vocabulary;
 
 // Default color theme
 export const SECTION_COLOR: SectionColorTheme = {
@@ -38,8 +38,8 @@ const tabs: TabType[] = [
     icon: FlashcardIcon,
   },
   {
-    name: "video-explanation",
-    label: "video-explanation",
+    name: "video-tab",
+    label: "video-tab",
     icon: TeacherIcon,
   },
   {

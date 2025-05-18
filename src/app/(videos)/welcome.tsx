@@ -1,24 +1,27 @@
 import welcome from "assets/videos/welcome-dict";
+import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { APP_COLORS } from "@/constants/routes";
 import type { AnimationCollection } from "@/ui/components/interactive-video-player";
 import InteractiveVideoPlayer from "@/ui/components/interactive-video-player";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 
-import { sectionColor } from "./_layout";
+export const screenOptions = {
+  headerShown: false,
+};
 
 // Example usage in your VideoTab component
-const VideoTab = () => {
+const WelcomeVideo = () => {
   const sectionButtonColorProps: ButtonColorProps = {
-    primaryColor: sectionColor.primary,
-    secondaryColor: sectionColor.light,
+    primaryColor: APP_COLORS.green,
+    secondaryColor: APP_COLORS.lightgreen,
     offwhiteColor: APP_COLORS.offwhite,
     offblackColor: APP_COLORS.offblack,
     backgroundColor: APP_COLORS.backgroundgrey,
   };
 
-  // REPLACE with correct SVG animation
-  const imAnimationCollection: AnimationCollection = {
+  const welcomeAnimationCollection: AnimationCollection = {
     svgatorDict: welcome,
     segments: [
       {
@@ -41,15 +44,33 @@ const VideoTab = () => {
         svgatorDictKey: "welcome_screen_4",
         animationDuration: 0,
       },
+      {
+        audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partE.mp3"),
+        svgatorDictKey: "welcome_screen_5",
+        animationDuration: 0,
+      },
     ],
   };
 
   return (
-    <InteractiveVideoPlayer
-      animationCollection={imAnimationCollection}
-      buttonColorProps={sectionButtonColorProps}
-    />
+    <SafeAreaView
+      style={styles.container}
+      edges={["right", "bottom", "left"]} // Exclude 'top' edge
+    >
+      <InteractiveVideoPlayer
+        animationCollection={welcomeAnimationCollection}
+        buttonColorProps={sectionButtonColorProps}
+      />
+    </SafeAreaView>
   );
 };
 
-export default VideoTab;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: APP_COLORS.offwhite,
+    marginBottom: -40,
+  },
+});
+
+export default WelcomeVideo;
