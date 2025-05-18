@@ -89,13 +89,13 @@ const useSound = () => {
       try {
         await soundRef.current.stopAsync();
         await soundRef.current.unloadAsync();
-        
+
         // Force release the reference
         soundRef.current = null;
         isPlayingRef.current = false;
       } catch (error) {
         console.log("Error in cleanup:", error);
-        
+
         // Even if there's an error, force cleanup
         soundRef.current = null;
         isPlayingRef.current = false;

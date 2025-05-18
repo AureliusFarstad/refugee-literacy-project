@@ -3,6 +3,7 @@
 // 117:5   error  'resumeSound' is assigned a value but never used. Allowed unused vars must match /^_/u                            unused-imports/no-unused-vars
 // 120:16  error  'isAudioPlaying' is assigned a value but never used. Allowed unused vars must match /^_/u                         unused-imports/no-unused-vars
 
+import { useIsFocused } from "@react-navigation/native";
 import welcome from "assets/videos/welcome-dict";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
@@ -18,8 +19,6 @@ import VideoPlayer from "@/ui/components/video-player";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { HomeButton } from "@/ui/icons/circular/home-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
-
-import { useIsFocused } from '@react-navigation/native';
 
 const defaultButtonColorProps: ButtonColorProps = {
   primaryColor: APP_COLORS.green,
@@ -131,7 +130,7 @@ const InteractiveVideoPlayer = ({
   // Add a timer reference to track animation completion
   const animationTimerRef = useRef<number | null>(null);
 
-    // Add this at the top of your component
+  // Add this at the top of your component
   const isMountedRef = useRef(true);
 
   // Add this useEffect right after your component is defined
@@ -242,7 +241,7 @@ const InteractiveVideoPlayer = ({
       setIsPlaying(false);
       stopSound();
       pauseSound();
-      
+
       // Clear timers
       if (nextSegmentTimerRef.current) {
         clearTimeout(nextSegmentTimerRef.current);
@@ -252,7 +251,7 @@ const InteractiveVideoPlayer = ({
         clearTimeout(animationTimerRef.current);
         animationTimerRef.current = null;
       }
-      
+
       // Reset state
       setCurrentSegmentIndex(0);
       setShowOverlay(true);
@@ -401,7 +400,7 @@ const InteractiveVideoPlayer = ({
       setIsPlaying(false);
       stopSound();
       cleanup();
-      
+
       // Clear any pending timers
       if (nextSegmentTimerRef.current) {
         clearTimeout(nextSegmentTimerRef.current);
