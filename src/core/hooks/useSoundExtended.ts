@@ -84,8 +84,24 @@ const useSound = () => {
 
   // Cleanup function to stop and unload sound
   const cleanup = useCallback(async () => {
-    await stopSound();
-  }, [stopSound]);
+    // First try the normal way
+    if (soundRef.current) {
+      try {
+        await soundRef.current.stopAsync();
+        await soundRef.current.unloadAsync();
+        
+        // Force release the reference
+        soundRef.current = null;
+        isPlayingRef.current = false;
+      } catch (error) {
+        console.log("Error in cleanup:", error);
+        
+        // Even if there's an error, force cleanup
+        soundRef.current = null;
+        isPlayingRef.current = false;
+      }
+    }
+  }, []);
 
   return {
     playSound,

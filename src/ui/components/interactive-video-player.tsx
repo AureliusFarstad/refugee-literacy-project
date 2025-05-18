@@ -19,6 +19,8 @@ import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { HomeButton } from "@/ui/icons/circular/home-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
 
+import { useIsFocused } from '@react-navigation/native';
+
 const defaultButtonColorProps: ButtonColorProps = {
   primaryColor: APP_COLORS.green,
   secondaryColor: APP_COLORS.lightgreen,
@@ -81,6 +83,7 @@ const InteractiveVideoPlayer = ({
   buttonColorProps?: ButtonColorProps;
 }) => {
   const navigateToHome = () => {
+    stopSound(); // Stop audio explicitly before navigation
     router.navigate({
       pathname: "/",
     });
@@ -127,6 +130,17 @@ const InteractiveVideoPlayer = ({
 
   // Add a timer reference to track animation completion
   const animationTimerRef = useRef<number | null>(null);
+
+    // Add this at the top of your component
+  const isMountedRef = useRef(true);
+
+  // Add this useEffect right after your component is defined
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // 1. Segment loading useEffect - loads content and auto-plays if needed
   useEffect(() => {
@@ -219,6 +233,34 @@ const InteractiveVideoPlayer = ({
     playSound,
   ]);
 
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (!isFocused && isPlaying) {
+      console.log("Screen lost focus - pausing all activity");
+      // Stop everything
+      setIsPlaying(false);
+      stopSound();
+      pauseSound();
+      
+      // Clear timers
+      if (nextSegmentTimerRef.current) {
+        clearTimeout(nextSegmentTimerRef.current);
+        nextSegmentTimerRef.current = null;
+      }
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
+        animationTimerRef.current = null;
+      }
+      
+      // Reset state
+      setCurrentSegmentIndex(0);
+      setShowOverlay(true);
+      setAudioCompleted(false);
+      setAnimationCompleted(false);
+    }
+  }, [isFocused, isPlaying, stopSound, pauseSound]);
+
   // Handle play button press
   const handlePlay = useCallback(() => {
     const currentSegment = animationCollection.segments[currentSegmentIndex];
@@ -285,20 +327,6 @@ const InteractiveVideoPlayer = ({
     }
   }, [pauseSound]);
 
-  // Cleanup audio and timers when component unmounts
-  useEffect(() => {
-    return () => {
-      cleanup();
-      // Clear any pending timers
-      if (nextSegmentTimerRef.current) {
-        clearTimeout(nextSegmentTimerRef.current);
-      }
-      if (animationTimerRef.current) {
-        clearTimeout(animationTimerRef.current);
-      }
-    };
-  }, [cleanup]);
-
   // Keep the animation complete handler as a fallback
   // but don't rely on it as the primary mechanism
   const handleAnimationComplete = useCallback(() => {
@@ -364,6 +392,27 @@ const InteractiveVideoPlayer = ({
     // Update progress whenever current segment changes
     progressValue.value = currentSegmentIndex;
   }, [currentSegmentIndex, progressValue]);
+
+  // Replace or enhance your existing cleanup useEffect
+  useEffect(() => {
+    return () => {
+      console.log("Component unmounting - performing cleanup");
+      // Stop any playing sounds
+      setIsPlaying(false);
+      stopSound();
+      cleanup();
+      
+      // Clear any pending timers
+      if (nextSegmentTimerRef.current) {
+        clearTimeout(nextSegmentTimerRef.current);
+        nextSegmentTimerRef.current = null;
+      }
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
+        animationTimerRef.current = null;
+      }
+    };
+  }, [cleanup, stopSound]);
 
   return (
     <SafeAreaView style={styles.container}>
