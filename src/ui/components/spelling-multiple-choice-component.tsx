@@ -485,7 +485,6 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 
   const currentColors = getButtonColorProps();
 
-
   return (
     <GestureDetector gesture={gesture}>
       <Reanimated.View
@@ -970,54 +969,50 @@ const SpellingMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
       {/* Button Pool */}
       <View style={styles.buttonPool}>
         <View style={styles.buttonRow}>
-          {availableButtons
-            .slice(0, 3)
-            .map((item: ButtonItem) => (
-              <DraggableButton
-                key={`${item.id}`}
-                item={item}
-                onAudioPlay={() => playAudio(item.audioFile, item.id)}
-                onDragStart={() => setIsCardActive(true)}
-                onDragEnd={(pos, isInTarget) =>
-                  handleDragEnd(pos, item.id, isInTarget, CORRECT_BUTTON_ID)
-                }
-                buttonColor={buttonColor}
-                targetPosition={targetPosition}
-                destinationArea={destinationArea}
-                isPlaced={placedButtonId === item.id}
-                isCorrect={placedButtonId === item.id ? isCorrectAnswer : null}
-                disabled={disabledButtons.includes(item.id)}
-                isPlaying={playingButtonId === item.id}
-                onMarkDisabled={(buttonId: string) =>
-                  setDisabledButtons((prev) => [...prev, buttonId])
-                }
-              />
-            ))}
+          {availableButtons.slice(0, 3).map((item: ButtonItem) => (
+            <DraggableButton
+              key={`${item.id}`}
+              item={item}
+              onAudioPlay={() => playAudio(item.audioFile, item.id)}
+              onDragStart={() => setIsCardActive(true)}
+              onDragEnd={(pos, isInTarget) =>
+                handleDragEnd(pos, item.id, isInTarget, CORRECT_BUTTON_ID)
+              }
+              buttonColor={buttonColor}
+              targetPosition={targetPosition}
+              destinationArea={destinationArea}
+              isPlaced={placedButtonId === item.id}
+              isCorrect={placedButtonId === item.id ? isCorrectAnswer : null}
+              disabled={disabledButtons.includes(item.id)}
+              isPlaying={playingButtonId === item.id}
+              onMarkDisabled={(buttonId: string) =>
+                setDisabledButtons((prev) => [...prev, buttonId])
+              }
+            />
+          ))}
         </View>
         <View style={styles.buttonRow}>
-          {availableButtons
-            .slice(3, 5)
-            .map((item: ButtonItem) => (
-              <DraggableButton
-                key={`${item.id}`}
-                item={item}
-                onAudioPlay={() => playAudio(item.audioFile, item.id)}
-                onDragStart={() => setIsCardActive(true)}
-                onDragEnd={(pos, isInTarget) =>
-                  handleDragEnd(pos, item.id, isInTarget, CORRECT_BUTTON_ID)
-                }
-                buttonColor={buttonColor}
-                targetPosition={targetPosition}
-                destinationArea={destinationArea}
-                isPlaced={placedButtonId === item.id}
-                isCorrect={placedButtonId === item.id ? isCorrectAnswer : null}
-                disabled={disabledButtons.includes(item.id)}
-                isPlaying={playingButtonId === item.id}
-                onMarkDisabled={(buttonId: string) =>
-                  setDisabledButtons((prev) => [...prev, buttonId])
-                }
-              />
-            ))}
+          {availableButtons.slice(3, 5).map((item: ButtonItem) => (
+            <DraggableButton
+              key={`${item.id}`}
+              item={item}
+              onAudioPlay={() => playAudio(item.audioFile, item.id)}
+              onDragStart={() => setIsCardActive(true)}
+              onDragEnd={(pos, isInTarget) =>
+                handleDragEnd(pos, item.id, isInTarget, CORRECT_BUTTON_ID)
+              }
+              buttonColor={buttonColor}
+              targetPosition={targetPosition}
+              destinationArea={destinationArea}
+              isPlaced={placedButtonId === item.id}
+              isCorrect={placedButtonId === item.id ? isCorrectAnswer : null}
+              disabled={disabledButtons.includes(item.id)}
+              isPlaying={playingButtonId === item.id}
+              onMarkDisabled={(buttonId: string) =>
+                setDisabledButtons((prev) => [...prev, buttonId])
+              }
+            />
+          ))}
         </View>
       </View>
     </GestureHandlerRootView>
