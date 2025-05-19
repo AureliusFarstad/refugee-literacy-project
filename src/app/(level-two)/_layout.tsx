@@ -1,5 +1,5 @@
-import { Tabs } from "expo-router";
-import React from "react";
+import { Tabs, useRouter } from "expo-router";
+import React, { useEffect } from "react";
 import type { JSX } from "react/jsx-runtime";
 
 import type { SectionColorTheme } from "@/constants/routes";
@@ -10,7 +10,7 @@ import { EarIcon } from "@/ui/icons/bottom-tab/ear-icon";
 import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
 import { IS_IOS } from "@/utils/layout";
 
-const sectionColor = SECTION_COLORS.blending;
+export const sectionColor = SECTION_COLORS.blending;
 
 // Default color theme
 export const SECTION_COLOR: SectionColorTheme = {
@@ -47,13 +47,22 @@ const tabs: TabType[] = [
     icon: DragIcon,
   },
   {
-    name: "spelling",
-    label: "spelling",
+    name: "spelling-drag-and-drop",
+    label: "spelling-drag-and-drop",
     icon: DragIcon,
   },
 ];
 
 export default function LevelTwoTabLayout() {
+  const router = useRouter();
+
+  // TODO: Wants to go to tab "spelling" - Unless I include this code...
+  // Need help from Om
+  useEffect(() => {
+    // Force navigation to the correct tab on mount
+    router.replace("/(level-two)/blending-flashcard");
+  }, [router]);
+
   return (
     <Tabs
       initialRouteName="blending-flashcard"
