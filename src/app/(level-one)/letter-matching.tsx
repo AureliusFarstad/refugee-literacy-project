@@ -159,11 +159,15 @@ const LetterTapMatching = () => {
           left: selectedLeft.id,
           right: letter.id,
         });
-        setTimeout(() => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => {
           setIncorrectMatch({
             left: null,
             right: null,
           });
+          timeoutRef.current = null;
         }, 500);
       }
       setSelectedLeft(null);
