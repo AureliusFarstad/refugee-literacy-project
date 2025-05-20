@@ -164,17 +164,6 @@ const LetterFormation = () => {
             </View>
           </AnimatedAudioButton>
         </View>
-        {/* <TouchableOpacity
-              onPress={() => {
-                setIsOverlayAnimation(true);
-                setTimeout(() => {
-                  animatedLetterRef.current?.animateLowercase();
-                }, 2000);
-              }}
-              className=" ml-2 flex size-[80] items-center justify-center  rounded-full bg-colors-purple-500"
-            >
-              <CustomPencilIcon size={44} />
-            </TouchableOpacity> */}
         <View style={styles.card}>
           <View style={styles.letterOffset}>
             <OverlayLetterAnimation
