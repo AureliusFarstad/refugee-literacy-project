@@ -1007,7 +1007,7 @@ const Screen = () => {
           title="Audio Multiple Choice"
           isPlaying={isPlaying}
           onPressGuide={playGuideAudio}
-          colorType="DEFAULT"
+          showLetterCaseSwitch={false}
         />
         <DraggableAudioGame />
       </View>

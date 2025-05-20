@@ -480,7 +480,7 @@ const Screen = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
-          colorType="NATIVE_BUTTON_COLOR"
+          showLetterCaseSwitch={false}
         />
         <View style={styles.overflowContainer}>
           {/* Bottom-anchored content that can overflow at the top */}

@@ -600,7 +600,7 @@ function Listening() {
         title="Sound"
         isPlaying={isPlaying}
         onPressGuide={playGuideAudio}
-        colorType="NATIVE_BUTTON_COLOR"
+        showLetterCaseSwitch={false}
       />
 
       <View className="flex h-20 flex-row items-center bg-[#F2EFF0] px-4">

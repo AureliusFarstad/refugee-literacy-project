@@ -120,12 +120,12 @@ const LetterFormation = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="bg-[#FAFAFA]">
       <GuidanceAudioHeader
         title="Formation"
         onPressGuide={playGuideAudio}
         isPlaying={isPlayingGuidanceAudio}
-        colorType="NATIVE_BUTTON_COLOR"
+        showLetterCaseSwitch={true}
       />
       <View
         style={[

@@ -57,7 +57,7 @@ export default function FlashCardContainer() {
         title="Sound"
         isPlaying={isPlayingGuidanceAudio}
         onPressGuide={playGuideAudio}
-        colorType="NATIVE_BUTTON_COLOR"
+        showLetterCaseSwitch={true}
       />
       <View className="flex size-full items-center">
         <FlatList

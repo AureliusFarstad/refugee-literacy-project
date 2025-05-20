@@ -51,7 +51,6 @@ const Spelling = () => {
         title="Sound"
         isPlaying={isPlayingGuidanceAudio}
         onPressGuide={playGuideAudio}
-        colorType="DEFAULT"
       />
 
       <View className="flex h-full items-center ">

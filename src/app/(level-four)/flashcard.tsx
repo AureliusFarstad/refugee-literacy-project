@@ -86,7 +86,7 @@ export default function FlashCardContainer() {
           title="Blending Flashcards"
           isPlaying={isPlaying}
           onPressGuide={playGuideAudio}
-          colorType="DEFAULT"
+          showLetterCaseSwitch={false}
         />
         <View className="flex size-full items-center">
           <FlatList

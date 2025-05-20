@@ -161,6 +161,7 @@ const AudioMultipleChoice = () => {
           title="Sound"
           isPlaying={isPlaying}
           onPressGuide={playGuideAudio}
+          showLetterCaseSwitch={false}
         />
 
         <WordChoiceScreen

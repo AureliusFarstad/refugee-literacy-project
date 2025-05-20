@@ -169,7 +169,7 @@ const LetterSoundScreen = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
-          colorType="DEFAULT"
+          showLetterCaseSwitch={true}
         />
         <WordChoiceScreen
           wordSets={generatedLetterSets}

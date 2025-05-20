@@ -18,15 +18,6 @@ import LetterCaseSwitch from "@/ui/components/global-letter-casing-switch";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EmptyHeadButton } from "@/ui/icons/circular/empty-head-button";
 import { HomeButton } from "@/ui/icons/circular/home-button";
-import { NativeButton } from "@/ui/icons/circular/native-button";
-
-const NATIVE_BUTTON_COLOR: ButtonColorProps = {
-  primaryColor: "blue",
-  secondaryColor: APP_COLORS.lightgreen,
-  offwhiteColor: APP_COLORS.offwhite,
-  offblackColor: APP_COLORS.offblack,
-  backgroundColor: APP_COLORS.backgroundgrey,
-};
 
 const buttonColorProps: ButtonColorProps = {
   primaryColor: APP_COLORS.green,
@@ -163,14 +154,14 @@ type HeaderProps = {
   title: string;
   onPressGuide?: () => void;
   isPlaying: boolean;
-  colorType?: "NATIVE_BUTTON_COLOR" | "DEFAULT";
+  showLetterCaseSwitch?: boolean;
 };
 
 const GuidanceAudioHeader = ({
   title,
   onPressGuide,
   isPlaying,
-  colorType,
+  showLetterCaseSwitch = true,
 }: HeaderProps) => {
   const navigateToHome = useCallback(() => {
     router.navigate("/");
@@ -178,7 +169,12 @@ const GuidanceAudioHeader = ({
   console.log(title);
 
   return (
-    <View className="flex-row items-center justify-between p-4">
+    <View
+      className="flex-row items-center justify-between p-4"
+      style={{
+        backgroundColor: APP_COLORS.offwhite,
+      }}
+    >
       <View className="flex-row items-center space-x-4">
         <Pressable onPress={navigateToHome} className="p-2">
           <View style={[{ width: SIZE, height: SIZE }]}>
@@ -187,7 +183,7 @@ const GuidanceAudioHeader = ({
         </Pressable>
       </View>
       <View className="flex-row items-center space-x-4">
-        <LetterCaseSwitch />
+        {showLetterCaseSwitch && <LetterCaseSwitch />}
       </View>
       <View className="flex-row items-center space-x-4">
         <AnimatedAudioButton
@@ -198,11 +194,7 @@ const GuidanceAudioHeader = ({
           borderColor={APP_COLORS.green}
           icon={
             <View style={{ width: SIZE, height: SIZE }}>
-              {colorType === "NATIVE_BUTTON_COLOR" ? (
-                <EmptyHeadButton {...buttonColorProps} />
-              ) : (
-                <NativeButton {...NATIVE_BUTTON_COLOR} />
-              )}
+              <EmptyHeadButton {...buttonColorProps} />
             </View>
           }
         />
