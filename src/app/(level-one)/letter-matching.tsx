@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Alert, PanResponder, View } from "react-native";
+import { Alert, View } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -38,17 +38,18 @@ const LetterTapMatching = () => {
   const [rightLetters, setRightLetters] = useState<ILetter[]>([]);
   const [selectedLeft, setSelectedLeft] = useState<ILetter | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<string[]>([]);
-
+  const [incorrectMatch, setIncorrectMatch] = useState<{
+    left: string | null;
+    right: string | null;
+  }>({
+    left: null,
+    right: null,
+  });
   const [paths, setPaths] = useState<Path[]>([]);
-  const [currentPath, setCurrentPath] = useState<string>("");
-  const pathRef = useRef<string>("");
-  const startPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   // @ts-ignore
-
   const tappedPath = useRef<Path>();
   // @ts-ignore
-
   const layoutValuesRef = useRef<
     {
       x: number;
@@ -59,67 +60,6 @@ const LetterTapMatching = () => {
       pageY: number;
     }[]
   >();
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: (evt) => {
-        const { locationX, locationY } = evt.nativeEvent;
-        startPointRef.current = { x: locationX, y: locationY };
-        pathRef.current = `M${locationX},${locationY}`;
-        setCurrentPath(`M${locationX},${locationY} L${locationX},${locationY}`);
-      },
-      onPanResponderMove: (evt) => {
-        const { locationX, locationY } = evt.nativeEvent;
-        const newPath = `M${startPointRef.current.x},${startPointRef.current.y} L${locationX},${locationY}`;
-        pathRef.current = newPath;
-        setCurrentPath(newPath);
-      },
-      onPanResponderRelease: (evt) => {
-        const { locationX, locationY } = evt.nativeEvent;
-
-        const newPath: Path = {
-          pathString: `M${startPointRef.current.x},${startPointRef.current.y} L${locationX},${locationY}`,
-          startingPoint: {
-            x1: Math.floor(startPointRef.current.x),
-            y1: Math.floor(startPointRef.current.y),
-          },
-          endingPoint: {
-            x2: Math.floor(locationX),
-            y2: Math.floor(locationY),
-          },
-        };
-        /**
-         * Calculate the two letters
-         * left value
-         * right value
-         */
-        const letterFoundInLeft = checkLeftLetterValue({
-          y1: Math.floor(startPointRef.current.y),
-        });
-        const letterFoundInRight = checkRightLetterValue({
-          y1: locationY,
-        });
-        /**
-         * Update the paths
-         */
-        checkIfLettersMatch(letterFoundInLeft, letterFoundInRight, newPath);
-        setCurrentPath("");
-      },
-    }),
-  ).current;
-
-  const checkIfLettersMatch = (
-    letterFoundInLeft: string,
-    letterFoundInRight: string,
-    newPath: Path,
-  ) => {
-    if (letterFoundInLeft === letterFoundInRight) {
-      setPaths((prevPaths) => [...prevPaths, newPath]);
-      setMatchedPairs((prev) => [...prev, letterFoundInRight]);
-    }
-  };
 
   const initializeGame = useCallback(() => {
     const letters = shuffleLetters(activeActivity.current.letters ?? []);
@@ -137,6 +77,7 @@ const LetterTapMatching = () => {
     setRightLetters(right);
     setSelectedLeft(null);
     setMatchedPairs([]);
+    setPaths([]);
   }, []);
 
   useEffect(() => {
@@ -163,6 +104,8 @@ const LetterTapMatching = () => {
       // @ts-ignore
       tappedPath.current = undefined;
       setSelectedLeft(null);
+
+      // Check if all pairs are matched
       if (matchedPairs.length + 1 === leftLetters.length) {
         Alert.alert("Level", "Completed");
         const updatedLevels = levels.map((level: ILevel) => {
@@ -210,6 +153,19 @@ const LetterTapMatching = () => {
         updateLevels(updatedLevels);
       }
     } else {
+      // Handle incorrect match - flash red for 400ms
+      if (selectedLeft) {
+        setIncorrectMatch({
+          left: selectedLeft.id,
+          right: letter.id,
+        });
+        setTimeout(() => {
+          setIncorrectMatch({
+            left: null,
+            right: null,
+          });
+        }, 500);
+      }
       setSelectedLeft(null);
     }
   };
@@ -233,13 +189,21 @@ const LetterTapMatching = () => {
               className={clsx(
                 "my-[14px] size-[64px] items-center justify-center rounded-[10px] ",
                 {
-                  "bg-[#8AC65B]": matchedPairs.includes(
+                  "bg-[#62CC82]": matchedPairs.includes(
                     letter.value.toLowerCase(),
                   ),
-                  "bg-[#7471F0]": selectedLeft?.id === letter.id,
-                  "bg-colors-purple-500":
+                  "bg-[#FF5A5F]":
+                    incorrectMatch.left === letter.id ||
+                    incorrectMatch.right === letter.id,
+                  "bg-[#7471F0]":
+                    selectedLeft?.id === letter.id &&
+                    incorrectMatch.left !== letter.id &&
+                    incorrectMatch.right !== letter.id,
+                  "bg-[#C385F8]":
                     !matchedPairs.includes(letter.value.toLowerCase()) &&
-                    selectedLeft?.id !== letter.id,
+                    selectedLeft?.id !== letter.id &&
+                    incorrectMatch.left !== letter.id &&
+                    incorrectMatch.right !== letter.id,
                 },
               )}
               onPress={() => {
@@ -248,13 +212,7 @@ const LetterTapMatching = () => {
                 );
                 if (!letterMetaInformation) return;
 
-                /**
-                 * HEADER HEIGHT = 96
-                 * INSETS.TOP
-                 * VERTICAL SPACING OF CIRCLE = 8
-                 */
-
-                const offset = 96 + insets.top - (28 - 8);
+                const offset = insets.top + 16; // Fixed offset calculation
 
                 if (!isRight) {
                   tappedPath.current = {
@@ -294,17 +252,24 @@ const LetterTapMatching = () => {
                 {letter.value}
               </Text>
               <View
-                className={clsx("absolute size-4  rounded-full border-2 ", {
+                className={clsx("absolute size-4 rounded-full border-2", {
                   "right-24": isRight,
                   "left-24": !isRight,
                   "bg-[#8AC65B] border-[#8AC65B]": matchedPairs.includes(
                     letter.value.toLowerCase(),
                   ),
+                  "bg-[#FF0000] border-[#FF0000]":
+                    incorrectMatch.left === letter.id ||
+                    incorrectMatch.right === letter.id,
                   "bg-[#7471F0] border-[#7471F0]":
-                    selectedLeft?.id === letter.id,
+                    selectedLeft?.id === letter.id &&
+                    incorrectMatch.left !== letter.id &&
+                    incorrectMatch.right !== letter.id,
                   "border-colors-purple-500":
                     !matchedPairs.includes(letter.value.toLowerCase()) &&
-                    selectedLeft?.id !== letter.id,
+                    selectedLeft?.id !== letter.id &&
+                    incorrectMatch.left !== letter.id &&
+                    incorrectMatch.right !== letter.id,
                 })}
                 onLayout={(e) => {
                   e.target.measure((x, y, width, height, pageX, pageY) => {
@@ -342,44 +307,6 @@ const LetterTapMatching = () => {
     </View>
   );
 
-  const checkLeftLetterValue = ({ y1 }: { y1: number }) => {
-    if (!layoutValuesRef.current) return "";
-    let letterFoundInLeft = "";
-
-    for (let index = 0; index < layoutValuesRef.current.length; index++) {
-      const element = layoutValuesRef.current[index];
-      if (element.id.includes("left")) {
-        const a = insets.top < 40 ? y1 + 92 : y1 + 92 + insets.top;
-        const b = element.y;
-
-        const difference = Math.abs(a - b);
-        if (difference <= 40) {
-          letterFoundInLeft = element.value;
-        }
-      }
-    }
-    return letterFoundInLeft.toLowerCase();
-  };
-
-  const checkRightLetterValue = ({ y1 }: { y1: number }) => {
-    if (!layoutValuesRef.current) return "";
-    let letterFoundInRight = "";
-
-    for (let index = 0; index < layoutValuesRef.current.length; index++) {
-      const element = layoutValuesRef.current[index];
-      if (element.id.includes("right")) {
-        const a = insets.top < 40 ? y1 + 92 : y1 + 92 + insets.top;
-        const b = element.y;
-
-        const difference = Math.abs(a - b);
-        if (difference <= 40) {
-          letterFoundInRight = element.value;
-        }
-      }
-    }
-    return letterFoundInRight.toLowerCase();
-  };
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GuidanceAudioHeader
@@ -389,9 +316,9 @@ const LetterTapMatching = () => {
         colorType="NATIVE_BUTTON_COLOR"
       />
 
-      <View className="relative flex flex-row justify-between border-yellow-500  px-10">
+      <View className="relative flex flex-row justify-between border-yellow-500 px-10">
         {renderLetters(leftLetters, handleLeftLetterPress, false)}
-        <View {...panResponder.panHandlers} className="z-10 flex-1">
+        <View className="z-10 flex-1">
           <Svg height="100%" width="100%">
             {paths.map((p, index) => (
               <React.Fragment key={index}>
@@ -403,12 +330,6 @@ const LetterTapMatching = () => {
                 />
               </React.Fragment>
             ))}
-            <SvgPath
-              d={currentPath}
-              stroke="blue"
-              strokeWidth="2"
-              fill="none"
-            />
           </Svg>
         </View>
         {renderLetters(rightLetters, handleRightLetterPress, true)}
