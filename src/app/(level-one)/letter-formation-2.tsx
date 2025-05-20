@@ -2,25 +2,23 @@ import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 
+import { ALPHABET_LETTER_LIST_BY_LEVEL } from "@/assets/alphabet";
+import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
+import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
 import OverlayLetterAnimation from "@/ui/components/letter-formation/overlay-letter-animation";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
-import { HEIGHT, IS_IOS } from "@/utils/layout";
-
+import { useLetterCase } from "@/ui/core/headers/letter-case-context";
+import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
 import { NameButton } from "@/ui/icons/circular/name-button";
 import { PencilButton } from "@/ui/icons/circular/pencil-button";
-import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
-import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
-
-import { ALPHABET_LETTER_LIST_BY_LEVEL } from "@/assets/alphabet";
-import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
+import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
-import { APP_COLORS } from "@/constants/routes";
 
 // TODO: Move to _layout?
 const buttonColors: ButtonColorProps = {
@@ -36,7 +34,6 @@ const letters = ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1;
 type AnimatedLetterComponentRef = {
   animateLowercase: () => void;
 };
-
 
 const styles = StyleSheet.create({
   background: {
@@ -71,15 +68,15 @@ const styles = StyleSheet.create({
     backgroundColor: APP_COLORS.offwhite,
     borderRadius: 20,
     borderStyle: "solid",
-    borderWidth: 2, 
+    borderWidth: 2,
     borderColor: SECTION_COLOR.primary,
   },
   letterOffset: {
-    position: "absolute",  // Change from "relative" to "absolute"
-    width: "100%",         // Take full parent width
+    position: "absolute", // Change from "relative" to "absolute"
+    width: "100%", // Take full parent width
     height: 356,
-    top: -30,              // Move up 20px
-    left: 0,               // Ensure it's aligned with parent
+    top: -30, // Move up 20px
+    left: 0, // Ensure it's aligned with parent
     alignItems: "center",
     justifyContent: "center",
   },
@@ -93,16 +90,15 @@ const LetterFormation = () => {
   const [activeLetter, setActiveLetter] = useState(letters[0]);
 
   const [animationLetter, setAnimationLetter] = useState(
-    isLowercase ? activeLetter.toLowerCase() : activeLetter.toUpperCase()
+    isLowercase ? activeLetter.toLowerCase() : activeLetter.toUpperCase(),
   );
-  
+
   // Add this useEffect to update animationLetter when dependencies change
   useEffect(() => {
     setAnimationLetter(
-      isLowercase ? activeLetter.toLowerCase() : activeLetter.toUpperCase()
+      isLowercase ? activeLetter.toLowerCase() : activeLetter.toUpperCase(),
     );
   }, [activeLetter, isLowercase]);
-
 
   const [isAnimating, setIsAnimating] = useState(false);
   const [isOverlayAnimation, setIsOverlayAnimation] = useState(true);
@@ -132,36 +128,43 @@ const LetterFormation = () => {
         colorType="NATIVE_BUTTON_COLOR"
       />
       <View
-        style={[{
-          height:
-            HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
-        }, styles.background]}
+        style={[
+          {
+            height:
+              HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
+          },
+          styles.background,
+        ]}
       >
         <View style={[styles.buttonRow]}>
-          <AnimatedAudioButton 
-            audioSource={ALPHABET_AUDIO_SOURCES[activeLetter as keyof typeof ALPHABET_AUDIO_SOURCES].name}
+          <AnimatedAudioButton
+            audioSource={
+              ALPHABET_AUDIO_SOURCES[
+                activeLetter as keyof typeof ALPHABET_AUDIO_SOURCES
+              ].name
+            }
             width={60}
             height={60}
           >
             <View style={[styles.button]}>
-              <NameButton
-                {...buttonColors}
-              />
+              <NameButton {...buttonColors} />
             </View>
           </AnimatedAudioButton>
-          <AnimatedAudioButton 
-            audioSource={ALPHABET_AUDIO_SOURCES[activeLetter as keyof typeof ALPHABET_AUDIO_SOURCES].sound}
+          <AnimatedAudioButton
+            audioSource={
+              ALPHABET_AUDIO_SOURCES[
+                activeLetter as keyof typeof ALPHABET_AUDIO_SOURCES
+              ].sound
+            }
             width={60}
             height={60}
           >
             <View style={[styles.button]}>
-              <EarButton
-                {...buttonColors}
-              />
+              <EarButton {...buttonColors} />
             </View>
           </AnimatedAudioButton>
         </View>
-            {/* <TouchableOpacity
+        {/* <TouchableOpacity
               onPress={() => {
                 setIsOverlayAnimation(true);
                 setTimeout(() => {
@@ -182,22 +185,20 @@ const LetterFormation = () => {
               onAnimationStart={onAnimationStart}
               isAnimating={isAnimating}
               isOverlayAnimation={isOverlayAnimation}
-           />
+            />
           </View>
           <View style={[styles.pencilButtonWrapper]}>
-              <TouchableOpacity
-                  onPress={() => {
-                    setIsOverlayAnimation(true);
-                    setTimeout(() => {
-                      animatedLetterRef.current?.animateLowercase();
-                    }, 2000);
-                  }}
-              >
-                <PencilButton
-                  {...buttonColors}
-                />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                setIsOverlayAnimation(true);
+                setTimeout(() => {
+                  animatedLetterRef.current?.animateLowercase();
+                }, 2000);
+              }}
+            >
+              <PencilButton {...buttonColors} />
+            </TouchableOpacity>
+          </View>
         </View>
         <View className="mt-auto ">
           <View />
@@ -222,8 +223,7 @@ const LetterFormation = () => {
                       {/* lowercase if isLowercase, otherwise uppercase */}
                       {isLowercase
                         ? bottomBarLetter.toLowerCase()
-                        : bottomBarLetter.toUpperCase()
-                      }
+                        : bottomBarLetter.toUpperCase()}
                     </Text>
                   </View>
                 </Pressable>
