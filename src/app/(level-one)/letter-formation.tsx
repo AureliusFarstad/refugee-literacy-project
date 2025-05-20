@@ -1,38 +1,104 @@
 import clsx from "clsx";
-import type { AVPlaybackSource } from "expo-av";
-import { Audio } from "expo-av";
-import type { Sound } from "expo-av/build/Audio";
 import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { ALPHABET_LETTER_LIST_BY_LEVEL } from "@/assets/alphabet";
+import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
+import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
-import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";
-import AlphabetTracing from "@/ui/components/home/alphabet-tracing";
-import LetterCaseSwitch from "@/ui/components/letter-casing-switch";
 import OverlayLetterAnimation from "@/ui/components/letter-formation/overlay-letter-animation";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
-import { CustomPencilIcon, EarIcon, LettersNameIcon } from "@/ui/icons";
+import { useLetterCase } from "@/ui/core/headers/letter-case-context";
+import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { EarButton } from "@/ui/icons/circular/ear-button";
+import { NameButton } from "@/ui/icons/circular/name-button";
+import { PencilButton } from "@/ui/icons/circular/pencil-button";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
+
+import { SECTION_COLOR } from "./_layout";
+
+// TODO: Move to _layout?
+const buttonColors: ButtonColorProps = {
+  primaryColor: SECTION_COLOR.primary,
+  secondaryColor: SECTION_COLOR.light,
+  offblackColor: APP_COLORS.offblack,
+  offwhiteColor: APP_COLORS.offwhite,
+  backgroundColor: APP_COLORS.backgroundgrey,
+};
+
+const letters = ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1;
 
 type AnimatedLetterComponentRef = {
   animateLowercase: () => void;
 };
 
+const styles = StyleSheet.create({
+  background: {
+    backgroundColor: APP_COLORS.backgroundgrey,
+  },
+  button: {
+    width: 60,
+    height: 60,
+  },
+  pencilButtonWrapper: {
+    width: 140,
+    height: 140,
+    position: "absolute",
+    top: 16,
+    left: 16,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: 20,
+    marginVertical: 16,
+    marginRight: 20,
+  },
+  card: {
+    position: "relative",
+    height: 360,
+    marginHorizontal: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+    backgroundColor: APP_COLORS.offwhite,
+    borderRadius: 20,
+    borderStyle: "solid",
+    borderWidth: 2,
+    borderColor: SECTION_COLOR.primary,
+  },
+  letterOffset: {
+    position: "absolute", // Change from "relative" to "absolute"
+    width: "100%", // Take full parent width
+    height: 356,
+    top: -30, // Move up 20px
+    left: 0, // Ensure it's aligned with parent
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
+
 const LetterFormation = () => {
-  const { levels } = useLevelStore();
-  const [sound, setSound] = useState<Sound>();
-
-  const [isLowercase, setIsLowercase] = useState(true);
-
   const insets = useSafeAreaInsets();
 
-  const [activeActivity, setActiveActivity] = useState(
-    levels[0].modules[0].sections[1].activities[0],
+  const { isLowercase } = useLetterCase();
+
+  const [activeLetter, setActiveLetter] = useState(letters[0]);
+
+  const [animationLetter, setAnimationLetter] = useState(
+    isLowercase ? activeLetter.toLowerCase() : activeLetter.toUpperCase(),
   );
 
-  const activitiesInCurrentSection =
-    levels[0].modules[0].sections[1].activities;
+  // Add this useEffect to update animationLetter when dependencies change
+  useEffect(() => {
+    setAnimationLetter(
+      isLowercase ? activeLetter.toLowerCase() : activeLetter.toUpperCase(),
+    );
+  }, [activeLetter, isLowercase]);
 
   const [isAnimating, setIsAnimating] = useState(false);
   const [isOverlayAnimation, setIsOverlayAnimation] = useState(true);
@@ -46,40 +112,12 @@ const LetterFormation = () => {
 
   const animatedLetterRef = useRef<AnimatedLetterComponentRef | null>(null);
 
-  const playSound = async (playbackSource: AVPlaybackSource) => {
-    try {
-      const { sound: soundResponse } =
-        await Audio.Sound.createAsync(playbackSource);
-      if (soundResponse) {
-        setSound(soundResponse);
-      }
-      await soundResponse.playAsync();
-    } catch (error) {
-      console.log("error in playSound", error);
-      throw error;
-    }
-  };
-
   const onAnimationComplete = (letter: string) => {
     console.log(letter);
     setIsAnimating(false);
     setIsOverlayAnimation(false);
     console.log("animation completed");
   };
-
-  useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound, activeActivity]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      animatedLetterRef.current?.animateLowercase();
-    }, 3000);
-  }, []);
 
   return (
     <SafeAreaView>
@@ -90,33 +128,55 @@ const LetterFormation = () => {
         colorType="NATIVE_BUTTON_COLOR"
       />
       <View
-        style={{
-          height:
-            HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
-        }}
+        style={[
+          {
+            height:
+              HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
+          },
+          styles.background,
+        ]}
       >
-        <View className="flex items-center justify-between">
-          <View className="w-full  px-5">
-            <LetterCaseSwitch
-              isLowercase={isLowercase}
-              setIsLowercase={setIsLowercase}
-              letter={"A"}
-              backgroundColor={"#C385F8"}
+        <View style={[styles.buttonRow]}>
+          <AnimatedAudioButton
+            audioSource={
+              ALPHABET_AUDIO_SOURCES[
+                activeLetter as keyof typeof ALPHABET_AUDIO_SOURCES
+              ].name
+            }
+            width={60}
+            height={60}
+          >
+            <View style={[styles.button]}>
+              <NameButton {...buttonColors} />
+            </View>
+          </AnimatedAudioButton>
+          <AnimatedAudioButton
+            audioSource={
+              ALPHABET_AUDIO_SOURCES[
+                activeLetter as keyof typeof ALPHABET_AUDIO_SOURCES
+              ].sound
+            }
+            width={60}
+            height={60}
+          >
+            <View style={[styles.button]}>
+              <EarButton {...buttonColors} />
+            </View>
+          </AnimatedAudioButton>
+        </View>
+        <View style={styles.card}>
+          <View style={styles.letterOffset}>
+            <OverlayLetterAnimation
+              ref={animatedLetterRef}
+              name={animationLetter}
+              key={animationLetter}
+              onAnimationComplete={onAnimationComplete}
+              onAnimationStart={onAnimationStart}
+              isAnimating={isAnimating}
+              isOverlayAnimation={isOverlayAnimation}
             />
           </View>
-          <View className="flex flex-row items-center justify-between  rounded-full bg-colors-purple-200 p-4">
-            <TouchableOpacity
-              onPress={() => playSound(activeActivity.sound.alphabeticAudioSrc)}
-              className="mr-2 flex size-[80] items-center justify-center rounded-full  bg-colors-purple-500"
-            >
-              <LettersNameIcon />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => playSound(activeActivity.sound.phoneticAudioSrc)}
-              className=" flex size-[80] items-center justify-center rounded-full  bg-colors-purple-500"
-            >
-              <EarIcon />
-            </TouchableOpacity>
+          <View style={[styles.pencilButtonWrapper]}>
             <TouchableOpacity
               onPress={() => {
                 setIsOverlayAnimation(true);
@@ -124,59 +184,35 @@ const LetterFormation = () => {
                   animatedLetterRef.current?.animateLowercase();
                 }, 2000);
               }}
-              className=" ml-2 flex size-[80] items-center justify-center  rounded-full bg-colors-purple-500"
             >
-              <CustomPencilIcon size={44} />
+              <PencilButton {...buttonColors} />
             </TouchableOpacity>
           </View>
-        </View>
-        <View className="relative h-[356] items-center justify-center overflow-hidden  border-pink-500">
-          <AlphabetTracing
-            letter={
-              isLowercase
-                ? activeActivity.letter.lowerCase
-                : activeActivity.letter.upperCase
-            }
-            isOverlayAnimation={isOverlayAnimation}
-          />
-          <OverlayLetterAnimation
-            ref={animatedLetterRef}
-            name={activeActivity.letter.lowerCase}
-            key={activeActivity.letter.lowerCase}
-            onAnimationComplete={onAnimationComplete}
-            onAnimationStart={onAnimationStart}
-            isAnimating={isAnimating}
-            isOverlayAnimation={isOverlayAnimation}
-          />
         </View>
         <View className="mt-auto ">
           <View />
           <View className=" flex flex-row justify-between ">
             <View className="mt-16 flex w-full flex-row items-center justify-around px-[10px]">
-              {activitiesInCurrentSection.map((activity, index) => (
+              {letters.map((bottomBarLetter, index) => (
                 <Pressable
                   className={clsx(
                     "flex size-[60] items-center justify-center rounded-md ",
                     {
-                      "bg-colors-gray-300": activity.id !== activeActivity.id,
-                      "bg-colors-purple-500": activity.id === activeActivity.id,
+                      "bg-colors-gray-300": bottomBarLetter !== activeLetter,
+                      "bg-colors-purple-500": bottomBarLetter === activeLetter,
                     },
                   )}
                   onPress={() => {
-                    /**
-                     * update current activity
-                     */
-                    setActiveActivity(activity);
+                    setActiveLetter(bottomBarLetter);
                   }}
                   key={index}
-                  disabled={isOverlayAnimation}
                 >
                   <View className="flex flex-row  items-center justify-center ">
                     <Text className="text-3xl font-medium">
-                      {activity.letter.upperCase}
-                    </Text>
-                    <Text className=" ml-0.5 text-3xl font-medium">
-                      {activity.letter.lowerCase}
+                      {/* lowercase if isLowercase, otherwise uppercase */}
+                      {isLowercase
+                        ? bottomBarLetter.toLowerCase()
+                        : bottomBarLetter.toUpperCase()}
                     </Text>
                   </View>
                 </Pressable>

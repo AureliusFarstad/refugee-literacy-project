@@ -124,6 +124,13 @@ const SVGatorLetterComponent = forwardRef(
         const data = JSON.parse(event.nativeEvent.data);
         if (data.event === "animationComplete") {
           console.log("Animation complete event received");
+          // animation.stop
+          injectJavaScript(`
+            const svg = document.querySelector('svg');
+            if (svg && svg.svgatorPlayer) {
+              svg.svgatorPlayer.stop();
+            }
+          `);
           onAnimationComplete && onAnimationComplete();
         }
       } catch (error) {
