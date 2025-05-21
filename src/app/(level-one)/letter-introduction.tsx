@@ -18,6 +18,7 @@ import { EarButton } from "@/ui/icons/circular/ear-button";
 import { NameButton } from "@/ui/icons/circular/name-button";
 import { PencilButton } from "@/ui/icons/circular/pencil-button";
 import { HEIGHT, IS_IOS, WIDTH } from "@/utils/layout";
+import { globalStyles } from "@/ui/styles";
 
 type AnimatedLetterComponentRef = {
   animateLowercase: () => void;
@@ -215,7 +216,7 @@ const LetterIntroduction = () => {
   }, [activitiesInCurrentSection, levels]);
 
   return (
-    <SafeAreaView className="bg-[#FAFAFA]">
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <GuidanceAudioHeader
         title="Sound"
         isPlaying={isPlaying}
