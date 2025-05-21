@@ -27,6 +27,7 @@ import { UserAvatar } from "@/ui/illustrations";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { sectionColor } from "./_layout";
+import { globalStyles } from "@/ui/styles";
 
 const primaryColor = SECTION_COLORS.speaking;
 const secondaryColor = SECTION_COLORS.vocabulary;
@@ -468,7 +469,7 @@ const Screen = () => {
   //       <DragDrop activeActivity={activeActivity} />
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <View
         style={{
           height: HEIGHT - (insets.bottom + insets.top + (IS_IOS ? 96 : 112)),

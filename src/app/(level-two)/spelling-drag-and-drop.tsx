@@ -32,6 +32,7 @@ import { EarButton } from "@/ui/icons/circular/ear-button";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { sectionColor } from "./_layout";
+import { globalStyles } from "@/ui/styles";
 
 const styles = StyleSheet.create({
   card: {
@@ -374,7 +375,7 @@ const Screen = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <View
         style={{
           height:

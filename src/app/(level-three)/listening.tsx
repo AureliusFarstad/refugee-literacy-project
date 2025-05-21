@@ -30,6 +30,7 @@ import { PauseButton } from "@/ui/icons/circular/pause-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
 import { UserAvatar } from "@/ui/illustrations";
 import { cn } from "@/utils/helpers";
+import { globalStyles } from "@/ui/styles";
 
 type Message = {
   id: string;
@@ -595,7 +596,7 @@ function Listening() {
   });
 
   return (
-    <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
+    <SafeAreaView style={globalStyles.safeAreaView} edges={["top", "left", "right"]}>
       <GuidanceAudioHeader
         title="Sound"
         isPlaying={isPlaying}
@@ -674,9 +675,6 @@ function Listening() {
 export default Listening;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   listContainer: {
     flex: 1,
     backgroundColor: "#F2EFF0",

@@ -42,6 +42,7 @@ import {
 } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
+import { globalStyles } from "@/ui/styles";
 
 // ------------------------------------------------------------
 // TYPE DEFINITIONS
@@ -981,10 +982,6 @@ const DraggableAudioGame: React.FC = () => {
 
 const Screen = () => {
   const screenStyles = StyleSheet.create({
-    safeareaview: {
-      flex: 1,
-      backgroundColor: "#FFFFFF", // Changed from red
-    },
     content: {
       flex: 1,
       display: "flex",
@@ -999,7 +996,7 @@ const Screen = () => {
 
   return (
     <SafeAreaView
-      style={screenStyles.safeareaview}
+      style={globalStyles.safeAreaView}
       edges={["top", "left", "right"]}
     >
       <View style={screenStyles.content}>

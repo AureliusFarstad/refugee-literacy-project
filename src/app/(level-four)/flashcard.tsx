@@ -15,6 +15,7 @@ import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { VocabularyFlashCard } from "@/ui/components/vocabulary-flashcard";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
+import { globalStyles } from "@/ui/styles";
 
 const Footer = () => {
   return <View className="h-40" />;
@@ -74,7 +75,7 @@ export default function FlashCardContainer() {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <View
         style={{
           height:

@@ -19,6 +19,7 @@ import { SnailButton } from "@/ui/icons/circular/snail-button";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
+import { globalStyles } from "@/ui/styles";
 
 // TODO: Refactor this out to _layout?
 const buttonStyles: ButtonColorProps = {
@@ -148,7 +149,7 @@ const AudioMultipleChoice = () => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <View
         style={{
           height:

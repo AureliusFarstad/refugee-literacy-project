@@ -23,6 +23,7 @@ import { EarButton } from "@/ui/icons/circular/ear-button";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
+import { globalStyles } from "@/ui/styles";
 // TODO: Not sure if we want to generate these or have a static list.
 const generatedWordSets: WordSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   (word: string) => {
@@ -170,7 +171,7 @@ const AudioMultipleChoice = () => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <View
         style={{
           height:
