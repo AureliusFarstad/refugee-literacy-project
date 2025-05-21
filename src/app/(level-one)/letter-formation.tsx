@@ -16,10 +16,10 @@ import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
 import { NameButton } from "@/ui/icons/circular/name-button";
 import { PencilButton } from "@/ui/icons/circular/pencil-button";
+import { globalStyles } from "@/ui/styles";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
-import { globalStyles } from "@/ui/styles";
 
 // TODO: Move to _layout?
 const buttonColors: ButtonColorProps = {

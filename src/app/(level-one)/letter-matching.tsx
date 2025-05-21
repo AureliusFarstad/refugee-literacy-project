@@ -11,8 +11,8 @@ import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Text, TouchableOpacity } from "@/ui";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
-import { shuffleLetters } from "@/utils/level-one";
 import { globalStyles } from "@/ui/styles";
+import { shuffleLetters } from "@/utils/level-one";
 
 type Path = {
   pathString: string;
