@@ -20,6 +20,7 @@ import { EarButton } from "@/ui/icons/circular/ear-button";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
+import { globalStyles } from "@/ui/styles";
 
 // TODO: Refactor this color logic...
 const sectionColorTheme: SectionColorTheme = {
@@ -157,7 +158,7 @@ const LetterSoundScreen = () => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <View
         style={{
           height:
@@ -169,7 +170,7 @@ const LetterSoundScreen = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
-          colorType="DEFAULT"
+          showLetterCaseSwitch={true}
         />
         <WordChoiceScreen
           wordSets={generatedLetterSets}

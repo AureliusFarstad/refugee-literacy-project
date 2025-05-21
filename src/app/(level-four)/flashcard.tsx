@@ -14,6 +14,7 @@ import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { VocabularyFlashCard } from "@/ui/components/vocabulary-flashcard";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
+import { globalStyles } from "@/ui/styles";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 const Footer = () => {
@@ -74,7 +75,7 @@ export default function FlashCardContainer() {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <View
         style={{
           height:
@@ -86,7 +87,7 @@ export default function FlashCardContainer() {
           title="Blending Flashcards"
           isPlaying={isPlaying}
           onPressGuide={playGuideAudio}
-          colorType="DEFAULT"
+          showLetterCaseSwitch={false}
         />
         <View className="flex size-full items-center">
           <FlatList

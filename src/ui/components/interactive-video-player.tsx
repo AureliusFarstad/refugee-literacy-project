@@ -20,6 +20,8 @@ import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { HomeButton } from "@/ui/icons/circular/home-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
 
+import { globalStyles } from "../styles";
+
 const defaultButtonColorProps: ButtonColorProps = {
   primaryColor: APP_COLORS.green,
   secondaryColor: APP_COLORS.lightgreen,
@@ -414,7 +416,7 @@ const InteractiveVideoPlayer = ({
   }, [cleanup, stopSound]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       {/* Top Bar */}
       <View className="flex-row items-center justify-between p-4">
         {/* Home Button */}
@@ -491,10 +493,6 @@ const InteractiveVideoPlayer = ({
 export default InteractiveVideoPlayer;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginBottom: -40,
-  },
   sliderContainer: {
     paddingHorizontal: 4,
     flex: 1,

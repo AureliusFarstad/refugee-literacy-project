@@ -7,6 +7,7 @@ import { Alert, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Line } from "react-native-svg";
 
+import { APP_COLORS } from "@/constants/routes";
 import { MS_300 } from "@/constants/timing";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
@@ -17,6 +18,7 @@ import { EarButton } from "@/ui/icons/circular/ear-button";
 import { NameButton } from "@/ui/icons/circular/name-button";
 import { PencilButton } from "@/ui/icons/circular/pencil-button";
 import { HEIGHT, IS_IOS, WIDTH } from "@/utils/layout";
+import { globalStyles } from "@/ui/styles";
 
 type AnimatedLetterComponentRef = {
   animateLowercase: () => void;
@@ -214,18 +216,19 @@ const LetterIntroduction = () => {
   }, [activitiesInCurrentSection, levels]);
 
   return (
-    <SafeAreaView className="bg-[#F2EFF0]">
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <GuidanceAudioHeader
         title="Sound"
         isPlaying={isPlaying}
         onPressGuide={playGuideAudio}
-        colorType="NATIVE_BUTTON_COLOR"
+        showLetterCaseSwitch={false}
       />
       <View
         className="flex flex-col justify-between"
         style={{
           height:
             HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
+          backgroundColor: APP_COLORS.backgroundgrey,
         }}
       >
         <View>

@@ -29,6 +29,7 @@ import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { PauseButton } from "@/ui/icons/circular/pause-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
 import { UserAvatar } from "@/ui/illustrations";
+import { globalStyles } from "@/ui/styles";
 import { cn } from "@/utils/helpers";
 
 type Message = {
@@ -595,12 +596,15 @@ function Listening() {
   });
 
   return (
-    <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
+    <SafeAreaView
+      style={globalStyles.safeAreaView}
+      edges={["top", "left", "right"]}
+    >
       <GuidanceAudioHeader
         title="Sound"
         isPlaying={isPlaying}
         onPressGuide={playGuideAudio}
-        colorType="NATIVE_BUTTON_COLOR"
+        showLetterCaseSwitch={false}
       />
 
       <View className="flex h-20 flex-row items-center bg-[#F2EFF0] px-4">
@@ -674,9 +678,6 @@ function Listening() {
 export default Listening;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   listContainer: {
     flex: 1,
     backgroundColor: "#F2EFF0",

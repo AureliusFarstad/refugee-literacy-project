@@ -34,6 +34,7 @@ import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
+import { globalStyles } from "@/ui/styles";
 import {
   BOTTOM_TAB_HEIGHT,
   HEADER_HEIGHT,
@@ -981,10 +982,6 @@ const DraggableAudioGame: React.FC = () => {
 
 const Screen = () => {
   const screenStyles = StyleSheet.create({
-    safeareaview: {
-      flex: 1,
-      backgroundColor: "#FFFFFF", // Changed from red
-    },
     content: {
       flex: 1,
       display: "flex",
@@ -999,7 +996,7 @@ const Screen = () => {
 
   return (
     <SafeAreaView
-      style={screenStyles.safeareaview}
+      style={globalStyles.safeAreaView}
       edges={["top", "left", "right"]}
     >
       <View style={screenStyles.content}>
@@ -1007,7 +1004,7 @@ const Screen = () => {
           title="Audio Multiple Choice"
           isPlaying={isPlaying}
           onPressGuide={playGuideAudio}
-          colorType="DEFAULT"
+          showLetterCaseSwitch={false}
         />
         <DraggableAudioGame />
       </View>

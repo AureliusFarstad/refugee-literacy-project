@@ -24,6 +24,7 @@ import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
 import { UserAvatar } from "@/ui/illustrations";
+import { globalStyles } from "@/ui/styles";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { sectionColor } from "./_layout";
@@ -468,7 +469,7 @@ const Screen = () => {
   //       <DragDrop activeActivity={activeActivity} />
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <View
         style={{
           height: HEIGHT - (insets.bottom + insets.top + (IS_IOS ? 96 : 112)),
@@ -480,7 +481,7 @@ const Screen = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
-          colorType="NATIVE_BUTTON_COLOR"
+          showLetterCaseSwitch={false}
         />
         <View style={styles.overflowContainer}>
           {/* Bottom-anchored content that can overflow at the top */}

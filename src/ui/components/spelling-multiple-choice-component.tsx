@@ -21,6 +21,7 @@ import Reanimated, {
 } from "react-native-reanimated";
 
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
+import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 
 // ------------------------------------------------------------
@@ -485,6 +486,8 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
 
   const currentColors = getButtonColorProps();
 
+  const { isLowercase } = useLetterCase();
+
   return (
     <GestureDetector gesture={gesture}>
       <Reanimated.View
@@ -512,7 +515,10 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
             animatedBorderStyle,
           ]}
         />
-        <Text>{item.id}</Text>
+        {/* Capitalize based on isLowercase */}
+        <Text>
+          {isLowercase ? item.id.toLowerCase() : item.id.toUpperCase()}
+        </Text>
       </Reanimated.View>
     </GestureDetector>
   );

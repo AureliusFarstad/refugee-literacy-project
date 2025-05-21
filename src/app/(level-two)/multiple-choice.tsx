@@ -20,6 +20,7 @@ import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
+import { globalStyles } from "@/ui/styles";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
@@ -170,7 +171,7 @@ const AudioMultipleChoice = () => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <View
         style={{
           height:
@@ -182,7 +183,7 @@ const AudioMultipleChoice = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
-          colorType="DEFAULT"
+          showLetterCaseSwitch={true}
         />
         <WordChoiceScreen
           wordSets={generatedWordSets}

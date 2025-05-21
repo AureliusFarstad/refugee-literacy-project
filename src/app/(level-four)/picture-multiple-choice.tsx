@@ -16,6 +16,7 @@ import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { SnailButton } from "@/ui/icons/circular/snail-button";
+import { globalStyles } from "@/ui/styles";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
@@ -148,7 +149,7 @@ const AudioMultipleChoice = () => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <View
         style={{
           height:
@@ -161,6 +162,7 @@ const AudioMultipleChoice = () => {
           title="Sound"
           isPlaying={isPlaying}
           onPressGuide={playGuideAudio}
+          showLetterCaseSwitch={false}
         />
 
         <WordChoiceScreen

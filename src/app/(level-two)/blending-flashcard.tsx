@@ -10,6 +10,7 @@ import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { BlendingFlashCard } from "@/ui/components/blending-flashcard";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
+import { globalStyles } from "@/ui/styles";
 
 // TODO: Maybe construct in assets/blending/index.ts?
 const BLENDING_FLASHCARDS = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
@@ -52,12 +53,12 @@ export default function FlashCardContainer() {
   });
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <GuidanceAudioHeader
         title="Sound"
         isPlaying={isPlayingGuidanceAudio}
         onPressGuide={playGuideAudio}
-        colorType="NATIVE_BUTTON_COLOR"
+        showLetterCaseSwitch={true}
       />
       <View className="flex size-full items-center">
         <FlatList

@@ -29,6 +29,7 @@ import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
+import { globalStyles } from "@/ui/styles";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { sectionColor } from "./_layout";
@@ -374,7 +375,7 @@ const Screen = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <View
         style={{
           height:
@@ -386,7 +387,7 @@ const Screen = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
-          colorType="DEFAULT"
+          showLetterCaseSwitch={true}
         />
         {spellingContent}
       </View>

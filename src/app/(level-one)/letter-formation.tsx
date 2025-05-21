@@ -19,6 +19,7 @@ import { PencilButton } from "@/ui/icons/circular/pencil-button";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
+import { globalStyles } from "@/ui/styles";
 
 // TODO: Move to _layout?
 const buttonColors: ButtonColorProps = {
@@ -120,12 +121,12 @@ const LetterFormation = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <GuidanceAudioHeader
         title="Formation"
         onPressGuide={playGuideAudio}
         isPlaying={isPlayingGuidanceAudio}
-        colorType="NATIVE_BUTTON_COLOR"
+        showLetterCaseSwitch={true}
       />
       <View
         style={[

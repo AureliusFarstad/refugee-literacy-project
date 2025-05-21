@@ -12,6 +12,7 @@ import { useLevelStore } from "@/core/store/levels";
 import { Text, TouchableOpacity } from "@/ui";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { shuffleLetters } from "@/utils/level-one";
+import { globalStyles } from "@/ui/styles";
 
 type Path = {
   pathString: string;
@@ -308,15 +309,14 @@ const LetterTapMatching = () => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={globalStyles.safeAreaView}>
       <GuidanceAudioHeader
         title="Sound"
         isPlaying={isPlayingGuidanceAudio}
         onPressGuide={playGuideAudio}
-        colorType="NATIVE_BUTTON_COLOR"
+        showLetterCaseSwitch={false}
       />
-
-      <View className="relative flex flex-row justify-between border-yellow-500 px-10">
+      <View className="relative flex flex-row justify-between bg-[#F2EFF0] px-10">
         {renderLetters(leftLetters, handleLeftLetterPress, false)}
         <View className="z-10 flex-1">
           <Svg height="100%" width="100%">

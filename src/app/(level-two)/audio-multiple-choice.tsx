@@ -29,10 +29,12 @@ import {
 import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
+import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
+import { globalStyles } from "@/ui/styles";
 import {
   BOTTOM_TAB_HEIGHT,
   HEADER_HEIGHT,
@@ -912,6 +914,8 @@ const DraggableAudioGame: React.FC = () => {
     [placedButtonId],
   );
 
+  const { isLowercase } = useLetterCase();
+
   return (
     <GestureHandlerRootView style={styles.container}>
       {/* Flashcard */}
@@ -955,8 +959,12 @@ const DraggableAudioGame: React.FC = () => {
 
           {/* A row with Text and Drop Target Next to each other */}
           <View style={styles.row}>
-            <Text style={styles.text}>{CORRECT_BUTTON_ID}</Text>
-            {/*TODO: Use capitalization.*/}
+            <Text style={styles.text}>
+              {/* use Capitalization based on isLowercase */}
+              {isLowercase
+                ? CORRECT_BUTTON_ID.toLowerCase()
+                : CORRECT_BUTTON_ID.toUpperCase()}
+            </Text>
             {/* Drop target */}
             <View style={styles.dropCircleContainer}>
               <View ref={dropCircleRef} style={styles.emptyDropCircle} />
@@ -1002,10 +1010,6 @@ const Screen = () => {
   });
 
   const screenStyles = StyleSheet.create({
-    safeareaview: {
-      flex: 1,
-      backgroundColor: "#FFFFFF", // Changed from red
-    },
     content: {
       flex: 1,
       display: "flex",
@@ -1016,7 +1020,7 @@ const Screen = () => {
 
   return (
     <SafeAreaView
-      style={screenStyles.safeareaview}
+      style={globalStyles.safeAreaView}
       edges={["top", "left", "right"]}
     >
       <View style={screenStyles.content}>
@@ -1024,7 +1028,7 @@ const Screen = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
-          colorType="NATIVE_BUTTON_COLOR"
+          showLetterCaseSwitch={true}
         />
         <DraggableAudioGame />
       </View>

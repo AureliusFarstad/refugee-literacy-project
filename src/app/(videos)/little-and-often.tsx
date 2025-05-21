@@ -1,11 +1,11 @@
 import welcome from "assets/videos/welcome-dict";
-import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { APP_COLORS } from "@/constants/routes";
 import type { AnimationCollection } from "@/ui/components/interactive-video-player";
 import InteractiveVideoPlayer from "@/ui/components/interactive-video-player";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { globalStyles } from "@/ui/styles";
 
 export const screenOptions = {
   headerShown: false,
@@ -50,7 +50,7 @@ const WelcomeVideo = () => {
 
   return (
     <SafeAreaView
-      style={styles.container}
+      style={globalStyles.safeAreaView}
       edges={["right", "bottom", "left"]} // Exclude 'top' edge
     >
       <InteractiveVideoPlayer
@@ -60,13 +60,5 @@ const WelcomeVideo = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: APP_COLORS.offwhite,
-    marginBottom: -40,
-  },
-});
 
 export default WelcomeVideo;
