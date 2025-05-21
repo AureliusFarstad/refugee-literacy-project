@@ -24,10 +24,10 @@ import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
 import { UserAvatar } from "@/ui/illustrations";
+import { globalStyles } from "@/ui/styles";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { sectionColor } from "./_layout";
-import { globalStyles } from "@/ui/styles";
 
 const primaryColor = SECTION_COLORS.speaking;
 const secondaryColor = SECTION_COLORS.vocabulary;

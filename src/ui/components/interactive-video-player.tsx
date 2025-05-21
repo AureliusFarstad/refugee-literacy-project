@@ -19,6 +19,7 @@ import VideoPlayer from "@/ui/components/video-player";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { HomeButton } from "@/ui/icons/circular/home-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
+
 import { globalStyles } from "../styles";
 
 const defaultButtonColorProps: ButtonColorProps = {

@@ -29,8 +29,8 @@ import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { PauseButton } from "@/ui/icons/circular/pause-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
 import { UserAvatar } from "@/ui/illustrations";
-import { cn } from "@/utils/helpers";
 import { globalStyles } from "@/ui/styles";
+import { cn } from "@/utils/helpers";
 
 type Message = {
   id: string;
@@ -596,7 +596,10 @@ function Listening() {
   });
 
   return (
-    <SafeAreaView style={globalStyles.safeAreaView} edges={["top", "left", "right"]}>
+    <SafeAreaView
+      style={globalStyles.safeAreaView}
+      edges={["top", "left", "right"]}
+    >
       <GuidanceAudioHeader
         title="Sound"
         isPlaying={isPlaying}

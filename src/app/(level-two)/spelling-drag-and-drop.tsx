@@ -29,10 +29,10 @@ import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
+import { globalStyles } from "@/ui/styles";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { sectionColor } from "./_layout";
-import { globalStyles } from "@/ui/styles";
 
 const styles = StyleSheet.create({
   card: {

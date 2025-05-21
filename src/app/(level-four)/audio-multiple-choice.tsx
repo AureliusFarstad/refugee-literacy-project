@@ -34,6 +34,7 @@ import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
+import { globalStyles } from "@/ui/styles";
 import {
   BOTTOM_TAB_HEIGHT,
   HEADER_HEIGHT,
@@ -42,7 +43,6 @@ import {
 } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
-import { globalStyles } from "@/ui/styles";
 
 // ------------------------------------------------------------
 // TYPE DEFINITIONS

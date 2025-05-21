@@ -14,8 +14,8 @@ import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { VocabularyFlashCard } from "@/ui/components/vocabulary-flashcard";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
-import { HEIGHT, IS_IOS } from "@/utils/layout";
 import { globalStyles } from "@/ui/styles";
+import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 const Footer = () => {
   return <View className="h-40" />;
