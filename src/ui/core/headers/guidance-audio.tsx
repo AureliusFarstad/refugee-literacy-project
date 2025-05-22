@@ -19,6 +19,7 @@ import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EmptyHeadButton } from "@/ui/icons/circular/empty-head-button";
 import { HomeButton } from "@/ui/icons/circular/home-button";
 
+// TODO: Move out of file. Shared with home screen
 const buttonColorProps: ButtonColorProps = {
   primaryColor: APP_COLORS.green,
   secondaryColor: APP_COLORS.lightgreen,

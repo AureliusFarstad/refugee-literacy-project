@@ -85,12 +85,12 @@ interface IActivityWithSoundAndName {
 
 interface ILesson {
   id: string;
-  image: string;
+  svg: any; // TODO: Type of an SVG file...
   title: string;
   description: string;
   path: string;
   isFinished: boolean;
-  progressBarColor: string;
+  guidanceAudio: any; // TODO: Type of a require("audio.mp3")
 }
 
 interface ILetter {
