@@ -1,14 +1,38 @@
-import { Image } from "expo-image";
 import { router } from "expo-router";
-import React from "react";
-import { FlatList, Pressable, Text, View } from "react-native";
+import React, { useState } from "react";
+import { FlatList, Pressable, Text, View, StyleSheet} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { LESSONS } from "@/constants/routes";
-import ProgressBar from "@/ui/components/home/progress-bar";
-import { HOME_BANNER_IMAGE } from "@/ui/components/illustrations/home";
+import { APP_COLORS, LESSONS } from "@/constants/routes";
+import WELCOME_VIDEO_BANNER from "@/assets/home/svg/welcome-video.svg"
 import { CheckIcon, DashesIcon, MultiLingualIcon } from "@/ui/icons";
 import { WIDTH } from "@/utils/layout";
+import { EmptyHeadButton } from "@/ui/icons/circular/empty-head-button";
+import { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
+
+// Welcome Video Banner Styling
+const HORIZONTAL_PADDING = 20
+const WELCOME_WIDTH = WIDTH - (HORIZONTAL_PADDING * 2);
+const WELCOME_ASPECT_RATIO = 161 / 281; // Original height/width ratio
+const WELCOME_HEIGHT = WELCOME_WIDTH * WELCOME_ASPECT_RATIO;
+
+// Level Banner Styling
+const BUTTON_WIDTH = 40
+const BUTTON_MARGIN_OUTSIDE = 20
+const BUTTON_MARGIN_INSIDE = 10
+const LEVEL_WIDTH = WIDTH - ((BUTTON_WIDTH + BUTTON_MARGIN_OUTSIDE + BUTTON_MARGIN_INSIDE)* 2);
+const LEVEL_ASPECT_RATIO = 118 / 164;
+const LEVEL_HEIGHT = LEVEL_WIDTH * LEVEL_ASPECT_RATIO;
+
+// TODO: Move out of file. Shared with header.
+const buttonColorProps: ButtonColorProps = {
+  primaryColor: APP_COLORS.green,
+  secondaryColor: APP_COLORS.lightgreen,
+  offwhiteColor: APP_COLORS.offwhite,
+  offblackColor: APP_COLORS.offblack,
+  backgroundColor: APP_COLORS.backgroundgrey,
+};
 
 const HomeHeader = () => {
   return (
@@ -17,18 +41,12 @@ const HomeHeader = () => {
         router.push("/(videos)/welcome");
       }}
     >
-      <View className="mb-10 flex w-full items-center">
-        <View className="">
-          <Image
-            source={HOME_BANNER_IMAGE}
-            style={{
-              width: WIDTH - 32,
-              height: 200,
-            }}
-          />
-        </View>
+      <View style={homeStyles.welcomeVideoBannerContainer}>
+        <WELCOME_VIDEO_BANNER
+          style={homeStyles.welcomeVideoBanner}
+        />
       </View>
-      <View className="mb-10 hidden bg-colors-green-500">
+      <View className="mb-10 bg-colors-green-500" style={homeStyles.levelBanner}> {/* add hidden to hide */}
         <Text className="py-2 text-center text-4xl text-white">1</Text>
       </View>
     </Pressable>
@@ -37,40 +55,85 @@ const HomeHeader = () => {
 
 const Separator = () => <View className="my-8" />;
 
+const homeStyles = StyleSheet.create({
+  welcomeVideoBannerContainer: {
+    width: '100%',
+    alignContent: 'center',
+    justifyContent: 'center',
+    padding: HORIZONTAL_PADDING,
+  },
+  welcomeVideoBanner: {
+    height: WELCOME_HEIGHT,
+  },
+  levelBanner: {
+    backgroundColor: APP_COLORS.green,
+  },
+  speakerButtonStyle: {
+    width: BUTTON_WIDTH,
+    height: BUTTON_WIDTH,
+    marginLeft: BUTTON_MARGIN_OUTSIDE,
+    marginRight: BUTTON_MARGIN_INSIDE,
+  },
+  checkButtonStyle: {
+    width: BUTTON_WIDTH,
+    height: BUTTON_WIDTH,
+    marginLeft: BUTTON_MARGIN_INSIDE,
+    marginRight: BUTTON_MARGIN_OUTSIDE,
+  }
+});
+
+
 const Home = () => {
-  // const [lessons, setLessons] = useState<ILesson[]>(LESSONS);
+  const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
+
+  // TODO solve ERROR:
+  // Warning: Text strings must be rendered within a <Text> component.
+  // Happening because of svg items...
+  
   const renderItem = ({ item }: { item: ILesson }) => {
+    const currentFill = checkedItems[item.id] === true ? "#62CC82" : "#D4D4D8";
     return (
-      <Pressable
-        className="flex px-5"
-        onPress={() => {
-          router.push(item.path as never);
-        }}
-      >
-        <View className="flex flex-row">
-          <View className="size-12 items-center justify-center rounded-full bg-colors-green-500 p-2">
-            <MultiLingualIcon />
-          </View>
-          <View className="relative mx-auto">
-            <Image
-              source={item.image}
-              style={{
-                width: WIDTH,
-                height: 180,
-                aspectRatio: 1.3,
-                borderRadius: 10,
-              }}
+      <View className="flex flex-row items-start">
+        {/* Guidance Audio Button */}
+        <View style={homeStyles.speakerButtonStyle}>
+          <AnimatedAudioButton
+            audioSource={item.guidanceAudio}
+            width={BUTTON_WIDTH}
+            height={BUTTON_WIDTH}
+          >
+            <EmptyHeadButton {...buttonColorProps}/>
+          </AnimatedAudioButton>
+        </View>
+        {/* Lesson Banner */}
+        <Pressable
+          onPress={() => {
+            router.push(item.path as never);
+          }}
+        >
+          <item.svg
+            width={LEVEL_WIDTH}
+            height={LEVEL_HEIGHT}
+          />
+        </Pressable>
+        {/* Toggleable Checkmark */}
+        <Pressable
+          onPress={() => {
+            // Toggle the checked state for this specific item
+            setCheckedItems(prev => ({
+              ...prev,
+              [item.id]: !prev[item.id]
+            }));
+          }}
+        >
+          <View style={homeStyles.checkButtonStyle}>
+            <CheckIcon 
+              width={BUTTON_WIDTH} 
+              height={BUTTON_WIDTH} 
+              fill={currentFill} 
             />
-            <ProgressBar progress={10} color={item.progressBarColor} />
           </View>
-          <View>
-            <CheckIcon />
-          </View>
-        </View>
-        <View className="absolute left-10 top-16">
-          <DashesIcon />
-        </View>
-      </Pressable>
+        </Pressable>
+      </View>
     );
   };
 

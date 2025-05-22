@@ -1,77 +1,61 @@
-import {
-  LESSON_FOUR_IMAGE,
-  LESSON_ONE_IMAGE,
-  LESSON_THREE_IMAGE,
-  LESSON_TWO_IMAGE,
-  TEACHER_TIP_IMAGE,
-} from "@/ui/components/illustrations/home";
+import LITTLE_AND_OFTEN from "@/assets/home/svg/little-and-often.svg";
+import ALPHABET from "@/assets/home/svg/alphabet.svg";
+import BLENDING from "@/assets/home/svg/blending.svg";
+import VOCABULARY from "@/assets/home/svg/vocabulary.svg";
+import CONVERSATION from "@/assets/home/svg/conversation.svg";
+
+// TODO: REPLACE WITH CORRECT AUDIO
+import { CONVERSATION_AUDIO_SOURCES_ENGLISH } from "@/assets/conversation/";
+
+const defaultGuidanceAudio = CONVERSATION_AUDIO_SOURCES_ENGLISH.part1.female;
 
 export const LESSONS = [
   {
     id: "teacher-tip",
-    image: TEACHER_TIP_IMAGE,
     title: "Teacher tip",
     description: "Section 1 Introduction to the alphabet",
     path: "/(videos)/little-and-often",
     isFinished: true,
-    progressBarColor: "bg-[#2B4AB0]",
+    svg: LITTLE_AND_OFTEN,
+    guidanceAudio: defaultGuidanceAudio
   },
   {
     id: "lesson-1",
-    image: LESSON_ONE_IMAGE,
     title: "Lesson 1",
     description: "Section 2 Introduction to the alphabet",
     path: "/(level-one)/letter-introduction",
     isFinished: false,
-    progressBarColor: "bg-[#6D28D9]",
+    svg: ALPHABET,
+    guidanceAudio: defaultGuidanceAudio
   },
   {
     id: "lesson-2",
-    image: LESSON_TWO_IMAGE,
     title: "Lesson 2",
     description: "Section 3 Introduction to the alphabet",
     path: "/(level-two)/spelling",
     isFinished: false,
-    progressBarColor: "bg-[#B43855]",
+    svg: BLENDING,
+    guidanceAudio: defaultGuidanceAudio
   },
   {
     id: "lesson-3",
-    image: LESSON_THREE_IMAGE,
     title: "Lesson 3",
     description: "Section 4",
     path: "/(level-three)/listening",
     isFinished: false,
-    progressBarColor: "bg-[#CA8A04]",
+    svg: CONVERSATION,
+    guidanceAudio: defaultGuidanceAudio
   },
   {
     id: "lesson-4",
-    image: LESSON_FOUR_IMAGE,
     title: "Lesson 4",
     description: "Section 3",
     path: "/(level-four)/flashcard",
     isFinished: false,
-    progressBarColor: "bg-[#C07027]",
+    svg: VOCABULARY,
+    guidanceAudio: defaultGuidanceAudio
   },
 ];
-
-export const LEVEL_COLORS = {
-  levelFour: {
-    primary: "#F69F4E",
-    secondary: "#FFF6D7",
-  },
-  levelOne: {
-    primary: "#6D28D9",
-    secondary: "#D6BCFA",
-  },
-  levelThree: {
-    primary: "#FBD65B",
-    secondary: "#FFF6D7",
-  },
-  levelTwo: {
-    primary: "#F36889",
-    secondary: "#E39AAB",
-  },
-} as const;
 
 export const APP_COLORS = {
   green: "#62CC82",
@@ -127,5 +111,3 @@ export const SECTION_COLORS = {
 
 export type SectionColorScheme =
   (typeof SECTION_COLORS)[keyof typeof SECTION_COLORS];
-
-export type LevelColorScheme = (typeof LEVEL_COLORS)[keyof typeof LEVEL_COLORS];

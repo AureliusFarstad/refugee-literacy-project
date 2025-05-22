@@ -26,13 +26,13 @@ export const ArrowIcon = ({ color = "#000", ...props }: SvgProps) => (
   </Svg>
 );
 
-export const CheckIcon = ({ ...props }: SvgProps) => (
-  <Svg width={40} height={40} viewBox="0 0 40 40" fill="none" {...props}>
+export const CheckIcon = ({ width, height, fill, ...props }: SvgProps) => (
+  <Svg width={width} height={height} viewBox="0 0 40 40" {...props}>
     <Path
       fillRule="evenodd"
       clipRule="evenodd"
       d="M.5 20C.5 9.23 9.23.5 20 .5S39.5 9.23 39.5 20 30.77 39.5 20 39.5.5 30.77.5 20zm26.72-3.628a1.501 1.501 0 10-2.44-1.744l-6.472 9.06-3.248-3.248a1.5 1.5 0 00-2.12 2.12l4.5 4.5a1.5 1.5 0 002.28-.188l7.5-10.5z"
-      fill="#D4D4D8"
+      fill={fill}
     />
   </Svg>
 );
