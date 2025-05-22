@@ -1,27 +1,28 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { FlatList, Pressable, Text, View, StyleSheet} from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import WELCOME_VIDEO_BANNER from "@/assets/home/svg/welcome-video.svg";
 import { APP_COLORS, LESSONS } from "@/constants/routes";
-import WELCOME_VIDEO_BANNER from "@/assets/home/svg/welcome-video.svg"
-import { CheckIcon, DashesIcon, MultiLingualIcon } from "@/ui/icons";
-import { WIDTH } from "@/utils/layout";
-import { EmptyHeadButton } from "@/ui/icons/circular/empty-head-button";
-import { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { CheckIcon } from "@/ui/icons";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { EmptyHeadButton } from "@/ui/icons/circular/empty-head-button";
+import { WIDTH } from "@/utils/layout";
 
 // Welcome Video Banner Styling
-const HORIZONTAL_PADDING = 20
-const WELCOME_WIDTH = WIDTH - (HORIZONTAL_PADDING * 2);
+const HORIZONTAL_PADDING = 20;
+const WELCOME_WIDTH = WIDTH - HORIZONTAL_PADDING * 2;
 const WELCOME_ASPECT_RATIO = 161 / 281; // Original height/width ratio
 const WELCOME_HEIGHT = WELCOME_WIDTH * WELCOME_ASPECT_RATIO;
 
 // Level Banner Styling
-const BUTTON_WIDTH = 40
-const BUTTON_MARGIN_OUTSIDE = 20
-const BUTTON_MARGIN_INSIDE = 10
-const LEVEL_WIDTH = WIDTH - ((BUTTON_WIDTH + BUTTON_MARGIN_OUTSIDE + BUTTON_MARGIN_INSIDE)* 2);
+const BUTTON_WIDTH = 40;
+const BUTTON_MARGIN_OUTSIDE = 20;
+const BUTTON_MARGIN_INSIDE = 10;
+const LEVEL_WIDTH =
+  WIDTH - (BUTTON_WIDTH + BUTTON_MARGIN_OUTSIDE + BUTTON_MARGIN_INSIDE) * 2;
 const LEVEL_ASPECT_RATIO = 118 / 164;
 const LEVEL_HEIGHT = LEVEL_WIDTH * LEVEL_ASPECT_RATIO;
 
@@ -42,11 +43,14 @@ const HomeHeader = () => {
       }}
     >
       <View style={homeStyles.welcomeVideoBannerContainer}>
-        <WELCOME_VIDEO_BANNER
-          style={homeStyles.welcomeVideoBanner}
-        />
+        <WELCOME_VIDEO_BANNER style={homeStyles.welcomeVideoBanner} />
       </View>
-      <View className="mb-10 bg-colors-green-500" style={homeStyles.levelBanner}> {/* add hidden to hide */}
+      <View
+        className="mb-10 bg-colors-green-500"
+        style={homeStyles.levelBanner}
+      >
+        {" "}
+        {/* add hidden to hide */}
         <Text className="py-2 text-center text-4xl text-white">1</Text>
       </View>
     </Pressable>
@@ -57,9 +61,9 @@ const Separator = () => <View className="my-8" />;
 
 const homeStyles = StyleSheet.create({
   welcomeVideoBannerContainer: {
-    width: '100%',
-    alignContent: 'center',
-    justifyContent: 'center',
+    width: "100%",
+    alignContent: "center",
+    justifyContent: "center",
     padding: HORIZONTAL_PADDING,
   },
   welcomeVideoBanner: {
@@ -79,17 +83,18 @@ const homeStyles = StyleSheet.create({
     height: BUTTON_WIDTH,
     marginLeft: BUTTON_MARGIN_INSIDE,
     marginRight: BUTTON_MARGIN_OUTSIDE,
-  }
+  },
 });
 
-
 const Home = () => {
-  const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
+  const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
+    {},
+  );
 
   // TODO solve ERROR:
   // Warning: Text strings must be rendered within a <Text> component.
   // Happening because of svg items...
-  
+
   const renderItem = ({ item }: { item: ILesson }) => {
     const currentFill = checkedItems[item.id] === true ? "#62CC82" : "#D4D4D8";
     return (
@@ -101,7 +106,7 @@ const Home = () => {
             width={BUTTON_WIDTH}
             height={BUTTON_WIDTH}
           >
-            <EmptyHeadButton {...buttonColorProps}/>
+            <EmptyHeadButton {...buttonColorProps} />
           </AnimatedAudioButton>
         </View>
         {/* Lesson Banner */}
@@ -110,26 +115,23 @@ const Home = () => {
             router.push(item.path as never);
           }}
         >
-          <item.svg
-            width={LEVEL_WIDTH}
-            height={LEVEL_HEIGHT}
-          />
+          <item.svg width={LEVEL_WIDTH} height={LEVEL_HEIGHT} />
         </Pressable>
         {/* Toggleable Checkmark */}
         <Pressable
           onPress={() => {
             // Toggle the checked state for this specific item
-            setCheckedItems(prev => ({
+            setCheckedItems((prev) => ({
               ...prev,
-              [item.id]: !prev[item.id]
+              [item.id]: !prev[item.id],
             }));
           }}
         >
           <View style={homeStyles.checkButtonStyle}>
-            <CheckIcon 
-              width={BUTTON_WIDTH} 
-              height={BUTTON_WIDTH} 
-              fill={currentFill} 
+            <CheckIcon
+              width={BUTTON_WIDTH}
+              height={BUTTON_WIDTH}
+              fill={currentFill}
             />
           </View>
         </Pressable>

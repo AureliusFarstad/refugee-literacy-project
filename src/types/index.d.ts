@@ -90,7 +90,7 @@ interface ILesson {
   description: string;
   path: string;
   isFinished: boolean;
-  guidanceAudio: any, // TODO: Type of a require("audio.mp3")
+  guidanceAudio: any; // TODO: Type of a require("audio.mp3")
 }
 
 interface ILetter {

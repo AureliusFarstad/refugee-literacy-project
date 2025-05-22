@@ -1,11 +1,10 @@
-import LITTLE_AND_OFTEN from "@/assets/home/svg/little-and-often.svg";
-import ALPHABET from "@/assets/home/svg/alphabet.svg";
-import BLENDING from "@/assets/home/svg/blending.svg";
-import VOCABULARY from "@/assets/home/svg/vocabulary.svg";
-import CONVERSATION from "@/assets/home/svg/conversation.svg";
-
 // TODO: REPLACE WITH CORRECT AUDIO
 import { CONVERSATION_AUDIO_SOURCES_ENGLISH } from "@/assets/conversation/";
+import ALPHABET from "@/assets/home/svg/alphabet.svg";
+import BLENDING from "@/assets/home/svg/blending.svg";
+import CONVERSATION from "@/assets/home/svg/conversation.svg";
+import LITTLE_AND_OFTEN from "@/assets/home/svg/little-and-often.svg";
+import VOCABULARY from "@/assets/home/svg/vocabulary.svg";
 
 const defaultGuidanceAudio = CONVERSATION_AUDIO_SOURCES_ENGLISH.part1.female;
 
@@ -17,7 +16,7 @@ export const LESSONS = [
     path: "/(videos)/little-and-often",
     isFinished: true,
     svg: LITTLE_AND_OFTEN,
-    guidanceAudio: defaultGuidanceAudio
+    guidanceAudio: defaultGuidanceAudio,
   },
   {
     id: "lesson-1",
@@ -26,7 +25,7 @@ export const LESSONS = [
     path: "/(level-one)/letter-introduction",
     isFinished: false,
     svg: ALPHABET,
-    guidanceAudio: defaultGuidanceAudio
+    guidanceAudio: defaultGuidanceAudio,
   },
   {
     id: "lesson-2",
@@ -35,7 +34,7 @@ export const LESSONS = [
     path: "/(level-two)/spelling",
     isFinished: false,
     svg: BLENDING,
-    guidanceAudio: defaultGuidanceAudio
+    guidanceAudio: defaultGuidanceAudio,
   },
   {
     id: "lesson-3",
@@ -44,7 +43,7 @@ export const LESSONS = [
     path: "/(level-three)/listening",
     isFinished: false,
     svg: CONVERSATION,
-    guidanceAudio: defaultGuidanceAudio
+    guidanceAudio: defaultGuidanceAudio,
   },
   {
     id: "lesson-4",
@@ -53,7 +52,7 @@ export const LESSONS = [
     path: "/(level-four)/flashcard",
     isFinished: false,
     svg: VOCABULARY,
-    guidanceAudio: defaultGuidanceAudio
+    guidanceAudio: defaultGuidanceAudio,
   },
 ];
 
