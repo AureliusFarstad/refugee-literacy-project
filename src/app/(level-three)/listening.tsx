@@ -1,8 +1,9 @@
 import type { AudioStatus } from "expo-audio";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
+import { useFocusEffect } from "expo-router";
 import { MotiView } from "moti";
 import type { ReactNode } from "react";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { Slider } from "react-native-awesome-slider";
 import Animated, {
@@ -588,6 +589,18 @@ function Listening() {
 
     return isPlaying || isActiveStep;
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setActiveRow({
+          number: 3,
+          rowsAnimated: [0, 1, 2, 3],
+          step: "complete",
+        });
+      };
+    }, []),
+  );
 
   const conversationActive = isConversationActive();
 

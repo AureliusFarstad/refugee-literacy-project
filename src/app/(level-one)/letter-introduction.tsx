@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { AVPlaybackSource } from "expo-av";
+import type { AVPlaybackSource, AVPlaybackStatus } from "expo-av";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import React, { useEffect, useRef, useState } from "react";
@@ -14,6 +14,7 @@ import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import AnimatedLetterComponent from "@/ui/components/home/animated-letter-component";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
+import { AnimatedBreathingView } from "@/ui/icons/animated-breathing-view";
 import { EarButton } from "@/ui/icons/circular/ear-button";
 import { NameButton } from "@/ui/icons/circular/name-button";
 import { PencilButton } from "@/ui/icons/circular/pencil-button";
@@ -27,10 +28,10 @@ type AnimatedLetterComponentRef = {
 
 const PageLinesSVG = () => {
   return (
-    <View className="overflow-hidden">
+    <View className=" overflow-hidden">
       <Svg
         width={WIDTH - 16}
-        height="320"
+        height="224"
         viewBox={`0 0 ${WIDTH - 16} 143`}
         fill="none"
       >
@@ -79,6 +80,9 @@ const LetterIntroduction = () => {
   const { levels, updateLevels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
 
+  const [isAlphabeticPlaying, setIsAlphabeticPlaying] = useState(false);
+  const [isPhoneticPlaying, setIsPhoneticPlaying] = useState(false);
+
   const insets = useSafeAreaInsets();
 
   const [isAnimating, setIsAnimating] = useState(false);
@@ -104,12 +108,26 @@ const LetterIntroduction = () => {
 
   const playSound = async (playbackSource: AVPlaybackSource) => {
     try {
-      const { sound: soundResponse } =
-        await Audio.Sound.createAsync(playbackSource);
-      if (soundResponse) {
-        setSound(soundResponse);
+      if (sound) {
+        await sound.unloadAsync();
       }
-      await soundResponse.playAsync();
+
+      const { sound: soundResponse } = await Audio.Sound.createAsync(
+        playbackSource,
+        { shouldPlay: true },
+      );
+
+      setSound(soundResponse);
+
+      return new Promise<void>((resolve, _reject) => {
+        const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
+          if (status.isLoaded && status.didJustFinish) {
+            soundResponse.unloadAsync().then(() => resolve());
+          }
+        };
+
+        soundResponse.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+      });
     } catch (error) {
       console.log("error in playSound", error);
       throw error;
@@ -224,28 +242,33 @@ const LetterIntroduction = () => {
         showLetterCaseSwitch={false}
       />
       <View
-        className="flex flex-col justify-between"
+        className="flex flex-col justify-between "
         style={{
           height:
             HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
           backgroundColor: APP_COLORS.backgroundgrey,
         }}
       >
-        <View>
-          <View className=" border-yellow-500 ">
+        <View className="">
+          <View className="   ">
             <View className="mx-4  overflow-hidden rounded-xl border-2 border-purple-500 bg-white ">
-              <View className="mt-4 flex items-center justify-center ">
+              <View className="mt-2 flex items-center justify-center  ">
                 <View className="flex flex-row rounded-full p-4">
                   <TouchableOpacity
                     onPress={async () => {
                       try {
+                        setIsAlphabeticPlaying(true);
                         await playSound(
                           activeActivity.sound.alphabeticAudioSrc,
                         );
                         incrementProgress("ALPHABETIC_SOUND");
-                      } catch (error) {}
+                      } catch (error) {
+                        console.log("Error playing alphabetic sound:", error);
+                      } finally {
+                        setIsAlphabeticPlaying(false);
+                      }
                     }}
-                    className="mr-4 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
+                    className="z-50 mr-4 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
                   >
                     <NameButton
                       backgroundColor="#C385F8"
@@ -254,15 +277,24 @@ const LetterIntroduction = () => {
                       primaryColor="#C385F8"
                       secondaryColor="#FFFFFF"
                     />
+                    <AnimatedBreathingView
+                      isPlaying={isAlphabeticPlaying}
+                      size={80}
+                    />
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={async () => {
                       try {
+                        setIsPhoneticPlaying(true);
                         await playSound(activeActivity.sound.phoneticAudioSrc);
                         incrementProgress("PHONETIC_SOUND");
-                      } catch (error) {}
+                      } catch (error) {
+                        console.log("Error playing phonetic sound:", error);
+                      } finally {
+                        setIsPhoneticPlaying(false);
+                      }
                     }}
-                    className=" flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
+                    className="z-50 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
                   >
                     <EarButton
                       backgroundColor="#C385F8"
@@ -270,6 +302,10 @@ const LetterIntroduction = () => {
                       offwhiteColor="#FFFFFF"
                       primaryColor="#C385F8"
                       secondaryColor="#FFFFFF"
+                    />
+                    <AnimatedBreathingView
+                      isPlaying={isPhoneticPlaying}
+                      size={80}
                     />
                   </TouchableOpacity>
                 </View>
@@ -283,7 +319,7 @@ const LetterIntroduction = () => {
                 onAnimationStart={onAnimationStart}
                 isAnimating={isAnimating}
               />
-              <View className="mb-8 flex flex-row items-center justify-evenly">
+              <View className="flex flex-row items-center justify-evenly pb-16">
                 <TouchableOpacity
                   onPress={() => {
                     animatedLetterRef?.current?.animateLowercase();

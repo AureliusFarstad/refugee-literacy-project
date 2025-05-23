@@ -35,8 +35,8 @@ require("dotenv").config({
 const BUNDLE_ID = "com.refugee-literacy-project"; // ios bundle id
 const PACKAGE = "com.refugee_literacy_project"; // android package name
 const NAME = "refugee-literacy-project-app"; // app name
-const EXPO_ACCOUNT_OWNER = "refugee-literacy-project"; // expo account owner
-const EAS_PROJECT_ID = ""; // eas project id
+const EXPO_ACCOUNT_OWNER = "ouremode"; // expo account owner
+const EAS_PROJECT_ID = "2a4309fe-0708-4146-b92c-859b9db3851f"; // eas project id
 
 /**
  * We declare a function withEnvSuffix that will add a suffix to the variable name based on the APP_ENV

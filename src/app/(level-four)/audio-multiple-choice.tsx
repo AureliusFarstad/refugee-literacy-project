@@ -864,7 +864,9 @@ const DraggableAudioGame: React.FC = () => {
       position: Position,
       buttonId: string,
       isInTarget: boolean,
+      // eslint-disable-next-line @typescript-eslint/no-shadow
       CORRECT_BUTTON_ID: string,
+      // TODO: CORRECT_BUTTON_ID is already declared in the upper scope on line 731 column 9  @typescript-eslint/no-shadow
     ): void => {
       setIsCardActive(false);
 
