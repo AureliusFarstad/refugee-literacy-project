@@ -1,0 +1,34 @@
+name: EAS QA Build (Android & IOS) (EAS)
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  Build:
+    name: EAS QA Build (Android & IOS) (EAS)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
+
+      - name: 📦 Checkout project repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup Node + PNPM + install deps
+        uses: ./.github/actions/setup-node-pnpm-install
+
+      - name: ⏱️ EAS Build
+        uses: ./.github/actions/eas-build
+        with:
+          APP_ENV: preview
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          VERSION: ${{ github.event.release.tag_name }}
+          IOS: false # TODO: set as true when IOS account is ready
