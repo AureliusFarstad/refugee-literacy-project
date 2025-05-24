@@ -1,0 +1,32 @@
+name: New GitHub Release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  release:
+    name: New GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write # Add this permission to allow triggering other workflows
+    steps:
+      - name: 📦 Checkout project repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create A Github Release
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          draft: false
+
+      # Add this step to directly trigger the preview build workflow
+      - name: Trigger Preview Build
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: eas-build-preview.yml # Make sure this matches your workflow file name
+          token: ${{ secrets.GITHUB_TOKEN }} # Now with actions:write permission
