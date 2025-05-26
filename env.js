@@ -10,7 +10,7 @@
 /**
  * 1st part: Import packages and Load your env variables
  * we use dotenv to load the correct variables from the .env file based on the APP_ENV variable (default is development)
- * APP_ENV is passed as an inline variable while executing the command, for example: APP_ENV=staging pnpm build:android
+ * APP_ENV is passed as an inline variable while executing the command, for example: APP_ENV=preview pnpm build:android
  */
 const z = require("zod");
 
@@ -29,7 +29,7 @@ require("dotenv").config({
  * Such as: bundle id, package name, app name.
  *
  * You can add them to the .env file but we think it's better to keep them here as as we use prefix to generate this values based on the APP_ENV
- * for example: if the APP_ENV is staging, the bundle id will be com.refugee-literacy-project.staging
+ * for example: if the APP_ENV is preview, the bundle id will be com.refugee-literacy-project.preview
  */
 
 const BUNDLE_ID = "com.refugee-literacy-project"; // ios bundle id
@@ -68,7 +68,7 @@ const withEnvSuffix = (name) => {
  */
 
 const client = z.object({
-  APP_ENV: z.enum(["development", "staging", "production"]),
+  APP_ENV: z.enum(["development", "preview", "production"]),
   NAME: z.string(),
   BUNDLE_ID: z.string(),
   PACKAGE: z.string(),
