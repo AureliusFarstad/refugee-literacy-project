@@ -1,5 +1,5 @@
-import { Tabs, useRouter } from "expo-router";
-import React, { useEffect } from "react";
+import { Tabs } from "expo-router";
+import React from "react";
 import type { JSX } from "react/jsx-runtime";
 
 import type { SectionColorTheme } from "@/constants/routes";
@@ -54,19 +54,16 @@ const tabs: TabType[] = [
 ];
 
 export default function LevelTwoTabLayout() {
-  const router = useRouter();
-
   // TODO: Wants to go to tab "spelling" - Unless I include this code...
   // Need help from Om
-  useEffect(() => {
-    // Force navigation to the correct tab on mount
-    router.replace("/(level-two)/blending-flashcard");
-  }, [router]);
+  // useEffect(() => {
+  //   // Force navigation to the correct tab on mount
+  //   router.replace("/(level-two)/blending-flashcard");
+  // }, [router]);
 
   return (
     <Tabs
       initialRouteName="blending-flashcard"
-      backBehavior="order"
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {

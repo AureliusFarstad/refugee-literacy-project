@@ -21,6 +21,7 @@ type AnimatedAudioButtonProps = {
   borderColor?: string;
   borderWidth?: number;
   breatheDuration?: number;
+  onPress?: () => void; // Add this
 };
 
 export const AnimatedAudioButton = ({
@@ -31,6 +32,7 @@ export const AnimatedAudioButton = ({
   borderColor = "#4CAF50",
   borderWidth = 4,
   breatheDuration = 2000,
+  onPress,
 }: AnimatedAudioButtonProps) => {
   const [sound, setSound] = React.useState<Sound>();
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -88,6 +90,8 @@ export const AnimatedAudioButton = ({
         { shouldPlay: true },
       );
       setSound(newSound);
+
+      onPress?.();
 
       newSound.setOnPlaybackStatusUpdate((status) => {
         if (!status.isLoaded || status.didJustFinish) {

@@ -4,8 +4,16 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { zustandStorage } from "@/core/storage";
 import { createSelectors } from "@/core/utils";
 
-// TODO: add more languages
-type LanguageType = "en" | "zh" | "ja" | "ko";
+export const SUPPORTED_LANGUAGES = [
+  { code: "en", label: "English" },
+  { code: "fa", label: "فارسی" }, // Farsi
+  { code: "fa_AF", label: "دری" }, // Dari
+  { code: "ku", label: "Kurmancî" }, // Kurmanji
+  { code: "ar_SY", label: "العربية السورية" }, // Syrian Arabic
+];
+
+// Derive the type from the array
+type LanguageType = "DEFAULT" | (typeof SUPPORTED_LANGUAGES)[number]["code"];
 
 interface UserState {
   language: LanguageType;
@@ -15,7 +23,7 @@ interface UserState {
 const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      language: "en",
+      language: "DEFAULT",
       setLanguage: (language) => set(() => ({ language })),
     }),
     {

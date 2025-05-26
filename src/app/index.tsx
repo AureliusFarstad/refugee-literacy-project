@@ -1,10 +1,19 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import WELCOME_VIDEO_BANNER from "@/assets/home/svg/welcome-video.svg";
 import { APP_COLORS, LESSONS } from "@/constants/routes";
+import { useUser } from "@/core/store/user";
+import LanguageSelectionScreen from "@/ui/components/language-select-screen";
 import { CheckIcon } from "@/ui/icons";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
@@ -36,24 +45,39 @@ const buttonColorProps: ButtonColorProps = {
 };
 
 const HomeHeader = () => {
+  const { setLanguage } = useUser();
+
   return (
-    <Pressable
-      onPress={() => {
-        router.push("/(videos)/welcome");
-      }}
-    >
-      <View style={homeStyles.welcomeVideoBannerContainer}>
-        <WELCOME_VIDEO_BANNER style={homeStyles.welcomeVideoBanner} />
-      </View>
-      <View
-        className="mb-10 bg-colors-green-500"
-        style={homeStyles.levelBanner}
+    <View>
+      <Pressable
+        onPress={() => {
+          setLanguage("DEFAULT");
+        }}
       >
-        {" "}
-        {/* add hidden to hide */}
-        <Text className="py-2 text-center text-4xl text-white">1</Text>
-      </View>
-    </Pressable>
+        <Image
+          source={require("@/assets/home/png/return-to-select.png")} // Replace with your image path
+          style={{ width: 98 * 1.5, height: 54 * 1.5, paddingLeft: 25 }} // Add dimensions
+          resizeMode="contain" // Optional: adjust how image scales
+        />
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          router.push("/(videos)/welcome");
+        }}
+      >
+        <View style={homeStyles.welcomeVideoBannerContainer}>
+          <WELCOME_VIDEO_BANNER style={homeStyles.welcomeVideoBanner} />
+        </View>
+        <View
+          className="mb-10 bg-colors-green-500"
+          style={homeStyles.levelBanner}
+        >
+          {" "}
+          {/* add hidden to hide */}
+          <Text className="py-2 text-center text-4xl text-white">1</Text>
+        </View>
+      </Pressable>
+    </View>
   );
 };
 
@@ -90,6 +114,13 @@ const Home = () => {
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
     {},
   );
+
+  const { language } = useUser();
+
+  // Show language selection if no language is selected
+  if (language === "DEFAULT") {
+    return <LanguageSelectionScreen />;
+  }
 
   // TODO solve ERROR:
   // Warning: Text strings must be rendered within a <Text> component.
@@ -140,15 +171,7 @@ const Home = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1   bg-white">
-      <Pressable
-        className="hidden bg-colors-green-500 p-5"
-        onPress={() => {
-          router.push("/picture-multiple-choice");
-        }}
-      >
-        <Text>picture</Text>
-      </Pressable>
+    <SafeAreaView className="flex-1 bg-white">
       <View className="py-10">
         <FlatList
           ListHeaderComponent={HomeHeader}
