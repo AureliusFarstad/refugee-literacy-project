@@ -22,7 +22,8 @@ import { PlayButton } from "@/ui/icons/circular/play-button";
 
 import { globalStyles } from "../styles";
 
-// TODO: Refactor out
+// TODO: Refactor `defaultButtonColorProps` into a separate constants or theme file.
+// This will improve maintainability by centralizing color definitions and reducing redundancy.
 const defaultButtonColorProps: ButtonColorProps = {
   primaryColor: APP_COLORS.green,
   secondaryColor: APP_COLORS.lightgreen,
