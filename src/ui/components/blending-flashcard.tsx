@@ -2,8 +2,8 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import type { SvgProps } from "react-native-svg";
 
-import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
-import { BLENDING_AUDIO_SOURCES } from "@/assets/blending/index";
+import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
+import { BLENDING_AUDIO_SOURCES, requireAudioForWord } from "@/assets/blending/index";
 import { Text } from "@/ui";
 import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
@@ -148,7 +148,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
 
         {/* English Word Rectangular Button */}
         <AnimatedAudioButton
-          audioSource={BLENDING_AUDIO_SOURCES[content.word].file}
+          audioSource={requireAudioForWord(content.word)}
           width={180}
           height={40}
         >

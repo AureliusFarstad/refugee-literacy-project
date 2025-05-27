@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   BLENDING_IMAGE_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
+  requireImageForWord,
 } from "@/assets/blending";
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
@@ -19,8 +20,7 @@ const BLENDING_FLASHCARDS = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
       id: word,
       letters: word.split(""),
       word: word,
-      svg: BLENDING_IMAGE_SOURCES[word as keyof typeof BLENDING_IMAGE_SOURCES]
-        .file, // TODO: Improve syntax here with types?
+      svg: requireImageForWord(word),
     };
   },
 );

@@ -25,6 +25,9 @@ import {
   BLENDING_AUDIO_SOURCES,
   BLENDING_IMAGE_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
+  getAudioForWord,
+  requireAudioForWord,
+  requireImageForWord,
 } from "@/assets/blending";
 import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
@@ -742,11 +745,8 @@ const DraggableAudioGame: React.FC = () => {
   // Current game data
   const currentGameSet = generatedGameSets[currentGameSetIndex];
   const CORRECT_BUTTON_ID: string = currentGameSet.correctAnswer;
-  const Svg =
-    BLENDING_IMAGE_SOURCES[
-      CORRECT_BUTTON_ID as keyof typeof BLENDING_IMAGE_SOURCES
-    ];
-
+  const Svg = requireImageForWord(CORRECT_BUTTON_ID)
+  
   // Available audio buttons using shuffled options
   const availableButtons: ButtonItem[] = shuffledOptions.map((word: string) => {
     return { id: word, word: word };
@@ -947,7 +947,7 @@ const DraggableAudioGame: React.FC = () => {
             <View style={[styles.iconButton, { top: 0, right: 0 }]}>
               <AnimatedAudioButton
                 audioSource={
-                  BLENDING_AUDIO_SOURCES[CORRECT_BUTTON_ID].file // TODO: Update native source here.
+                  requireAudioForWord(CORRECT_BUTTON_ID)
                 }
                 width={40}
                 height={40}
@@ -980,7 +980,7 @@ const DraggableAudioGame: React.FC = () => {
             key={`${item.id}-${currentGameSetIndex}`}
             item={item}
             onAudioPlay={() =>
-              playAudio(BLENDING_AUDIO_SOURCES[item.word].file, item.id)
+              playAudio(requireAudioForWord(item.word), item.id)
             }
             onDragStart={() => setIsCardActive(true)}
             onDragEnd={(pos, isInTarget) =>

@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Path } from "react-native-svg";
 
-import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
+import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
 import NoBackgroundSVG from "@/assets/language-select/svg/no-background.svg";
 import NoBackgroundGreyscaleSVG from "@/assets/language-select/svg/no-background-greyscale.svg";
 import SelectSVG from "@/assets/language-select/svg/select.svg";

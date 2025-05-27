@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ALPHABET_LETTER_LIST_BY_LEVEL } from "@/assets/alphabet";
-import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
+import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
 import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from "@/ui";

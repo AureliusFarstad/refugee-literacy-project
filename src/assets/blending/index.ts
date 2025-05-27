@@ -1,63 +1,79 @@
-import ant_svg from "./images/ant.svg";
-import in_svg from "./images/in.svg";
-import pan_svg from "./images/pan.svg";
-import pin_svg from "./images/pin.svg";
-import tap_svg from "./images/tap.svg";
-import tin_svg from "./images/tin.svg";
-
-type IBlending_Word_List = {
+// ===== index.ts =====
+// Types
+export type IBlending_Word_List = {
   [key: string]: string[];
 };
 
-type IBlending_Audio_Source = {
-  [key: string]: {
-    file: string;
-  };
-};
-
+// Word Lists
 export const BLENDING_WORD_LIST_BY_LEVEL: IBlending_Word_List = {
   LEVEL_1: ["tin", "pin", "pan", "ant", "in", "tap"],
+  LEVEL_2: ["sit"],
 };
 
-// TODO: Update these
-export const BLENDING_AUDIO_SOURCES: IBlending_Audio_Source = {
-  tin: {
-    file: require("assets/alphabet/audio/name/b.mp3"),
-  },
-  pin: {
-    file: require("assets/alphabet/audio/name/c.mp3"),
-  },
-  pan: {
-    file: require("assets/alphabet/audio/name/d.mp3"),
-  },
-  ant: {
-    file: require("assets/alphabet/audio/name/e.mp3"),
-  },
-  in: {
-    file: require("assets/alphabet/audio/name/f.mp3"),
-  },
-  tap: {
-    file: require("assets/alphabet/audio/name/g.mp3"),
-  },
+// Extract all valid words from all levels automatically
+export type AllValidWords = (typeof BLENDING_WORD_LIST_BY_LEVEL)[keyof typeof BLENDING_WORD_LIST_BY_LEVEL][number];
+
+// Audio source type for blending words where keys are from list above.
+export type IBlending_Audio_Source = Partial<Record<AllValidWords, { file: string }>>;
+
+// Image sources with the same type safety
+export type IBlending_Image_Source = Partial<Record<AllValidWords, { file: any }>>;
+
+// Re-export sources
+export { BLENDING_AUDIO_SOURCES } from './audio-sources';
+export { BLENDING_IMAGE_SOURCES } from './image-sources';
+
+// Utils
+import { BLENDING_AUDIO_SOURCES } from './audio-sources';
+import { BLENDING_IMAGE_SOURCES } from './image-sources';
+
+// Helper function to get all words from a specific level
+export const getWordsForLevel = (level: keyof typeof BLENDING_WORD_LIST_BY_LEVEL) => {
+  return BLENDING_WORD_LIST_BY_LEVEL[level];
 };
 
-export const BLENDING_IMAGE_SOURCES = {
-  tin: {
-    file: tin_svg,
-  },
-  pin: {
-    file: pin_svg,
-  },
-  pan: {
-    file: pan_svg,
-  },
-  ant: {
-    file: ant_svg,
-  },
-  in: {
-    file: in_svg,
-  },
-  tap: {
-    file: tap_svg,
-  },
+// Type-safe function to get audio for a word
+export const getAudioForWord = (word: AllValidWords) => {
+  return BLENDING_AUDIO_SOURCES[word]?.file;
+};
+
+// Type-safe function to get image for a word
+export const getImageForWord = (word: AllValidWords) => {
+  return BLENDING_IMAGE_SOURCES[word];
+};
+
+// These functions guarantee the file exists (no casting needed!)
+export const requireAudioForWord = (word: AllValidWords): string => {
+  const audio = BLENDING_AUDIO_SOURCES[word]?.file;
+  if (!audio) {
+    throw new Error(`Audio file not found for word: ${word}`);
+  }
+  return audio as string; // Safe cast since we checked
+};
+
+export const requireImageForWord = (word: AllValidWords): any => {
+  const image = BLENDING_IMAGE_SOURCES[word]?.file;
+  if (!image) {
+    throw new Error(`Image file not found for word: ${word}`);
+  }
+  return image; // Safe since we checked
+};
+
+// Helper function to check if image exists for a word
+export const hasImageForWord = (word: AllValidWords): word is keyof typeof BLENDING_IMAGE_SOURCES => {
+  return word in BLENDING_IMAGE_SOURCES;
+};
+
+// Helper function to check if audio exists for a word
+export const hasAudioForWord = (word: AllValidWords): word is keyof typeof BLENDING_AUDIO_SOURCES => {
+  return word in BLENDING_AUDIO_SOURCES;
+};
+
+// Get words that are missing audio or image (useful for development)
+export const getIncompleteWords = () => {
+  const allWords = Object.values(BLENDING_WORD_LIST_BY_LEVEL).flat();
+  return {
+    missingAudio: allWords.filter(word => !hasAudioForWord(word as AllValidWords)),
+    missingImage: allWords.filter(word => !hasImageForWord(word as AllValidWords)),
+  };
 };

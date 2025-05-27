@@ -6,7 +6,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
+import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
 import {
   CONVERSATION_AUDIO_SOURCES_ENGLISH,
   CONVERSATION_AUDIO_SOURCES_FARSI,
