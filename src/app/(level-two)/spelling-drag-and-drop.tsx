@@ -13,8 +13,8 @@ import {
 } from "react-native-safe-area-context";
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
+import type { BLENDING_AUDIO_SOURCES } from "@/assets/blending";
 import {
-  BLENDING_AUDIO_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
   requireAudioForWord,
 } from "@/assets/blending";

@@ -4,8 +4,7 @@ import pan_svg from "./images/pan.svg";
 import pin_svg from "./images/pin.svg";
 import tap_svg from "./images/tap.svg";
 import tin_svg from "./images/tin.svg";
-
-import type { IBlending_Image_Source } from './index';
+import type { IBlending_Image_Source } from "./index";
 
 export const BLENDING_IMAGE_SOURCES: IBlending_Image_Source = {
   tin: {

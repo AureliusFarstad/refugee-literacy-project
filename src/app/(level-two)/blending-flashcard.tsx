@@ -3,7 +3,6 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
-  BLENDING_IMAGE_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
   requireImageForWord,
 } from "@/assets/blending";

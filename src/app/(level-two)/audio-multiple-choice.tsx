@@ -22,10 +22,7 @@ import Reanimated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
-  BLENDING_AUDIO_SOURCES,
-  BLENDING_IMAGE_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
-  getAudioForWord,
   requireAudioForWord,
   requireImageForWord,
 } from "@/assets/blending";
@@ -745,8 +742,8 @@ const DraggableAudioGame: React.FC = () => {
   // Current game data
   const currentGameSet = generatedGameSets[currentGameSetIndex];
   const CORRECT_BUTTON_ID: string = currentGameSet.correctAnswer;
-  const Svg = requireImageForWord(CORRECT_BUTTON_ID)
-  
+  const Svg = requireImageForWord(CORRECT_BUTTON_ID);
+
   // Available audio buttons using shuffled options
   const availableButtons: ButtonItem[] = shuffledOptions.map((word: string) => {
     return { id: word, word: word };
@@ -946,9 +943,7 @@ const DraggableAudioGame: React.FC = () => {
             />
             <View style={[styles.iconButton, { top: 0, right: 0 }]}>
               <AnimatedAudioButton
-                audioSource={
-                  requireAudioForWord(CORRECT_BUTTON_ID)
-                }
+                audioSource={requireAudioForWord(CORRECT_BUTTON_ID)}
                 width={40}
                 height={40}
               >

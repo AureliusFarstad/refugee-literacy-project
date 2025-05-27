@@ -1,4 +1,4 @@
-import type { IBlending_Audio_Source } from './index';
+import type { IBlending_Audio_Source } from "./index";
 
 export const BLENDING_AUDIO_SOURCES: IBlending_Audio_Source = {
   tin: {

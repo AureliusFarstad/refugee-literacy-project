@@ -4,11 +4,8 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import type { SvgProps } from "react-native-svg";
 
 import {
-  BLENDING_AUDIO_SOURCES,
-  BLENDING_IMAGE_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
   requireAudioForWord,
   requireImageForWord,
@@ -118,7 +115,7 @@ const RenderBackCard = (word: string, colors: SectionColorTheme) => {
     },
   });
 
-  const SvgComponent = requireImageForWord(word)
+  const SvgComponent = requireImageForWord(word);
 
   const { isLowercase } = useLetterCase();
 
