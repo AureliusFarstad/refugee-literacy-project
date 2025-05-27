@@ -12,10 +12,11 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet_sounds";
+import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
+import type { BLENDING_AUDIO_SOURCES } from "@/assets/blending";
 import {
-  BLENDING_AUDIO_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
+  requireAudioForWord,
 } from "@/assets/blending";
 import { SECTION_COLORS } from "@/constants/routes";
 import { APP_COLORS } from "@/constants/routes";
@@ -218,7 +219,7 @@ const Screen = () => {
         >
           <View style={styles.earButtonWrapper}>
             <AnimatedAudioButton
-              audioSource={BLENDING_AUDIO_SOURCES[word].file}
+              audioSource={requireAudioForWord(word)}
               width={120}
               height={120}
             >

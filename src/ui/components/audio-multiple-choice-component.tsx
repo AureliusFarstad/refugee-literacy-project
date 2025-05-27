@@ -20,7 +20,7 @@ import Reanimated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { BLENDING_AUDIO_SOURCES } from "@/assets/blending";
+import { requireAudioForWord } from "@/assets/blending";
 import { APP_COLORS } from "@/constants/routes";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
@@ -188,15 +188,15 @@ const defaultGameSet: GameSet = {
   options: [
     {
       id: "tin",
-      audioFile: BLENDING_AUDIO_SOURCES.tin.file,
+      audioFile: requireAudioForWord("tin"),
     },
     {
       id: "pin",
-      audioFile: BLENDING_AUDIO_SOURCES.pin.file,
+      audioFile: requireAudioForWord("pin"),
     },
     {
       id: "pan",
-      audioFile: BLENDING_AUDIO_SOURCES.pan.file,
+      audioFile: requireAudioForWord("pan"),
     },
   ],
 };

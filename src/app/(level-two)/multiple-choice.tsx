@@ -4,12 +4,11 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import type { SvgProps } from "react-native-svg";
 
 import {
-  BLENDING_AUDIO_SOURCES,
-  BLENDING_IMAGE_SOURCES,
   BLENDING_WORD_LIST_BY_LEVEL,
+  requireAudioForWord,
+  requireImageForWord,
 } from "@/assets/blending";
 import type { SectionColorTheme } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
@@ -50,7 +49,7 @@ const buttonStyles: ButtonColorProps = {
 const RenderFrontCard = (word: string) => {
   return (
     <AnimatedAudioButton
-      audioSource={BLENDING_AUDIO_SOURCES[word].file}
+      audioSource={requireAudioForWord(word)}
       width={120}
       height={120}
     >
@@ -116,9 +115,7 @@ const RenderBackCard = (word: string, colors: SectionColorTheme) => {
     },
   });
 
-  const SvgComponent = BLENDING_IMAGE_SOURCES[
-    word as keyof typeof BLENDING_IMAGE_SOURCES
-  ].file as React.FC<SvgProps>;
+  const SvgComponent = requireImageForWord(word);
 
   const { isLowercase } = useLetterCase();
 
