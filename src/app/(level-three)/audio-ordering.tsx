@@ -8,8 +8,8 @@ import {
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
 import {
-  CONVERSATION_AUDIO_SOURCES_ENGLISH,
-  CONVERSATION_AUDIO_SOURCES_FARSI,
+  requireEnglishConversationAudio,
+  requireNativeConversationAudio,
 } from "@/assets/conversation";
 import { SECTION_COLORS } from "@/constants/routes";
 import { APP_COLORS } from "@/constants/routes";
@@ -272,22 +272,22 @@ const Screen = () => {
         const FirstConversationDestinationComponent =
           createConversationDestinationComponent({
             gender: "female",
-            nativeAudioFile: CONVERSATION_AUDIO_SOURCES_FARSI.part1.female,
+            nativeAudioFile: requireNativeConversationAudio("part1", "female"),
           });
         const firstGameSet: GameSet = {
           correctAnswerId: "part1",
           options: [
             {
               id: "part1",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part1.female,
+              audioFile: requireEnglishConversationAudio("part1", "female")
             },
             {
               id: "part4",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part4.female,
+              audioFile: requireEnglishConversationAudio("part4", "female")
             },
             {
               id: "part3",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part3.female,
+              audioFile: requireEnglishConversationAudio("part3", "female")
             },
           ],
         };
@@ -303,22 +303,22 @@ const Screen = () => {
         const SecondConversationDestinationComponent =
           createConversationDestinationComponent({
             gender: "male",
-            nativeAudioFile: CONVERSATION_AUDIO_SOURCES_FARSI.part2.male,
+            nativeAudioFile: requireNativeConversationAudio("part2", "male"),
           });
         const secondGameSet: GameSet = {
           correctAnswerId: "part2",
           options: [
             {
               id: "part2",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part2.male,
+              audioFile: requireEnglishConversationAudio("part2", "male")
             },
             {
               id: "part1",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part1.male,
+              audioFile: requireEnglishConversationAudio("part1", "male")
             },
             {
               id: "part4",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part4.male,
+              audioFile: requireEnglishConversationAudio("part4", "male")
             },
           ],
         };
@@ -326,8 +326,8 @@ const Screen = () => {
           <View style={{ flex: 1 }}>
             <CompletedCard
               gender="female"
-              englishAudioFile={CONVERSATION_AUDIO_SOURCES_ENGLISH.part1.female}
-              nativeAudioFile={CONVERSATION_AUDIO_SOURCES_FARSI.part1.female}
+              englishAudioFile={requireEnglishConversationAudio("part1", "female")}
+              nativeAudioFile={requireNativeConversationAudio("part1", "female")}
             />
             <AudioMultipleChoice
               useDestinationComponent={SecondConversationDestinationComponent}
@@ -341,22 +341,22 @@ const Screen = () => {
         const ThirdConversationDestinationComponent =
           createConversationDestinationComponent({
             gender: "female",
-            nativeAudioFile: CONVERSATION_AUDIO_SOURCES_FARSI.part3.female,
+            nativeAudioFile: requireNativeConversationAudio("part3", "female"),
           });
         const thirdGameSet: GameSet = {
           correctAnswerId: "part3",
           options: [
             {
               id: "part3",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part3.female,
+              audioFile: requireEnglishConversationAudio("part3", "female"),
             },
             {
               id: "part1",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part1.female,
+              audioFile: requireEnglishConversationAudio("part1", "female"),
             },
             {
               id: "part4",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part4.female,
+              audioFile: requireEnglishConversationAudio("part4", "female"),
             },
           ],
         };
@@ -364,13 +364,13 @@ const Screen = () => {
           <View style={{ flex: 1 }}>
             <CompletedCard
               gender="female"
-              englishAudioFile={CONVERSATION_AUDIO_SOURCES_ENGLISH.part1.female}
-              nativeAudioFile={CONVERSATION_AUDIO_SOURCES_FARSI.part1.female}
+              englishAudioFile={requireEnglishConversationAudio("part1", "female")}
+              nativeAudioFile={requireNativeConversationAudio("part1", "female")}
             />
             <CompletedCard
               gender="male"
-              englishAudioFile={CONVERSATION_AUDIO_SOURCES_ENGLISH.part2.male}
-              nativeAudioFile={CONVERSATION_AUDIO_SOURCES_FARSI.part2.male}
+              englishAudioFile={requireEnglishConversationAudio("part2", "male")}
+              nativeAudioFile={requireNativeConversationAudio("part2", "male")}
             />
             <AudioMultipleChoice
               useDestinationComponent={ThirdConversationDestinationComponent}
@@ -384,22 +384,22 @@ const Screen = () => {
         const FourthConversationDestinationComponent =
           createConversationDestinationComponent({
             gender: "male",
-            nativeAudioFile: CONVERSATION_AUDIO_SOURCES_FARSI.part4.male,
+            nativeAudioFile: requireNativeConversationAudio("part4", "male"),
           });
         const forthGameSet: GameSet = {
           correctAnswerId: "part4",
           options: [
             {
               id: "part4",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part4.male,
+              audioFile: requireEnglishConversationAudio("part4", "male"),
             },
             {
               id: "part1",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part1.male,
+              audioFile: requireEnglishConversationAudio("part1", "male"),
             },
             {
               id: "part3",
-              audioFile: CONVERSATION_AUDIO_SOURCES_ENGLISH.part3.male,
+              audioFile: requireEnglishConversationAudio("part3", "male"),
             },
           ],
         };
@@ -407,18 +407,18 @@ const Screen = () => {
           <View style={{ flex: 1 }}>
             <CompletedCard
               gender="female"
-              englishAudioFile={CONVERSATION_AUDIO_SOURCES_ENGLISH.part1.female}
-              nativeAudioFile={CONVERSATION_AUDIO_SOURCES_FARSI.part1.female}
+              englishAudioFile={requireEnglishConversationAudio("part1", "female")}
+              nativeAudioFile={requireNativeConversationAudio("part1", "female")}
             />
             <CompletedCard
               gender="male"
-              englishAudioFile={CONVERSATION_AUDIO_SOURCES_ENGLISH.part2.male}
-              nativeAudioFile={CONVERSATION_AUDIO_SOURCES_FARSI.part2.male}
+              englishAudioFile={requireEnglishConversationAudio("part2", "male")}
+              nativeAudioFile={requireNativeConversationAudio("part2", "male")}
             />
             <CompletedCard
               gender="female"
-              englishAudioFile={CONVERSATION_AUDIO_SOURCES_ENGLISH.part3.female}
-              nativeAudioFile={CONVERSATION_AUDIO_SOURCES_FARSI.part3.female}
+              englishAudioFile={requireEnglishConversationAudio("part3", "female")}
+              nativeAudioFile={requireNativeConversationAudio("part3", "female")}
             />
             <AudioMultipleChoice
               useDestinationComponent={FourthConversationDestinationComponent}
@@ -434,23 +434,23 @@ const Screen = () => {
           <View style={{ flex: 1 }}>
             <CompletedCard
               gender="female"
-              englishAudioFile={CONVERSATION_AUDIO_SOURCES_ENGLISH.part1.female}
-              nativeAudioFile={CONVERSATION_AUDIO_SOURCES_FARSI.part1.female}
+              englishAudioFile={requireEnglishConversationAudio("part1", "female")}
+              nativeAudioFile={requireNativeConversationAudio("part1", "female")}
             />
             <CompletedCard
               gender="male"
-              englishAudioFile={CONVERSATION_AUDIO_SOURCES_ENGLISH.part2.male}
-              nativeAudioFile={CONVERSATION_AUDIO_SOURCES_FARSI.part2.male}
+              englishAudioFile={requireEnglishConversationAudio("part2", "male")}
+              nativeAudioFile={requireNativeConversationAudio("part2", "male")}
             />
             <CompletedCard
               gender="female"
-              englishAudioFile={CONVERSATION_AUDIO_SOURCES_ENGLISH.part3.female}
-              nativeAudioFile={CONVERSATION_AUDIO_SOURCES_FARSI.part3.female}
+              englishAudioFile={requireEnglishConversationAudio("part3", "female")}
+              nativeAudioFile={requireNativeConversationAudio("part3", "female")}
             />
             <CompletedCard
               gender="male"
-              englishAudioFile={CONVERSATION_AUDIO_SOURCES_ENGLISH.part4.male}
-              nativeAudioFile={CONVERSATION_AUDIO_SOURCES_FARSI.part4.male}
+              englishAudioFile={requireEnglishConversationAudio("part4", "male")}
+              nativeAudioFile={requireNativeConversationAudio("part4", "male")}
             />
           </View>
         );

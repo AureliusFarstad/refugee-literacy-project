@@ -1,12 +1,12 @@
 // TODO: REPLACE WITH CORRECT AUDIO
-import { CONVERSATION_AUDIO_SOURCES_ENGLISH } from "@/assets/conversation/";
+import { requireEnglishConversationAudio } from "@/assets/conversation/";
 import ALPHABET from "@/assets/home/svg/alphabet.svg";
 import BLENDING from "@/assets/home/svg/blending.svg";
 import CONVERSATION from "@/assets/home/svg/conversation.svg";
 import LITTLE_AND_OFTEN from "@/assets/home/svg/little-and-often.svg";
 import VOCABULARY from "@/assets/home/svg/vocabulary.svg";
 
-const defaultGuidanceAudio = CONVERSATION_AUDIO_SOURCES_ENGLISH.part1.female;
+const defaultGuidanceAudio = requireEnglishConversationAudio("part3", "female");
 
 export const LESSONS = [
   {

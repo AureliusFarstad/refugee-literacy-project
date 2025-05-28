@@ -1,44 +1,43 @@
-type IConversation_Audio_Source = {
+import { useUser } from "@/core/store/user";
+
+import {
+  AUDIO_SOURCES_BY_LANGUAGE,
+  ENGLISH_CONVERSATION_AUDIO,
+} from "./audio-sources";
+
+export type IConversation_Audio_Source = {
   [key: string]: {
     female: string;
     male: string;
   };
 };
 
-export const CONVERSATION_AUDIO_SOURCES_ENGLISH: IConversation_Audio_Source = {
-  part1: {
-    female: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_female.mp3"),
-    male: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
-  },
-  part2: {
-    female: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partB_female.mp3"),
-    male: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partB_male.mp3"),
-  },
-  part3: {
-    female: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partC_female.mp3"),
-    male: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partC_male.mp3"),
-  },
-  part4: {
-    female: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partD_female.mp3"),
-    male: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partD_male.mp3"),
-  },
+type Gender = "female" | "male";
+
+export const requireEnglishConversationAudio = (
+  part: string, gender: Gender,
+): string => {
+  const audio = ENGLISH_CONVERSATION_AUDIO[part]?.[gender];
+  if (!audio) {
+    throw new Error(`English audio file not found for word: ${part}, ${gender}`);
+  }
+  return audio;
 };
 
-export const CONVERSATION_AUDIO_SOURCES_FARSI: IConversation_Audio_Source = {
-  part1: {
-    female: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_female.mp3"),
-    male: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
-  },
-  part2: {
-    female: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partB_female.mp3"),
-    male: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partB_male.mp3"),
-  },
-  part3: {
-    female: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partC_female.mp3"),
-    male: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partC_male.mp3"),
-  },
-  part4: {
-    female: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partD_female.mp3"),
-    male: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partD_male.mp3"),
-  },
+export const requireNativeConversationAudio = (
+  part: string, gender: Gender,
+): string => {
+  const { language } = useUser.getState();
+
+  const audioSource =
+  AUDIO_SOURCES_BY_LANGUAGE[
+    language as keyof typeof AUDIO_SOURCES_BY_LANGUAGE
+  ];
+
+  const audio = audioSource[part]?.[gender];
+  if (!audio) {
+    // Fallback to English if native language doesn't have the word
+    return requireEnglishConversationAudio(part, gender);
+  }
+  return audio;
 };
