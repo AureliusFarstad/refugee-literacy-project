@@ -5,11 +5,11 @@ import {
 } from "react-native-safe-area-context";
 
 import {
-  VOCABULARY_WORD_LIST_BY_LEVEL,
   requireCompleteEnglishAudioForWord,
   requireCompleteNativeAudioForWord,
   requireImageForWord,
   requireSnailSpeedCompleteEnglishAudioForWord,
+  VOCABULARY_WORD_LIST_BY_LEVEL,
 } from "@/assets/vocabulary";
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";

@@ -1,9 +1,9 @@
-import type { 
-  INative_Vocabulary_Audio_Source, 
-  IEnglish_Vocabulary_Audio_Source
+import type {
+  IEnglish_Vocabulary_Audio_Source,
+  INative_Vocabulary_Audio_Source,
 } from "./index";
 
-export const ENGLISH_VOCABULARY_AUDIO: IEnglish_Vocabulary_Audio_Source ={
+export const ENGLISH_VOCABULARY_AUDIO: IEnglish_Vocabulary_Audio_Source = {
   good: {
     complete: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_good_complete_female.mp3"),
     snail_speed_complete: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_good_complete_snail_female.mp3"),

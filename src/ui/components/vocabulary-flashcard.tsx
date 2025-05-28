@@ -1,7 +1,6 @@
 import type { AVPlaybackSource } from "expo-av";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import type { SvgProps } from "react-native-svg";
 
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";

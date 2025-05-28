@@ -1,10 +1,12 @@
 import type { AVPlaybackSource } from "expo-av";
-import { VOCABULARY_IMAGE_SOURCES } from "./image-sources";
+
+import { useUser } from "@/core/store/user";
+
 import {
   AUDIO_SOURCES_BY_LANGUAGE,
   ENGLISH_VOCABULARY_AUDIO,
 } from "./audio-sources";
-import { useUser } from "@/core/store/user";
+import { VOCABULARY_IMAGE_SOURCES } from "./image-sources";
 
 // Types
 export type IVocabulary_Word_List = {
@@ -22,26 +24,34 @@ export type AllValidWords =
 
 // Audio source type for blending words where keys are from list above.
 export type IEnglish_Vocabulary_Audio_Source = Partial<
-  Record<AllValidWords, { 
-    complete: AVPlaybackSource,
-    snail_speed_complete: AVPlaybackSource,
-    contracted?: AVPlaybackSource,
-    snail_speed_contracted?: AVPlaybackSource,
-  }>
+  Record<
+    AllValidWords,
+    {
+      complete: AVPlaybackSource;
+      snail_speed_complete: AVPlaybackSource;
+      contracted?: AVPlaybackSource;
+      snail_speed_contracted?: AVPlaybackSource;
+    }
+  >
 >;
 
 export type INative_Vocabulary_Audio_Source = Partial<
-  Record<AllValidWords, { 
-    complete: AVPlaybackSource,
-    contracted?: AVPlaybackSource,
-  }>
+  Record<
+    AllValidWords,
+    {
+      complete: AVPlaybackSource;
+      contracted?: AVPlaybackSource;
+    }
+  >
 >;
 
 export type IVocabulary_Image_Source = Partial<
   Record<AllValidWords, { file: any }>
 >;
 
-export const requireCompleteEnglishAudioForWord = (word: AllValidWords): AVPlaybackSource => {
+export const requireCompleteEnglishAudioForWord = (
+  word: AllValidWords,
+): AVPlaybackSource => {
   const audio = ENGLISH_VOCABULARY_AUDIO[word]?.complete;
   if (!audio) {
     throw new Error(`English audio file not found for word: ${word}`);
@@ -49,7 +59,9 @@ export const requireCompleteEnglishAudioForWord = (word: AllValidWords): AVPlayb
   return audio;
 };
 
-export const requireSnailSpeedCompleteEnglishAudioForWord = (word: AllValidWords): AVPlaybackSource => {
+export const requireSnailSpeedCompleteEnglishAudioForWord = (
+  word: AllValidWords,
+): AVPlaybackSource => {
   const audio = ENGLISH_VOCABULARY_AUDIO[word]?.snail_speed_complete;
   if (!audio) {
     throw new Error(`English audio file not found for word: ${word}`);
@@ -57,7 +69,9 @@ export const requireSnailSpeedCompleteEnglishAudioForWord = (word: AllValidWords
   return audio;
 };
 
-export const requireCompleteNativeAudioForWord = (word: AllValidWords): AVPlaybackSource => {
+export const requireCompleteNativeAudioForWord = (
+  word: AllValidWords,
+): AVPlaybackSource => {
   // Get current language from store - getState() is performant and doesn't cause re-renders
   const { language } = useUser.getState();
 

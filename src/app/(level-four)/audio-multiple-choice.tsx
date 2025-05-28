@@ -22,10 +22,10 @@ import Reanimated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
-  VOCABULARY_WORD_LIST_BY_LEVEL,
   requireCompleteEnglishAudioForWord,
   requireCompleteNativeAudioForWord,
   requireImageForWord,
+  VOCABULARY_WORD_LIST_BY_LEVEL,
 } from "@/assets/vocabulary";
 import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
@@ -729,7 +729,7 @@ const DraggableAudioGame: React.FC = () => {
   // Current game data
   const currentGameSet = generatedGameSets[currentGameSetIndex];
   const CORRECT_BUTTON_ID: string = currentGameSet.correctAnswer;
-  const Svg = requireImageForWord(CORRECT_BUTTON_ID)
+  const Svg = requireImageForWord(CORRECT_BUTTON_ID);
 
   // Available audio buttons using shuffled options
   const availableButtons: ButtonItem[] = shuffledOptions.map((word: string) => {
@@ -928,7 +928,9 @@ const DraggableAudioGame: React.FC = () => {
             />
             <View style={[styles.iconButton, { top: 0, right: 0 }]}>
               <AnimatedAudioButton
-                audioSource={requireCompleteNativeAudioForWord(CORRECT_BUTTON_ID)}
+                audioSource={requireCompleteNativeAudioForWord(
+                  CORRECT_BUTTON_ID,
+                )}
                 width={40}
                 height={40}
               >
@@ -952,10 +954,7 @@ const DraggableAudioGame: React.FC = () => {
             key={`${item.id}-${currentGameSetIndex}`}
             item={item}
             onAudioPlay={() =>
-              playAudio(
-                requireCompleteEnglishAudioForWord(item.word),
-                item.id,
-              )
+              playAudio(requireCompleteEnglishAudioForWord(item.word), item.id)
             }
             onDragStart={() => setIsCardActive(true)}
             onDragEnd={(pos, isInTarget) =>

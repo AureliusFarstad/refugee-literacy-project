@@ -3,10 +3,10 @@ import { SafeAreaView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
-  VOCABULARY_WORD_LIST_BY_LEVEL,
   requireCompleteEnglishAudioForWord,
   requireImageForWord,
   requireSnailSpeedCompleteEnglishAudioForWord,
+  VOCABULARY_WORD_LIST_BY_LEVEL,
 } from "@/assets/vocabulary";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { WordChoiceScreen } from "@/ui/components/multiple-choice";
@@ -90,7 +90,7 @@ const renderBackCardSnail = (word: string) => {
     },
   });
 
-  const SvgComponent = requireImageForWord(word)
+  const SvgComponent = requireImageForWord(word);
 
   return (
     <View style={[styles.cardContainer]}>
