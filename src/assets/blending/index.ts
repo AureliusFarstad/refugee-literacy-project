@@ -1,6 +1,4 @@
-import { useUser } from '@/core/store/user';
-
-
+import { useUser } from "@/core/store/user";
 
 // Types
 export type IBlending_Word_List = {
@@ -28,10 +26,10 @@ export type IBlending_Image_Source = Partial<
 >;
 
 // Utils
-import { 
-  AUDIO_SOURCES_BY_LANGUAGE, 
-  ENGLISH_BLENDING_AUDIO
-} from './audio-sources';
+import {
+  AUDIO_SOURCES_BY_LANGUAGE,
+  ENGLISH_BLENDING_AUDIO,
+} from "./audio-sources";
 import { BLENDING_IMAGE_SOURCES } from "./image-sources";
 
 // Helper function to get all words from a specific level
@@ -55,9 +53,12 @@ export const requireEnglishAudioForWord = (word: AllValidWords): string => {
 export const requireNativeAudioForWord = (word: AllValidWords): string => {
   // Get current language from store - getState() is performant and doesn't cause re-renders
   const { language } = useUser.getState();
-  
-  const audioSource = AUDIO_SOURCES_BY_LANGUAGE[language as keyof typeof AUDIO_SOURCES_BY_LANGUAGE];
-  
+
+  const audioSource =
+    AUDIO_SOURCES_BY_LANGUAGE[
+      language as keyof typeof AUDIO_SOURCES_BY_LANGUAGE
+    ];
+
   const audio = audioSource[word]?.file;
   if (!audio) {
     // Fallback to English if native language doesn't have the word
@@ -73,7 +74,6 @@ export const requireImageForWord = (word: AllValidWords): any => {
   }
   return image; // Safe since we checked
 };
-
 
 // TODO: Make work for all languages...
 // // Helper function to check if image exists for a word

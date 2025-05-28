@@ -3,7 +3,10 @@ import { StyleSheet, View } from "react-native";
 import type { SvgProps } from "react-native-svg";
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
-import { requireEnglishAudioForWord, requireNativeAudioForWord } from "@/assets/blending/index";
+import {
+  requireEnglishAudioForWord,
+  requireNativeAudioForWord,
+} from "@/assets/blending/index";
 import { Text } from "@/ui";
 import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
