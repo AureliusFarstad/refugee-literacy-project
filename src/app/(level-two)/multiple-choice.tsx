@@ -7,7 +7,7 @@ import {
 
 import {
   BLENDING_WORD_LIST_BY_LEVEL,
-  requireAudioForWord,
+  requireEnglishAudioForWord,
   requireImageForWord,
 } from "@/assets/blending";
 import type { SectionColorTheme } from "@/constants/routes";
@@ -49,7 +49,7 @@ const buttonStyles: ButtonColorProps = {
 const RenderFrontCard = (word: string) => {
   return (
     <AnimatedAudioButton
-      audioSource={requireAudioForWord(word)}
+      audioSource={requireEnglishAudioForWord(word)}
       width={120}
       height={120}
     >

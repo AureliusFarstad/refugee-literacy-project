@@ -23,7 +23,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   BLENDING_WORD_LIST_BY_LEVEL,
-  requireAudioForWord,
+  requireEnglishAudioForWord,
   requireImageForWord,
 } from "@/assets/blending";
 import { APP_COLORS } from "@/constants/routes";
@@ -943,7 +943,7 @@ const DraggableAudioGame: React.FC = () => {
             />
             <View style={[styles.iconButton, { top: 0, right: 0 }]}>
               <AnimatedAudioButton
-                audioSource={requireAudioForWord(CORRECT_BUTTON_ID)}
+                audioSource={requireEnglishAudioForWord(CORRECT_BUTTON_ID)}
                 width={40}
                 height={40}
               >
@@ -975,7 +975,7 @@ const DraggableAudioGame: React.FC = () => {
             key={`${item.id}-${currentGameSetIndex}`}
             item={item}
             onAudioPlay={() =>
-              playAudio(requireAudioForWord(item.word), item.id)
+              playAudio(requireEnglishAudioForWord(item.word), item.id)
             }
             onDragStart={() => setIsCardActive(true)}
             onDragEnd={(pos, isInTarget) =>
