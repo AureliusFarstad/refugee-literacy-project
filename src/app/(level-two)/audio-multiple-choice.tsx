@@ -24,6 +24,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   BLENDING_WORD_LIST_BY_LEVEL,
   requireEnglishAudioForWord,
+  requireNativeAudioForWord,
   requireImageForWord,
 } from "@/assets/blending";
 import { APP_COLORS } from "@/constants/routes";
@@ -943,7 +944,7 @@ const DraggableAudioGame: React.FC = () => {
             />
             <View style={[styles.iconButton, { top: 0, right: 0 }]}>
               <AnimatedAudioButton
-                audioSource={requireEnglishAudioForWord(CORRECT_BUTTON_ID)}
+                audioSource={requireNativeAudioForWord(CORRECT_BUTTON_ID)}
                 width={40}
                 height={40}
               >
