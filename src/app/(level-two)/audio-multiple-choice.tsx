@@ -24,8 +24,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   BLENDING_WORD_LIST_BY_LEVEL,
   requireEnglishAudioForWord,
-  requireNativeAudioForWord,
   requireImageForWord,
+  requireNativeAudioForWord,
 } from "@/assets/blending";
 import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
