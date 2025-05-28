@@ -65,5 +65,3 @@ export const KURMANJI_BLENDING_AUDIO_SOURCES: IBlending_Audio_Source = {
     file: require("assets/multilingual-audio/kurmanji/vocabulary/blending/blending1_tap.mp3"),
   },
 };
-
-
