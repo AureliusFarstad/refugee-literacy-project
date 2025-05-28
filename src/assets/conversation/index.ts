@@ -15,24 +15,28 @@ export type IConversation_Audio_Source = {
 type Gender = "female" | "male";
 
 export const requireEnglishConversationAudio = (
-  part: string, gender: Gender,
+  part: string,
+  gender: Gender,
 ): string => {
   const audio = ENGLISH_CONVERSATION_AUDIO[part]?.[gender];
   if (!audio) {
-    throw new Error(`English audio file not found for word: ${part}, ${gender}`);
+    throw new Error(
+      `English audio file not found for word: ${part}, ${gender}`,
+    );
   }
   return audio;
 };
 
 export const requireNativeConversationAudio = (
-  part: string, gender: Gender,
+  part: string,
+  gender: Gender,
 ): string => {
   const { language } = useUser.getState();
 
   const audioSource =
-  AUDIO_SOURCES_BY_LANGUAGE[
-    language as keyof typeof AUDIO_SOURCES_BY_LANGUAGE
-  ];
+    AUDIO_SOURCES_BY_LANGUAGE[
+      language as keyof typeof AUDIO_SOURCES_BY_LANGUAGE
+    ];
 
   const audio = audioSource[part]?.[gender];
   if (!audio) {

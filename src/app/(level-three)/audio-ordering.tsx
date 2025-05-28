@@ -279,15 +279,15 @@ const Screen = () => {
           options: [
             {
               id: "part1",
-              audioFile: requireEnglishConversationAudio("part1", "female")
+              audioFile: requireEnglishConversationAudio("part1", "female"),
             },
             {
               id: "part4",
-              audioFile: requireEnglishConversationAudio("part4", "female")
+              audioFile: requireEnglishConversationAudio("part4", "female"),
             },
             {
               id: "part3",
-              audioFile: requireEnglishConversationAudio("part3", "female")
+              audioFile: requireEnglishConversationAudio("part3", "female"),
             },
           ],
         };
@@ -310,15 +310,15 @@ const Screen = () => {
           options: [
             {
               id: "part2",
-              audioFile: requireEnglishConversationAudio("part2", "male")
+              audioFile: requireEnglishConversationAudio("part2", "male"),
             },
             {
               id: "part1",
-              audioFile: requireEnglishConversationAudio("part1", "male")
+              audioFile: requireEnglishConversationAudio("part1", "male"),
             },
             {
               id: "part4",
-              audioFile: requireEnglishConversationAudio("part4", "male")
+              audioFile: requireEnglishConversationAudio("part4", "male"),
             },
           ],
         };
@@ -326,8 +326,14 @@ const Screen = () => {
           <View style={{ flex: 1 }}>
             <CompletedCard
               gender="female"
-              englishAudioFile={requireEnglishConversationAudio("part1", "female")}
-              nativeAudioFile={requireNativeConversationAudio("part1", "female")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part1",
+                "female",
+              )}
+              nativeAudioFile={requireNativeConversationAudio(
+                "part1",
+                "female",
+              )}
             />
             <AudioMultipleChoice
               useDestinationComponent={SecondConversationDestinationComponent}
@@ -364,12 +370,21 @@ const Screen = () => {
           <View style={{ flex: 1 }}>
             <CompletedCard
               gender="female"
-              englishAudioFile={requireEnglishConversationAudio("part1", "female")}
-              nativeAudioFile={requireNativeConversationAudio("part1", "female")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part1",
+                "female",
+              )}
+              nativeAudioFile={requireNativeConversationAudio(
+                "part1",
+                "female",
+              )}
             />
             <CompletedCard
               gender="male"
-              englishAudioFile={requireEnglishConversationAudio("part2", "male")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part2",
+                "male",
+              )}
               nativeAudioFile={requireNativeConversationAudio("part2", "male")}
             />
             <AudioMultipleChoice
@@ -407,18 +422,33 @@ const Screen = () => {
           <View style={{ flex: 1 }}>
             <CompletedCard
               gender="female"
-              englishAudioFile={requireEnglishConversationAudio("part1", "female")}
-              nativeAudioFile={requireNativeConversationAudio("part1", "female")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part1",
+                "female",
+              )}
+              nativeAudioFile={requireNativeConversationAudio(
+                "part1",
+                "female",
+              )}
             />
             <CompletedCard
               gender="male"
-              englishAudioFile={requireEnglishConversationAudio("part2", "male")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part2",
+                "male",
+              )}
               nativeAudioFile={requireNativeConversationAudio("part2", "male")}
             />
             <CompletedCard
               gender="female"
-              englishAudioFile={requireEnglishConversationAudio("part3", "female")}
-              nativeAudioFile={requireNativeConversationAudio("part3", "female")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part3",
+                "female",
+              )}
+              nativeAudioFile={requireNativeConversationAudio(
+                "part3",
+                "female",
+              )}
             />
             <AudioMultipleChoice
               useDestinationComponent={FourthConversationDestinationComponent}
@@ -434,22 +464,40 @@ const Screen = () => {
           <View style={{ flex: 1 }}>
             <CompletedCard
               gender="female"
-              englishAudioFile={requireEnglishConversationAudio("part1", "female")}
-              nativeAudioFile={requireNativeConversationAudio("part1", "female")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part1",
+                "female",
+              )}
+              nativeAudioFile={requireNativeConversationAudio(
+                "part1",
+                "female",
+              )}
             />
             <CompletedCard
               gender="male"
-              englishAudioFile={requireEnglishConversationAudio("part2", "male")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part2",
+                "male",
+              )}
               nativeAudioFile={requireNativeConversationAudio("part2", "male")}
             />
             <CompletedCard
               gender="female"
-              englishAudioFile={requireEnglishConversationAudio("part3", "female")}
-              nativeAudioFile={requireNativeConversationAudio("part3", "female")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part3",
+                "female",
+              )}
+              nativeAudioFile={requireNativeConversationAudio(
+                "part3",
+                "female",
+              )}
             />
             <CompletedCard
               gender="male"
-              englishAudioFile={requireEnglishConversationAudio("part4", "male")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part4",
+                "male",
+              )}
               nativeAudioFile={requireNativeConversationAudio("part4", "male")}
             />
           </View>
