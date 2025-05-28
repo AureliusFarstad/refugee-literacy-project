@@ -1,5 +1,11 @@
 import { useUser } from "@/core/store/user";
 
+import {
+  AUDIO_SOURCES_BY_LANGUAGE,
+  ENGLISH_BLENDING_AUDIO,
+} from "./audio-sources";
+import { BLENDING_IMAGE_SOURCES } from "./image-sources";
+
 // Types
 export type IBlending_Word_List = {
   [key: string]: string[];
@@ -24,13 +30,6 @@ export type IBlending_Audio_Source = Partial<
 export type IBlending_Image_Source = Partial<
   Record<AllValidWords, { file: any }>
 >;
-
-// Utils
-import {
-  AUDIO_SOURCES_BY_LANGUAGE,
-  ENGLISH_BLENDING_AUDIO,
-} from "./audio-sources";
-import { BLENDING_IMAGE_SOURCES } from "./image-sources";
 
 // Helper function to get all words from a specific level
 export const getWordsForLevel = (
