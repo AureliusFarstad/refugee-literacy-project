@@ -5,10 +5,11 @@ import {
 } from "react-native-safe-area-context";
 
 import {
-  ENGLISH_VOCABULARY_AUDIO_SOURCES,
-  NATIVE_VOCABULARY_AUDIO_SOURCES,
-  VOCABULARY_IMAGE_SOURCES,
   VOCABULARY_WORD_LIST_BY_LEVEL,
+  requireCompleteEnglishAudioForWord,
+  requireCompleteNativeAudioForWord,
+  requireImageForWord,
+  requireSnailSpeedCompleteEnglishAudioForWord,
 } from "@/assets/vocabulary";
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
@@ -26,21 +27,10 @@ const VOCABULARY_FLASHCARDS = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
   (word: string) => {
     return {
       id: word,
-      svg: VOCABULARY_IMAGE_SOURCES[
-        word as keyof typeof VOCABULARY_IMAGE_SOURCES
-      ].file, // TODO: Improve syntax here with types?
-      english_normal_speed:
-        ENGLISH_VOCABULARY_AUDIO_SOURCES[
-          word as keyof typeof ENGLISH_VOCABULARY_AUDIO_SOURCES
-        ].normal_speed,
-      english_snail_speed:
-        ENGLISH_VOCABULARY_AUDIO_SOURCES[
-          word as keyof typeof ENGLISH_VOCABULARY_AUDIO_SOURCES
-        ].snail_speed,
-      native_file:
-        NATIVE_VOCABULARY_AUDIO_SOURCES[
-          word as keyof typeof NATIVE_VOCABULARY_AUDIO_SOURCES
-        ].file,
+      svg: requireImageForWord(word),
+      english_normal_speed: requireCompleteEnglishAudioForWord(word),
+      english_snail_speed: requireSnailSpeedCompleteEnglishAudioForWord(word),
+      native_file: requireCompleteNativeAudioForWord(word),
     };
   },
 );

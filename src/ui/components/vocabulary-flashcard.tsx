@@ -11,7 +11,7 @@ import { SnailButton } from "@/ui/icons/circular/snail-button";
 type VocabularyFlashCardProps = {
   content: {
     id: string;
-    svg: React.FC<SvgProps>;
+    svg: any;
     english_normal_speed: AVPlaybackSource;
     english_snail_speed: AVPlaybackSource;
     native_file: AVPlaybackSource;

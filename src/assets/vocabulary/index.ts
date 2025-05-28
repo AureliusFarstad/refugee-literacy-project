@@ -1,122 +1,83 @@
 import type { AVPlaybackSource } from "expo-av";
+import { VOCABULARY_IMAGE_SOURCES } from "./image-sources";
+import {
+  AUDIO_SOURCES_BY_LANGUAGE,
+  ENGLISH_VOCABULARY_AUDIO,
+} from "./audio-sources";
+import { useUser } from "@/core/store/user";
 
-import angry_svg from "./images/angry.svg";
-import cold_svg from "./images/cold.svg";
-import good_svg from "./images/good.svg";
-import hot_svg from "./images/hot.svg";
-import hungry_svg from "./images/hungry.svg";
-import sad_svg from "./images/sad.svg";
-import sick_svg from "./images/sick.svg";
-import tired_svg from "./images/tired.svg";
-
-type IVocabulary_Word_List = {
+// Types
+export type IVocabulary_Word_List = {
   [key: string]: string[];
 };
 
-type IEnglish_Vocabulary_Audio_Source = {
-  [key: string]: {
-    normal_speed: AVPlaybackSource;
-    snail_speed: AVPlaybackSource;
-  };
-};
-
-type INative_Vocabulary_Audio_Source = {
-  [key: string]: {
-    file: AVPlaybackSource;
-  };
-};
-
+// Word Lists
 export const VOCABULARY_WORD_LIST_BY_LEVEL: IVocabulary_Word_List = {
   LEVEL_1: ["good", "sad", "tired", "hungry", "angry", "sick", "hot", "cold"],
 };
 
-export const ENGLISH_VOCABULARY_AUDIO_SOURCES: IEnglish_Vocabulary_Audio_Source =
-  {
-    good: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_good_complete_female.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_good_complete_snail_female.mp3"),
-    },
-    tired: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_tired_complete_female.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_tired_complete_snail_female.mp3"),
-    },
-    sad: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_sad_complete_female.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_sad_complete_snail_female.mp3"),
-    },
-    hungry: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_hungry_complete_female.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_hungry_complete_snail_female.mp3"),
-    },
-    angry: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_angry_complete_female.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_angry_complete_snail_female.mp3"),
-    },
-    sick: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_sick_complete_female.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_sick_complete_snail_female.mp3"),
-    },
-    hot: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_hot_complete_female.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_hot_complete_snail_female.mp3"),
-    },
-    cold: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_cold_complete_female.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_cold_complete_snail_female.mp3"),
-    },
-  };
+// Extract all valid words from all levels automatically
+export type AllValidWords =
+  (typeof VOCABULARY_WORD_LIST_BY_LEVEL)[keyof typeof VOCABULARY_WORD_LIST_BY_LEVEL][number];
 
-export const NATIVE_VOCABULARY_AUDIO_SOURCES: INative_Vocabulary_Audio_Source =
-  {
-    good: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_good_complete_female.mp3"),
-    },
-    tired: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_tired_complete_female.mp3"),
-    },
-    sad: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_sad_complete_female.mp3"),
-    },
-    hungry: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_hungry_complete_female.mp3"),
-    },
-    angry: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_angry_complete_female.mp3"),
-    },
-    sick: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_sick_complete_female.mp3"),
-    },
-    hot: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_hot_complete_female.mp3"),
-    },
-    cold: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_cold_complete_female.mp3"),
-    },
-  };
+// Audio source type for blending words where keys are from list above.
+export type IEnglish_Vocabulary_Audio_Source = Partial<
+  Record<AllValidWords, { 
+    complete: AVPlaybackSource,
+    snail_speed_complete: AVPlaybackSource,
+    contracted?: AVPlaybackSource,
+    snail_speed_contracted?: AVPlaybackSource,
+  }>
+>;
 
-export const VOCABULARY_IMAGE_SOURCES = {
-  good: {
-    file: good_svg,
-  },
-  tired: {
-    file: tired_svg,
-  },
-  sad: {
-    file: sad_svg,
-  },
-  hungry: {
-    file: hungry_svg,
-  },
-  angry: {
-    file: angry_svg,
-  },
-  sick: {
-    file: sick_svg,
-  },
-  hot: {
-    file: hot_svg,
-  },
-  cold: {
-    file: cold_svg,
-  },
+export type INative_Vocabulary_Audio_Source = Partial<
+  Record<AllValidWords, { 
+    complete: AVPlaybackSource,
+    contracted?: AVPlaybackSource,
+  }>
+>;
+
+export type IVocabulary_Image_Source = Partial<
+  Record<AllValidWords, { file: any }>
+>;
+
+export const requireCompleteEnglishAudioForWord = (word: AllValidWords): AVPlaybackSource => {
+  const audio = ENGLISH_VOCABULARY_AUDIO[word]?.complete;
+  if (!audio) {
+    throw new Error(`English audio file not found for word: ${word}`);
+  }
+  return audio;
+};
+
+export const requireSnailSpeedCompleteEnglishAudioForWord = (word: AllValidWords): AVPlaybackSource => {
+  const audio = ENGLISH_VOCABULARY_AUDIO[word]?.snail_speed_complete;
+  if (!audio) {
+    throw new Error(`English audio file not found for word: ${word}`);
+  }
+  return audio;
+};
+
+export const requireCompleteNativeAudioForWord = (word: AllValidWords): AVPlaybackSource => {
+  // Get current language from store - getState() is performant and doesn't cause re-renders
+  const { language } = useUser.getState();
+
+  const audioSource =
+    AUDIO_SOURCES_BY_LANGUAGE[
+      language as keyof typeof AUDIO_SOURCES_BY_LANGUAGE
+    ];
+
+  const audio = audioSource[word]?.complete;
+  if (!audio) {
+    // Fallback to English if native language doesn't have the word
+    return requireCompleteEnglishAudioForWord(word);
+  }
+  return audio;
+};
+
+export const requireImageForWord = (word: AllValidWords): any => {
+  const image = VOCABULARY_IMAGE_SOURCES[word]?.file;
+  if (!image) {
+    throw new Error(`Image file not found for word: ${word}`);
+  }
+  return image; // Safe since we checked
 };
