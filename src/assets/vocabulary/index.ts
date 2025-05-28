@@ -33,64 +33,64 @@ export const VOCABULARY_WORD_LIST_BY_LEVEL: IVocabulary_Word_List = {
 export const ENGLISH_VOCABULARY_AUDIO_SOURCES: IEnglish_Vocabulary_Audio_Source =
   {
     good: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/good_complete.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/snail_good_complete.mp3"),
+      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_good_complete_female.mp3"),
+      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_good_complete_snail_female.mp3"),
     },
     tired: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/tired_complete.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/snail_tired_complete.mp3"),
+      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_tired_complete_female.mp3"),
+      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_tired_complete_snail_female.mp3"),
     },
     sad: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/sad_complete.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/snail_sad_complete.mp3"),
+      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_sad_complete_female.mp3"),
+      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_sad_complete_snail_female.mp3"),
     },
     hungry: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/hungry_complete.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/snail_hungry_complete.mp3"),
+      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_hungry_complete_female.mp3"),
+      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_hungry_complete_snail_female.mp3"),
     },
     angry: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/angry_complete.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/snail_angry_complete.mp3"),
+      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_angry_complete_female.mp3"),
+      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_angry_complete_snail_female.mp3"),
     },
     sick: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/sick_complete.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/snail_sick_complete.mp3"),
+      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_sick_complete_female.mp3"),
+      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_sick_complete_snail_female.mp3"),
     },
     hot: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/hot_complete.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/snail_hot_complete.mp3"),
+      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_hot_complete_female.mp3"),
+      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_hot_complete_snail_female.mp3"),
     },
     cold: {
-      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/cold_complete.mp3"),
-      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/snail_cold_complete.mp3"),
+      normal_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_cold_complete_female.mp3"),
+      snail_speed: require("assets/multilingual-audio/english/vocabulary/emotions/vocabulary1_cold_complete_snail_female.mp3"),
     },
   };
 
 export const NATIVE_VOCABULARY_AUDIO_SOURCES: INative_Vocabulary_Audio_Source =
   {
     good: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/good_complete.mp3"),
+      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_good_complete_female.mp3"),
     },
     tired: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/tired_complete.mp3"),
+      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_tired_complete_female.mp3"),
     },
     sad: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/sad_complete.mp3"),
+      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_sad_complete_female.mp3"),
     },
     hungry: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/hungry_complete.mp3"),
+      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_hungry_complete_female.mp3"),
     },
     angry: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/angry_complete.mp3"),
+      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_angry_complete_female.mp3"),
     },
     sick: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/sick_complete.mp3"),
+      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_sick_complete_female.mp3"),
     },
     hot: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/hot_complete.mp3"),
+      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_hot_complete_female.mp3"),
     },
     cold: {
-      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/cold_complete.mp3"),
+      file: require("assets/multilingual-audio/farsi/vocabulary/emotions/vocabulary1_cold_complete_female.mp3"),
     },
   };
 

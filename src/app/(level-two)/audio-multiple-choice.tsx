@@ -927,7 +927,7 @@ const DraggableAudioGame: React.FC = () => {
           }}
         >
           <View style={styles.imageContainer}>
-            <Svg.file
+            <Svg
               style={styles.image}
               height="60%"
               width="60%"
