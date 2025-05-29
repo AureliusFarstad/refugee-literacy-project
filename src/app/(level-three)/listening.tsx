@@ -283,7 +283,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
         {isPlayingState ? (
           <>
             <View style={styles.button}>
-              <NativeButton {...buttonProps} />
+              <NativeButton {...DISABLED_COLORS} width={80} height={80} />
             </View>
 
             <View style={styles.playingButtonWrapper}>
@@ -315,7 +315,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
               height={80}
             >
               <View style={styles.button}>
-                <NativeButton {...buttonProps} />
+                <NativeButton {...buttonProps} width={80} height={80} />
               </View>
             </AnimatedAudioButton>
             <AnimatedAudioButton
