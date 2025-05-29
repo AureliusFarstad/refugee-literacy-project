@@ -75,6 +75,8 @@ export const requireCompleteNativeAudioForWord = (
   // Get current language from store - getState() is performant and doesn't cause re-renders
   const { language } = useUser.getState();
 
+  console.log(`Fetching native audio for word: ${word} in language: ${language}`);
+
   const audioSource =
     AUDIO_SOURCES_BY_LANGUAGE[
       language as keyof typeof AUDIO_SOURCES_BY_LANGUAGE
