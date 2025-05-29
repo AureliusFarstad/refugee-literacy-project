@@ -6,6 +6,9 @@ import InteractiveVideoPlayer from "@/ui/components/interactive-video-player";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 
 import { sectionColor } from "./_layout";
+import { useMemo } from "react";
+import { requireVideoAudio } from "@/assets/video-audio/audio-sources";
+import { useUser } from "@/core/store/user";
 
 // Example usage in your VideoTab component
 const VideoTab = () => {
@@ -17,32 +20,44 @@ const VideoTab = () => {
     backgroundColor: APP_COLORS.backgroundgrey,
   };
 
-  // REPLACE with correct SVG animation
-  const youAnimationCollection: AnimationCollection = {
-    svgatorDict: welcome,
-    segments: [
-      {
-        audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partA.mp3"),
-        svgatorDictKey: "welcome_screen_1",
-        animationDuration: 0,
-      },
-      {
-        audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partB.mp3"),
-        svgatorDictKey: "welcome_screen_2",
-        animationDuration: 0,
-      },
-      {
-        audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partC.mp3"),
-        svgatorDictKey: "welcome_screen_3",
-        animationDuration: 6000,
-      },
-      {
-        audio: require("assets/multilingual-audio/english/videos/welcome/welcome_partD.mp3"),
-        svgatorDictKey: "welcome_screen_4",
-        animationDuration: 0,
-      },
-    ],
-  };
+  const { language } = useUser();
+
+  // TODO: REPLACE with correct SVG animation
+  const youAnimationCollection: AnimationCollection = useMemo<AnimationCollection>(
+      () => ({
+        svgatorDict: welcome,
+        segments: [
+          {
+            audio: requireVideoAudio("welcome", "partA"),
+            svgatorDictKey: "welcome_screen_1",
+            animationDuration: 0,
+          },
+          {
+            audio: requireVideoAudio("welcome", "partB"),
+            svgatorDictKey: "welcome_screen_2",
+            animationDuration: 0,
+          },
+          {
+            audio: requireVideoAudio("welcome", "partC"),
+            svgatorDictKey: "welcome_screen_3",
+            animationDuration: 6000,
+          },
+          {
+            audio: requireVideoAudio("welcome", "partD"),
+            svgatorDictKey: "welcome_screen_4",
+            animationDuration: 0,
+          },
+          {
+            audio: requireVideoAudio("welcome", "partE"),
+            svgatorDictKey: "welcome_screen_5",
+            animationDuration: 0,
+          },
+        ],
+      }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [language],
+      // requireVideoAudio depends on language but linter does not recognize
+    );
 
   return (
     <InteractiveVideoPlayer

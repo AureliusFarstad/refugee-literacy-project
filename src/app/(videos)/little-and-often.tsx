@@ -24,10 +24,10 @@ const WelcomeVideo = () => {
     backgroundColor: APP_COLORS.backgroundgrey,
   };
 
-  // REPLACE with correct SVG animation
+  // TODO: REPLACE with correct SVG animation
   const { language } = useUser();
 
-  const welcomeAnimationCollection = useMemo<AnimationCollection>(
+  const littleAndOftenAnimationCollection = useMemo<AnimationCollection>(
     () => ({
       svgatorDict: welcome,
       segments: [
@@ -69,7 +69,7 @@ const WelcomeVideo = () => {
       edges={["right", "bottom", "left"]} // Exclude 'top' edge
     >
       <InteractiveVideoPlayer
-        animationCollection={welcomeAnimationCollection}
+        animationCollection={littleAndOftenAnimationCollection}
         buttonColorProps={sectionButtonColorProps}
       />
     </SafeAreaView>
