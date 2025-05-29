@@ -1,14 +1,14 @@
 import welcome from "assets/videos/welcome-dict";
+import { useMemo } from "react";
 
+import { requireVideoAudio } from "@/assets/video-audio/audio-sources";
 import { APP_COLORS } from "@/constants/routes";
+import { useUser } from "@/core/store/user";
 import type { AnimationCollection } from "@/ui/components/interactive-video-player";
 import InteractiveVideoPlayer from "@/ui/components/interactive-video-player";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 
 import { sectionColor } from "./_layout";
-import { useMemo } from "react";
-import { requireVideoAudio } from "@/assets/video-audio/audio-sources";
-import { useUser } from "@/core/store/user";
 
 // Example usage in your VideoTab component
 const VideoTab = () => {
@@ -23,7 +23,8 @@ const VideoTab = () => {
   const { language } = useUser();
 
   // TODO: REPLACE with correct SVG animation
-  const imAnimationCollection: AnimationCollection = useMemo<AnimationCollection>(
+  const imAnimationCollection: AnimationCollection =
+    useMemo<AnimationCollection>(
       () => ({
         svgatorDict: welcome,
         segments: [
