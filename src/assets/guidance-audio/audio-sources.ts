@@ -1,6 +1,35 @@
 // AUDIO TODO: replace all require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
 
+import { useUser } from "@/core/store/user";
+
 const ENGLISH_GUIDANCE_AUDIO: GuidanceType = {
+  "home-screen": {
+    "alphabet-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "blending-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "vocabulary-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "conversation-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "teacher-tip": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+  },
   "alphabet-module": {
     "letter-introduction": {
       "audio-files": [
@@ -88,6 +117,33 @@ const ENGLISH_GUIDANCE_AUDIO: GuidanceType = {
 };
 
 const FARSI_GUIDANCE_AUDIO: GuidanceType = {
+  "home-screen": {
+    "alphabet-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "blending-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "vocabulary-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "conversation-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "teacher-tip": {
+      "audio-files": [
+        require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+  },
   "alphabet-module": {
     "letter-introduction": {
       "audio-files": [
@@ -175,6 +231,33 @@ const FARSI_GUIDANCE_AUDIO: GuidanceType = {
 };
 
 const DARI_GUIDANCE_AUDIO: GuidanceType = {
+  "home-screen": {
+    "alphabet-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "blending-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "vocabulary-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "conversation-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "teacher-tip": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+  },
   "alphabet-module": {
     "letter-introduction": {
       "audio-files": [
@@ -262,6 +345,33 @@ const DARI_GUIDANCE_AUDIO: GuidanceType = {
 };
 
 const KURMANJI_GUIDANCE_AUDIO: GuidanceType = {
+  "home-screen": {
+    "alphabet-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "blending-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "vocabulary-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "conversation-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "teacher-tip": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+  },
   "alphabet-module": {
     "letter-introduction": {
       "audio-files": [
@@ -349,6 +459,33 @@ const KURMANJI_GUIDANCE_AUDIO: GuidanceType = {
 };
 
 const SYRIAN_ARABIC_GUIDANCE_AUDIO: GuidanceType = {
+  "home-screen": {
+    "alphabet-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "blending-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "vocabulary-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "conversation-module": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+    "teacher-tip": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+      ],
+    },
+  },
   "alphabet-module": {
     "letter-introduction": {
       "audio-files": [
@@ -444,3 +581,18 @@ const GUIDANCE_AUDIO_SOURCES_BY_LANGUAGE = {
 } as const;
 
 export { GUIDANCE_AUDIO_SOURCES_BY_LANGUAGE };
+
+export const requireHomeScreenAudioByScreenName = (module: string): string => {
+  const { language } = useUser.getState();
+
+  const audioSource =
+    GUIDANCE_AUDIO_SOURCES_BY_LANGUAGE[
+      language as keyof typeof GUIDANCE_AUDIO_SOURCES_BY_LANGUAGE
+    ];
+
+  const audio = (audioSource as any)["home-screen"]?.[module]?.[
+    "audio-files"
+  ][0];
+
+  return audio;
+};

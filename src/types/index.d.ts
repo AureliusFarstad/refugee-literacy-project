@@ -90,7 +90,7 @@ interface ILesson {
   description: string;
   path: string;
   isFinished: boolean;
-  guidanceAudio: any; // TODO: Type of a require("audio.mp3")
+  guidanceAudioKey: string;
 }
 
 interface ILetter {
@@ -151,9 +151,18 @@ interface VocabularySection {
   "video-explanation"?: AudioSection;
 }
 
+interface HomeScreen {
+  "teacher-tip": AudioSection;
+  "alphabet-module": AudioSection;
+  "blending-module": AudioSection;
+  "vocabulary-module": AudioSection;
+  "conversation-module": AudioSection;
+}
+
 type GuidanceMOdule = AlphabetModule | BlendingModule;
 
 interface GuidanceType {
+  "home-screen": HomeScreen;
   "alphabet-module": AlphabetModule;
   "blending-module": BlendingModule;
   "vocabulary-module": VocabularySection;

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { requireHomeScreenAudioByScreenName } from "@/assets/guidance-audio/audio-sources";
 import WELCOME_VIDEO_BANNER from "@/assets/home/svg/welcome-video.svg";
 import { APP_COLORS, LESSONS } from "@/constants/routes";
 import { useUser } from "@/core/store/user";
@@ -133,7 +134,9 @@ const Home = () => {
         {/* Guidance Audio Button */}
         <View style={homeStyles.speakerButtonStyle}>
           <AnimatedAudioButton
-            audioSource={item.guidanceAudio}
+            audioSource={requireHomeScreenAudioByScreenName(
+              item.guidanceAudioKey,
+            )}
             width={BUTTON_WIDTH}
             height={BUTTON_WIDTH}
           >
