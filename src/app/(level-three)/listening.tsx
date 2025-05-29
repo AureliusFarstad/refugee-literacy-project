@@ -1,13 +1,10 @@
-import type { AudioStatus } from "expo-audio";
-import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
+import type { AVPlaybackSource } from "expo-av";
+import { Audio } from "expo-av";
+import type { Sound } from "expo-av/build/Audio";
 import { useFocusEffect } from "expo-router";
-import { MotiView } from "moti";
-import type { ReactNode } from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { Slider } from "react-native-awesome-slider";
+import React from "react";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
-  cancelAnimation,
   Easing,
   useAnimatedStyle,
   useSharedValue,
@@ -21,603 +18,455 @@ import {
   requireEnglishConversationAudio,
   requireNativeConversationAudio,
 } from "@/assets/conversation";
+import { SECTION_COLORS } from "@/constants/routes";
+import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
-import { useLevelStore } from "@/core/store/levels";
 import { useUser } from "@/core/store/user";
-import { View } from "@/ui";
-import {
-  FemaleEnglishAudioPlayedIcon,
-  FemaleNativeAudioPlayedIcon,
-  MaleEnglishAudioPlayedIcon,
-  MaleNativeAudioPlayedIcon,
-} from "@/ui/components/listening/icons";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
-import { PauseButton } from "@/ui/icons/circular/pause-button";
+import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
+import { EnglishButton } from "@/ui/icons/circular/english-button";
+import { NativeButton } from "@/ui/icons/circular/native-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
 import { UserAvatar } from "@/ui/illustrations";
 import { globalStyles } from "@/ui/styles";
-import { cn } from "@/utils/helpers";
 
-type Message = {
-  id: string;
-  avatar: ReactNode;
-  mediaType: "audio" | "video";
-  englishAudioResources: {
-    gender: string;
-    source: any; // Using any for simplicity, but should match what expo-audio expects
-  };
-  nativeAudioResources: {
-    gender: string;
-    source: any; // Using any for simplicity, but should match what expo-audio expects
-    lang: string;
-  };
+const primaryColor = SECTION_COLORS.speaking;
+const secondaryColor = SECTION_COLORS.vocabulary;
+
+const femaleButtonProps = {
+  primaryColor: primaryColor.primary,
+  secondaryColor: primaryColor.light,
+  offwhiteColor: APP_COLORS.offwhite,
+  offblackColor: APP_COLORS.offblack,
+  backgroundColor: APP_COLORS.backgroundgrey,
 };
 
-const ItemSeparator = () => <View className="h-4 bg-[#F2EFF0]" />;
-
-type AnimatedAudioButtonProps = {
-  onPress: () => void;
-  icon: ReactNode;
-  isPlaying?: boolean;
-  width?: number;
-  height?: number;
-  borderColor?: string;
-  borderWidth?: number;
-  breatheDuration?: number;
-  className?: string;
+const maleButtonProps = {
+  primaryColor: secondaryColor.primary,
+  secondaryColor: secondaryColor.light,
+  offwhiteColor: APP_COLORS.offwhite,
+  offblackColor: APP_COLORS.offblack,
+  backgroundColor: APP_COLORS.backgroundgrey,
 };
 
-function AnimatedAudioButton({
-  onPress,
-  icon,
-  isPlaying = false,
-  width = 40,
-  height = 40,
-  borderColor = "#F69F4E",
-  borderWidth = 2,
-  breatheDuration = 2000,
-  className,
-}: AnimatedAudioButtonProps) {
-  const borderOpacity = useSharedValue(0);
+const DISABLED_COLORS = {
+  primaryColor: "#F2EFF0",
+  offwhiteColor: "#FAFAFA",
+  offblackColor: "#D4D4D8",
+  secondaryColor: "#888888",
+  backgroundColor: "#F5F5F5",
+};
 
-  useEffect(() => {
-    if (isPlaying) {
-      startBreathingAnimation();
-    } else {
-      stopAnimation();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPlaying]);
+interface ConversationCardProps {
+  gender: "female" | "male";
+  englishAudioFile: string;
+  nativeAudioFile: string;
+  state: "completed" | "disabled" | "hidden" | "playing";
+  onAudioComplete?: () => void;
+}
 
-  useEffect(() => {
+const ConversationCard: React.FC<ConversationCardProps> = ({
+  gender = "male",
+  englishAudioFile,
+  nativeAudioFile,
+  state,
+  onAudioComplete,
+}) => {
+  const [sound, setSound] = React.useState<Sound>();
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const hasAutoPlayed = React.useRef(false);
+
+  const isDisabled = state === "disabled";
+  const isPlayingState = state === "playing";
+
+  const isCurrentlyPlayingSV = useSharedValue(isPlayingState);
+
+  React.useEffect(() => {
+    isCurrentlyPlayingSV.value = isPlayingState;
+  }, [isPlayingState, isCurrentlyPlayingSV]);
+
+  const buttonProps = isDisabled
+    ? DISABLED_COLORS
+    : gender === "female"
+      ? femaleButtonProps
+      : maleButtonProps;
+
+  const cardBorderColor = isDisabled
+    ? DISABLED_COLORS.primaryColor
+    : gender === "female"
+      ? primaryColor.primary
+      : secondaryColor.primary;
+
+  React.useEffect(() => {
+    const currentSound = sound;
     return () => {
-      cancelAnimation(borderOpacity);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const stopAnimation = () => {
-    cancelAnimation(borderOpacity);
-    borderOpacity.value = withTiming(0, { duration: 300 });
-  };
-
-  const startBreathingAnimation = () => {
-    borderOpacity.value = withSequence(
-      withTiming(0.6, { duration: breatheDuration / 2, easing: Easing.ease }),
-      withRepeat(
-        withSequence(
-          withTiming(1, { duration: breatheDuration / 2, easing: Easing.ease }),
-          withTiming(0.6, {
-            duration: breatheDuration / 2,
-            easing: Easing.ease,
-          }),
-        ),
-        -1,
-      ),
-    );
-  };
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: borderOpacity.value,
-  }));
-
-  return (
-    <TouchableOpacity
-      style={[styles.animatedButtonContainer]}
-      onPress={onPress}
-      className={className}
-    >
-      <Animated.View
-        style={[
-          styles.animatedBorder,
-          {
-            borderColor,
-            borderWidth,
-            width: width + borderWidth * 2,
-            height: height + borderWidth * 2,
-            borderRadius: (width + borderWidth * 2) / 2,
-          },
-          animatedStyle,
-        ]}
-      />
-      <View
-        style={[
-          styles.animatedButton,
-          { width, height, borderRadius: width / 2 },
-        ]}
-      >
-        {icon}
-      </View>
-    </TouchableOpacity>
-  );
-}
-
-type PlayingAudio = {
-  rowIndex: number;
-  type: "english" | "native" | "none";
-};
-
-type AudioControlsProps = {
-  onPlayEnglish: () => void;
-  onPlayNative: () => void;
-  item: Message;
-  conversationComplete: boolean;
-  isPlayingEnglish?: boolean;
-  isPlayingNative?: boolean;
-};
-
-function AudioControls({
-  onPlayEnglish,
-  onPlayNative,
-  item,
-  conversationComplete,
-  isPlayingEnglish = false,
-  isPlayingNative = false,
-}: AudioControlsProps) {
-  const englishBorderColor =
-    item?.englishAudioResources.gender === "F" ? "#FBD65B" : "#F69F4E";
-  const nativeBorderColor =
-    item?.nativeAudioResources.gender === "F" ? "#FBD65B" : "#F69F4E";
-
-  return (
-    <MotiView
-      from={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className={cn(
-        "flex h-[72px] flex-row items-center rounded-lg border-2 border-[#D9D9D966] bg-[#EDEDED] px-6 py-4 relative",
-        {
-          "bg-white border-[#FBD65B]": conversationComplete,
-          "border-[#F69F4E]":
-            item?.englishAudioResources.gender === "M" && conversationComplete,
-        },
-      )}
-    >
-      <AnimatedAudioButton
-        onPress={onPlayEnglish}
-        isPlaying={isPlayingEnglish}
-        borderColor={englishBorderColor}
-        className="flex size-[40] flex-row items-center justify-center rounded-full"
-        icon={
-          item?.englishAudioResources?.gender === "F" ? (
-            <FemaleEnglishAudioPlayedIcon isPlaying={!conversationComplete} />
-          ) : (
-            <MaleEnglishAudioPlayedIcon isPlaying={!conversationComplete} />
-          )
-        }
-      />
-
-      <View className="w-2.5" />
-
-      <AnimatedAudioButton
-        onPress={onPlayNative}
-        isPlaying={isPlayingNative}
-        borderColor={nativeBorderColor}
-        className="flex size-[40] flex-row items-center justify-center rounded-full"
-        icon={
-          item?.nativeAudioResources?.gender === "F" ? (
-            <FemaleNativeAudioPlayedIcon isPlaying={!conversationComplete} />
-          ) : (
-            <MaleNativeAudioPlayedIcon isPlaying={!conversationComplete} />
-          )
-        }
-      />
-    </MotiView>
-  );
-}
-
-type ActiveRow = {
-  number: number;
-  step: "avatar" | "audio-controls" | "complete";
-  rowsAnimated?: number[];
-};
-
-type MessageRowProps = {
-  item: Message;
-  index: number;
-  activeRow: ActiveRow;
-  playAudio: (rowIndex: number, type: "english" | "native") => void;
-  playingAudio: PlayingAudio;
-};
-
-function MessageRow({
-  item,
-  index,
-  activeRow,
-  playAudio,
-  playingAudio,
-}: MessageRowProps) {
-  const isEven = index % 2 === 0;
-  const isActive = activeRow.number === index;
-  const isAnimated = activeRow.rowsAnimated?.includes(index);
-  const conversationComplete = activeRow.step === "complete";
-
-  // Only set conversationComplete to true for an item when the entire conversation is complete
-  const isItemComplete = conversationComplete;
-
-  // Determine if audio is playing for this specific row
-  const isPlayingEnglish =
-    playingAudio.rowIndex === index && playingAudio.type === "english";
-  const isPlayingNative =
-    playingAudio.rowIndex === index && playingAudio.type === "native";
-
-  const renderContent = () => {
-    if (isAnimated || (conversationComplete && index === 4 - 1)) {
-      // TODO: 4 hardcoded from Data Length which was moved into fn for dynam
-      return (
-        <View className="flex h-[72] flex-row items-end justify-end ">
-          {isEven && <View className="mr-4">{item.avatar}</View>}
-          <AudioControls
-            item={item}
-            conversationComplete={isItemComplete}
-            isPlayingEnglish={isPlayingEnglish}
-            isPlayingNative={isPlayingNative}
-            onPlayEnglish={() => playAudio(index, "english")}
-            onPlayNative={() => playAudio(index, "native")}
-          />
-          {!isEven && <View className="ml-4">{item.avatar}</View>}
-        </View>
-      );
-    }
-
-    if (isActive) {
-      switch (activeRow.step) {
-        case "avatar":
-          return (
-            <View className="flex h-[72] flex-row items-end justify-end">
-              <View className={isEven ? "mr-4" : "ml-4"}>{item.avatar}</View>
-            </View>
-          );
-        case "audio-controls":
-        case "complete":
-          return (
-            <View className="flex h-[72] flex-row items-end justify-end">
-              {isEven && <View className="mr-4">{item.avatar}</View>}
-              <AudioControls
-                item={item}
-                conversationComplete={isItemComplete}
-                isPlayingEnglish={isPlayingEnglish}
-                isPlayingNative={isPlayingNative}
-                onPlayEnglish={() => playAudio(index, "english")}
-                onPlayNative={() => playAudio(index, "native")}
-              />
-              {!isEven && <View className="ml-4">{item.avatar}</View>}
-            </View>
+      if (currentSound) {
+        currentSound.setOnPlaybackStatusUpdate(null);
+        currentSound
+          .unloadAsync()
+          .catch((e) =>
+            console.warn(
+              `[ConversationCard ${gender}] Error unloading sound in cleanup:`,
+              (e as Error).message,
+            ),
           );
       }
+    };
+  }, [sound, gender]);
+
+  const playEnglishAudio = React.useCallback(async () => {
+    console.log("Playing English audio");
+    try {
+      if (sound) {
+        try {
+          await sound.stopAsync();
+          sound.setOnPlaybackStatusUpdate(null);
+          await sound.unloadAsync();
+        } catch (e: unknown) {
+          console.warn(
+            `[playEnglishAudio on card ${gender}] Warning: Error stopping/unloading previous sound: `,
+            (e as Error).message,
+          );
+        }
+      }
+
+      setIsPlaying(true);
+
+      const source =
+        typeof englishAudioFile === "string" && englishAudioFile.includes("mp3")
+          ? { uri: englishAudioFile }
+          : englishAudioFile;
+
+      const { sound: newSound, status: initialStatus } =
+        await Audio.Sound.createAsync(source as AVPlaybackSource, {
+          shouldPlay: false,
+        });
+      setSound(newSound);
+
+      if (!initialStatus.isLoaded) {
+        const errorMessage =
+          initialStatus.error ||
+          "Sound failed to load, initial status indicates not loaded.";
+        console.error(
+          "Sound load error:",
+          errorMessage,
+          "Full status:",
+          initialStatus,
+        );
+        throw new Error(errorMessage);
+      }
+
+      newSound.setOnPlaybackStatusUpdate((status) => {
+        if (status.isLoaded) {
+          if (status.didJustFinish) {
+            console.log("Audio finished");
+            setIsPlaying(false);
+            onAudioComplete?.();
+            return;
+          }
+
+          if (isPlaying && !status.isPlaying && !status.didJustFinish) {
+            console.log(
+              "Playback stopped unexpectedly (isLoaded=true, but not playing and not finished).",
+            );
+            setIsPlaying(false);
+            onAudioComplete?.();
+          }
+        } else {
+          if (status.error) {
+            console.error(
+              "Playback Status Error (isLoaded=false):",
+              status.error,
+            );
+          }
+          setIsPlaying(false);
+          onAudioComplete?.();
+        }
+      });
+
+      await newSound.playAsync();
+    } catch (error: unknown) {
+      console.error("Error playing English audio:", (error as Error).message);
+      onAudioComplete?.();
+    }
+  }, [
+    sound,
+    englishAudioFile,
+    onAudioComplete,
+    setSound,
+    isPlaying,
+    setIsPlaying,
+    gender,
+  ]);
+
+  React.useEffect(() => {
+    if (isPlayingState && !hasAutoPlayed.current) {
+      console.log("State changed to playing, starting audio...");
+      hasAutoPlayed.current = true;
+      playEnglishAudio();
     }
 
+    if (!isPlayingState) {
+      hasAutoPlayed.current = false;
+      if (isPlaying) {
+        setIsPlaying(false);
+        if (sound) {
+          sound.setOnPlaybackStatusUpdate(null);
+          sound
+            .stopAsync()
+            .catch((e) =>
+              console.error(
+                `[ConversationCard ${gender}] Error stopping sound on state change:`,
+                e,
+              ),
+            );
+        }
+      }
+    }
+  }, [
+    isPlayingState,
+    playEnglishAudio,
+    isPlaying,
+    sound,
+    setIsPlaying,
+    gender,
+  ]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    if (isCurrentlyPlayingSV.value) {
+      return {
+        opacity: withRepeat(
+          withSequence(
+            withTiming(1, { duration: 1000, easing: Easing.ease }),
+            withTiming(0.6, { duration: 1000, easing: Easing.ease }),
+          ),
+          -1,
+          false,
+        ),
+      };
+    } else {
+      return {
+        opacity: withTiming(0, { duration: 300 }),
+      };
+    }
+  });
+
+  if (state === "hidden") {
     return null;
-  };
+  }
 
   return (
     <View
-      className={cn("p-4", {
-        "flex flex-row": isEven,
-        "flex flex-row justify-end": !isEven,
-      })}
+      style={[
+        styles.chatRow,
+        gender === "female" ? styles.femaleChatRow : styles.maleChatRow,
+      ]}
+      pointerEvents={isDisabled ? "none" : "auto"}
     >
-      <View className="flex h-[80px] flex-row items-center">
-        {renderContent()}
+      {gender === "female" && (
+        <View
+          style={[styles.avatarWrapper, isDisabled && styles.disabledAvatar]}
+        >
+          <UserAvatar gender="f" name="a" />
+        </View>
+      )}
+      <View
+        style={[
+          styles.speakerCard,
+          {
+            borderColor: cardBorderColor,
+            backgroundColor: isDisabled
+              ? DISABLED_COLORS.backgroundColor
+              : APP_COLORS.offwhite,
+          },
+        ]}
+      >
+        {isPlayingState ? (
+          <>
+            <View style={styles.button}>
+              <NativeButton {...buttonProps} />
+            </View>
+
+            <View style={styles.playingButtonWrapper}>
+              <View style={styles.playingButtonContainer}>
+                <Animated.View
+                  style={[
+                    styles.playingBorder,
+                    {
+                      borderColor: APP_COLORS.green,
+                      borderWidth: 4,
+                      width: 88,
+                      height: 88,
+                      borderRadius: 44,
+                    },
+                    animatedStyle,
+                  ]}
+                />
+                <View style={styles.playingButton}>
+                  <EnglishButton {...buttonProps} />
+                </View>
+              </View>
+            </View>
+          </>
+        ) : (
+          <>
+            <AnimatedAudioButton
+              audioSource={nativeAudioFile}
+              width={80}
+              height={80}
+            >
+              <View style={styles.button}>
+                <NativeButton {...buttonProps} />
+              </View>
+            </AnimatedAudioButton>
+            <AnimatedAudioButton
+              audioSource={englishAudioFile}
+              width={80}
+              height={80}
+            >
+              <View style={styles.button}>
+                <EnglishButton {...buttonProps} />
+              </View>
+            </AnimatedAudioButton>
+          </>
+        )}
       </View>
+      {gender === "male" && (
+        <View
+          style={[styles.avatarWrapper, isDisabled && styles.disabledAvatar]}
+        >
+          <UserAvatar gender="m" name="b" />
+        </View>
+      )}
     </View>
   );
-}
+};
 
-function Listening() {
-  const { levels: _levels } = useLevelStore();
+const Listening: React.FC = () => {
+  const NUMBER_OF_CARDS = 4;
+  const [playSessionId, setPlaySessionId] = React.useState(0);
+  const [hasCompletedFirstFullCycle, setHasCompletedFirstFullCycle] =
+    React.useState(false);
+  const scrollViewRef = React.useRef<ScrollView>(null);
 
-  const { language } = useUser(); // Add this line
+  const [cardStates, setCardStates] = React.useState<
+    ("completed" | "disabled" | "hidden" | "playing")[]
+  >(Array(NUMBER_OF_CARDS).fill("hidden"));
 
-  const DATA = useMemo<Message[]>(
-    () => [
-      {
-        id: "message-1",
-        avatar: <UserAvatar gender="f" name="a" />,
-        mediaType: "audio",
-        englishAudioResources: {
-          gender: "F",
-          source: requireEnglishConversationAudio("part1", "female"),
-        },
-        nativeAudioResources: {
-          gender: "F",
-          lang: language,
-          source: requireNativeConversationAudio("part1", "female"),
-        },
-      },
-      {
-        id: "message-2",
-        avatar: <UserAvatar gender="m" name="b" />,
-        mediaType: "audio",
-        englishAudioResources: {
-          gender: "M",
-          source: requireEnglishConversationAudio("part2", "male"),
-        },
-        nativeAudioResources: {
-          gender: "M",
-          lang: language,
-          source: requireNativeConversationAudio("part2", "male"),
-        },
-      },
-      {
-        id: "message-3",
-        avatar: <UserAvatar gender="f" name="a" />,
-        mediaType: "audio",
-        englishAudioResources: {
-          gender: "F",
-          source: requireEnglishConversationAudio("part3", "female"),
-        },
-        nativeAudioResources: {
-          gender: "F",
-          lang: language,
-          source: requireNativeConversationAudio("part3", "female"),
-        },
-      },
-      {
-        id: "message-4",
-        avatar: <UserAvatar gender="m" name="b" />,
-        mediaType: "audio",
-        englishAudioResources: {
-          gender: "M",
-          source: requireEnglishConversationAudio("part4", "male"),
-        },
-        nativeAudioResources: {
-          gender: "M",
-          lang: language,
-          source: requireNativeConversationAudio("part4", "male"),
-        },
-      },
-    ],
-    [language],
-  );
-
-  // Now we'll use the useAudioPlayer hook instead of manually managing sounds
-  const [activeSource, setActiveSource] = useState<any>(null);
-  const player = useAudioPlayer(activeSource);
-  const [audioStatus, setAudioStatus] = useState<AudioStatus>();
-
-  // Track which audio is currently playing
-  const [playingAudio, setPlayingAudio] = useState<PlayingAudio>({
-    rowIndex: -1,
-    type: "none",
-  });
-
-  const [activeRow, setActiveRow] = useState<ActiveRow>({
-    number: 0,
-    step: "avatar",
-    rowsAnimated: [],
-  });
-
-  const [isSliding, setIsSliding] = useState(false);
-
-  const progressValue = useSharedValue(activeRow.number);
-  const min = useSharedValue(0);
-  const max = useSharedValue(DATA.length - 1);
-
-  // Use the useAudioPlayerStatus hook to track audio status
-  const playerStatus = useAudioPlayerStatus(player);
-
-  // Update our local status whenever playerStatus changes
-  useEffect(() => {
-    if (playerStatus) {
-      setAudioStatus(playerStatus);
-
-      // Clear playing state when audio finishes
-      if (playerStatus.didJustFinish) {
-        setPlayingAudio({ rowIndex: -1, type: "none" });
-      }
-    }
-  }, [playerStatus]);
-
-  // Modified to use expo-audio hooks API
-  const playAudio = useCallback(
-    (rowIndex: number, type: "english" | "native") => {
-      try {
-        // Stop existing audio if playing
-        if (player && player.playing) {
-          player.pause();
-        }
-
-        // Get the source for the selected audio
-        const source =
-          type === "english"
-            ? DATA[rowIndex].englishAudioResources.source
-            : DATA[rowIndex].nativeAudioResources.source;
-
-        // Update the source and playing state
-        setActiveSource(source);
-        setPlayingAudio({ rowIndex, type });
-
-        // The player will automatically update with the new source
-        // and we can just play it
-        if (player) {
-          player.play();
-        }
-      } catch (error) {
-        console.error("Error playing audio:", error);
-        setPlayingAudio({ rowIndex: -1, type: "none" });
-      }
-    },
-    [player, DATA],
-  );
-
-  const playSound = useCallback(
-    (currentActiveNumber: number) => {
-      try {
-        if (currentActiveNumber >= DATA.length) {
-          console.log("Reached the end of messages");
-          return;
-        }
-
-        console.log(`Playing audio for row: ${currentActiveNumber}`);
-
-        // Play the English audio by default
-        playAudio(currentActiveNumber, "english");
-      } catch (error) {
-        console.error("Error in playSound:", error);
-      }
-    },
-    [playAudio, DATA],
-  );
-
-  const moveToNextStep = useCallback(() => {
-    setActiveRow((prev) => {
-      if (prev.step === "avatar") {
-        return { ...prev, step: "audio-controls" };
-      } else if (prev.step === "audio-controls") {
-        const nextNumber = prev.number + 1;
-        if (nextNumber >= DATA.length) {
-          console.log("Reached the end of messages");
-          // Mark the conversation as complete and add the last message to rowsAnimated
-          return {
-            ...prev,
-            step: "complete",
-            rowsAnimated: [...(prev.rowsAnimated || []), prev.number],
-          };
-        }
-        return {
-          number: nextNumber,
-          step: "avatar",
-          rowsAnimated: [...(prev.rowsAnimated || []), prev.number],
-        };
-      }
-      return prev;
-    });
-  }, [DATA]);
-
-  useEffect(() => {
-    if (activeRow.step === "avatar") {
-      // Increased delay for better visibility of the avatar step
-      const timer = setTimeout(moveToNextStep, 1000);
-      return () => clearTimeout(timer);
-    } else if (activeRow.step === "audio-controls") {
-      playSound(activeRow.number);
-    }
-  }, [activeRow.step, activeRow.number, playSound, moveToNextStep]);
-
-  useEffect(() => {
-    if (audioStatus?.didJustFinish) {
-      moveToNextStep();
-    }
-  }, [audioStatus?.didJustFinish, moveToNextStep]);
-
-  useEffect(() => {
-    progressValue.value = activeRow.number;
-  }, [activeRow.number, progressValue]);
-
-  const handleSliderChange = (value: number) => {
-    const newIndex = Math.round(value);
-
-    // Stop current audio if playing
-    if (player && player.playing) {
-      player.pause();
-    }
-
-    // Clear playing state
-    setPlayingAudio({ rowIndex: -1, type: "none" });
-
-    // Update active row state
-    setActiveRow({
-      number: newIndex,
-      step: "audio-controls",
-      rowsAnimated: Array.from({ length: newIndex }, (_, i) => i),
-    });
-
-    // Play audio for the new position
-    playSound(newIndex);
-  };
-
-  const handleReplay = () => {
-    // If conversation is complete or not active, restart
-    if (activeRow.step === "complete" || !isConversationActive()) {
-      // Stop current audio if playing
-      if (player && player.playing) {
-        player.pause();
-      }
-
-      // Reset all states
-      setActiveRow({
-        number: 0,
-        step: "avatar",
-        rowsAnimated: [],
-      });
-
-      // Clear playing state
-      setPlayingAudio({ rowIndex: -1, type: "none" });
-
-      progressValue.value = 0;
-      setIsSliding(false);
-    } else {
-      // If conversation is active, pause it
-      if (player && player.playing) {
-        player.pause();
-
-        // Clear playing state
-        setPlayingAudio({ rowIndex: -1, type: "none" });
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (!isSliding) {
-      progressValue.value = activeRow.number;
-    }
-  }, [activeRow.number, progressValue, isSliding]);
-
-  const isConversationActive = () => {
-    // Check if conversation is complete
-    if (activeRow.step === "complete") {
-      return false;
-    }
-
-    // Check if the conversation is in a playing state
-    const isPlaying = player && player.playing;
-
-    // Check if we're in an active step
-    const isActiveStep =
-      activeRow.step === "avatar" ||
-      (activeRow.step === "audio-controls" && !audioStatus?.didJustFinish);
-
-    return isPlaying || isActiveStep;
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      return () => {
-        setActiveRow({
-          number: 3,
-          rowsAnimated: [0, 1, 2, 3],
-          step: "complete",
-        });
-      };
-    }, []),
-  );
-
-  const conversationActive = isConversationActive();
-
-  const { playGuideAudio, isPlaying } = useGuideAudio({
+  const { playGuideAudio, isPlaying: isGuidePlaying } = useGuideAudio({
     screenName: "listening",
     module: "conversation-module",
   });
+
+  const handleAudioComplete = () => {
+    console.log("Audio completed! Move to next card.");
+    setCardStates((prevStates) => {
+      const currentPlayingIndex = prevStates.findIndex((s) => s === "playing");
+
+      if (currentPlayingIndex === -1) {
+        console.warn(
+          "handleAudioComplete called but no card was in playing state.",
+        );
+        return prevStates;
+      }
+
+      const newStates = [...prevStates] as typeof prevStates;
+      newStates[currentPlayingIndex] = "disabled";
+
+      const nextCardIndex = currentPlayingIndex + 1;
+
+      console.log(
+        `[handleAudioComplete] SessionID: ${playSessionId}, PrevStates: ${JSON.stringify(prevStates)}, currentPlayingIndex: ${currentPlayingIndex}, nextCardIndex: ${nextCardIndex}, NUMBER_OF_CARDS: ${NUMBER_OF_CARDS}`,
+      );
+
+      if (nextCardIndex < NUMBER_OF_CARDS) {
+        newStates[nextCardIndex] = "playing";
+        for (let i = nextCardIndex + 1; i < NUMBER_OF_CARDS; i++) {
+          if (newStates[i] !== "disabled" && newStates[i] !== "completed") {
+            newStates[i] = "hidden";
+          }
+        }
+      } else {
+        console.log(
+          "[handleAudioComplete] END OF SEQUENCE DETECTED. Setting all to completed.",
+        );
+        if (!hasCompletedFirstFullCycle) {
+          setHasCompletedFirstFullCycle(true);
+          console.log("[handleAudioComplete] First full cycle completed.");
+        }
+        // Scroll to top when conversation ends
+        scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+        return Array(NUMBER_OF_CARDS).fill("completed") as typeof prevStates;
+      }
+      // If not end of sequence, but a card became playing, scroll to end
+      // This is handled by the useEffect watching cardStates for a 'playing' card
+      return newStates;
+    });
+  };
+
+  const handlePlayPress = () => {
+    console.log("Play button pressed - starting first card, new session.");
+    setPlaySessionId((prevId) => prevId + 1);
+
+    setCardStates((prevStates) => {
+      const newStates = Array(NUMBER_OF_CARDS).fill(
+        "hidden",
+      ) as typeof prevStates;
+      if (NUMBER_OF_CARDS > 0) {
+        newStates[0] = "playing";
+      }
+      return newStates;
+    });
+  };
+
+  const isConversationActive = React.useMemo(
+    () => cardStates.some((s) => s === "playing" || s === "disabled"),
+    [cardStates],
+  );
+
+  React.useEffect(() => {
+    const isPlayingCardPresent = cardStates.some((s) => s === "playing");
+    if (isPlayingCardPresent && scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  }, [cardStates]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        console.log("Listening screen blurred.");
+
+        setCardStates((currentCardStates) => {
+          const isAnyCardPlaying = currentCardStates.some(
+            (s) => s === "playing",
+          );
+          let newStates = [...currentCardStates];
+
+          if (!hasCompletedFirstFullCycle) {
+            const hasPartialProgressInFirstCycle = currentCardStates.some(
+              (s) => s === "playing" || s === "disabled",
+            );
+
+            if (hasPartialProgressInFirstCycle) {
+              console.log(
+                "Blur during first ever playthrough cycle (in progress): Resetting all cards to hidden and session.",
+              );
+              newStates = Array(NUMBER_OF_CARDS).fill("hidden");
+              setPlaySessionId(0);
+            }
+          } else {
+            if (isAnyCardPlaying) {
+              console.log(
+                "Blur during a later playthrough cycle (audio active): Setting all cards to completed.",
+              );
+              newStates = Array(NUMBER_OF_CARDS).fill("completed");
+            }
+          }
+          return newStates as typeof currentCardStates;
+        });
+      };
+    }, [hasCompletedFirstFullCycle, NUMBER_OF_CARDS, setPlaySessionId]),
+  );
 
   return (
     <SafeAreaView
@@ -626,102 +475,169 @@ function Listening() {
     >
       <GuidanceAudioHeader
         title="Sound"
-        isPlaying={isPlaying}
+        isPlaying={isGuidePlaying}
         onPressGuide={playGuideAudio}
         showLetterCaseSwitch={false}
       />
 
-      <View className="flex h-20 flex-row items-center bg-[#F2EFF0] px-4">
-        <TouchableOpacity
-          onPress={handleReplay}
-          className="mr-2 flex items-center justify-center"
-        >
-          <View className="flex size-12 items-center justify-center rounded-full bg-yellow-400">
-            {conversationActive ? (
-              <PauseButton
-                backgroundColor="#F9C720"
-                offblackColor="#000000"
-                offwhiteColor="#FFFFFF"
-                primaryColor="#F9C720"
-                secondaryColor="#FAECBB"
-              />
-            ) : (
+      <ScrollView
+        ref={scrollViewRef}
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContentContainer}
+      >
+        <View style={styles.playButtonArea}>
+          <TouchableOpacity
+            onPress={handlePlayPress}
+            style={styles.playButtonWrapper}
+            disabled={isConversationActive}
+          >
+            <View
+              style={[
+                styles.playButton,
+                isConversationActive && styles.disabledPlayButton,
+              ]}
+            >
               <PlayButton
-                backgroundColor="#F9C720"
-                offblackColor="#000000"
+                backgroundColor={
+                  isConversationActive ? APP_COLORS.grey : "#F9C720"
+                }
+                offblackColor={
+                  isConversationActive ? APP_COLORS.offblack : "#000000"
+                }
                 offwhiteColor="#FFFFFF"
-                primaryColor="#F9C720"
-                secondaryColor="#FAECBB"
+                primaryColor={
+                  isConversationActive ? APP_COLORS.grey : "#F9C720"
+                }
+                secondaryColor={
+                  isConversationActive ? APP_COLORS.backgroundgrey : "#FAECBB"
+                }
               />
-            )}
-          </View>
-        </TouchableOpacity>
-        <Slider
-          style={{
-            height: 40,
-          }}
-          theme={{
-            bubbleTextColor: "#F9C720",
-            minimumTrackTintColor: "#F9C720",
-            maximumTrackTintColor: "#FAE8AB",
-            bubbleBackgroundColor: "#ffffff",
-          }}
-          progress={progressValue}
-          minimumValue={min}
-          maximumValue={max}
-          onSlidingStart={() => setIsSliding(true)}
-          onSlidingComplete={(value) => {
-            setIsSliding(false);
-            handleSliderChange(value);
-          }}
-        />
-      </View>
+            </View>
+          </TouchableOpacity>
+        </View>
 
-      <View className="flex-1 bg-[#F2EFF0]">
-        <FlatList
-          data={DATA}
-          renderItem={({ item, index }) => (
-            <MessageRow
-              item={item}
-              index={index}
-              activeRow={activeRow}
-              playAudio={playAudio}
-              playingAudio={playingAudio}
-            />
-          )}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          ItemSeparatorComponent={ItemSeparator}
-          contentContainerStyle={styles.flatListContent}
-        />
-      </View>
+        <View style={styles.conversationContainer} key={playSessionId}>
+          <ConversationCard
+            gender="female"
+            englishAudioFile={requireEnglishConversationAudio(
+              "part1",
+              "female",
+            )}
+            nativeAudioFile={requireNativeConversationAudio("part1", "female")}
+            state={cardStates[0]}
+            onAudioComplete={handleAudioComplete}
+          />
+          <ConversationCard
+            gender="male"
+            englishAudioFile={requireEnglishConversationAudio("part2", "male")}
+            nativeAudioFile={requireNativeConversationAudio("part2", "male")}
+            state={cardStates[1]}
+            onAudioComplete={handleAudioComplete}
+          />
+          <ConversationCard
+            gender="female"
+            englishAudioFile={requireEnglishConversationAudio(
+              "part3",
+              "female",
+            )}
+            nativeAudioFile={requireNativeConversationAudio("part3", "female")}
+            state={cardStates[2]}
+            onAudioComplete={handleAudioComplete}
+          />
+          <ConversationCard
+            gender="male"
+            englishAudioFile={requireEnglishConversationAudio("part4", "male")}
+            nativeAudioFile={requireNativeConversationAudio("part4", "male")}
+            state={cardStates[3]}
+            onAudioComplete={handleAudioComplete}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
-}
-
-export default Listening;
+};
 
 const styles = StyleSheet.create({
-  listContainer: {
-    flex: 1,
-    backgroundColor: "#F2EFF0",
+  playButtonArea: {
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 16,
   },
-  flatListContent: {
-    flexGrow: 1,
-    paddingBottom: 0,
-    backgroundColor: "#F2EFF0",
-  },
-  animatedButtonContainer: {
+  playButtonWrapper: {},
+  playButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#F9C720",
     alignItems: "center",
     justifyContent: "center",
   },
-  animatedBorder: {
+  disabledPlayButton: {
+    backgroundColor: APP_COLORS.grey,
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: "#F2EFF0",
+  },
+  scrollViewContentContainer: {},
+  conversationContainer: {
+    backgroundColor: "#F2EFF0",
+    paddingVertical: 8,
+  },
+  chatRow: {
+    flexDirection: "row",
+    margin: 12,
+    gap: 12,
+  },
+  femaleChatRow: {
+    justifyContent: "flex-start",
+  },
+  maleChatRow: {
+    justifyContent: "flex-end",
+  },
+  avatarWrapper: {
+    width: 60,
+    height: 60,
+  },
+  disabledAvatar: {
+    opacity: 0.3,
+  },
+  speakerCard: {
+    height: 120,
+    width: 220,
+    borderWidth: 2,
+    borderRadius: 12,
+    margin: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  button: {
+    width: 80,
+    height: 80,
+  },
+  playingButtonWrapper: {
+    width: 88,
+    height: 88,
+  },
+  playingButtonContainer: {
+    width: 88,
+    height: 88,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+  },
+  playingBorder: {
     position: "absolute",
     borderStyle: "solid",
   },
-  animatedButton: {
+  playingButton: {
+    width: 80,
+    height: 80,
     zIndex: 2,
     alignItems: "center",
     justifyContent: "center",
   },
 });
+
+export default Listening;
