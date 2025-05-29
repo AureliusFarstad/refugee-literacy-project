@@ -1,15 +1,19 @@
-import type { AVPlaybackSource } from "expo-av";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
+import {
+  requireCompleteEnglishAudioForWord,
+  requireCompleteNativeAudioForWord,
+  requireImageForWord,
+  requireSnailSpeedCompleteEnglishAudioForWord,
+} from "@/assets/vocabulary";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
 import { SnailButton } from "@/ui/icons/circular/snail-button";
-import { requireCompleteEnglishAudioForWord, requireImageForWord, requireSnailSpeedCompleteEnglishAudioForWord, requireCompleteNativeAudioForWord } from "@/assets/vocabulary";
 
 type VocabularyFlashCardProps = {
-  word: string,
+  word: string;
   colors: {
     background_color: string;
     primary_color: string;
@@ -98,7 +102,7 @@ export const VocabularyFlashCard = ({
     },
   });
 
-  const Svg = requireImageForWord(word)
+  const Svg = requireImageForWord(word);
 
   return (
     <View style={styles.container}>

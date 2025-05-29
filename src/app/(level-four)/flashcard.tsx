@@ -4,9 +4,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-import {
-  VOCABULARY_WORD_LIST_BY_LEVEL,
-} from "@/assets/vocabulary";
+import { VOCABULARY_WORD_LIST_BY_LEVEL } from "@/assets/vocabulary";
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { VocabularyFlashCard } from "@/ui/components/vocabulary-flashcard";
@@ -63,15 +61,15 @@ export default function FlashCardContainer() {
           showLetterCaseSwitch={false}
         />
         <View className="flex size-full items-center">
-        <FlatList
-          style={styles.scrollable}
-          data={VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1}
-          renderItem={({ item }) => (
-            <VocabularyFlashCard word={item} colors={colors} />
-          )}
-          keyExtractor={(item) => item}
-          ListFooterComponent={Footer}
-        />
+          <FlatList
+            style={styles.scrollable}
+            data={VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1}
+            renderItem={({ item }) => (
+              <VocabularyFlashCard word={item} colors={colors} />
+            )}
+            keyExtractor={(item) => item}
+            ListFooterComponent={Footer}
+          />
           {/* Help TODO: Om, I can't get a nice padding on the bottom of the scrollable area to align with the bottom tab bar*/}
         </View>
       </View>
