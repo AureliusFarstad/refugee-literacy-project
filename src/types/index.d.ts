@@ -132,9 +132,23 @@ interface AlphabetModule {
 }
 
 interface BlendingModule {
-  "blending-game": AudioSection;
-  "blending-introduction": AudioSection;
-  "word-matching": AudioSection;
+  "audio-multiple-choice": AudioSection;
+  "blending-flashcard": AudioSection;
+  "multiple-choice": AudioSection;
+  "spelling-drag-and-drop": AudioSection;
+}
+
+interface ConversationSection {
+  "audio-ordering": AudioSection;
+  listening: AudioSection;
+  "video-explanation"?: AudioSection;
+}
+
+interface VocabularySection {
+  flashcard: AudioSection;
+  "picture-multiple-choice": AudioSection;
+  "audio-multiple-choice": AudioSection;
+  "video-explanation"?: AudioSection;
 }
 
 type GuidanceMOdule = AlphabetModule | BlendingModule;
@@ -142,4 +156,6 @@ type GuidanceMOdule = AlphabetModule | BlendingModule;
 interface GuidanceType {
   "alphabet-module": AlphabetModule;
   "blending-module": BlendingModule;
+  "vocabulary-module": VocabularySection;
+  "conversation-module": ConversationSection;
 }

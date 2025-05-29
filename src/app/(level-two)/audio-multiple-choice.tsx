@@ -1001,7 +1001,7 @@ const DraggableAudioGame: React.FC = () => {
 // Update the Screen component styles
 const Screen = () => {
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
-    screenName: "letter-formation",
+    screenName: "audio-multiple-choice",
     module: "blending-module",
   });
 

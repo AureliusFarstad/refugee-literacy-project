@@ -109,6 +109,7 @@ const LetterFormation = () => {
 
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
     screenName: "letter-formation",
+    module: "alphabet-module",
   });
 
   const animatedLetterRef = useRef<AnimatedLetterComponentRef | null>(null);

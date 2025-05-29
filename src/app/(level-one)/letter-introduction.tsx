@@ -92,6 +92,7 @@ const LetterIntroduction = () => {
 
   const { playGuideAudio, isPlaying } = useGuideAudio({
     screenName: "letter-introduction",
+    module: "alphabet-module",
   });
 
   // const [isUpdatingSession, setIsUpdatingSession] = useState(false);

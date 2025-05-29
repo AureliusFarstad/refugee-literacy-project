@@ -48,7 +48,8 @@ export default function FlashCardContainer() {
   });
 
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
-    screenName: "audio-multiple-choice",
+    screenName: "blending-flashcard",
+    module: "blending-module",
   });
 
   return (

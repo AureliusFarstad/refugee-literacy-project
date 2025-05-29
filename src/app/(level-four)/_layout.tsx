@@ -38,8 +38,8 @@ const tabs: TabType[] = [
     icon: FlashcardIcon,
   },
   {
-    name: "video-tab",
-    label: "video-tab",
+    name: "video-explanation",
+    label: "video-explanation",
     icon: TeacherIcon,
   },
   {

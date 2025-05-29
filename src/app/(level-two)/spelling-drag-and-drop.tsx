@@ -366,7 +366,7 @@ const Screen = () => {
   }, [word, letterIndex, onCorrectAnswer, createSpellingDestinationComponent]);
 
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
-    screenName: "letter-formation",
+    screenName: "spelling-drag-and-drop",
     module: "blending-module",
   });
 

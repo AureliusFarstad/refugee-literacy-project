@@ -614,8 +614,9 @@ function Listening() {
 
   const conversationActive = isConversationActive();
 
-  const { isPlaying, playGuideAudio } = useGuideAudio({
-    screenName: "letter-formation",
+  const { playGuideAudio, isPlaying } = useGuideAudio({
+    screenName: "listening",
+    module: "conversation-module",
   });
 
   return (

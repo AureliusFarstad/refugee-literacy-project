@@ -153,7 +153,7 @@ const RenderOption = (
 const LetterSoundScreen = () => {
   const insets = useSafeAreaInsets();
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
-    screenName: "multiple-choice",
+    screenName: "letter-sound",
     module: "alphabet-module",
   });
 

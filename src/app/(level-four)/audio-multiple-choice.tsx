@@ -988,6 +988,7 @@ const Screen = () => {
 
   const { isPlaying, playGuideAudio } = useGuideAudio({
     screenName: "audio-multiple-choice",
+    module: "vocabulary-module",
   });
 
   return (

@@ -42,7 +42,8 @@ export default function FlashCardContainer() {
   const insets = useSafeAreaInsets();
   // TODO: update with correct resource
   const { isPlaying, playGuideAudio } = useGuideAudio({
-    screenName: "letter-introduction",
+    screenName: "flashcard",
+    module: "vocabulary-module",
   });
 
   return (

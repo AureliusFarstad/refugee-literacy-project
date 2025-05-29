@@ -506,8 +506,8 @@ const Screen = () => {
   };
 
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
-    screenName: "letter-formation",
-    module: "blending-module",
+    screenName: "audio-ordering",
+    module: "conversation-module",
   });
 
   // TODO: Maybe use some of these styles

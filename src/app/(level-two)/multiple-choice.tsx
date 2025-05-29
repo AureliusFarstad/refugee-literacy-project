@@ -164,7 +164,7 @@ const AudioMultipleChoice = () => {
   const insets = useSafeAreaInsets();
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
     screenName: "multiple-choice",
-    module: "alphabet-module",
+    module: "blending-module",
   });
 
   return (
