@@ -3,7 +3,10 @@ import { StyleSheet, View } from "react-native";
 import type { SvgProps } from "react-native-svg";
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
-import { requireAudioForWord } from "@/assets/blending/index";
+import {
+  requireEnglishAudioForWord,
+  requireNativeAudioForWord,
+} from "@/assets/blending/index";
 import { Text } from "@/ui";
 import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
@@ -137,7 +140,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
           <View style={styles.nativeButtonOverlay} />
           <View style={[styles.iconButton, { top: 0, right: 0 }]}>
             <AnimatedAudioButton
-              audioSource={ALPHABET_AUDIO_SOURCES.a.sound} // TODO: Plug in the right native audio here...
+              audioSource={requireNativeAudioForWord(content.word)}
               width={40}
               height={40}
             >
@@ -148,7 +151,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
 
         {/* English Word Rectangular Button */}
         <AnimatedAudioButton
-          audioSource={requireAudioForWord(content.word)}
+          audioSource={requireEnglishAudioForWord(content.word)}
           width={180}
           height={40}
         >

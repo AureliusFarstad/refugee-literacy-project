@@ -33,6 +33,7 @@ const LetterTapMatching = () => {
 
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
     screenName: "letter-matching",
+    module: "alphabet-module",
   });
 
   const [leftLetters, setLeftLetters] = useState<ILetter[]>([]);

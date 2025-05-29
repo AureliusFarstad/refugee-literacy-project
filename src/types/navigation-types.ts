@@ -6,10 +6,11 @@ export type LevelOneBottomTabRoutes = {
   "letter-matching": undefined;
 };
 export type LevelTwoBottomTabRoutes = {
-  spelling: undefined;
+  // spelling: undefined; TODO: Remove
+  "audio-multiple-choice": undefined;
+  "blending-flashcard": undefined;
   "multiple-choice": undefined;
-  flashcard: undefined;
-  blending_flashcard: undefined;
+  "spelling-drag-and-drop": undefined;
 };
 
 export type LevelThreeBottomTabRoutes = {
@@ -20,9 +21,9 @@ export type LevelThreeBottomTabRoutes = {
 
 export type LevelFourBottomTabRoutes = {
   flashcard: undefined;
-  "video-explanation": undefined;
   "picture-multiple-choice": undefined;
   "audio-multiple-choice": undefined;
+  "video-explanation": undefined;
 };
 
 export type CombinedRoutes =

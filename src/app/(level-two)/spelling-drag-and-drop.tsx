@@ -13,10 +13,9 @@ import {
 } from "react-native-safe-area-context";
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
-import type { BLENDING_AUDIO_SOURCES } from "@/assets/blending";
 import {
   BLENDING_WORD_LIST_BY_LEVEL,
-  requireAudioForWord,
+  requireEnglishAudioForWord,
 } from "@/assets/blending";
 import { SECTION_COLORS } from "@/constants/routes";
 import { APP_COLORS } from "@/constants/routes";
@@ -96,10 +95,8 @@ const styles = StyleSheet.create({
   },
 });
 
-type BlendingWord = keyof typeof BLENDING_AUDIO_SOURCES;
-
 interface DestinationCardFactoryProps {
-  word: BlendingWord;
+  word: string;
   index: number;
 }
 
@@ -219,7 +216,7 @@ const Screen = () => {
         >
           <View style={styles.earButtonWrapper}>
             <AnimatedAudioButton
-              audioSource={requireAudioForWord(word)}
+              audioSource={requireEnglishAudioForWord(word)}
               width={120}
               height={120}
             >
@@ -336,7 +333,7 @@ const Screen = () => {
   const spellingContent = useMemo(() => {
     // Create destination component with current word and letter index
     const DestinationComponent = createSpellingDestinationComponent({
-      word: word as BlendingWord,
+      word: word,
       index: letterIndex,
     });
 
@@ -369,7 +366,7 @@ const Screen = () => {
   }, [word, letterIndex, onCorrectAnswer, createSpellingDestinationComponent]);
 
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
-    screenName: "letter-formation",
+    screenName: "spelling-drag-and-drop",
     module: "blending-module",
   });
 

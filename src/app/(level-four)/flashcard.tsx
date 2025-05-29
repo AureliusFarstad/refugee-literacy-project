@@ -4,12 +4,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-import {
-  ENGLISH_VOCABULARY_AUDIO_SOURCES,
-  NATIVE_VOCABULARY_AUDIO_SOURCES,
-  VOCABULARY_IMAGE_SOURCES,
-  VOCABULARY_WORD_LIST_BY_LEVEL,
-} from "@/assets/vocabulary";
+import { VOCABULARY_WORD_LIST_BY_LEVEL } from "@/assets/vocabulary";
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { VocabularyFlashCard } from "@/ui/components/vocabulary-flashcard";
@@ -20,30 +15,6 @@ import { HEIGHT, IS_IOS } from "@/utils/layout";
 const Footer = () => {
   return <View className="h-40" />;
 };
-
-// TODO: Maybe construct in assets/blending/index.ts?
-const VOCABULARY_FLASHCARDS = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
-  (word: string) => {
-    return {
-      id: word,
-      svg: VOCABULARY_IMAGE_SOURCES[
-        word as keyof typeof VOCABULARY_IMAGE_SOURCES
-      ].file, // TODO: Improve syntax here with types?
-      english_normal_speed:
-        ENGLISH_VOCABULARY_AUDIO_SOURCES[
-          word as keyof typeof ENGLISH_VOCABULARY_AUDIO_SOURCES
-        ].normal_speed,
-      english_snail_speed:
-        ENGLISH_VOCABULARY_AUDIO_SOURCES[
-          word as keyof typeof ENGLISH_VOCABULARY_AUDIO_SOURCES
-        ].snail_speed,
-      native_file:
-        NATIVE_VOCABULARY_AUDIO_SOURCES[
-          word as keyof typeof NATIVE_VOCABULARY_AUDIO_SOURCES
-        ].file,
-    };
-  },
-);
 
 const colors = {
   background_color: APP_COLORS.backgroundgrey,
@@ -71,7 +42,8 @@ export default function FlashCardContainer() {
   const insets = useSafeAreaInsets();
   // TODO: update with correct resource
   const { isPlaying, playGuideAudio } = useGuideAudio({
-    screenName: "letter-introduction",
+    screenName: "flashcard",
+    module: "vocabulary-module",
   });
 
   return (
@@ -92,11 +64,11 @@ export default function FlashCardContainer() {
         <View className="flex size-full items-center">
           <FlatList
             style={styles.scrollable}
-            data={VOCABULARY_FLASHCARDS}
+            data={VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1}
             renderItem={({ item }) => (
-              <VocabularyFlashCard content={item} colors={colors} />
+              <VocabularyFlashCard word={item} colors={colors} />
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item}
             ListFooterComponent={Footer}
           />
           {/* Help TODO: Om, I can't get a nice padding on the bottom of the scrollable area to align with the bottom tab bar*/}

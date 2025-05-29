@@ -22,9 +22,9 @@ import Reanimated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
-  ENGLISH_VOCABULARY_AUDIO_SOURCES,
-  NATIVE_VOCABULARY_AUDIO_SOURCES,
-  VOCABULARY_IMAGE_SOURCES,
+  requireCompleteEnglishAudioForWord,
+  requireCompleteNativeAudioForWord,
+  requireImageForWord,
   VOCABULARY_WORD_LIST_BY_LEVEL,
 } from "@/assets/vocabulary";
 import { APP_COLORS } from "@/constants/routes";
@@ -729,10 +729,7 @@ const DraggableAudioGame: React.FC = () => {
   // Current game data
   const currentGameSet = generatedGameSets[currentGameSetIndex];
   const CORRECT_BUTTON_ID: string = currentGameSet.correctAnswer;
-  const Svg =
-    VOCABULARY_IMAGE_SOURCES[
-      CORRECT_BUTTON_ID as keyof typeof VOCABULARY_IMAGE_SOURCES
-    ];
+  const Svg = requireImageForWord(CORRECT_BUTTON_ID);
 
   // Available audio buttons using shuffled options
   const availableButtons: ButtonItem[] = shuffledOptions.map((word: string) => {
@@ -915,7 +912,7 @@ const DraggableAudioGame: React.FC = () => {
           }}
         >
           <View style={styles.imageContainer}>
-            <Svg.file
+            <Svg
               style={styles.image}
               height="60%"
               width="60%"
@@ -931,9 +928,9 @@ const DraggableAudioGame: React.FC = () => {
             />
             <View style={[styles.iconButton, { top: 0, right: 0 }]}>
               <AnimatedAudioButton
-                audioSource={
-                  NATIVE_VOCABULARY_AUDIO_SOURCES[CORRECT_BUTTON_ID].file
-                }
+                audioSource={requireCompleteNativeAudioForWord(
+                  CORRECT_BUTTON_ID,
+                )}
                 width={40}
                 height={40}
               >
@@ -957,10 +954,7 @@ const DraggableAudioGame: React.FC = () => {
             key={`${item.id}-${currentGameSetIndex}`}
             item={item}
             onAudioPlay={() =>
-              playAudio(
-                ENGLISH_VOCABULARY_AUDIO_SOURCES[item.word].normal_speed,
-                item.id,
-              )
+              playAudio(requireCompleteEnglishAudioForWord(item.word), item.id)
             }
             onDragStart={() => setIsCardActive(true)}
             onDragEnd={(pos, isInTarget) =>
@@ -994,6 +988,7 @@ const Screen = () => {
 
   const { isPlaying, playGuideAudio } = useGuideAudio({
     screenName: "audio-multiple-choice",
+    module: "vocabulary-module",
   });
 
   return (

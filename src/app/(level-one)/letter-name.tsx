@@ -153,7 +153,7 @@ const RenderOption = (
 const LetterNameScreen = () => {
   const insets = useSafeAreaInsets();
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
-    screenName: "multiple-choice",
+    screenName: "letter-name",
     module: "alphabet-module",
   });
 

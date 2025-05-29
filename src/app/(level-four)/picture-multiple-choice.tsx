@@ -1,11 +1,11 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { SvgProps } from "react-native-svg";
 
 import {
-  ENGLISH_VOCABULARY_AUDIO_SOURCES,
-  VOCABULARY_IMAGE_SOURCES,
+  requireCompleteEnglishAudioForWord,
+  requireImageForWord,
+  requireSnailSpeedCompleteEnglishAudioForWord,
   VOCABULARY_WORD_LIST_BY_LEVEL,
 } from "@/assets/vocabulary";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
@@ -57,7 +57,7 @@ const RenderFrontCard = (word: string) => {
   return (
     <View style={styles.container}>
       <AnimatedAudioButton
-        audioSource={ENGLISH_VOCABULARY_AUDIO_SOURCES[word].normal_speed}
+        audioSource={requireCompleteEnglishAudioForWord(word)}
         width={100}
         height={100}
       >
@@ -66,7 +66,7 @@ const RenderFrontCard = (word: string) => {
         </View>
       </AnimatedAudioButton>
       <AnimatedAudioButton
-        audioSource={ENGLISH_VOCABULARY_AUDIO_SOURCES[word].snail_speed}
+        audioSource={requireSnailSpeedCompleteEnglishAudioForWord(word)}
         width={100}
         height={100}
       >
@@ -90,9 +90,7 @@ const renderBackCardSnail = (word: string) => {
     },
   });
 
-  const SvgComponent = VOCABULARY_IMAGE_SOURCES[
-    word as keyof typeof VOCABULARY_IMAGE_SOURCES
-  ].file as React.FC<SvgProps>;
+  const SvgComponent = requireImageForWord(word);
 
   return (
     <View style={[styles.cardContainer]}>
@@ -126,9 +124,7 @@ const RenderOption = (
     },
   });
 
-  const SvgComponent = VOCABULARY_IMAGE_SOURCES[
-    word as keyof typeof VOCABULARY_IMAGE_SOURCES
-  ].file as React.FC<SvgProps>;
+  const SvgComponent = requireImageForWord(word);
 
   return (
     <View style={[styles.cardContainer]}>
@@ -145,7 +141,8 @@ const RenderOption = (
 const AudioMultipleChoice = () => {
   const insets = useSafeAreaInsets();
   const { isPlaying, playGuideAudio } = useGuideAudio({
-    screenName: "letter-formation",
+    screenName: "picture-multiple-choice",
+    module: "vocabulary-module",
   });
 
   return (

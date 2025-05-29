@@ -1,21 +1,19 @@
-import type { AVPlaybackSource } from "expo-av";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import type { SvgProps } from "react-native-svg";
 
+import {
+  requireCompleteEnglishAudioForWord,
+  requireCompleteNativeAudioForWord,
+  requireImageForWord,
+  requireSnailSpeedCompleteEnglishAudioForWord,
+} from "@/assets/vocabulary";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
 import { SnailButton } from "@/ui/icons/circular/snail-button";
 
 type VocabularyFlashCardProps = {
-  content: {
-    id: string;
-    svg: React.FC<SvgProps>;
-    english_normal_speed: AVPlaybackSource;
-    english_snail_speed: AVPlaybackSource;
-    native_file: AVPlaybackSource;
-  };
+  word: string;
   colors: {
     background_color: string;
     primary_color: string;
@@ -26,7 +24,7 @@ type VocabularyFlashCardProps = {
 };
 
 export const VocabularyFlashCard = ({
-  content,
+  word,
   colors,
 }: VocabularyFlashCardProps) => {
   // Shared button props for consistency
@@ -104,13 +102,15 @@ export const VocabularyFlashCard = ({
     },
   });
 
+  const Svg = requireImageForWord(word);
+
   return (
     <View style={styles.container}>
       {/* Background^ and Card */}
       <View style={styles.card}>
         {/* Image  */}
         <View style={styles.imageContainer}>
-          <content.svg
+          <Svg
             style={styles.image}
             height="60%"
             width="60%"
@@ -121,7 +121,7 @@ export const VocabularyFlashCard = ({
           <View style={styles.nativeButtonOverlay} />
           <View style={[styles.iconButton, { top: 0, right: 0 }]}>
             <AnimatedAudioButton
-              audioSource={content.native_file}
+              audioSource={requireCompleteNativeAudioForWord(word)}
               width={40}
               height={40}
             >
@@ -135,7 +135,7 @@ export const VocabularyFlashCard = ({
           {/* English Button */}
           <View style={styles.englishButtonOverlay}>
             <AnimatedAudioButton
-              audioSource={content.english_normal_speed}
+              audioSource={requireCompleteEnglishAudioForWord(word)}
               width={40}
               height={40}
             >
@@ -146,7 +146,7 @@ export const VocabularyFlashCard = ({
           {/* Snail Buttons */}
           <View style={styles.snailButtonOverlay}>
             <AnimatedAudioButton
-              audioSource={content.english_snail_speed}
+              audioSource={requireSnailSpeedCompleteEnglishAudioForWord(word)}
               width={40}
               height={40}
             >

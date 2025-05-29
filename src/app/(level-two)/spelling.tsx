@@ -40,16 +40,16 @@ const activeActivity = {
 const Spelling = () => {
   const [isLowercase, setIsLowercase] = useState(false);
 
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
-    screenName: "spelling",
-    module: "blending-module",
+  const { playGuideAudio, isPlaying } = useGuideAudio({
+    screenName: "listening",
+    module: "conversation-module",
   });
 
   return (
     <SafeAreaView>
       <GuidanceAudioHeader
         title="Sound"
-        isPlaying={isPlayingGuidanceAudio}
+        isPlaying={isPlaying}
         onPressGuide={playGuideAudio}
       />
 

@@ -3,7 +3,7 @@ import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import { useFocusEffect } from "expo-router";
 import { MotiView } from "moti";
 import type { ReactNode } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { Slider } from "react-native-awesome-slider";
 import Animated, {
@@ -17,8 +17,13 @@ import Animated, {
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import {
+  requireEnglishConversationAudio,
+  requireNativeConversationAudio,
+} from "@/assets/conversation";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
+import { useUser } from "@/core/store/user";
 import { View } from "@/ui";
 import {
   FemaleEnglishAudioPlayedIcon,
@@ -47,66 +52,6 @@ type Message = {
     lang: string;
   };
 };
-
-const DATA: Message[] = [
-  {
-    id: "message-1",
-    avatar: <UserAvatar gender="f" name="a" />,
-    mediaType: "audio",
-    englishAudioResources: {
-      gender: "F",
-      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partA_female.mp3"),
-    },
-
-    nativeAudioResources: {
-      gender: "F",
-      lang: "fr",
-      source: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_female.mp3"),
-    },
-  },
-  {
-    id: "message-2",
-    avatar: <UserAvatar gender="m" name="b" />,
-    mediaType: "audio",
-    englishAudioResources: {
-      gender: "M",
-      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partB_male.mp3"),
-    },
-    nativeAudioResources: {
-      gender: "M",
-      lang: "fr",
-      source: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partB_male.mp3"),
-    },
-  },
-  {
-    id: "message-3",
-    avatar: <UserAvatar gender="f" name="a" />,
-    mediaType: "audio",
-    englishAudioResources: {
-      gender: "F",
-      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partC_female.mp3"),
-    },
-    nativeAudioResources: {
-      gender: "F",
-      lang: "fr",
-      source: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partC_female.mp3"),
-    },
-  },
-  {
-    id: "message-4",
-    avatar: <UserAvatar gender="m" name="b" />,
-    mediaType: "audio",
-    englishAudioResources: {
-      gender: "M",
-      source: require("assets/multilingual-audio/english/conversations/how_are_you/conversation1_how_are_you_partD_male.mp3"),
-    },
-    nativeAudioResources: {
-      gender: "M",
-      lang: "fr",
-      source: require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partD_male.mp3"),
-    },
-  },
-];
 
 const ItemSeparator = () => <View className="h-4 bg-[#F2EFF0]" />;
 
@@ -316,7 +261,8 @@ function MessageRow({
     playingAudio.rowIndex === index && playingAudio.type === "native";
 
   const renderContent = () => {
-    if (isAnimated || (conversationComplete && index === DATA.length - 1)) {
+    if (isAnimated || (conversationComplete && index === 4 - 1)) {
+      // TODO: 4 hardcoded from Data Length which was moved into fn for dynam
       return (
         <View className="flex h-[72] flex-row items-end justify-end ">
           {isEven && <View className="mr-4">{item.avatar}</View>}
@@ -379,6 +325,70 @@ function MessageRow({
 
 function Listening() {
   const { levels: _levels } = useLevelStore();
+
+  const { language } = useUser(); // Add this line
+
+  const DATA = useMemo<Message[]>(
+    () => [
+      {
+        id: "message-1",
+        avatar: <UserAvatar gender="f" name="a" />,
+        mediaType: "audio",
+        englishAudioResources: {
+          gender: "F",
+          source: requireEnglishConversationAudio("part1", "female"),
+        },
+        nativeAudioResources: {
+          gender: "F",
+          lang: language,
+          source: requireNativeConversationAudio("part1", "female"),
+        },
+      },
+      {
+        id: "message-2",
+        avatar: <UserAvatar gender="m" name="b" />,
+        mediaType: "audio",
+        englishAudioResources: {
+          gender: "M",
+          source: requireEnglishConversationAudio("part2", "male"),
+        },
+        nativeAudioResources: {
+          gender: "M",
+          lang: language,
+          source: requireNativeConversationAudio("part2", "male"),
+        },
+      },
+      {
+        id: "message-3",
+        avatar: <UserAvatar gender="f" name="a" />,
+        mediaType: "audio",
+        englishAudioResources: {
+          gender: "F",
+          source: requireEnglishConversationAudio("part3", "female"),
+        },
+        nativeAudioResources: {
+          gender: "F",
+          lang: language,
+          source: requireNativeConversationAudio("part3", "female"),
+        },
+      },
+      {
+        id: "message-4",
+        avatar: <UserAvatar gender="m" name="b" />,
+        mediaType: "audio",
+        englishAudioResources: {
+          gender: "M",
+          source: requireEnglishConversationAudio("part4", "male"),
+        },
+        nativeAudioResources: {
+          gender: "M",
+          lang: language,
+          source: requireNativeConversationAudio("part4", "male"),
+        },
+      },
+    ],
+    [language],
+  );
 
   // Now we'll use the useAudioPlayer hook instead of manually managing sounds
   const [activeSource, setActiveSource] = useState<any>(null);
@@ -447,7 +457,7 @@ function Listening() {
         setPlayingAudio({ rowIndex: -1, type: "none" });
       }
     },
-    [player],
+    [player, DATA],
   );
 
   const playSound = useCallback(
@@ -466,7 +476,7 @@ function Listening() {
         console.error("Error in playSound:", error);
       }
     },
-    [playAudio],
+    [playAudio, DATA],
   );
 
   const moveToNextStep = useCallback(() => {
@@ -492,7 +502,7 @@ function Listening() {
       }
       return prev;
     });
-  }, []);
+  }, [DATA]);
 
   useEffect(() => {
     if (activeRow.step === "avatar") {
@@ -604,8 +614,9 @@ function Listening() {
 
   const conversationActive = isConversationActive();
 
-  const { isPlaying, playGuideAudio } = useGuideAudio({
-    screenName: "letter-formation",
+  const { playGuideAudio, isPlaying } = useGuideAudio({
+    screenName: "listening",
+    module: "conversation-module",
   });
 
   return (
