@@ -13,8 +13,8 @@ import { APP_COLORS } from "@/constants/routes";
 import useSound from "@/core/hooks/useSoundExtended";
 import { SUPPORTED_LANGUAGES, useUser } from "@/core/store/user";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
-import { WIDTH } from "@/utils/layout";
 import { globalStyles } from "@/ui/styles";
+import { WIDTH } from "@/utils/layout";
 
 import type { ButtonColorProps } from "../icons/circular/color-scheme";
 import { NativeButton } from "../icons/circular/native-button";
