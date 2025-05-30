@@ -6,7 +6,6 @@ export type LevelOneBottomTabRoutes = {
   "letter-matching": undefined;
 };
 export type LevelTwoBottomTabRoutes = {
-  // spelling: undefined; TODO: Remove
   "audio-multiple-choice": undefined;
   "blending-flashcard": undefined;
   "multiple-choice": undefined;

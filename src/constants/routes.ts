@@ -28,7 +28,7 @@ export const LESSONS = [
     id: "lesson-2",
     title: "Lesson 2",
     description: "Section 3 Introduction to the alphabet",
-    path: "/(level-two)/spelling",
+    path: "/(level-two)/blending-flashcard",
     isFinished: false,
     svg: BLENDING,
     guidanceAudioKey: "blending-module",
