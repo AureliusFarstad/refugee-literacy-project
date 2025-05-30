@@ -26,6 +26,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: Env.BUNDLE_ID,
+    infoPlist: {
+      ITSAppUsesNonExemptEncryption: false,
+    },
   },
   experiments: {
     typedRoutes: true,
