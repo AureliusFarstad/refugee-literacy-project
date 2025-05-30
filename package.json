@@ -27,7 +27,6 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "type-check": "tsc  --noemit",
     "lint:translations": "eslint ./src/translations/ --fix --ext .json  ",
-    "eas-build-pre-install": "./scripts/eas-pre-install",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky"
   },

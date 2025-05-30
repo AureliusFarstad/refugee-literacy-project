@@ -1,40 +1,33 @@
-name: 'Setup EAS Build + Trigger Build'
-description: 'Setup EAS Build + Trigger Build'
-
+name: "Setup EAS Build + Trigger Build"
+description: "Setup EAS Build + Trigger Build"
 inputs:
   APP_ENV:
-    description: 'APP_ENV (one of): development, preview, production'
+    description: "APP_ENV (one of): development, preview, production"
     required: true
-    default: 'preview'
-
+    default: "preview"
   AUTO_SUBMIT: ## TODO: we need to handle this too
-    description: 'AUTO_SUBMIT (one of): true, false'
+    description: "AUTO_SUBMIT (one of): true, false"
     required: true
-    default: 'false'
-
+    default: "false"
   ANDROID:
-    description: 'run for ANDROID (one of): true, false'
+    description: "run for ANDROID (one of): true, false"
     required: true
-    default: 'true'
-
+    default: "true"
   VERSION:
-    description: 'VERSION'
+    description: "VERSION"
     required: true
-    default: '0.0.0'
-
+    default: "0.0.0"
   IOS:
-    description: 'run for IOS (one of): true, false'
+    description: "run for IOS (one of): true, false"
     required: true
-    default: 'false'
-
+    default: "false"
   EXPO_TOKEN:
-    description: 'EXPO_TOKEN'
+    description: "EXPO_TOKEN"
     required: true
-    default: 'false'
+    default: "false"
 
 runs:
-  using: 'composite'
-
+  using: "composite"
   steps:
     - name: 💯 Check for EXPO_TOKEN
       run: |
