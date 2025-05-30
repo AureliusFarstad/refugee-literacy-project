@@ -26,6 +26,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: Env.BUNDLE_ID,
+    infoPlist: {
+      ITSAppUsesNonExemptEncryption: false,
+    },
   },
   experiments: {
     typedRoutes: true,
@@ -47,14 +50,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ["expo-font"],
     "expo-localization",
     "expo-router",
-    [
-      "expo-build-properties",
-      {
-        android: {
-          kotlinVersion: "1.7.22", // this is for softinput package
-        },
-      },
-    ],
+    ["expo-build-properties"],
     [
       "app-icon-badge",
       {
