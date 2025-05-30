@@ -167,6 +167,8 @@ const CompletedCard: React.FC<CompletedCardProps> = ({
           <View style={styles.button}>
             <NativeButton
               {...(gender === "female" ? femaleButtonProps : maleButtonProps)}
+              width={80}
+              height={80}
             />
           </View>
         </AnimatedAudioButton>
@@ -238,6 +240,8 @@ const createConversationDestinationComponent: DestinationFunction<
             <View style={styles.button}>
               <NativeButton
                 {...(gender === "female" ? femaleButtonProps : maleButtonProps)}
+                width={80}
+                height={80}
               />
             </View>
           </AnimatedAudioButton>
