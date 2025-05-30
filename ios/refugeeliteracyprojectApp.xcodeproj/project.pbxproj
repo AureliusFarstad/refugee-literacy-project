@@ -30,6 +30,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = refugeeliteracyprojectapp/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* refugeeliteracyprojectapp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "refugeeliteracyprojectapp-Bridging-Header.h"; path = "refugeeliteracyprojectapp/refugeeliteracyprojectapp-Bridging-Header.h"; sourceTree = "<group>"; };
+		EB0F86557C7E4C87A96FE500 /* SplashScreen.storyboard */ = {isa = PBXFileReference; name = "SplashScreen.storyboard"; path = "refugeeliteracyprojectApp/SplashScreen.storyboard"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +92,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				D4BA33F8C332834CE12BD7BD /* Pods */,
 				46BD9F70A5ABC9544327341C /* ExpoModulesProviders */,
+				EB0F86557C7E4C87A96FE500 /* SplashScreen.storyboard */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -197,6 +199,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				4B79992AC9DEF5550176DB88 /* PrivacyInfo.xcprivacy in Resources */,
+				94E01A3A91E54B96B291669E /* SplashScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,7 +351,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = refugeeliteracyprojectapp/refugeeliteracyprojectapp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = refugeeliteracyprojectApp/refugeeliteracyprojectapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -369,7 +372,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.refugee-literacy-project.development";
-				PRODUCT_NAME = refugeeliteracyprojectapp;
+				PRODUCT_NAME = "refugeeliteracyprojectapp";
 				SWIFT_OBJC_BRIDGING_HEADER = "refugeeliteracyprojectapp/refugeeliteracyprojectapp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -384,7 +387,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = refugeeliteracyprojectapp/refugeeliteracyprojectapp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = refugeeliteracyprojectApp/refugeeliteracyprojectapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = refugeeliteracyprojectapp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -400,7 +403,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.refugee-literacy-project.development";
-				PRODUCT_NAME = refugeeliteracyprojectapp;
+				PRODUCT_NAME = "refugeeliteracyprojectapp";
 				SWIFT_OBJC_BRIDGING_HEADER = "refugeeliteracyprojectapp/refugeeliteracyprojectapp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
