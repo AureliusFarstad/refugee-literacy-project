@@ -7,26 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		051DE490A69F7488BD0904BF /* libPods-refugeeliteracyprojectapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B7B7F4FA1F8050B149416B48 /* libPods-refugeeliteracyprojectapp.a */; };
+		0EFF03479064039866531164 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FDED9461CFD936D350A428 /* ExpoModulesProvider.swift */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		4FE81154DE5EC8BC7F37DC9F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 68A4ACCB1164CD5230A1757C /* PrivacyInfo.xcprivacy */; };
-		50F60DD8B089A70F80DE74A1 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E6612CE7A36891385F7561 /* ExpoModulesProvider.swift */; };
-		8318F51A57EDB40E1E736FE7 /* libPods-refugeeliteracyprojectapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC3C00E94439EAFCD5176F0B /* libPods-refugeeliteracyprojectapp.a */; };
+		4B79992AC9DEF5550176DB88 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AC83EB84DC8635CF7A4A005D /* PrivacyInfo.xcprivacy */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		07AEC07F63059B5978E5C6C9 /* Pods-refugeeliteracyprojectapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-refugeeliteracyprojectapp.release.xcconfig"; path = "Target Support Files/Pods-refugeeliteracyprojectapp/Pods-refugeeliteracyprojectapp.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* refugeeliteracyprojectapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = refugeeliteracyprojectapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = refugeeliteracyprojectapp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = refugeeliteracyprojectapp/Info.plist; sourceTree = "<group>"; };
-		68A4ACCB1164CD5230A1757C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = refugeeliteracyprojectapp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		38FDED9461CFD936D350A428 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-refugeeliteracyprojectapp/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		9F338E0479FDE49AC8053DC2 /* Pods-refugeeliteracyprojectapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-refugeeliteracyprojectapp.release.xcconfig"; path = "Target Support Files/Pods-refugeeliteracyprojectapp/Pods-refugeeliteracyprojectapp.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = refugeeliteracyprojectapp/SplashScreen.storyboard; sourceTree = "<group>"; };
-		B9EF2D887ACAEE8426A0F0E4 /* Pods-refugeeliteracyprojectapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-refugeeliteracyprojectapp.debug.xcconfig"; path = "Target Support Files/Pods-refugeeliteracyprojectapp/Pods-refugeeliteracyprojectapp.debug.xcconfig"; sourceTree = "<group>"; };
+		AC83EB84DC8635CF7A4A005D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = refugeeliteracyprojectapp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		B7B7F4FA1F8050B149416B48 /* libPods-refugeeliteracyprojectapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-refugeeliteracyprojectapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		BC3C00E94439EAFCD5176F0B /* libPods-refugeeliteracyprojectapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-refugeeliteracyprojectapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E0E6612CE7A36891385F7561 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-refugeeliteracyprojectapp/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		D30290F4A2743A3C5E62C07C /* Pods-refugeeliteracyprojectapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-refugeeliteracyprojectapp.debug.xcconfig"; path = "Target Support Files/Pods-refugeeliteracyprojectapp/Pods-refugeeliteracyprojectapp.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = refugeeliteracyprojectapp/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* refugeeliteracyprojectapp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "refugeeliteracyprojectapp-Bridging-Header.h"; path = "refugeeliteracyprojectapp/refugeeliteracyprojectapp-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -37,23 +37,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8318F51A57EDB40E1E736FE7 /* libPods-refugeeliteracyprojectapp.a in Frameworks */,
+				051DE490A69F7488BD0904BF /* libPods-refugeeliteracyprojectapp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0A08B277E3CB4F511B7D512A /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				B9EF2D887ACAEE8426A0F0E4 /* Pods-refugeeliteracyprojectapp.debug.xcconfig */,
-				07AEC07F63059B5978E5C6C9 /* Pods-refugeeliteracyprojectapp.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* refugeeliteracyprojectapp */ = {
 			isa = PBXGroup;
 			children = (
@@ -63,7 +53,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				68A4ACCB1164CD5230A1757C /* PrivacyInfo.xcprivacy */,
+				AC83EB84DC8635CF7A4A005D /* PrivacyInfo.xcprivacy */,
 			);
 			name = refugeeliteracyprojectapp;
 			sourceTree = "<group>";
@@ -72,15 +62,15 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				BC3C00E94439EAFCD5176F0B /* libPods-refugeeliteracyprojectapp.a */,
+				B7B7F4FA1F8050B149416B48 /* libPods-refugeeliteracyprojectapp.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		819A97FA40B5A4BE961ACF64 /* ExpoModulesProviders */ = {
+		46BD9F70A5ABC9544327341C /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				D237C751CD5C11B0E8DD91D8 /* refugeeliteracyprojectapp */,
+				E209B436459DD009665C70BF /* refugeeliteracyprojectapp */,
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
@@ -99,8 +89,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				0A08B277E3CB4F511B7D512A /* Pods */,
-				819A97FA40B5A4BE961ACF64 /* ExpoModulesProviders */,
+				D4BA33F8C332834CE12BD7BD /* Pods */,
+				46BD9F70A5ABC9544327341C /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -124,10 +114,20 @@
 			path = refugeeliteracyprojectapp/Supporting;
 			sourceTree = "<group>";
 		};
-		D237C751CD5C11B0E8DD91D8 /* refugeeliteracyprojectapp */ = {
+		D4BA33F8C332834CE12BD7BD /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				E0E6612CE7A36891385F7561 /* ExpoModulesProvider.swift */,
+				D30290F4A2743A3C5E62C07C /* Pods-refugeeliteracyprojectapp.debug.xcconfig */,
+				9F338E0479FDE49AC8053DC2 /* Pods-refugeeliteracyprojectapp.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		E209B436459DD009665C70BF /* refugeeliteracyprojectapp */ = {
+			isa = PBXGroup;
+			children = (
+				38FDED9461CFD936D350A428 /* ExpoModulesProvider.swift */,
 			);
 			name = refugeeliteracyprojectapp;
 			sourceTree = "<group>";
@@ -140,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "refugeeliteracyprojectapp" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				163E10968AAA1C0DCA4385EC /* [Expo] Configure project */,
+				4D7D5A41055B1426D234FAE8 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				438545C8E5B067BB746DBA5D /* [CP] Embed Pods Frameworks */,
+				CC74286D1A2FF103DC7DF55F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -196,7 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				4FE81154DE5EC8BC7F37DC9F /* PrivacyInfo.xcprivacy in Resources */,
+				4B79992AC9DEF5550176DB88 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,7 +240,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		163E10968AAA1C0DCA4385EC /* [Expo] Configure project */ = {
+		4D7D5A41055B1426D234FAE8 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -258,24 +258,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-refugeeliteracyprojectapp/expo-configure-project.sh\"\n";
-		};
-		438545C8E5B067BB746DBA5D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-refugeeliteracyprojectapp/Pods-refugeeliteracyprojectapp-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-refugeeliteracyprojectapp/Pods-refugeeliteracyprojectapp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -327,6 +309,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-refugeeliteracyprojectapp/Pods-refugeeliteracyprojectapp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		CC74286D1A2FF103DC7DF55F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-refugeeliteracyprojectapp/Pods-refugeeliteracyprojectapp-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-refugeeliteracyprojectapp/Pods-refugeeliteracyprojectapp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -335,7 +335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				50F60DD8B089A70F80DE74A1 /* ExpoModulesProvider.swift in Sources */,
+				0EFF03479064039866531164 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,7 +344,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B9EF2D887ACAEE8426A0F0E4 /* Pods-refugeeliteracyprojectapp.debug.xcconfig */;
+			baseConfigurationReference = D30290F4A2743A3C5E62C07C /* Pods-refugeeliteracyprojectapp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -369,7 +369,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.refugee-literacy-project.development";
-				PRODUCT_NAME = "refugeeliteracyprojectapp";
+				PRODUCT_NAME = refugeeliteracyprojectapp;
 				SWIFT_OBJC_BRIDGING_HEADER = "refugeeliteracyprojectapp/refugeeliteracyprojectapp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -380,7 +380,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 07AEC07F63059B5978E5C6C9 /* Pods-refugeeliteracyprojectapp.release.xcconfig */;
+			baseConfigurationReference = 9F338E0479FDE49AC8053DC2 /* Pods-refugeeliteracyprojectapp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -400,7 +400,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.refugee-literacy-project.development";
-				PRODUCT_NAME = "refugeeliteracyprojectapp";
+				PRODUCT_NAME = refugeeliteracyprojectapp;
 				SWIFT_OBJC_BRIDGING_HEADER = "refugeeliteracyprojectapp/refugeeliteracyprojectapp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
