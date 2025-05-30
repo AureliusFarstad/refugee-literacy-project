@@ -1,19 +1,19 @@
-name: 'Setup  JDK + GRADLE + Generate APK'
-description: 'Setup  JDK + GRADLE + Generate APK'
+name: "Setup  JDK + GRADLE + Generate APK"
+description: "Setup  JDK + GRADLE + Generate APK"
 inputs:
   APP_ENV:
-    description: 'APP_ENV (one of): development, preview, production'
+    description: "APP_ENV (one of): development, preview, production"
     required: true
-    default: 'preview'
+    default: "preview"
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Set Up JDK
       uses: actions/setup-java@v3
       with:
-        distribution: 'zulu' # See 'Supported distributions' for available options
-        java-version: '17'
+        distribution: "zulu" # See 'Supported distributions' for available options
+        java-version: "17"
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
 
@@ -26,6 +26,6 @@ runs:
         cd ..
       shell: bash
       env:
-        EXPO_NO_DOTENV: '1'
+        EXPO_NO_DOTENV: "1"
         APP_ENV: ${{ inputs.APP_ENV }}
-        CI: 'true'
+        CI: "true"
