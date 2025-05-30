@@ -7,4 +7,8 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: APP_COLORS.offwhite,
   },
+  thomasFont: {
+    fontFamily: "Thomas",
+    fontSize: 40,
+  },
 });

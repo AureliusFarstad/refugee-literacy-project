@@ -37,6 +37,7 @@ export default function RootLayout() {
     Inter_400Regular,
     Inter_500Medium,
     Inter_600SemiBold,
+    'Thomas': require('@/assets/fonts/ThomasDraft.ttf'),
     ...FontAwesome.font,
   });
 

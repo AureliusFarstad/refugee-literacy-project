@@ -22,7 +22,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   updates: {
     fallbackToCacheTimeout: 0,
   },
-  assetBundlePatterns: ["**/*"],
+  assetBundlePatterns: ["**/*"], // TODO: Refine this... i.e. ["assets/images/*", "assets/fonts/*"]
   ios: {
     supportsTablet: true,
     bundleIdentifier: Env.BUNDLE_ID,
