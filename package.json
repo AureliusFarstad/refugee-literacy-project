@@ -28,7 +28,8 @@
     "type-check": "tsc  --noemit",
     "lint:translations": "eslint ./src/translations/ --fix --ext .json  ",
     "preinstall": "npx only-allow pnpm",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "echo \"No tests specified\""
   },
   "dependencies": {
     "@expo-google-fonts/dongle": "^0.2.3",
