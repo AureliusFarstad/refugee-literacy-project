@@ -47,14 +47,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ["expo-font"],
     "expo-localization",
     "expo-router",
-    [
-      "expo-build-properties",
-      {
-        android: {
-          kotlinVersion: "1.8.10", // this is for softinput package
-        },
-      },
-    ],
+    ["expo-build-properties"],
     [
       "app-icon-badge",
       {
