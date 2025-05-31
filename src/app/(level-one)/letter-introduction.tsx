@@ -4,7 +4,6 @@ import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, TouchableOpacity } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Line } from "react-native-svg";
 
 import { APP_COLORS } from "@/constants/routes";
