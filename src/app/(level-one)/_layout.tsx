@@ -10,10 +10,7 @@ import { EarIcon } from "@/ui/icons/bottom-tab/ear-icon";
 import { NameIcon } from "@/ui/icons/bottom-tab/name-icon";
 import { PencilIcon } from "@/ui/icons/bottom-tab/pencil-icon";
 import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
-import {
-  BOTTOM_TAB_HEIGHT,
-  IS_IOS,
-} from "@/utils/layout";
+import { BOTTOM_TAB_HEIGHT, IS_IOS } from "@/utils/layout";
 
 export const SECTION_COLOR = SECTION_COLORS.alphabet;
 
