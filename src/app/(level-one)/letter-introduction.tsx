@@ -15,11 +15,14 @@ import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import AnimatedLetterComponent from "@/ui/components/home/animated-letter-component";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { AnimatedBreathingView } from "@/ui/icons/animated-breathing-view";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
 import { NameButton } from "@/ui/icons/circular/name-button";
 import { PencilButton } from "@/ui/icons/circular/pencil-button";
 import { globalStyles } from "@/ui/styles";
-import { HEIGHT, IS_IOS, WIDTH } from "@/utils/layout";
+import { WIDTH } from "@/utils/layout";
+
+import { SECTION_COLOR } from "./_layout";
 
 type AnimatedLetterComponentRef = {
   animateLowercase: () => void;
@@ -31,7 +34,7 @@ const PageLinesSVG = () => {
     <View className=" overflow-hidden">
       <Svg
         width={WIDTH - 16}
-        height="224"
+        height="180"
         viewBox={`0 0 ${WIDTH - 16} 143`}
         fill="none"
       >
@@ -76,14 +79,23 @@ const PageLinesSVG = () => {
   );
 };
 
+const VERTICAL_OFFSET = -9;
+
+// TODO: Refactor this out to _layout?
+const buttonStyles: ButtonColorProps = {
+  primaryColor: SECTION_COLOR.primary,
+  secondaryColor: SECTION_COLOR.dark,
+  offwhiteColor: APP_COLORS.offwhite,
+  offblackColor: APP_COLORS.offblack,
+  backgroundColor: APP_COLORS.backgroundgrey,
+};
+
 const LetterIntroduction = () => {
   const { levels, updateLevels } = useLevelStore();
   const [sound, setSound] = useState<Sound>();
 
   const [isAlphabeticPlaying, setIsAlphabeticPlaying] = useState(false);
   const [isPhoneticPlaying, setIsPhoneticPlaying] = useState(false);
-
-  const insets = useSafeAreaInsets();
 
   const [isAnimating, setIsAnimating] = useState(false);
   const onAnimationStart = () => {
@@ -235,125 +247,96 @@ const LetterIntroduction = () => {
   }, [activitiesInCurrentSection, levels]);
 
   return (
-    <SafeAreaView style={globalStyles.safeAreaView}>
+    <SafeAreaView
+      style={globalStyles.safeAreaView}
+      edges={["top", "left", "right"]}
+    >
       <GuidanceAudioHeader
         title="Sound"
         isPlaying={isPlaying}
         onPressGuide={playGuideAudio}
         showLetterCaseSwitch={false}
       />
-      <View
-        className="flex flex-col justify-between "
-        style={{
-          height:
-            HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
-          backgroundColor: APP_COLORS.backgroundgrey,
-        }}
-      >
-        <View className="">
-          <View className="   ">
-            <View className="mx-4  overflow-hidden rounded-xl border-2 border-purple-500 bg-white ">
-              <View className="mt-2 flex items-center justify-center  ">
-                <View className="flex flex-row rounded-full p-4">
-                  <TouchableOpacity
-                    onPress={async () => {
-                      try {
-                        setIsAlphabeticPlaying(true);
-                        await playSound(
-                          activeActivity.sound.alphabeticAudioSrc,
-                        );
-                        incrementProgress("ALPHABETIC_SOUND");
-                      } catch (error) {
-                        console.log("Error playing alphabetic sound:", error);
-                      } finally {
-                        setIsAlphabeticPlaying(false);
-                      }
-                    }}
-                    className="z-50 mr-4 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
-                  >
-                    <NameButton
-                      backgroundColor="#C385F8"
-                      offblackColor="#000000"
-                      offwhiteColor="#FFFFFF"
-                      primaryColor="#C385F8"
-                      secondaryColor="#FFFFFF"
-                    />
-                    <AnimatedBreathingView
-                      isPlaying={isAlphabeticPlaying}
-                      size={80}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={async () => {
-                      try {
-                        setIsPhoneticPlaying(true);
-                        await playSound(activeActivity.sound.phoneticAudioSrc);
-                        incrementProgress("PHONETIC_SOUND");
-                      } catch (error) {
-                        console.log("Error playing phonetic sound:", error);
-                      } finally {
-                        setIsPhoneticPlaying(false);
-                      }
-                    }}
-                    className="z-50 flex size-[80] items-center justify-center rounded-full bg-colors-purple-500"
-                  >
-                    <EarButton
-                      backgroundColor="#C385F8"
-                      offblackColor="#000000"
-                      offwhiteColor="#FFFFFF"
-                      primaryColor="#C385F8"
-                      secondaryColor="#FFFFFF"
-                    />
-                    <AnimatedBreathingView
-                      isPlaying={isPhoneticPlaying}
-                      size={80}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <PageLinesSVG />
-              <AnimatedLetterComponent
-                ref={animatedLetterRef}
-                name={activeActivity.letter.lowerCase}
-                key={activeActivity.letter.lowerCase}
-                onAnimationComplete={onAnimationComplete}
-                onAnimationStart={onAnimationStart}
-                isAnimating={isAnimating}
-              />
-              <View className="flex flex-row items-center justify-evenly pb-16">
-                <TouchableOpacity
-                  onPress={() => {
-                    animatedLetterRef?.current?.animateLowercase();
-                  }}
-                >
-                  <PencilButton
-                    backgroundColor="#C385F8"
-                    offblackColor="#000000"
-                    offwhiteColor="#FFFFFF"
-                    primaryColor="#C385F8"
-                    secondaryColor="#FFFFFF"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    animatedLetterRef?.current?.animateUppercase();
-                  }}
-                >
-                  <PencilButton
-                    backgroundColor="#C385F8"
-                    offblackColor="#000000"
-                    offwhiteColor="#FFFFFF"
-                    primaryColor="#C385F8"
-                    secondaryColor="#FFFFFF"
-                  />
-                </TouchableOpacity>
-              </View>
+      <View className="flex flex-1 flex-col bg-[#F2EFF0] pb-4">
+        <View className="m-4 flex flex-1 flex-col overflow-hidden rounded-xl border-2 border-purple-500 bg-white ">
+          <View className="flex items-center justify-center pt-4">
+            <View className="flex flex-row gap-4 rounded-full p-2">
+              <TouchableOpacity
+                onPress={async () => {
+                  try {
+                    setIsAlphabeticPlaying(true);
+                    await playSound(activeActivity.sound.alphabeticAudioSrc);
+                    incrementProgress("ALPHABETIC_SOUND");
+                  } catch (error) {
+                    console.log("Error playing alphabetic sound:", error);
+                  } finally {
+                    setIsAlphabeticPlaying(false);
+                  }
+                }}
+                className="z-50 flex size-[70] items-center justify-center rounded-full bg-colors-purple-500"
+              >
+                <NameButton {...buttonStyles} />
+                <AnimatedBreathingView
+                  isPlaying={isAlphabeticPlaying}
+                  size={70}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={async () => {
+                  try {
+                    setIsPhoneticPlaying(true);
+                    await playSound(activeActivity.sound.phoneticAudioSrc);
+                    incrementProgress("PHONETIC_SOUND");
+                  } catch (error) {
+                    console.log("Error playing phonetic sound:", error);
+                  } finally {
+                    setIsPhoneticPlaying(false);
+                  }
+                }}
+                className="z-50 flex size-[70] items-center justify-center rounded-full bg-colors-purple-500"
+              >
+                <EarButton {...buttonStyles} />
+                <AnimatedBreathingView
+                  isPlaying={isPhoneticPlaying}
+                  size={70}
+                />
+              </TouchableOpacity>
             </View>
+          </View>
+          <View
+            className="flex flex-1 flex-col items-center justify-center"
+            style={{ transform: [{ translateY: VERTICAL_OFFSET }] }}
+          >
+            <PageLinesSVG />
+          </View>
+          <AnimatedLetterComponent
+            ref={animatedLetterRef}
+            name={activeActivity.letter.lowerCase}
+            key={activeActivity.letter.lowerCase}
+            onAnimationComplete={onAnimationComplete}
+            onAnimationStart={onAnimationStart}
+            isAnimating={isAnimating}
+          />
+          <View className="mt-auto flex flex-row items-center justify-evenly pb-6">
+            <TouchableOpacity
+              onPress={() => {
+                animatedLetterRef?.current?.animateUppercase();
+              }}
+            >
+              <PencilButton {...buttonStyles} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                animatedLetterRef?.current?.animateLowercase();
+              }}
+            >
+              <PencilButton {...buttonStyles} />
+            </TouchableOpacity>
           </View>
         </View>
 
-        <View className="flex w-full flex-col justify-between">
-          <View className="flex w-full flex-row items-center justify-around px-[10px]">
+        <View className="mt-auto flex w-full flex-col justify-between px-4">
+          <View className="flex w-full flex-row items-center justify-around">
             {activitiesInCurrentSection.map((activity, index) => (
               <Pressable
                 className={clsx("flex size-[60] justify-center  rounded-md  ", {
@@ -370,11 +353,11 @@ const LetterIntroduction = () => {
                 key={index}
                 disabled={isAnimating}
               >
-                <View className="flex flex-row  items-center justify-center ">
-                  <Text className="text-3xl font-medium">
+                <View className="flex flex-row items-center justify-center ">
+                  <Text style={globalStyles.thomasFont}>
                     {activity.letter.upperCase}
                   </Text>
-                  <Text className=" ml-0.5 text-3xl font-medium">
+                  <Text style={globalStyles.thomasFont}>
                     {activity.letter.lowerCase}
                   </Text>
                 </View>
