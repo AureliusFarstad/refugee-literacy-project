@@ -1,19 +1,19 @@
 import clsx from "clsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Alert, View, Platform } from "react-native";
+import { Platform, View } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import Svg, { Path as SvgPath } from "react-native-svg";
 
+import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Text, TouchableOpacity } from "@/ui";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { globalStyles } from "@/ui/styles";
 import { shuffleLetters } from "@/utils/level-one";
-import { APP_COLORS } from "@/constants/routes";
 
 type Path = {
   pathString: string;
@@ -219,13 +219,16 @@ const LetterTapMatching = () => {
                 if (!letterMetaInformation) return;
 
                 const absoluteTileCenterY = letterMetaInformation.pageY + 32; // Center of the 64px TouchableOpacity
-                let yPosForPath = Math.floor(absoluteTileCenterY - svgScreenOrigin.y);
+                let yPosForPath = Math.floor(
+                  absoluteTileCenterY - svgScreenOrigin.y,
+                );
 
-                if (Platform.OS === 'ios') {
+                if (Platform.OS === "ios") {
                   // Heuristic: iPhone SE has insets.top ~20. iPhone 15 has ~59.
                   // If insets.top is significantly larger, assume it needs the special offset like iPhone 15.
                   // TODO: KEEP INVESTIGATING THIS FIX... WORKS NOT ON ANDROID BUT NOT ALL iOS
-                  if (insets.top > 30) { // Threshold to differentiate devices needing the extra offset
+                  if (insets.top > 30) {
+                    // Threshold to differentiate devices needing the extra offset
                     yPosForPath += insets.top / 2 + 2; // Add the device's own top inset, as per your iPhone 15 observation
                   }
                 }
@@ -247,9 +250,7 @@ const LetterTapMatching = () => {
                   tappedPath.current = {
                     pathString: `M${tappedPath.current.startingPoint.x1},${
                       tappedPath.current.startingPoint.y1
-                    } L${letterMetaInformation.pageX - 90},${
-                      yPosForPath
-                    }`,
+                    } L${letterMetaInformation.pageX - 90},${yPosForPath}`,
                     startingPoint: tappedPath.current?.startingPoint as {
                       x1: number;
                       y1: number;
@@ -263,7 +264,14 @@ const LetterTapMatching = () => {
                 onPress(letter);
               }}
             >
-              <Text style={{ fontFamily: "Thomas", fontSize: 42, lineHeight: 52, color: APP_COLORS.offwhite }}>
+              <Text
+                style={{
+                  fontFamily: "Thomas",
+                  fontSize: 42,
+                  lineHeight: 52,
+                  color: APP_COLORS.offwhite,
+                }}
+              >
                 {letter.value}
               </Text>
               <View
