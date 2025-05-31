@@ -11,6 +11,6 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "Thomas",
     fontSize: 40,
     lineHeight: 50,
-    color: APP_COLORS.offblack
+    color: APP_COLORS.offblack,
   },
 });
