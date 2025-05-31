@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ALPHABET_LETTER_LIST_BY_LEVEL } from "@/assets/alphabet";
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
@@ -17,7 +16,7 @@ import { EarButton } from "@/ui/icons/circular/ear-button";
 import { NameButton } from "@/ui/icons/circular/name-button";
 import { PencilButton } from "@/ui/icons/circular/pencil-button";
 import { globalStyles } from "@/ui/styles";
-import { HEIGHT, IS_IOS } from "@/utils/layout";
+import { HEIGHT } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
 
@@ -131,11 +130,16 @@ const LetterFormation = () => {
   const letterOffsetStyle = [
     styles.letterOffset,
 
-    isSmallScreen ? { transform: [{ scale: 0.6 }] } : { transform: [{translateY: -25}]}, // No transform for larger screens
+    isSmallScreen
+      ? { transform: [{ scale: 0.6 }] }
+      : { transform: [{ translateY: -25 }] }, // No transform for larger screens
   ];
 
   return (
-    <SafeAreaView style={globalStyles.safeAreaView} edges={["top", "left", "right"]}>
+    <SafeAreaView
+      style={globalStyles.safeAreaView}
+      edges={["top", "left", "right"]}
+    >
       <GuidanceAudioHeader
         title="Formation"
         onPressGuide={playGuideAudio}
@@ -144,12 +148,12 @@ const LetterFormation = () => {
       />
       <View
         style={[
-          {flex: 1, justifyContent: 'center', alignItems: 'center'},
+          { flex: 1, justifyContent: "center", alignItems: "center" },
           styles.background,
         ]}
       >
         <View
-          style={{flex: 1, justifyContent: 'center', paddingHorizontal: 10}}
+          style={{ flex: 1, justifyContent: "center", paddingHorizontal: 10 }}
         >
           <View style={[styles.buttonRow]}>
             <AnimatedAudioButton
@@ -181,15 +185,15 @@ const LetterFormation = () => {
           </View>
           <View style={cardStyle}>
             <View style={letterOffsetStyle}>
-                <OverlayLetterAnimation
-                  ref={animatedLetterRef}
-                  name={animationLetter}
-                  key={animationLetter}
-                  onAnimationComplete={onAnimationComplete}
-                  onAnimationStart={onAnimationStart}
-                  isAnimating={isAnimating}
-                  isOverlayAnimation={isOverlayAnimation}
-                />
+              <OverlayLetterAnimation
+                ref={animatedLetterRef}
+                name={animationLetter}
+                key={animationLetter}
+                onAnimationComplete={onAnimationComplete}
+                onAnimationStart={onAnimationStart}
+                isAnimating={isAnimating}
+                isOverlayAnimation={isOverlayAnimation}
+              />
             </View>
             <View style={[styles.pencilButtonWrapper]}>
               <TouchableOpacity
@@ -210,13 +214,10 @@ const LetterFormation = () => {
           <View className="flex w-full flex-row items-center justify-around">
             {letters.map((bottomBarLetter, index) => (
               <Pressable
-                className={clsx(
-                  "flex size-[60] justify-center rounded-md",
-                  {
-                    "bg-colors-gray-300": bottomBarLetter !== activeLetter,
-                    "bg-colors-purple-500": bottomBarLetter === activeLetter,
-                  },
-                )}
+                className={clsx("flex size-[60] justify-center rounded-md", {
+                  "bg-colors-gray-300": bottomBarLetter !== activeLetter,
+                  "bg-colors-purple-500": bottomBarLetter === activeLetter,
+                })}
                 onPress={() => {
                   setActiveLetter(bottomBarLetter);
                 }}
