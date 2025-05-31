@@ -7,11 +7,13 @@ import {
 } from "react-native-safe-area-context";
 import Svg, { Path as SvgPath } from "react-native-svg";
 
-import { APP_COLORS } from "@/constants/routes";
+import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Text, TouchableOpacity } from "@/ui";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { ScissorButton } from "@/ui/icons/circular/scissor-button";
 import { globalStyles } from "@/ui/styles";
 import { shuffleLetters } from "@/utils/level-one";
 
@@ -49,6 +51,8 @@ const LetterTapMatching = () => {
     right: null,
   });
   const [paths, setPaths] = useState<Path[]>([]);
+  const [gameCompleted, setGameCompleted] = useState(false);
+  const [showScissorButton, setShowScissorButton] = useState(false);
 
   // @ts-ignore
   const tappedPath = useRef<Path>();
@@ -84,6 +88,8 @@ const LetterTapMatching = () => {
     setSelectedLeft(null);
     setMatchedPairs([]);
     setPaths([]);
+    setGameCompleted(false);
+    setShowScissorButton(false);
   }, []);
 
   useEffect(() => {
@@ -113,7 +119,7 @@ const LetterTapMatching = () => {
 
       // Check if all pairs are matched
       if (matchedPairs.length + 1 === leftLetters.length) {
-        // TODO: How to reset the game?
+        setGameCompleted(true);
         const updatedLevels = levels.map((level: ILevel) => {
           if (level.id !== levels[0].id) return level;
 
@@ -177,10 +183,31 @@ const LetterTapMatching = () => {
   };
 
   useEffect(() => {
-    if (matchedPairs.length === activeActivity.current.letters?.length) {
-      // TODO: How to reset the game?
+    if (
+      activeActivity.current.letters &&
+      matchedPairs.length === activeActivity.current.letters?.length &&
+      matchedPairs.length > 0
+    ) {
+      setGameCompleted(true);
     }
-  }, [matchedPairs, initializeGame]);
+  }, [matchedPairs]);
+
+  useEffect(() => {
+    let timerId: number | undefined;
+    if (gameCompleted) {
+      timerId = setTimeout(() => {
+        setShowScissorButton(true);
+      }, 500);
+    } else {
+      setShowScissorButton(false);
+    }
+
+    return () => {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+    };
+  }, [gameCompleted]);
 
   const renderLetters = (
     letters: ILetter[],
@@ -330,6 +357,18 @@ const LetterTapMatching = () => {
     </View>
   );
 
+  const scissorButtonColors: ButtonColorProps = {
+    primaryColor: SECTION_COLORS.alphabet.primary,
+    offwhiteColor: APP_COLORS.offwhite,
+    offblackColor: APP_COLORS.offblack,
+    secondaryColor: SECTION_COLORS.alphabet.light,
+    backgroundColor: APP_COLORS.backgroundgrey,
+  };
+
+  const handleScissorPress = () => {
+    initializeGame();
+  };
+
   return (
     <SafeAreaView style={globalStyles.safeAreaView}>
       <GuidanceAudioHeader
@@ -363,6 +402,13 @@ const LetterTapMatching = () => {
               </React.Fragment>
             ))}
           </Svg>
+          {showScissorButton && (
+            <View className="absolute inset-0 items-center justify-center">
+              <TouchableOpacity onPress={handleScissorPress}>
+                <ScissorButton {...scissorButtonColors} />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
         {renderLetters(rightLetters, handleRightLetterPress, true)}
       </View>
