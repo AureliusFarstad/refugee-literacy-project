@@ -1,9 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ALPHABET_LETTER_LIST_BY_LEVEL } from "@/assets/alphabet";
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
