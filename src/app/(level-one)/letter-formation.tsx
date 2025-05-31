@@ -21,6 +21,8 @@ import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
 
+const SCREEN_HEIGHT_CUTOFF = 732; // Pixel 2 viewport height
+
 // TODO: Move to _layout?
 const buttonColors: ButtonColorProps = {
   primaryColor: SECTION_COLOR.primary,
@@ -54,14 +56,14 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: "row",
     justifyContent: "flex-end",
+    width: "100%",
     alignItems: "center",
     gap: 20,
     marginVertical: 16,
-    marginRight: 20,
+    marginRight: 24,
   },
   card: {
     position: "relative",
-    height: 360,
     marginHorizontal: 20,
     alignItems: "center",
     justifyContent: "center",
@@ -75,8 +77,7 @@ const styles = StyleSheet.create({
   letterOffset: {
     position: "absolute", // Change from "relative" to "absolute"
     width: "100%", // Take full parent width
-    height: 356,
-    top: -30, // Move up 20px
+    top: 0,
     left: 0, // Ensure it's aligned with parent
     alignItems: "center",
     justifyContent: "center",
@@ -84,8 +85,6 @@ const styles = StyleSheet.create({
 });
 
 const LetterFormation = () => {
-  const insets = useSafeAreaInsets();
-
   const { isLowercase } = useLetterCase();
 
   const [activeLetter, setActiveLetter] = useState(letters[0]);
@@ -121,8 +120,22 @@ const LetterFormation = () => {
     console.log("animation completed");
   };
 
+  // Conditional styles based on screen height
+  const isSmallScreen = HEIGHT < SCREEN_HEIGHT_CUTOFF;
+
+  const cardStyle = [
+    styles.card,
+    isSmallScreen ? { height: 250 } : { height: 360 },
+  ];
+
+  const letterOffsetStyle = [
+    styles.letterOffset,
+
+    isSmallScreen ? { transform: [{ scale: 0.6 }] } : { transform: [{translateY: -25}]}, // No transform for larger screens
+  ];
+
   return (
-    <SafeAreaView style={globalStyles.safeAreaView}>
+    <SafeAreaView style={globalStyles.safeAreaView} edges={["top", "left", "right"]}>
       <GuidanceAudioHeader
         title="Formation"
         onPressGuide={playGuideAudio}
@@ -131,95 +144,94 @@ const LetterFormation = () => {
       />
       <View
         style={[
-          {
-            height:
-              HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
-          },
+          {flex: 1, justifyContent: 'center', alignItems: 'center'},
           styles.background,
         ]}
       >
-        <View style={[styles.buttonRow]}>
-          <AnimatedAudioButton
-            audioSource={
-              ALPHABET_AUDIO_SOURCES[
-                activeLetter as keyof typeof ALPHABET_AUDIO_SOURCES
-              ].name
-            }
-            width={60}
-            height={60}
-          >
-            <View style={[styles.button]}>
-              <NameButton {...buttonColors} />
-            </View>
-          </AnimatedAudioButton>
-          <AnimatedAudioButton
-            audioSource={
-              ALPHABET_AUDIO_SOURCES[
-                activeLetter as keyof typeof ALPHABET_AUDIO_SOURCES
-              ].sound
-            }
-            width={60}
-            height={60}
-          >
-            <View style={[styles.button]}>
-              <EarButton {...buttonColors} />
-            </View>
-          </AnimatedAudioButton>
-        </View>
-        <View style={styles.card}>
-          <View style={styles.letterOffset}>
-            <OverlayLetterAnimation
-              ref={animatedLetterRef}
-              name={animationLetter}
-              key={animationLetter}
-              onAnimationComplete={onAnimationComplete}
-              onAnimationStart={onAnimationStart}
-              isAnimating={isAnimating}
-              isOverlayAnimation={isOverlayAnimation}
-            />
-          </View>
-          <View style={[styles.pencilButtonWrapper]}>
-            <TouchableOpacity
-              onPress={() => {
-                setIsOverlayAnimation(true);
-                setTimeout(() => {
-                  animatedLetterRef.current?.animateLowercase();
-                }, 2000);
-              }}
+        <View
+          style={{flex: 1, justifyContent: 'center', paddingHorizontal: 10}}
+        >
+          <View style={[styles.buttonRow]}>
+            <AnimatedAudioButton
+              audioSource={
+                ALPHABET_AUDIO_SOURCES[
+                  activeLetter as keyof typeof ALPHABET_AUDIO_SOURCES
+                ].name
+              }
+              width={60}
+              height={60}
             >
-              <PencilButton {...buttonColors} />
-            </TouchableOpacity>
+              <View style={[styles.button]}>
+                <NameButton {...buttonColors} />
+              </View>
+            </AnimatedAudioButton>
+            <AnimatedAudioButton
+              audioSource={
+                ALPHABET_AUDIO_SOURCES[
+                  activeLetter as keyof typeof ALPHABET_AUDIO_SOURCES
+                ].sound
+              }
+              width={60}
+              height={60}
+            >
+              <View style={[styles.button]}>
+                <EarButton {...buttonColors} />
+              </View>
+            </AnimatedAudioButton>
+          </View>
+          <View style={cardStyle}>
+            <View style={letterOffsetStyle}>
+                <OverlayLetterAnimation
+                  ref={animatedLetterRef}
+                  name={animationLetter}
+                  key={animationLetter}
+                  onAnimationComplete={onAnimationComplete}
+                  onAnimationStart={onAnimationStart}
+                  isAnimating={isAnimating}
+                  isOverlayAnimation={isOverlayAnimation}
+                />
+            </View>
+            <View style={[styles.pencilButtonWrapper]}>
+              <TouchableOpacity
+                onPress={() => {
+                  setIsOverlayAnimation(true);
+                  setTimeout(() => {
+                    animatedLetterRef.current?.animateLowercase();
+                  }, 0);
+                }}
+              >
+                <PencilButton {...buttonColors} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-        <View className="mt-auto ">
+        <View className="mt-auto flex w-full flex-col justify-between px-4 pb-4">
           <View />
-          <View className=" flex flex-row justify-between ">
-            <View className="mt-16 flex w-full flex-row items-center justify-around px-[10px]">
-              {letters.map((bottomBarLetter, index) => (
-                <Pressable
-                  className={clsx(
-                    "flex size-[60] items-center justify-center rounded-md ",
-                    {
-                      "bg-colors-gray-300": bottomBarLetter !== activeLetter,
-                      "bg-colors-purple-500": bottomBarLetter === activeLetter,
-                    },
-                  )}
-                  onPress={() => {
-                    setActiveLetter(bottomBarLetter);
-                  }}
-                  key={index}
-                >
-                  <View className="flex flex-row  items-center justify-center ">
-                    <Text className="text-3xl font-medium">
-                      {/* lowercase if isLowercase, otherwise uppercase */}
-                      {isLowercase
-                        ? bottomBarLetter.toLowerCase()
-                        : bottomBarLetter.toUpperCase()}
-                    </Text>
-                  </View>
-                </Pressable>
-              ))}
-            </View>
+          <View className="flex w-full flex-row items-center justify-around">
+            {letters.map((bottomBarLetter, index) => (
+              <Pressable
+                className={clsx(
+                  "flex size-[60] justify-center rounded-md",
+                  {
+                    "bg-colors-gray-300": bottomBarLetter !== activeLetter,
+                    "bg-colors-purple-500": bottomBarLetter === activeLetter,
+                  },
+                )}
+                onPress={() => {
+                  setActiveLetter(bottomBarLetter);
+                }}
+                key={index}
+              >
+                <View className="flex flex-row items-center justify-center">
+                  <Text style={globalStyles.thomasFont}>
+                    {/* lowercase if isLowercase, otherwise uppercase */}
+                    {isLowercase
+                      ? bottomBarLetter.toLowerCase()
+                      : bottomBarLetter.toUpperCase()}
+                  </Text>
+                </View>
+              </Pressable>
+            ))}
           </View>
         </View>
       </View>
