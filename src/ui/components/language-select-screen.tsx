@@ -13,6 +13,7 @@ import { APP_COLORS } from "@/constants/routes";
 import useSound from "@/core/hooks/useSoundExtended";
 import { SUPPORTED_LANGUAGES, useUser } from "@/core/store/user";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
+import { globalStyles } from "@/ui/styles";
 import { WIDTH } from "@/utils/layout";
 
 import type { ButtonColorProps } from "../icons/circular/color-scheme";
@@ -223,6 +224,7 @@ const LanguageSelectionScreen = () => {
                     isSelected
                       ? styles.languageRowTextSelected
                       : styles.languageRowTextUnselected,
+                    language.code === "en" && globalStyles.thomasFont,
                   ]}
                 >
                   {assets?.selectText || language.label}
