@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
@@ -53,7 +53,7 @@ export default function FlashCardContainer() {
   });
 
   return (
-    <SafeAreaView 
+    <SafeAreaView
       style={globalStyles.safeAreaView}
       edges={["top", "right", "left"]}
     >

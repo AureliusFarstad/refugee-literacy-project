@@ -7,13 +7,12 @@ import {
   requireEnglishAudioForWord,
   requireNativeAudioForWord,
 } from "@/assets/blending/index";
+import { APP_COLORS } from "@/constants/routes";
 import { Text } from "@/ui";
 import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
-import { APP_COLORS } from "@/constants/routes";
-import { globalStyles } from "../styles";
 
 type FlashCardProps = {
   content: {
