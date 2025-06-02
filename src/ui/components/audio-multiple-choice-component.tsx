@@ -44,6 +44,7 @@ type Position = {
 interface DraggableButtonProps {
   item: ButtonItem;
   disabled?: boolean;
+  isLockedByGame?: boolean;
   onAudioPlay: () => void;
   onDragStart: () => void;
   onDragEnd: (position: Position, isInTarget: boolean) => void;
@@ -57,6 +58,7 @@ interface DraggableButtonProps {
   breatheDuration?: number;
   animationBorderColor?: string;
   animationBorderWidth?: number;
+  isLockedByGameDefault?: boolean;
 }
 
 export type GameSet = {
@@ -224,6 +226,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   breatheDuration = 2000,
   animationBorderColor = "#4CAF50",
   animationBorderWidth = 4,
+  isLockedByGame = false,
 }) => {
   // Animated values for position
   const translateX = useSharedValue<number>(0);
@@ -462,21 +465,21 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   // Gesture handling
   const tapGesture = Gesture.Tap()
     .onStart(() => {
-      if (!isDragging.value && !disabled && !isPlaying) {
+      if (!isDragging.value && !disabled && !isLockedByGame && !isPlaying) {
         runOnJS(onAudioPlay)();
       }
     })
     .maxDuration(250)
-    .enabled(!disabled);
+    .enabled(!disabled && !isLockedByGame);
 
   const dragGesture = Gesture.Pan()
     .onStart(() => {
-      if (disabled) return;
+      if (disabled || isLockedByGame) return;
       touchStartTime.value = Date.now();
       savedPosition.value = { x: translateX.value, y: translateY.value };
     })
     .onUpdate((event) => {
-      if (disabled) return;
+      if (disabled || isLockedByGame) return;
       if (Date.now() - touchStartTime.value > DRAG_DELAY_MS) {
         if (!isDragging.value) {
           isDragging.value = true;
@@ -488,7 +491,15 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
       }
     })
     .onEnd((event) => {
-      if (disabled) return;
+      if (disabled || isLockedByGame) {
+        if (isDragging.value) {
+          translateX.value = withSpring(0, SPRING_CONFIG);
+          translateY.value = withSpring(0, SPRING_CONFIG);
+          isDragging.value = false;
+        }
+        return;
+      }
+
       if (isDragging.value) {
         const droppedX = event.absoluteX;
         const droppedY = event.absoluteY;
@@ -706,6 +717,8 @@ const AudioMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
   const [disabledButtons, setDisabledButtons] = useState<string[]>([]);
   const [playingButtonId, setPlayingButtonId] = useState<string | null>(null);
   const [shuffledOptions, setShuffledOptions] = useState<GameSet>(gameSet);
+  const [isGameInteractionLocked, setIsGameInteractionLocked] =
+    useState<boolean>(false);
 
   // Refs
   const currentSound = useRef<Sound | null>(null);
@@ -1005,7 +1018,7 @@ const AudioMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
   // Handle drag end for buttons
   const handleDragEnd = useCallback(
     (
-      position: Position,
+      _position: Position,
       buttonId: string,
       isInTarget: boolean,
       correctButtonId: string,
@@ -1013,13 +1026,13 @@ const AudioMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
       console.log(
         `[EVENT] Button ${buttonId} - Drag ended - isInTarget: ${isInTarget}`,
       );
-
       setIsCardActive(false);
 
       if (isInTarget) {
         console.log(
           `[STATE] Button ${buttonId} - Placed in target - correct: ${buttonId === correctButtonId}`,
         );
+        setIsGameInteractionLocked(true);
         setPlacedButtonId(buttonId);
         const isCorrect = buttonId === correctButtonId;
         setIsCorrectAnswer(isCorrect);
@@ -1042,14 +1055,19 @@ const AudioMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
               onCorrectAnswer();
             }
           }, 1500); // Wait 1.5 seconds before advancing
+        } else {
+          // Incorrect answer, feedback is handled by DraggableButton's useEffect
+          // The DraggableButton will call this handleDragEnd again with isInTarget: false
+          // after its timeout, at which point the lock will be released.
         }
       } else if (placedButtonId === buttonId) {
         console.log(`[STATE] Button ${buttonId} - Removed from placement`);
         setPlacedButtonId(null);
         setIsCorrectAnswer(null);
+        setIsGameInteractionLocked(false);
       }
     },
-    [placedButtonId, onCorrectAnswer],
+    [onCorrectAnswer, placedButtonId],
   );
 
   // Prepare available buttons
@@ -1063,8 +1081,10 @@ const AudioMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
       <View style={styles.buttonPool}>
         {availableButtons.map((item: ButtonItem, index: number) => (
           <DraggableButton
-            key={`${item.id}`}
+            key={`${item.id}-${gameSet.correctAnswerId}`}
             item={item}
+            disabled={disabledButtons.includes(item.id)}
+            isLockedByGame={isGameInteractionLocked}
             onAudioPlay={() => playAudio(item.audioFile, item.id)}
             onDragStart={() => setIsCardActive(true)}
             onDragEnd={(pos, isInTarget) =>
@@ -1075,7 +1095,6 @@ const AudioMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
             destinationArea={destinationArea}
             isPlaced={placedButtonId === item.id}
             isCorrect={placedButtonId === item.id ? isCorrectAnswer : null}
-            disabled={disabledButtons.includes(item.id)}
             isPlaying={playingButtonId === item.id}
             onMarkDisabled={(buttonId: string) =>
               setDisabledButtons((prev) => [...prev, buttonId])
