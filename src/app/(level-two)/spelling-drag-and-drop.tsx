@@ -11,10 +11,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
 import {
-  THREE_LETTER_BLENDING_WORD_LIST_BY_LEVEL,
   requireEnglishAudioForWord,
+  THREE_LETTER_BLENDING_WORD_LIST_BY_LEVEL,
 } from "@/assets/blending";
-import { SECTION_COLORS, APP_COLORS } from "@/constants/routes";
+import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import type {
   DestinationComponentType,
@@ -150,10 +150,14 @@ const Screen = () => {
     return [...array].sort(() => Math.random() - 0.5);
   }, []);
 
-  const [wordQueue, setWordQueue] = useState<string[]>(() => shuffle(SOURCE_WORDS));
-  const [currentWord, setCurrentWord] = useState<string>(() => wordQueue[0] || "");
+  const [wordQueue, setWordQueue] = useState<string[]>(() =>
+    shuffle(SOURCE_WORDS),
+  );
+  const [currentWord, setCurrentWord] = useState<string>(
+    () => wordQueue[0] || "",
+  );
   const [letterIndex, setLetterIndex] = useState(0);
-  
+
   useEffect(() => {
     // This effect ensures currentWord is updated if wordQueue changes and was empty then populated.
     // Or if the first word of the queue changes for any other reason.
@@ -171,7 +175,8 @@ const Screen = () => {
 
   const onCorrectAnswer = useCallback(() => {
     setLetterIndex((prevLetterIndex) => {
-      if (prevLetterIndex + 1 >= maxIndex) { // Word completed
+      if (prevLetterIndex + 1 >= maxIndex) {
+        // Word completed
         setWordQueue((prevQueue) => {
           let newQueue = prevQueue.slice(1);
           if (newQueue.length === 0) {
@@ -337,7 +342,8 @@ const Screen = () => {
   // Helper function to render the appropriate content based on dialogueCounter
   // Use useMemo to only recalculate when dependencies change
   const spellingContent = useMemo(() => {
-    if (!currentWord) { // Handle cases where currentWord might be temporarily empty
+    if (!currentWord) {
+      // Handle cases where currentWord might be temporarily empty
       return null; // Or some loading/empty state
     }
     // Create destination component with current word and letter index
@@ -372,7 +378,12 @@ const Screen = () => {
         sectionColorTheme={sectionColor}
       />
     );
-  }, [currentWord, letterIndex, onCorrectAnswer, createSpellingDestinationComponent]);
+  }, [
+    currentWord,
+    letterIndex,
+    onCorrectAnswer,
+    createSpellingDestinationComponent,
+  ]);
 
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
     screenName: "spelling-drag-and-drop",

@@ -18,8 +18,12 @@ export const BLENDING_WORD_LIST_BY_LEVEL: IBlending_Word_List = {
 };
 
 export const THREE_LETTER_BLENDING_WORD_LIST_BY_LEVEL: IBlending_Word_List = {
-  LEVEL_1: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter((word) => word.length === 3),
-  LEVEL_2: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_2.filter((word) => word.length === 3),
+  LEVEL_1: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
+    (word) => word.length === 3,
+  ),
+  LEVEL_2: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_2.filter(
+    (word) => word.length === 3,
+  ),
 };
 
 // Extract all valid words from all levels automatically
