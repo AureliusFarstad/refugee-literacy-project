@@ -11,11 +11,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
 import {
-  BLENDING_WORD_LIST_BY_LEVEL,
+  THREE_LETTER_BLENDING_WORD_LIST_BY_LEVEL,
   requireEnglishAudioForWord,
 } from "@/assets/blending";
-import { SECTION_COLORS } from "@/constants/routes";
-import { APP_COLORS } from "@/constants/routes";
+import { SECTION_COLORS, APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import type {
   DestinationComponentType,
@@ -38,6 +37,9 @@ const IS_SMALL_SCREEN = screenHeight < SMALL_SCREEN_THRESHOLD;
 const DESTINATION_BUTTON_SIZE = IS_SMALL_SCREEN ? 60 : 80;
 const DESTINATION_LETTER_FONT_SIZE = IS_SMALL_SCREEN ? 40 : 55;
 const DESTINATION_LETTER_LINE_HEIGHT = IS_SMALL_SCREEN ? 45 : 62;
+
+// Define SOURCE_WORDS outside or ensure it's stable if defined inside.
+const SOURCE_WORDS = THREE_LETTER_BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1;
 
 const styles = StyleSheet.create({
   card: {
@@ -143,65 +145,48 @@ const Screen = () => {
   const thirdButtonRef = useRef<View>(null);
   const destinationContainerRef = useRef<View>(null);
 
-  // const insets = useSafeAreaInsets();
-  // Add a default empty array as fallback if undefined
-  const wordCollection = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1;
+  const shuffle = useCallback((array: string[]) => {
+    // Return a new shuffled array
+    return [...array].sort(() => Math.random() - 0.5);
+  }, []);
 
-  // Check if wordCollection has items before using it
-  const initialWord = wordCollection[0]; // Default fallback
-
-  // Convert dialogueCounter to state so it persists between renders
-  const [wordIndex, setWordIndex] = useState(0);
-  const [word, setWord] = useState<string>(initialWord);
-
-  // Add this effect to update word when wordIndex changes
-  useEffect(() => {
-    if (wordCollection && wordCollection[wordIndex]) {
-      setWord(wordCollection[wordIndex]);
-    }
-  }, [wordIndex, wordCollection]);
-
+  const [wordQueue, setWordQueue] = useState<string[]>(() => shuffle(SOURCE_WORDS));
+  const [currentWord, setCurrentWord] = useState<string>(() => wordQueue[0] || "");
   const [letterIndex, setLetterIndex] = useState(0);
-  const maxIndex = 3;
+  
+  useEffect(() => {
+    // This effect ensures currentWord is updated if wordQueue changes and was empty then populated.
+    // Or if the first word of the queue changes for any other reason.
+    if (wordQueue.length > 0 && currentWord !== wordQueue[0]) {
+      setCurrentWord(wordQueue[0]);
+      setLetterIndex(0); // Reset letter index for the new word
+    } else if (wordQueue.length === 0 && currentWord !== "") {
+      // Handle case where queue becomes empty (e.g. if SOURCE_WORDS was empty)
+      setCurrentWord("");
+      setLetterIndex(0);
+    }
+  }, [wordQueue, currentWord]);
 
-  /**
-   * Handles progression after a correct answer:
-   * - First advances to the next letter in current word
-   * - When all letters in word are completed, advances to next word
-   * - Cycles back to beginning when all words are completed
-   */
+  const maxIndex = 3; // Assuming all words are 3 letters long based on THREE_LETTER_...
+
   const onCorrectAnswer = useCallback(() => {
-    // Update the current letter index within the word
-    setLetterIndex((prevIndex) => {
-      let newIndex = prevIndex + 1;
-
-      // Check if we've completed all letters in the current word
-      if (newIndex >= maxIndex) {
-        newIndex = prevIndex;
-        // Move to the next word since we finished all letters
-        setWordIndex((prevWordIndex) => {
-          let newWordIndex = prevWordIndex + 1;
-
-          // Check if we've completed all words in the collection
-          if (newWordIndex >= wordCollection.length) {
-            // Reset to the first word when we've gone through the entire collection
-            newWordIndex = 0;
+    setLetterIndex((prevLetterIndex) => {
+      if (prevLetterIndex + 1 >= maxIndex) { // Word completed
+        setWordQueue((prevQueue) => {
+          let newQueue = prevQueue.slice(1);
+          if (newQueue.length === 0) {
+            newQueue = shuffle(SOURCE_WORDS);
           }
-
-          setTimeout(() => {
-            // Reset letter index to 0 after a delay
-            setLetterIndex(0);
-            setWordIndex(newWordIndex);
-          });
-
-          return prevWordIndex;
+          // The useEffect above will handle setting currentWord from newQueue[0]
+          return newQueue;
         });
+        return 0; // Reset letterIndex for the new word
+      } else {
+        // Advance letter in current word
+        return prevLetterIndex + 1;
       }
-
-      // Continue with the next letter in the current word
-      return newIndex;
     });
-  }, [maxIndex, wordCollection.length]);
+  }, [maxIndex, shuffle]); // SOURCE_WORDS is stable, shuffle is memoized
 
   // Keep the original structure but use useCallback for stability
   const createSpellingDestinationComponent = useCallback<
@@ -242,7 +227,7 @@ const Screen = () => {
               >
                 <AnimatedAudioButton
                   audioSource={
-                    ALPHABET_AUDIO_SOURCES[(propWord as string)[0]].sound
+                    ALPHABET_AUDIO_SOURCES[(propWord as string)[0]]?.sound
                   }
                   width={DESTINATION_BUTTON_SIZE}
                   height={DESTINATION_BUTTON_SIZE}
@@ -275,7 +260,7 @@ const Screen = () => {
               >
                 <AnimatedAudioButton
                   audioSource={
-                    ALPHABET_AUDIO_SOURCES[(propWord as string)[1]].sound
+                    ALPHABET_AUDIO_SOURCES[(propWord as string)[1]]?.sound
                   }
                   width={DESTINATION_BUTTON_SIZE}
                   height={DESTINATION_BUTTON_SIZE}
@@ -308,7 +293,7 @@ const Screen = () => {
               >
                 <AnimatedAudioButton
                   audioSource={
-                    ALPHABET_AUDIO_SOURCES[(propWord as string)[2]].sound
+                    ALPHABET_AUDIO_SOURCES[(propWord as string)[2]]?.sound
                   }
                   width={DESTINATION_BUTTON_SIZE}
                   height={DESTINATION_BUTTON_SIZE}
@@ -352,14 +337,17 @@ const Screen = () => {
   // Helper function to render the appropriate content based on dialogueCounter
   // Use useMemo to only recalculate when dependencies change
   const spellingContent = useMemo(() => {
+    if (!currentWord) { // Handle cases where currentWord might be temporarily empty
+      return null; // Or some loading/empty state
+    }
     // Create destination component with current word and letter index
     const DestinationComponent = createSpellingDestinationComponent({
-      word: word,
+      word: currentWord,
       index: letterIndex,
     });
 
     // Get the current letter that should be the correct answer
-    const currentLetter = word[letterIndex];
+    const currentLetter = currentWord[letterIndex];
 
     const gameSet: GameSet = {
       correctAnswerId: currentLetter,
@@ -373,7 +361,7 @@ const Screen = () => {
     };
 
     // Create a unique key combining word and letter index
-    const componentKey = `${word}-${letterIndex}`;
+    const componentKey = `${currentWord}-${letterIndex}`;
 
     return (
       <SpellingMultipleChoice
@@ -384,7 +372,7 @@ const Screen = () => {
         sectionColorTheme={sectionColor}
       />
     );
-  }, [word, letterIndex, onCorrectAnswer, createSpellingDestinationComponent]);
+  }, [currentWord, letterIndex, onCorrectAnswer, createSpellingDestinationComponent]);
 
   const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
     screenName: "spelling-drag-and-drop",
