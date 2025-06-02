@@ -237,9 +237,11 @@ const VideoPlayer = forwardRef(
 
     // Ensure the WebView itself takes 100% width and height of its allocated space
     const webViewFinalStyle = {
-      ...(svgatorStyles && typeof svgatorStyles.style === 'object' ? svgatorStyles.style : {}),
-      width: '100%',
-      height: '100%',
+      ...(svgatorStyles && typeof svgatorStyles.style === "object"
+        ? svgatorStyles.style
+        : {}),
+      width: "100%",
+      height: "100%",
     };
 
     return (

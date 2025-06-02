@@ -8,7 +8,13 @@ import welcome from "assets/videos/welcome-dict";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Animated, Pressable, StyleSheet, View, type LayoutChangeEvent } from "react-native";
+import {
+  Animated,
+  type LayoutChangeEvent,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 import { Slider } from "react-native-awesome-slider";
 import { useSharedValue } from "react-native-reanimated";
 
@@ -106,7 +112,10 @@ const InteractiveVideoPlayer = ({
   const [svgContent, setSvgContent] = useState<string | null>(null);
 
   // State for video container dimensions
-  const [videoContainerLayout, setVideoContainerLayout] = useState<{ width: number; height: number } | null>(null);
+  const [videoContainerLayout, setVideoContainerLayout] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
 
   // Completion tracking
   const [audioCompleted, setAudioCompleted] = useState(false);
@@ -439,7 +448,8 @@ const InteractiveVideoPlayer = ({
       return { width: 0, height: 0, ready: false };
     }
 
-    const { width: containerWidth, height: rawContainerHeight } = videoContainerLayout;
+    const { width: containerWidth, height: rawContainerHeight } =
+      videoContainerLayout;
     // Adjust available height by subtracting the bottom inset.
     // This is crucial for ensuring the video content respects the tab navigator or other bottom obstructions.
     const containerHeight = rawContainerHeight;
@@ -458,10 +468,10 @@ const InteractiveVideoPlayer = ({
       targetHeight = containerWidth / svgAspectRatio;
     }
 
-    return { 
-      width: Math.max(0, Math.floor(targetWidth)), 
-      height: Math.max(0, Math.floor(targetHeight)), 
-      ready: true 
+    return {
+      width: Math.max(0, Math.floor(targetWidth)),
+      height: Math.max(0, Math.floor(targetHeight)),
+      ready: true,
     };
   }, [videoContainerLayout, svgAspectRatio]);
 
@@ -505,46 +515,52 @@ const InteractiveVideoPlayer = ({
         {videoPlayerDimensions.ready && svgContent ? (
           <Pressable
             // This Pressable defines the tappable area for pause, matching the scaled video.
-            style={{ width: videoPlayerDimensions.width, height: videoPlayerDimensions.height }}
+            style={{
+              width: videoPlayerDimensions.width,
+              height: videoPlayerDimensions.height,
+            }}
             onPress={handlePause}
             disabled={!isPlaying}
           >
             <VideoPlayer
               ref={playerRef}
-              // @ts-ignore 
+              // @ts-ignore
               svgContent={svgContent}
               onAnimationComplete={handleAnimationComplete}
-              style={{ width: '100%', height: '100%' }}
+              style={{ width: "100%", height: "100%" }}
               // Assuming VideoPlayer's internal WebView is styled to fill this Pressable (e.g. width: '100%', height: '100%')
             />
           </Pressable>
         ) : (
           // Placeholder while dimensions are calculated or content is loading
           // Consider adding an ActivityIndicator if loading takes time
-          <View style={{flex: 1}} /> // Takes up space to prevent layout jumps
+          <View style={{ flex: 1 }} /> // Takes up space to prevent layout jumps
         )}
 
         {/* Overlay When Paused */}
-        {showOverlay && svgContent && ( // Conditionally render based on svgContent as well
-          <Animated.View
-            style={[styles.overlayContainer, { opacity: overlayOpacity }]}
-          >
-            <BlurView
-              intensity={40}
-              tint="dark"
-              style={styles.blurViewStyle} // Using StyleSheet for consistency
+        {showOverlay &&
+          svgContent && ( // Conditionally render based on svgContent as well
+            <Animated.View
+              style={[styles.overlayContainer, { opacity: overlayOpacity }]}
             >
-              <View> {/* Removed className="flex flex-row" as PlayButton is centered by BlurView */}
-                <Pressable
-                  onPress={handlePlay}
-                  // className removed, BlurView handles centering
-                >
-                  <PlayButton width={80} height={80} {...buttonColorProps} />
-                </Pressable>
-              </View>
-            </BlurView>
-          </Animated.View>
-        )}
+              <BlurView
+                intensity={40}
+                tint="dark"
+                style={styles.blurViewStyle} // Using StyleSheet for consistency
+              >
+                <View>
+                  {" "}
+                  {/* Removed className="flex flex-row" as PlayButton is centered by BlurView */}
+                  <Pressable
+                    onPress={handlePlay}
+                    // className removed, BlurView handles centering
+                  >
+                    <PlayButton width={80} height={80} {...buttonColorProps} />
+                  </Pressable>
+                </View>
+              </BlurView>
+            </Animated.View>
+          )}
       </View>
     </View>
   );
@@ -562,17 +578,20 @@ const styles = StyleSheet.create({
   slider: {
     height: 40,
   },
-  videoScreenContainer: { // Styles for the main video area container
+  videoScreenContainer: {
+    // Styles for the main video area container
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
-  overlayContainer: { // Fills the videoScreenContainer
+  overlayContainer: {
+    // Fills the videoScreenContainer
     ...StyleSheet.absoluteFillObject,
   },
-  blurViewStyle: { // Fills its parent (overlayContainer) and centers content
+  blurViewStyle: {
+    // Fills its parent (overlayContainer) and centers content
     ...StyleSheet.absoluteFillObject,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
