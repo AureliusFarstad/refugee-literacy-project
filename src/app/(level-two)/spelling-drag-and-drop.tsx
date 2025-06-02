@@ -6,11 +6,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
 import {
@@ -26,13 +23,21 @@ import type {
 } from "@/ui/components/audio-multiple-choice-component";
 import SpellingMultipleChoice from "@/ui/components/spelling-multiple-choice-component";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
+import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
 import { globalStyles } from "@/ui/styles";
-import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { sectionColor } from "./_layout";
+
+const screenHeight = Dimensions.get("window").height;
+const SMALL_SCREEN_THRESHOLD = 750; // Consistent threshold
+const IS_SMALL_SCREEN = screenHeight < SMALL_SCREEN_THRESHOLD;
+
+const DESTINATION_BUTTON_SIZE = IS_SMALL_SCREEN ? 60 : 80;
+const DESTINATION_LETTER_FONT_SIZE = IS_SMALL_SCREEN ? 40 : 55;
+const DESTINATION_LETTER_LINE_HEIGHT = IS_SMALL_SCREEN ? 45 : 62;
 
 const styles = StyleSheet.create({
   card: {
@@ -42,9 +47,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: 20,
     marginBottom: 32,
-    padding: 24,
-    gap: 24,
-    height: 200,
+    padding: IS_SMALL_SCREEN ? 16 : 24,
+    gap: IS_SMALL_SCREEN ? 16 : 24,
+    height: IS_SMALL_SCREEN ? 160 : 200,
     backgroundColor: APP_COLORS.offwhite,
     borderColor: sectionColor.primary,
     borderWidth: 2,
@@ -54,8 +59,8 @@ const styles = StyleSheet.create({
     backgroundColor: sectionColor.light,
   },
   earButtonWrapper: {
-    width: 120,
-    height: 120,
+    width: IS_SMALL_SCREEN ? 100 : 120,
+    height: IS_SMALL_SCREEN ? 100 : 120,
     alignSelf: "center",
   },
   buttonRow: {
@@ -64,34 +69,35 @@ const styles = StyleSheet.create({
   },
   smallbuttonWrapper: {},
   smallEarButton: {
-    width: 80,
-    height: 80,
+    width: DESTINATION_BUTTON_SIZE,
+    height: DESTINATION_BUTTON_SIZE,
     borderColor: "#D4D4D8",
     borderWidth: 2,
     borderStyle: "dashed",
-    borderRadius: 40,
+    borderRadius: DESTINATION_BUTTON_SIZE / 2,
   },
   dropSmallEarButton: {
-    width: 80,
-    height: 80,
+    width: DESTINATION_BUTTON_SIZE,
+    height: DESTINATION_BUTTON_SIZE,
     borderColor: sectionColor.primary,
     borderWidth: 2,
     borderStyle: "dashed",
-    borderRadius: 40,
+    borderRadius: DESTINATION_BUTTON_SIZE / 2,
   },
   letterCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: DESTINATION_BUTTON_SIZE,
+    height: DESTINATION_BUTTON_SIZE,
+    borderRadius: DESTINATION_BUTTON_SIZE / 2,
     backgroundColor: APP_COLORS.green,
     alignContent: "center",
     justifyContent: "center",
   },
   letterStyle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: APP_COLORS.offblack,
+    fontFamily: "Thomas",
+    fontSize: DESTINATION_LETTER_FONT_SIZE,
+    lineHeight: DESTINATION_LETTER_LINE_HEIGHT,
     textAlign: "center",
+    color: APP_COLORS.offblack,
   },
 });
 
@@ -200,7 +206,7 @@ const Screen = () => {
   // Keep the original structure but use useCallback for stability
   const createSpellingDestinationComponent = useCallback<
     DestinationFunction<DestinationCardFactoryProps>
-  >(({ word, index }: DestinationCardFactoryProps) => {
+  >(({ word: propWord, index }: DestinationCardFactoryProps) => {
     // This returns a function that matches the original signature expected by AudioMultipleChoice
     return (
       isCardActive: boolean,
@@ -209,110 +215,119 @@ const Screen = () => {
       RefObject<View | null>,
       RefObject<View | null>,
     ] => {
-      const DestinationCard = () => (
-        <View
-          style={[styles.card, isCardActive && styles.cardActive]}
-          ref={destinationContainerRef}
-        >
-          <View style={styles.earButtonWrapper}>
-            <AnimatedAudioButton
-              audioSource={requireEnglishAudioForWord(word)}
-              width={120}
-              height={120}
-            >
-              <EarButton {...buttonColorProps} />
-            </AnimatedAudioButton>
+      const DestinationCard = () => {
+        const { isLowercase } = useLetterCase();
+        return (
+          <View
+            style={[styles.card, isCardActive && styles.cardActive]}
+            ref={destinationContainerRef}
+          >
+            <View style={styles.earButtonWrapper}>
+              <AnimatedAudioButton
+                audioSource={requireEnglishAudioForWord(propWord)}
+                width={IS_SMALL_SCREEN ? 100 : 120}
+                height={IS_SMALL_SCREEN ? 100 : 120}
+              >
+                <EarButton {...buttonColorProps} />
+              </AnimatedAudioButton>
+            </View>
+            <View style={styles.buttonRow}>
+              {/* FIRST BUTTON - Always use firstButtonRef */}
+              <View
+                style={[
+                  index === 0 && styles.dropSmallEarButton,
+                  index > 0 && styles.smallbuttonWrapper,
+                ]}
+                ref={firstButtonRef}
+              >
+                <AnimatedAudioButton
+                  audioSource={ALPHABET_AUDIO_SOURCES[(propWord as string)[0]].sound}
+                  width={DESTINATION_BUTTON_SIZE}
+                  height={DESTINATION_BUTTON_SIZE}
+                >
+                  {index > 0 ? (
+                    <View style={styles.letterCircle}>
+                      <Text style={styles.letterStyle}>
+                        {isLowercase
+                          ? (propWord as string)[0].toLowerCase()
+                          : (propWord as string)[0].toUpperCase()}
+                      </Text>
+                    </View>
+                  ) : (
+                    <EarButton
+                      {...(index === 0
+                        ? activeSmallButtonColorProps
+                        : smallButtonColorProps)}
+                    />
+                  )}
+                </AnimatedAudioButton>
+              </View>
+              {/* SECOND BUTTON - Always use secondButtonRef */}
+              <View
+                style={[
+                  index === 1 && styles.dropSmallEarButton,
+                  index < 1 && styles.smallEarButton,
+                  index > 1 && styles.smallbuttonWrapper,
+                ]}
+                ref={secondButtonRef}
+              >
+                <AnimatedAudioButton
+                  audioSource={ALPHABET_AUDIO_SOURCES[(propWord as string)[1]].sound}
+                  width={DESTINATION_BUTTON_SIZE}
+                  height={DESTINATION_BUTTON_SIZE}
+                >
+                  {index > 1 ? (
+                    <View style={styles.letterCircle}>
+                      <Text style={styles.letterStyle}>
+                        {isLowercase
+                          ? (propWord as string)[1].toLowerCase()
+                          : (propWord as string)[1].toUpperCase()}
+                      </Text>
+                    </View>
+                  ) : (
+                    <EarButton
+                      {...(index === 1
+                        ? activeSmallButtonColorProps
+                        : smallButtonColorProps)}
+                    />
+                  )}
+                </AnimatedAudioButton>
+              </View>
+              {/* THIRD BUTTON - Always use thirdButtonRef */}
+              <View
+                style={[
+                  index === 2 && styles.dropSmallEarButton,
+                  index < 2 && styles.smallEarButton,
+                  index > 2 && styles.smallbuttonWrapper,
+                ]}
+                ref={thirdButtonRef}
+              >
+                <AnimatedAudioButton
+                  audioSource={ALPHABET_AUDIO_SOURCES[(propWord as string)[2]].sound}
+                  width={DESTINATION_BUTTON_SIZE}
+                  height={DESTINATION_BUTTON_SIZE}
+                >
+                  {index > 2 ? (
+                    <View style={styles.letterCircle}>
+                      <Text style={styles.letterStyle}>
+                        {isLowercase
+                          ? (propWord as string)[2].toLowerCase()
+                          : (propWord as string)[2].toUpperCase()}
+                      </Text>
+                    </View>
+                  ) : (
+                    <EarButton
+                      {...(index === 2
+                        ? activeSmallButtonColorProps
+                        : smallButtonColorProps)}
+                    />
+                  )}
+                </AnimatedAudioButton>
+              </View>
+            </View>
           </View>
-          <View style={styles.buttonRow}>
-            {/* FIRST BUTTON - Always use firstButtonRef */}
-            <View
-              style={[
-                index === 0 && styles.dropSmallEarButton,
-                index > 0 && styles.smallbuttonWrapper,
-              ]}
-              ref={firstButtonRef}
-            >
-              <AnimatedAudioButton
-                audioSource={ALPHABET_AUDIO_SOURCES[(word as string)[0]].sound}
-                width={80}
-                height={80}
-              >
-                {index > 0 ? (
-                  <View style={styles.letterCircle}>
-                    <Text style={styles.letterStyle}>
-                      {(word as string)[0]}
-                    </Text>
-                  </View>
-                ) : (
-                  <EarButton
-                    {...(index === 0
-                      ? activeSmallButtonColorProps
-                      : smallButtonColorProps)}
-                  />
-                )}
-              </AnimatedAudioButton>
-            </View>
-            {/* SECOND BUTTON - Always use secondButtonRef */}
-            <View
-              style={[
-                index === 1 && styles.dropSmallEarButton,
-                index < 1 && styles.smallEarButton,
-                index > 1 && styles.smallbuttonWrapper,
-              ]}
-              ref={secondButtonRef}
-            >
-              <AnimatedAudioButton
-                audioSource={ALPHABET_AUDIO_SOURCES[(word as string)[1]].sound}
-                width={80}
-                height={80}
-              >
-                {index > 1 ? (
-                  <View style={styles.letterCircle}>
-                    <Text style={styles.letterStyle}>
-                      {(word as string)[1]}
-                    </Text>
-                  </View>
-                ) : (
-                  <EarButton
-                    {...(index === 1
-                      ? activeSmallButtonColorProps
-                      : smallButtonColorProps)}
-                  />
-                )}
-              </AnimatedAudioButton>
-            </View>
-            {/* THIRD BUTTON - Always use thirdButtonRef */}
-            <View
-              style={[
-                index === 2 && styles.dropSmallEarButton,
-                index < 2 && styles.smallEarButton,
-                index > 2 && styles.smallbuttonWrapper,
-              ]}
-              ref={thirdButtonRef}
-            >
-              <AnimatedAudioButton
-                audioSource={ALPHABET_AUDIO_SOURCES[(word as string)[2]].sound}
-                width={80}
-                height={80}
-              >
-                {index > 2 ? (
-                  <View style={styles.letterCircle}>
-                    <Text style={styles.letterStyle}>
-                      {(word as string)[2]}
-                    </Text>
-                  </View>
-                ) : (
-                  <EarButton
-                    {...(index === 2
-                      ? activeSmallButtonColorProps
-                      : smallButtonColorProps)}
-                  />
-                )}
-              </AnimatedAudioButton>
-            </View>
-          </View>
-        </View>
-      );
+        );
+      };
 
       // Select the appropriate ref to return based on the current index
       let activeDropRef: RefObject<View | null>;
@@ -370,25 +385,18 @@ const Screen = () => {
     module: "blending-module",
   });
 
-  const insets = useSafeAreaInsets();
-
   return (
-    <SafeAreaView style={globalStyles.safeAreaView}>
-      <View
-        style={{
-          height:
-            HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
-          flex: 1,
-        }}
-      >
-        <GuidanceAudioHeader
-          title="Sound"
-          isPlaying={isPlayingGuidanceAudio}
-          onPressGuide={playGuideAudio}
-          showLetterCaseSwitch={true}
-        />
-        {spellingContent}
-      </View>
+    <SafeAreaView
+      style={globalStyles.safeAreaView}
+      edges={["top", "right", "left"]}
+    >
+      <GuidanceAudioHeader
+        title="Sound"
+        isPlaying={isPlayingGuidanceAudio}
+        onPressGuide={playGuideAudio}
+        showLetterCaseSwitch={true}
+      />
+      {spellingContent}
     </SafeAreaView>
   );
 };

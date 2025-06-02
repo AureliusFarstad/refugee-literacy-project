@@ -2,7 +2,7 @@ import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import type { ReactElement, RefObject } from "react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -73,7 +73,11 @@ export type DestinationComponentType = () => ReactElement;
 // CONSTANTS
 // ------------------------------------------------------------
 
-const BUTTON_SIZE = 80;
+const screenHeight = Dimensions.get("window").height;
+const SMALL_SCREEN_THRESHOLD = 750; // Adjust this value as needed
+const IS_SMALL_SCREEN = screenHeight < SMALL_SCREEN_THRESHOLD;
+
+const BUTTON_SIZE = IS_SMALL_SCREEN ? 60 : 80;
 const DRAG_DELAY_MS = 100;
 const INCORRECT_FEEDBACK_DURATION_MS = 2000;
 const SPRING_CONFIG = {
@@ -180,6 +184,13 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
       position: "absolute",
       borderStyle: "solid",
       zIndex: -1,
+    },
+    letterStyle: {
+      fontFamily: "Thomas",
+      fontSize: IS_SMALL_SCREEN ? 40 : 55,
+      lineHeight: IS_SMALL_SCREEN ? 45 : 62,
+      textAlign: "center",
+      color: APP_COLORS.offblack,
     },
   });
 
@@ -526,7 +537,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
           ]}
         />
         {/* Capitalize based on isLowercase */}
-        <Text>
+        <Text style={styles.letterStyle}>
           {isLowercase ? item.id.toLowerCase() : item.id.toUpperCase()}
         </Text>
       </Reanimated.View>
@@ -661,7 +672,7 @@ const SpellingMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
       width: "100%",
       flexDirection: "column",
       alignItems: "center",
-      paddingVertical: 20,
+      paddingVertical: IS_SMALL_SCREEN ? 10 : 20,
       borderWidth: 2,
       borderColor: sectionColorTheme.primary,
       backgroundColor: sectionColorTheme.light,
@@ -674,7 +685,7 @@ const SpellingMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
       justifyContent: "space-evenly",
       alignItems: "center",
       width: "100%",
-      marginVertical: 10,
+      marginVertical: IS_SMALL_SCREEN ? 5 : 10,
     },
     audioButtonContainer: {
       width: BUTTON_SIZE,
