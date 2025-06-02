@@ -40,6 +40,7 @@ import {
   HEADER_HEIGHT,
   HEIGHT,
   WIDTH,
+  IS_SMALL_SCREEN,
 } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
     justifyContent: "center", // Center the flashcard vertically
   },
   flashcard: {
-    height: FLASHCARD_HEIGHT,
+    height: IS_SMALL_SCREEN ? FLASHCARD_HEIGHT - 40 : FLASHCARD_HEIGHT,
     borderWidth: 2,
     borderColor: SECTION_COLOR.sectionPrimaryColor,
     borderRadius: 12,
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: "100%",
-    height: 200,
+    height: IS_SMALL_SCREEN ? 160 : 200,
     backgroundColor: APP_COLORS.backgroundgrey,
     borderRadius: 10,
     justifyContent: "center",
