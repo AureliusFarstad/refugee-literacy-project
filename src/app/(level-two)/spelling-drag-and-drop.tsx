@@ -241,7 +241,9 @@ const Screen = () => {
                 ref={firstButtonRef}
               >
                 <AnimatedAudioButton
-                  audioSource={ALPHABET_AUDIO_SOURCES[(propWord as string)[0]].sound}
+                  audioSource={
+                    ALPHABET_AUDIO_SOURCES[(propWord as string)[0]].sound
+                  }
                   width={DESTINATION_BUTTON_SIZE}
                   height={DESTINATION_BUTTON_SIZE}
                 >
@@ -272,7 +274,9 @@ const Screen = () => {
                 ref={secondButtonRef}
               >
                 <AnimatedAudioButton
-                  audioSource={ALPHABET_AUDIO_SOURCES[(propWord as string)[1]].sound}
+                  audioSource={
+                    ALPHABET_AUDIO_SOURCES[(propWord as string)[1]].sound
+                  }
                   width={DESTINATION_BUTTON_SIZE}
                   height={DESTINATION_BUTTON_SIZE}
                 >
@@ -303,7 +307,9 @@ const Screen = () => {
                 ref={thirdButtonRef}
               >
                 <AnimatedAudioButton
-                  audioSource={ALPHABET_AUDIO_SOURCES[(propWord as string)[2]].sound}
+                  audioSource={
+                    ALPHABET_AUDIO_SOURCES[(propWord as string)[2]].sound
+                  }
                   width={DESTINATION_BUTTON_SIZE}
                   height={DESTINATION_BUTTON_SIZE}
                 >
