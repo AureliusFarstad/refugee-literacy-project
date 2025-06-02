@@ -96,9 +96,9 @@ const LetterIntroduction = () => {
   const [isAlphabeticPlaying, setIsAlphabeticPlaying] = useState(false);
   const [isPhoneticPlaying, setIsPhoneticPlaying] = useState(false);
 
-  const [isAnimating, setIsAnimating] = useState(false);
+  // const [isAnimating, setIsAnimating] = useState(false);
   const onAnimationStart = () => {
-    setIsAnimating(true);
+    // setIsAnimating(true);
   };
 
   const { playGuideAudio, isPlaying } = useGuideAudio({
@@ -226,7 +226,7 @@ const LetterIntroduction = () => {
   };
 
   const onAnimationComplete = (letter: string) => {
-    setIsAnimating(false);
+    // setIsAnimating(false);
     if (letter === activeActivity.letter.upperCase) {
       incrementProgress("UPPERCASE_LETTER");
     } else if (letter === activeActivity.letter.lowerCase) {
