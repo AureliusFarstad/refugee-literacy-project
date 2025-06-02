@@ -1,5 +1,6 @@
 import welcome from "assets/videos/welcome-dict";
 import { useMemo } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { requireVideoAudio } from "@/assets/video-audio/audio-sources";
 import { APP_COLORS } from "@/constants/routes";
@@ -7,6 +8,7 @@ import { useUser } from "@/core/store/user";
 import type { AnimationCollection } from "@/ui/components/interactive-video-player";
 import InteractiveVideoPlayer from "@/ui/components/interactive-video-player";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { globalStyles } from "@/ui/styles";
 
 import { sectionColor } from "./_layout";
 
@@ -61,10 +63,15 @@ const VideoTab = () => {
     );
 
   return (
-    <InteractiveVideoPlayer
-      animationCollection={imAnimationCollection}
-      buttonColorProps={sectionButtonColorProps}
-    />
+    <SafeAreaView
+      style={globalStyles.safeAreaView}
+      edges={["top", "right", "left"]}
+    >
+      <InteractiveVideoPlayer
+        animationCollection={imAnimationCollection}
+        buttonColorProps={sectionButtonColorProps}
+      />
+    </SafeAreaView>
   );
 };
 

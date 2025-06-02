@@ -230,10 +230,17 @@ const VideoPlayer = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isWebViewReady]);
 
-    const { newProps, styles } = SVGatorPlayer.getWebViewProps(
+    const { newProps, styles: svgatorStyles } = SVGatorPlayer.getWebViewProps(
       props,
       wrappedHtml,
     );
+
+    // Ensure the WebView itself takes 100% width and height of its allocated space
+    const webViewFinalStyle = {
+      ...(svgatorStyles && typeof svgatorStyles.style === 'object' ? svgatorStyles.style : {}),
+      width: '100%',
+      height: '100%',
+    };
 
     return (
       // @ts-ignore
@@ -241,8 +248,8 @@ const VideoPlayer = forwardRef(
         ref={webViewRef}
         {...newProps}
         source={{ html: wrappedHtml }}
-        containerStyle={styles.container}
-        style={styles.style}
+        containerStyle={svgatorStyles ? svgatorStyles.container : undefined}
+        style={webViewFinalStyle}
         onMessage={onMessage}
         // @ts-ignore
         onError={(syntheticEvent) => {
