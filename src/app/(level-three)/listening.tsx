@@ -23,6 +23,7 @@ import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
@@ -56,6 +57,31 @@ const DISABLED_COLORS = {
   backgroundColor: "#F5F5F5",
 };
 
+const NATIVE_DISABLED_COLORS = {
+  primaryColor: "#F2EFF0",
+  offwhiteColor: "#FAFAFA",
+  offblackColor: "#D4D4D8",
+  secondaryColor: "#F2EFF0",
+  backgroundColor: "#F5F5F5",
+};
+
+// Define color props for the PlayButton
+const activePlayButtonColorProps: ButtonColorProps = {
+  primaryColor: SECTION_COLORS.speaking.primary,
+  secondaryColor: APP_COLORS.lightgreen,
+  offwhiteColor: APP_COLORS.offwhite,
+  offblackColor: APP_COLORS.offblack,
+  backgroundColor: APP_COLORS.backgroundgrey,
+};
+
+const disabledPlayButtonColorProps: ButtonColorProps = {
+  primaryColor: APP_COLORS.grey,
+  secondaryColor: APP_COLORS.backgroundgrey,
+  offwhiteColor: APP_COLORS.offwhite,
+  offblackColor: APP_COLORS.offblack,
+  backgroundColor: APP_COLORS.grey,
+};
+
 interface ConversationCardProps {
   gender: "female" | "male";
   englishAudioFile: string;
@@ -86,6 +112,12 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
 
   const buttonProps = isDisabled
     ? DISABLED_COLORS
+    : gender === "female"
+      ? femaleButtonProps
+      : maleButtonProps;
+
+  const nativeButtonProps = isDisabled
+    ? NATIVE_DISABLED_COLORS
     : gender === "female"
       ? femaleButtonProps
       : maleButtonProps;
@@ -283,7 +315,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
         {isPlayingState ? (
           <>
             <View style={styles.button}>
-              <NativeButton {...DISABLED_COLORS} width={80} height={80} />
+              <NativeButton {...NATIVE_DISABLED_COLORS} width={80} height={80} />
             </View>
 
             <View style={styles.playingButtonWrapper}>
@@ -315,7 +347,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
               height={80}
             >
               <View style={styles.button}>
-                <NativeButton {...buttonProps} width={80} height={80} />
+                <NativeButton {...nativeButtonProps} width={80} height={80} />
               </View>
             </AnimatedAudioButton>
             <AnimatedAudioButton
@@ -490,28 +522,13 @@ const Listening: React.FC = () => {
             style={styles.playButtonWrapper}
             disabled={isConversationActive}
           >
-            <View
-              style={[
-                styles.playButton,
-                isConversationActive && styles.disabledPlayButton,
-              ]}
-            >
-              <PlayButton
-                backgroundColor={
-                  isConversationActive ? APP_COLORS.grey : "#F9C720"
-                }
-                offblackColor={
-                  isConversationActive ? APP_COLORS.offblack : "#000000"
-                }
-                offwhiteColor="#FFFFFF"
-                primaryColor={
-                  isConversationActive ? APP_COLORS.grey : "#F9C720"
-                }
-                secondaryColor={
-                  isConversationActive ? APP_COLORS.backgroundgrey : "#FAECBB"
-                }
-              />
-            </View>
+            <PlayButton
+              width={80}
+              height={80}
+              {...(isConversationActive
+                ? disabledPlayButtonColorProps
+                : activePlayButtonColorProps)}
+            />
           </TouchableOpacity>
         </View>
 
@@ -563,17 +580,6 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   playButtonWrapper: {},
-  playButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: "#F9C720",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  disabledPlayButton: {
-    backgroundColor: APP_COLORS.grey,
-  },
   scrollView: {
     flex: 1,
     backgroundColor: "#F2EFF0",
