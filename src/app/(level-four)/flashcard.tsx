@@ -1,7 +1,5 @@
 import { FlatList, StyleSheet } from "react-native";
-import {
-  SafeAreaView,
-} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { VOCABULARY_WORD_LIST_BY_LEVEL } from "@/assets/vocabulary";
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
