@@ -963,11 +963,7 @@ const SpellingMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
         }
       }
     },
-    [
-      gameSet.correctAnswerId,
-      onCorrectAnswer,
-      placedButtonId,
-    ],
+    [gameSet.correctAnswerId, onCorrectAnswer, placedButtonId],
   );
 
   // Prepare available buttons
