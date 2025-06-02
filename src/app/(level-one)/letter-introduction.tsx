@@ -314,7 +314,7 @@ const LetterIntroduction = () => {
             key={activeActivity.letter.lowerCase}
             onAnimationComplete={onAnimationComplete}
             onAnimationStart={onAnimationStart}
-            isAnimating={isAnimating}
+            // isAnimating={isAnimating}
           />
           <View className="mt-auto flex flex-row items-center justify-evenly pb-6">
             <TouchableOpacity
@@ -341,7 +341,7 @@ const LetterIntroduction = () => {
                 className={clsx("flex size-[60] justify-center  rounded-md  ", {
                   "bg-colors-gray-300": activity.id !== activeActivity.id,
                   "bg-colors-purple-500": activity.id === activeActivity.id,
-                  "bg-gray-200": isAnimating,
+                  // "bg-gray-200": isAnimating,
                 })}
                 onPress={() => {
                   /**
@@ -350,7 +350,7 @@ const LetterIntroduction = () => {
                   setActiveActivity(activity);
                 }}
                 key={index}
-                disabled={isAnimating}
+                // disabled={isAnimating}
               >
                 <View className="flex flex-row items-center justify-center ">
                   <Text style={globalStyles.thomasFont}>
