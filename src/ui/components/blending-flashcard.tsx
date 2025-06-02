@@ -12,6 +12,8 @@ import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
+import { APP_COLORS } from "@/constants/routes";
+import { globalStyles } from "../styles";
 
 type FlashCardProps = {
   content: {
@@ -96,15 +98,11 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       backgroundColor: colors.primary_color,
       // alignSelf: "center",
     },
-    text: {
-      color: colors.off_black_color,
-      fontWeight: "bold",
-      textAlign: "center",
-    },
     word: {
-      fontSize: 24,
-      height: 40, // TODO: might change with font.
-      lineHeight: 40,
+      fontFamily: "Thomas",
+      fontSize: 40,
+      lineHeight: 44,
+      color: APP_COLORS.offblack,
     },
     lettersContainer: {
       paddingTop: 18,
@@ -122,7 +120,10 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       alignItems: "center",
     },
     letter: {
-      fontSize: 20,
+      fontFamily: "Thomas",
+      fontSize: 32,
+      lineHeight: 42,
+      color: APP_COLORS.offblack,
     },
   });
 
@@ -159,7 +160,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
             <View style={[styles.iconButton, { left: 0 }]}>
               <EnglishButton {...iconButtonProps} />
             </View>
-            <Text style={[styles.text, styles.word]}>
+            <Text style={[styles.word]}>
               {isLowercase
                 ? content.word.toLowerCase()
                 : content.word.toUpperCase()}
@@ -177,7 +178,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
               height={40}
             >
               <View style={styles.letterButton}>
-                <Text style={[styles.text, styles.letter]}>
+                <Text style={[styles.letter]}>
                   {isLowercase ? letter.toLowerCase() : letter.toUpperCase()}
                 </Text>
               </View>

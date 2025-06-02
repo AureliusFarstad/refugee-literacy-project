@@ -53,24 +53,25 @@ export default function FlashCardContainer() {
   });
 
   return (
-    <SafeAreaView style={globalStyles.safeAreaView}>
+    <SafeAreaView 
+      style={globalStyles.safeAreaView}
+      edges={["top", "right", "left"]}
+    >
       <GuidanceAudioHeader
         title="Sound"
         isPlaying={isPlayingGuidanceAudio}
         onPressGuide={playGuideAudio}
         showLetterCaseSwitch={true}
       />
-      <View className="flex size-full items-center">
-        <FlatList
-          style={styles.scrollable}
-          data={BLENDING_FLASHCARDS}
-          renderItem={({ item }) => (
-            <BlendingFlashCard content={item} colors={colors} />
-          )}
-          keyExtractor={(item) => item.id}
-          ListFooterComponent={<View className="h-40" />}
-        />
-      </View>
+      <FlatList
+        style={styles.scrollable}
+        data={BLENDING_FLASHCARDS}
+        renderItem={({ item }) => (
+          <BlendingFlashCard content={item} colors={colors} />
+        )}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 10 }}
+      />
     </SafeAreaView>
   );
 }
