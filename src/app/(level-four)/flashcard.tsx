@@ -1,7 +1,6 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import {
   SafeAreaView,
-  useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
 import { VOCABULARY_WORD_LIST_BY_LEVEL } from "@/assets/vocabulary";
@@ -10,11 +9,6 @@ import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { VocabularyFlashCard } from "@/ui/components/vocabulary-flashcard";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { globalStyles } from "@/ui/styles";
-import { HEIGHT, IS_IOS } from "@/utils/layout";
-
-const Footer = () => {
-  return <View className="h-40" />;
-};
 
 const colors = {
   background_color: APP_COLORS.backgroundgrey,
@@ -39,7 +33,6 @@ export default function FlashCardContainer() {
     },
   });
 
-  const insets = useSafeAreaInsets();
   // TODO: update with correct resource
   const { isPlaying, playGuideAudio } = useGuideAudio({
     screenName: "flashcard",
@@ -47,33 +40,25 @@ export default function FlashCardContainer() {
   });
 
   return (
-    <SafeAreaView style={globalStyles.safeAreaView}>
-      <View
-        style={{
-          height:
-            HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
-          flex: 1,
-        }}
-      >
-        <GuidanceAudioHeader
-          title="Blending Flashcards"
-          isPlaying={isPlaying}
-          onPressGuide={playGuideAudio}
-          showLetterCaseSwitch={false}
-        />
-        <View className="flex size-full items-center">
-          <FlatList
-            style={styles.scrollable}
-            data={VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1}
-            renderItem={({ item }) => (
-              <VocabularyFlashCard word={item} colors={colors} />
-            )}
-            keyExtractor={(item) => item}
-            ListFooterComponent={Footer}
-          />
-          {/* Help TODO: Om, I can't get a nice padding on the bottom of the scrollable area to align with the bottom tab bar*/}
-        </View>
-      </View>
+    <SafeAreaView
+      style={globalStyles.safeAreaView}
+      edges={["top", "right", "left"]}
+    >
+      <GuidanceAudioHeader
+        title="Blending Flashcards"
+        isPlaying={isPlaying}
+        onPressGuide={playGuideAudio}
+        showLetterCaseSwitch={false}
+      />
+      <FlatList
+        style={styles.scrollable}
+        data={VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1}
+        renderItem={({ item }) => (
+          <VocabularyFlashCard word={item} colors={colors} />
+        )}
+        keyExtractor={(item) => item}
+        contentContainerStyle={{ paddingBottom: 10 }}
+      />
     </SafeAreaView>
   );
 }
