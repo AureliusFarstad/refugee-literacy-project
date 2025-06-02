@@ -39,8 +39,8 @@ import {
   BOTTOM_TAB_HEIGHT,
   HEADER_HEIGHT,
   HEIGHT,
-  WIDTH,
   IS_SMALL_SCREEN,
+  WIDTH,
 } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
