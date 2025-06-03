@@ -185,7 +185,7 @@ const GuidanceAudioHeader = ({
 
   return (
     <View
-      className="flex-row items-center justify-between py-2 px-4"
+      className="flex-row items-center justify-between px-4 py-2"
       style={{
         backgroundColor: APP_COLORS.offwhite,
       }}
