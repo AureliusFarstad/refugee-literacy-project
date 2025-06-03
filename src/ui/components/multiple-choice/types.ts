@@ -83,7 +83,7 @@ export interface ChoiceOptionsProps {
     isError: boolean,
     isSuccess: boolean,
     isCorrect: boolean,
-    colors: ColorTheme
+    colors: ColorTheme,
   ) => ReactNode;
   isInteractionLocked?: boolean;
 }

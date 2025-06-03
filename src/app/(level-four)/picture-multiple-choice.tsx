@@ -36,19 +36,18 @@ const shuffle = (array: string[]): string[] => {
   return [...array].sort(() => Math.random() - 0.5);
 };
 
-const generatedWordSets: WordSet[] = shuffle(VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1).map(
-  (word: string) => {
-    return {
-      correctAnswer: word,
-      options: shuffle(VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
-        (option) => option !== word,
-      )
+const generatedWordSets: WordSet[] = shuffle(
+  VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1,
+).map((word: string) => {
+  return {
+    correctAnswer: word,
+    options: shuffle(
+      VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.filter((option) => option !== word)
         .slice(0, 2)
         .concat(word),
-      ),
-    };
-  },
-);;
+    ),
+  };
+});
 
 const RenderFrontCard = (word: string) => {
   // TODO: Refactor this out of function

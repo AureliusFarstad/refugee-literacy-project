@@ -16,7 +16,8 @@ export const useWordGame = (
   const [disabledWords, setDisabledWords] = useState<string[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [isInteractionLocked, setIsInteractionLocked] = useState<boolean>(false);
+  const [isInteractionLocked, setIsInteractionLocked] =
+    useState<boolean>(false);
 
   // Animations
   const shakeAnimation = useRef(new Animated.Value(0)).current;
