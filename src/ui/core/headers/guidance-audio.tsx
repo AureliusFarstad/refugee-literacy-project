@@ -27,7 +27,7 @@ const buttonColorProps: ButtonColorProps = {
   backgroundColor: APP_COLORS.backgroundgrey,
 };
 
-const SIZE = 40;
+const SIZE = 50;
 
 type AnimatedAudioButtonProps = {
   onPress: () => void;
@@ -45,8 +45,8 @@ function AnimatedAudioButton({
   onPress,
   icon,
   isPlaying = false,
-  width = 40,
-  height = 40,
+  width = 50,
+  height = 50,
   borderColor = "#F69F4E",
   borderWidth = 3, // Increased from 2 to 3
   breatheDuration = 1500, // Reduced from 2000 to 1500 for faster animation
