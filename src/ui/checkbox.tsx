@@ -250,10 +250,16 @@ export const SwitchIcon = ({ checked = false, label }: IconProps) => {
         }}
         transition={{ translateX: { overshootClamping: true } }}
       />
-      <Text className={clsx("absolute left-4")} style={{ fontFamily: "Thomas", fontSize: 36, lineHeight: 44 }}>
+      <Text
+        className={clsx("absolute left-4")}
+        style={{ fontFamily: "Thomas", fontSize: 36, lineHeight: 44 }}
+      >
         {label?.toUpperCase()}
       </Text>
-      <Text className={clsx("absolute right-4")} style={{ fontFamily: "Thomas", fontSize: 36, lineHeight: 40 }}>
+      <Text
+        className={clsx("absolute right-4")}
+        style={{ fontFamily: "Thomas", fontSize: 36, lineHeight: 40 }}
+      >
         {label?.toLowerCase()}
       </Text>
     </View>
