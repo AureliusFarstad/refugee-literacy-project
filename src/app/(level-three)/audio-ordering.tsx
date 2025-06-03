@@ -1,6 +1,6 @@
 import type { RefObject } from "react";
 import React, { useRef, useState } from "react";
-import { StyleSheet, View, ScrollView, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -11,7 +11,7 @@ import {
   requireEnglishConversationAudio,
   requireNativeConversationAudio,
 } from "@/assets/conversation";
-import { SECTION_COLORS, APP_COLORS } from "@/constants/routes";
+import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import type {
   DestinationComponentType,
@@ -26,8 +26,6 @@ import { NativeButton } from "@/ui/icons/circular/native-button";
 import { PlayButton } from "@/ui/icons/circular/play-button";
 import { UserAvatar } from "@/ui/illustrations";
 import { globalStyles } from "@/ui/styles";
-
-import { sectionColor } from "./_layout";
 
 const primaryColor = SECTION_COLORS.speaking;
 const secondaryColor = SECTION_COLORS.vocabulary;
@@ -100,8 +98,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
   },
-  playButtonWrapper: {
-  },
+  playButtonWrapper: {},
   completedViewContainer: {
     flex: 1,
     backgroundColor: APP_COLORS.backgroundgrey,
@@ -242,10 +239,7 @@ const CompletedCard: React.FC<CompletedCardProps> = ({
 
 const createConversationDestinationComponent: DestinationFunction<
   DestinationCardFactoryProps
-> = ({
-  gender = "male",
-  nativeAudioFile = ALPHABET_AUDIO_SOURCES.a.sound,
-}) => {
+> = ({ gender = "male", nativeAudioFile = ALPHABET_AUDIO_SOURCES.a.sound }) => {
   return (
     isCardActive: boolean,
   ): [
@@ -295,9 +289,16 @@ const createConversationDestinationComponent: DestinationFunction<
             ref={dropCircleRef}
             style={[
               styles.dropCircle,
-              { borderColor: gender === "female" ? primaryColor.primary : secondaryColor.primary,
-                backgroundColor: gender === "female" ? primaryColor.light : secondaryColor.light,
-              }
+              {
+                borderColor:
+                  gender === "female"
+                    ? primaryColor.primary
+                    : secondaryColor.primary,
+                backgroundColor:
+                  gender === "female"
+                    ? primaryColor.light
+                    : secondaryColor.light,
+              },
             ]}
           />
         </View>
@@ -335,9 +336,18 @@ const Screen = () => {
         const firstGameSet: GameSet = {
           correctAnswerId: "part1",
           options: [
-            { id: "part1", audioFile: requireEnglishConversationAudio("part1", "female") },
-            { id: "part4", audioFile: requireEnglishConversationAudio("part4", "female") },
-            { id: "part3", audioFile: requireEnglishConversationAudio("part3", "female") },
+            {
+              id: "part1",
+              audioFile: requireEnglishConversationAudio("part1", "female"),
+            },
+            {
+              id: "part4",
+              audioFile: requireEnglishConversationAudio("part4", "female"),
+            },
+            {
+              id: "part3",
+              audioFile: requireEnglishConversationAudio("part3", "female"),
+            },
           ],
         };
         return (
@@ -358,17 +368,32 @@ const Screen = () => {
         const secondGameSet: GameSet = {
           correctAnswerId: "part2",
           options: [
-            { id: "part2", audioFile: requireEnglishConversationAudio("part2", "male") },
-            { id: "part1", audioFile: requireEnglishConversationAudio("part1", "male") },
-            { id: "part4", audioFile: requireEnglishConversationAudio("part4", "male") },
+            {
+              id: "part2",
+              audioFile: requireEnglishConversationAudio("part2", "male"),
+            },
+            {
+              id: "part1",
+              audioFile: requireEnglishConversationAudio("part1", "male"),
+            },
+            {
+              id: "part4",
+              audioFile: requireEnglishConversationAudio("part4", "male"),
+            },
           ],
         };
         return (
           <View style={{ flex: 1 }}>
             <CompletedCard
               gender="female"
-              englishAudioFile={requireEnglishConversationAudio("part1", "female")}
-              nativeAudioFile={requireNativeConversationAudio("part1", "female")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part1",
+                "female",
+              )}
+              nativeAudioFile={requireNativeConversationAudio(
+                "part1",
+                "female",
+              )}
             />
             <AudioMultipleChoice
               useDestinationComponent={SecondConversationDestinationComponent}
@@ -388,21 +413,39 @@ const Screen = () => {
         const thirdGameSet: GameSet = {
           correctAnswerId: "part3",
           options: [
-            { id: "part3", audioFile: requireEnglishConversationAudio("part3", "female") },
-            { id: "part1", audioFile: requireEnglishConversationAudio("part1", "female") },
-            { id: "part4", audioFile: requireEnglishConversationAudio("part4", "female") },
+            {
+              id: "part3",
+              audioFile: requireEnglishConversationAudio("part3", "female"),
+            },
+            {
+              id: "part1",
+              audioFile: requireEnglishConversationAudio("part1", "female"),
+            },
+            {
+              id: "part4",
+              audioFile: requireEnglishConversationAudio("part4", "female"),
+            },
           ],
         };
         return (
           <View style={{ flex: 1 }}>
             <CompletedCard
               gender="female"
-              englishAudioFile={requireEnglishConversationAudio("part1", "female")}
-              nativeAudioFile={requireNativeConversationAudio("part1", "female")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part1",
+                "female",
+              )}
+              nativeAudioFile={requireNativeConversationAudio(
+                "part1",
+                "female",
+              )}
             />
             <CompletedCard
               gender="male"
-              englishAudioFile={requireEnglishConversationAudio("part2", "male")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part2",
+                "male",
+              )}
               nativeAudioFile={requireNativeConversationAudio("part2", "male")}
             />
             <AudioMultipleChoice
@@ -423,27 +466,51 @@ const Screen = () => {
         const forthGameSet: GameSet = {
           correctAnswerId: "part4",
           options: [
-            { id: "part4", audioFile: requireEnglishConversationAudio("part4", "male") },
-            { id: "part1", audioFile: requireEnglishConversationAudio("part1", "male") },
-            { id: "part3", audioFile: requireEnglishConversationAudio("part3", "male") },
+            {
+              id: "part4",
+              audioFile: requireEnglishConversationAudio("part4", "male"),
+            },
+            {
+              id: "part1",
+              audioFile: requireEnglishConversationAudio("part1", "male"),
+            },
+            {
+              id: "part3",
+              audioFile: requireEnglishConversationAudio("part3", "male"),
+            },
           ],
         };
         return (
           <View style={{ flex: 1 }}>
             <CompletedCard
               gender="female"
-              englishAudioFile={requireEnglishConversationAudio("part1", "female")}
-              nativeAudioFile={requireNativeConversationAudio("part1", "female")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part1",
+                "female",
+              )}
+              nativeAudioFile={requireNativeConversationAudio(
+                "part1",
+                "female",
+              )}
             />
             <CompletedCard
               gender="male"
-              englishAudioFile={requireEnglishConversationAudio("part2", "male")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part2",
+                "male",
+              )}
               nativeAudioFile={requireNativeConversationAudio("part2", "male")}
             />
             <CompletedCard
               gender="female"
-              englishAudioFile={requireEnglishConversationAudio("part3", "female")}
-              nativeAudioFile={requireNativeConversationAudio("part3", "female")}
+              englishAudioFile={requireEnglishConversationAudio(
+                "part3",
+                "female",
+              )}
+              nativeAudioFile={requireNativeConversationAudio(
+                "part3",
+                "female",
+              )}
             />
             <AudioMultipleChoice
               useDestinationComponent={FourthConversationDestinationComponent}
@@ -465,7 +532,10 @@ const Screen = () => {
   });
 
   return (
-    <SafeAreaView style={globalStyles.safeAreaView} edges={["top", "right", "left"]}>
+    <SafeAreaView
+      style={globalStyles.safeAreaView}
+      edges={["top", "right", "left"]}
+    >
       <View style={{ flex: 1, backgroundColor: APP_COLORS.backgroundgrey }}>
         <GuidanceAudioHeader
           title="Sound"
@@ -480,33 +550,60 @@ const Screen = () => {
               contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
             >
               <View style={styles.playButtonArea}>
-              <TouchableOpacity onPress={restartGame} style={styles.playButtonWrapper}>
-                <PlayButton
-                  width={80}
-                  height={80}
-                  {...activePlayButtonColorProps}
-                />
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity
+                  onPress={restartGame}
+                  style={styles.playButtonWrapper}
+                >
+                  <PlayButton
+                    width={80}
+                    height={80}
+                    {...activePlayButtonColorProps}
+                  />
+                </TouchableOpacity>
+              </View>
               <CompletedCard
                 gender="female"
-                englishAudioFile={requireEnglishConversationAudio("part1", "female")}
-                nativeAudioFile={requireNativeConversationAudio("part1", "female")}
+                englishAudioFile={requireEnglishConversationAudio(
+                  "part1",
+                  "female",
+                )}
+                nativeAudioFile={requireNativeConversationAudio(
+                  "part1",
+                  "female",
+                )}
               />
               <CompletedCard
                 gender="male"
-                englishAudioFile={requireEnglishConversationAudio("part2", "male")}
-                nativeAudioFile={requireNativeConversationAudio("part2", "male")}
+                englishAudioFile={requireEnglishConversationAudio(
+                  "part2",
+                  "male",
+                )}
+                nativeAudioFile={requireNativeConversationAudio(
+                  "part2",
+                  "male",
+                )}
               />
               <CompletedCard
                 gender="female"
-                englishAudioFile={requireEnglishConversationAudio("part3", "female")}
-                nativeAudioFile={requireNativeConversationAudio("part3", "female")}
+                englishAudioFile={requireEnglishConversationAudio(
+                  "part3",
+                  "female",
+                )}
+                nativeAudioFile={requireNativeConversationAudio(
+                  "part3",
+                  "female",
+                )}
               />
               <CompletedCard
                 gender="male"
-                englishAudioFile={requireEnglishConversationAudio("part4", "male")}
-                nativeAudioFile={requireNativeConversationAudio("part4", "male")}
+                englishAudioFile={requireEnglishConversationAudio(
+                  "part4",
+                  "male",
+                )}
+                nativeAudioFile={requireNativeConversationAudio(
+                  "part4",
+                  "male",
+                )}
               />
             </ScrollView>
           </View>
