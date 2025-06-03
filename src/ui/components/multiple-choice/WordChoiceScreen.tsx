@@ -105,6 +105,7 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
         disabledWords={gameState.disabledWords}
         isError={gameState.isError}
         isSuccess={gameState.isSuccess}
+        isInteractionLocked={gameState.isInteractionLocked}
         colors={colors}
         onSelect={gameState.handleWordSelect}
         shakeAnimation={gameState.shakeAnimation}

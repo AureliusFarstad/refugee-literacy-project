@@ -75,7 +75,7 @@ export interface ChoiceOptionsProps {
   isSuccess: boolean;
   colors: ColorTheme;
   onSelect: (word: string) => void;
-  shakeAnimation?: any;
+  shakeAnimation: Animated.Value;
   renderOption: (
     word: string,
     isSelected: boolean,
@@ -83,8 +83,9 @@ export interface ChoiceOptionsProps {
     isError: boolean,
     isSuccess: boolean,
     isCorrect: boolean,
-    colors: ColorTheme,
+    colors: ColorTheme
   ) => ReactNode;
+  isInteractionLocked?: boolean;
 }
 
 export interface ProgressTrackerProps {
@@ -100,6 +101,7 @@ export interface WordGameState {
   disabledWords: string[];
   isError: boolean;
   isSuccess: boolean;
+  isInteractionLocked: boolean;
   moveToNextSet: () => void;
   resetGame: () => void;
   handleWordSelect: (word: string) => void;

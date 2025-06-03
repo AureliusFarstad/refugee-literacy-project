@@ -16,6 +16,7 @@ export const useWordGame = (
   const [disabledWords, setDisabledWords] = useState<string[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isInteractionLocked, setIsInteractionLocked] = useState<boolean>(false);
 
   // Animations
   const shakeAnimation = useRef(new Animated.Value(0)).current;
@@ -49,6 +50,7 @@ export const useWordGame = (
     setDisabledWords([]);
     setIsError(false);
     setIsSuccess(false);
+    setIsInteractionLocked(false);
   };
 
   // Move to the next word set
@@ -99,6 +101,7 @@ export const useWordGame = (
       }),
     ]).start(() => {
       setIsError(false);
+      setIsInteractionLocked(false);
     });
   };
 
@@ -109,6 +112,7 @@ export const useWordGame = (
       duration: 800,
       useNativeDriver: true,
     }).start(() => {
+      setIsInteractionLocked(false);
       // Wait before moving to next set
       setTimeout(moveToNextSet, 1500);
     });
@@ -116,10 +120,11 @@ export const useWordGame = (
 
   // Handle word selection
   const handleWordSelect = (word: string): void => {
-    if (disabledWords.includes(word)) {
+    if (isInteractionLocked || disabledWords.includes(word)) {
       return;
     }
 
+    setIsInteractionLocked(true);
     setSelectedWord(word);
     const currentWordSet = wordSets[currentSetIndex];
 
@@ -154,5 +159,6 @@ export const useWordGame = (
     backFlipValue,
     frontOpacity,
     backOpacity,
+    isInteractionLocked,
   };
 };

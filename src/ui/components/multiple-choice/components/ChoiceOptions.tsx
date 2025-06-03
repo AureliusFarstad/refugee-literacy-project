@@ -14,6 +14,7 @@ const ChoiceOptions: React.FC<ChoiceOptionsProps> = ({
   disabledWords,
   isError,
   isSuccess,
+  isInteractionLocked,
   colors,
   onSelect,
   shakeAnimation,
@@ -40,7 +41,7 @@ const ChoiceOptions: React.FC<ChoiceOptionsProps> = ({
         <TouchableOpacity
           key={word}
           onPress={() => onSelect(word)}
-          disabled={disabledWords.includes(word) || isSuccess}
+          disabled={disabledWords.includes(word) || isSuccess || isInteractionLocked}
           style={styles.optionWrapper}
         >
           <ChoiceOption
