@@ -95,6 +95,7 @@ const LetterIntroduction = () => {
 
   const [isAlphabeticPlaying, setIsAlphabeticPlaying] = useState(false);
   const [isPhoneticPlaying, setIsPhoneticPlaying] = useState(false);
+  const [hasPlayedGuidanceOnce, setHasPlayedGuidanceOnce] = useState(false);
 
   // const [isAnimating, setIsAnimating] = useState(false);
   const onAnimationStart = () => {
@@ -245,6 +246,13 @@ const LetterIntroduction = () => {
     }
   }, [activitiesInCurrentSection, levels]);
 
+  const handlePlayGuideAudio = () => {
+    if (!hasPlayedGuidanceOnce) {
+      setHasPlayedGuidanceOnce(true);
+    }
+    playGuideAudio();
+  };
+
   return (
     <SafeAreaView
       style={globalStyles.safeAreaView}
@@ -253,9 +261,11 @@ const LetterIntroduction = () => {
       <GuidanceAudioHeader
         title="Letter Introduction"
         isPlaying={isPlaying}
-        onPressGuide={playGuideAudio}
+        onPressGuide={handlePlayGuideAudio}
         onStopGuide={stopGuideAudio}
         showLetterCaseSwitch={false}
+        initialPulseColorForGuidance={SECTION_COLOR.primary}
+        activateInitialGuidancePulse={!hasPlayedGuidanceOnce}
       />
       <View className="flex flex-1 flex-col bg-[#F2EFF0] pb-4">
         <View className="m-4 flex flex-1 flex-col overflow-hidden rounded-xl border-2 border-purple-500 bg-white ">

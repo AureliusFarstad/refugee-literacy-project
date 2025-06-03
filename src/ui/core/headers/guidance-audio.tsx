@@ -1,6 +1,7 @@
 import { router, useFocusEffect } from "expo-router";
 import type { ReactNode } from "react";
 import { useCallback, useEffect } from "react";
+import * as React from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
   cancelAnimation,
@@ -39,6 +40,8 @@ type AnimatedAudioButtonProps = {
   borderWidth?: number;
   breatheDuration?: number;
   className?: string;
+  initialPulseColor?: string;
+  isInitialPulseConditionMet?: boolean;
 };
 
 function AnimatedAudioButton({
@@ -48,31 +51,65 @@ function AnimatedAudioButton({
   width = 50,
   height = 50,
   borderColor = "#F69F4E",
-  borderWidth = 3, // Increased from 2 to 3
-  breatheDuration = 1500, // Reduced from 2000 to 1500 for faster animation
+  borderWidth = 3,
+  breatheDuration = 1500,
   className,
+  initialPulseColor,
+  isInitialPulseConditionMet,
 }: AnimatedAudioButtonProps) {
   const borderOpacity = useSharedValue(0);
   const borderScale = useSharedValue(1);
+  const initialPulseOpacity = useSharedValue(0);
+
+  const [hasBeenPressedAtLeastOnce, setHasBeenPressedAtLeastOnce] =
+    React.useState(false);
 
   useEffect(() => {
     if (isPlaying) {
+      cancelAnimation(initialPulseOpacity);
+      initialPulseOpacity.value = withTiming(0, { duration: 100 });
       startBreathingAnimation();
     } else {
-      stopAnimation();
+      stopBreathingAnimation();
+      if (
+        initialPulseColor &&
+        isInitialPulseConditionMet &&
+        !hasBeenPressedAtLeastOnce
+      ) {
+        startInitialPulseAnimation();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPlaying]);
+  }, [isPlaying, initialPulseColor, isInitialPulseConditionMet, hasBeenPressedAtLeastOnce]);
+
+  useEffect(() => {
+    if (
+      initialPulseColor &&
+      isInitialPulseConditionMet &&
+      !hasBeenPressedAtLeastOnce &&
+      !isPlaying
+    ) {
+      startInitialPulseAnimation();
+    } else {
+      stopInitialPulseAnimation();
+    }
+    // Stop initial pulse if component unmounts or conditions change
+    return () => {
+      stopInitialPulseAnimation();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialPulseColor, isInitialPulseConditionMet, hasBeenPressedAtLeastOnce, isPlaying]);
 
   useEffect(() => {
     return () => {
       cancelAnimation(borderOpacity);
       cancelAnimation(borderScale);
+      cancelAnimation(initialPulseOpacity);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const stopAnimation = () => {
+  const stopBreathingAnimation = () => {
     cancelAnimation(borderOpacity);
     cancelAnimation(borderScale);
     borderOpacity.value = withTiming(0, { duration: 300 });
@@ -80,7 +117,6 @@ function AnimatedAudioButton({
   };
 
   const startBreathingAnimation = () => {
-    // Enhanced opacity animation
     borderOpacity.value = withSequence(
       withTiming(0.8, { duration: breatheDuration / 2, easing: Easing.ease }),
       withRepeat(
@@ -94,8 +130,6 @@ function AnimatedAudioButton({
         -1,
       ),
     );
-
-    // Add scale animation for more intensity
     borderScale.value = withSequence(
       withTiming(1.1, { duration: breatheDuration / 2, easing: Easing.ease }),
       withRepeat(
@@ -114,17 +148,60 @@ function AnimatedAudioButton({
     );
   };
 
+  const startInitialPulseAnimation = () => {
+    initialPulseOpacity.value = withRepeat(
+      withSequence(
+        withTiming(0.7, { duration: 750, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.3, { duration: 750, easing: Easing.inOut(Easing.ease) }),
+      ),
+      -1,
+      true,
+    );
+  };
+
+  const stopInitialPulseAnimation = () => {
+    cancelAnimation(initialPulseOpacity);
+    initialPulseOpacity.value = withTiming(0, { duration: 300 });
+  };
+
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: borderOpacity.value,
     transform: [{ scale: borderScale.value }],
   }));
 
+  const initialPulseAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: initialPulseOpacity.value,
+  }));
+
+  const handlePress = () => {
+    if (!hasBeenPressedAtLeastOnce) {
+      setHasBeenPressedAtLeastOnce(true);
+      stopInitialPulseAnimation();
+    }
+    onPress();
+  };
+
   return (
     <TouchableOpacity
       style={[styles.animatedButtonContainer]}
-      onPress={onPress}
+      onPress={handlePress}
       className={className}
     >
+      {initialPulseColor && isInitialPulseConditionMet && !hasBeenPressedAtLeastOnce && !isPlaying && (
+        <Animated.View
+          style={[
+            styles.animatedBorder,
+            {
+              borderColor: initialPulseColor,
+              borderWidth,
+              width: width + borderWidth * 2,
+              height: height + borderWidth * 2,
+              borderRadius: (width + borderWidth * 2) / 2,
+            },
+            initialPulseAnimatedStyle,
+          ]}
+        />
+      )}
       <Animated.View
         style={[
           styles.animatedBorder,
@@ -156,6 +233,8 @@ type HeaderProps = {
   onStopGuide?: () => void;
   isPlaying: boolean;
   showLetterCaseSwitch?: boolean;
+  initialPulseColorForGuidance?: string;
+  activateInitialGuidancePulse?: boolean;
 };
 
 const GuidanceAudioHeader = ({
@@ -164,6 +243,8 @@ const GuidanceAudioHeader = ({
   onStopGuide,
   isPlaying,
   showLetterCaseSwitch = true,
+  initialPulseColorForGuidance,
+  activateInitialGuidancePulse,
 }: HeaderProps) => {
   const navigateToHome = useCallback(() => {
     router.navigate("/");
@@ -204,7 +285,7 @@ const GuidanceAudioHeader = ({
         <AnimatedAudioButton
           className="p-2"
           onPress={onPressGuide || (() => {})}
-          isPlaying={isPlaying} // isPlaying is used here for the animation
+          isPlaying={isPlaying}
           width={SIZE}
           height={SIZE}
           borderColor={APP_COLORS.green}
@@ -213,6 +294,8 @@ const GuidanceAudioHeader = ({
               <EmptyHeadButton {...buttonColorProps} />
             </View>
           }
+          initialPulseColor={initialPulseColorForGuidance}
+          isInitialPulseConditionMet={activateInitialGuidancePulse}
         />
       </View>
     </View>

@@ -58,7 +58,7 @@ const HomeHeader = () => {
         <View style={{ paddingLeft: 25 }}>
           <Image
             source={require("@/assets/home/png/return-to-select.png")} // Replace with your image path
-            style={{ width: 98 * 1.5, height: 54 * 1.5 }} // Add dimensions
+            style={{ width: 98 * 1.8, height: 54 * 1.8 }} // Add dimensions
             resizeMode="contain" // Optional: adjust how image scales
           />
         </View>
