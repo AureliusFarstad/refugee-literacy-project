@@ -215,8 +215,8 @@ const LanguageSelectionScreen = () => {
               >
                 <PlayButton
                   {...defaultButtonColorProps}
-                  width={40}
-                  height={40}
+                  width={50}
+                  height={50}
                 />
                 <Text
                   style={[
@@ -437,8 +437,8 @@ const styles = StyleSheet.create({
 
   // Language Row Styles
   languageRowBase: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
     marginBottom: 20,
     borderRadius: 35,
     borderWidth: 2,

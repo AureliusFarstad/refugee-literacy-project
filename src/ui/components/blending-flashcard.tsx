@@ -75,13 +75,13 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
     },
     iconButton: {
       position: "absolute",
-      width: 40,
-      height: 40,
+      width: 50,
+      height: 50,
     },
     nativeButtonOverlay: {
       position: "absolute",
-      top: -10,
-      right: -10,
+      top: -5,
+      right: -5,
       width: 60,
       height: 60,
       borderRadius: 30,
@@ -92,15 +92,15 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       alignItems: "center",
       justifyContent: "center",
       width: 180,
-      height: 40,
-      borderRadius: 20,
+      height: 50,
+      borderRadius: 25,
       backgroundColor: colors.primary_color,
       // alignSelf: "center",
     },
     word: {
       fontFamily: "Thomas",
-      fontSize: 40,
-      lineHeight: 44,
+      fontSize: 42,
+      lineHeight: 48,
       color: APP_COLORS.offblack,
     },
     lettersContainer: {
@@ -111,17 +111,17 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       gap: 25,
     },
     letterButton: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
+      width: 50,
+      height: 50,
+      borderRadius: 25,
       backgroundColor: colors.primary_color,
       justifyContent: "center",
       alignItems: "center",
     },
     letter: {
       fontFamily: "Thomas",
-      fontSize: 32,
-      lineHeight: 42,
+      fontSize: 42,
+      lineHeight: 48,
       color: APP_COLORS.offblack,
     },
   });
@@ -141,8 +141,8 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
           <View style={[styles.iconButton, { top: 0, right: 0 }]}>
             <AnimatedAudioButton
               audioSource={requireNativeAudioForWord(content.word)}
-              width={40}
-              height={40}
+              width={50}
+              height={50}
             >
               <NativeButton {...iconButtonProps} />
             </AnimatedAudioButton>
@@ -153,7 +153,7 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
         <AnimatedAudioButton
           audioSource={requireEnglishAudioForWord(content.word)}
           width={180}
-          height={40}
+          height={50}
         >
           <View style={styles.wordContainer}>
             <View style={[styles.iconButton, { left: 0 }]}>
@@ -173,8 +173,8 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
             <AnimatedAudioButton
               key={letter} // TODO: do we need this?
               audioSource={ALPHABET_AUDIO_SOURCES[letter].sound}
-              width={40}
-              height={40}
+              width={50}
+              height={50}
             >
               <View style={styles.letterButton}>
                 <Text style={[styles.letter]}>

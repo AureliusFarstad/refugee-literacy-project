@@ -225,8 +225,8 @@ const styles = StyleSheet.create({
   },
   nativeButtonOverlay: {
     position: "absolute",
-    top: -10,
-    right: -10,
+    top: -5,
+    right: -5,
     width: 60,
     height: 60,
     borderRadius: 30,
@@ -234,8 +234,8 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     position: "absolute",
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
   },
   iconButtonActive: {
     backgroundColor: SECTION_COLOR.sectionSecondaryColor,
@@ -954,8 +954,8 @@ const DraggableAudioGame: React.FC = () => {
                 audioSource={requireCompleteNativeAudioForWord(
                   CORRECT_BUTTON_ID,
                 )}
-                width={40}
-                height={40}
+                width={50}
+                height={50}
               >
                 <NativeButton {...NATIVE_BUTTON_COLOR} />
               </AnimatedAudioButton>

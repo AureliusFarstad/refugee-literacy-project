@@ -28,7 +28,7 @@ const WELCOME_ASPECT_RATIO = 161 / 281; // Original height/width ratio
 const WELCOME_HEIGHT = WELCOME_WIDTH * WELCOME_ASPECT_RATIO;
 
 // Level Banner Styling
-const BUTTON_WIDTH = 40;
+const BUTTON_WIDTH = 50;
 const BUTTON_MARGIN_OUTSIDE = 20;
 const BUTTON_MARGIN_INSIDE = 10;
 const LEVEL_WIDTH =

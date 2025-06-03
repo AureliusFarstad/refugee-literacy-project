@@ -108,8 +108,8 @@ const RenderBackCard = (word: string, colors: SectionColorTheme) => {
       resizeMode: "contain", // This ensures the image fits while maintaining aspect ratio
     },
     cardBackText: {
-      fontSize: 40,
-      lineHeight: 50,
+      fontSize: 42,
+      lineHeight: 48,
       color: colors.appBlackColor,
       textAlign: "center",
       fontFamily: "Thomas",

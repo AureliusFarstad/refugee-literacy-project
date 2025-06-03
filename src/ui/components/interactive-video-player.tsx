@@ -482,7 +482,7 @@ const InteractiveVideoPlayer = ({
         {/* Home Button */}
         <View className="flex-row items-center space-x-4">
           <Pressable onPress={navigateToHome} className="p-2">
-            <View style={[{ width: 40, height: 40 }]}>
+            <View style={[{ width: 50, height: 50 }]}>
               <HomeButton {...homeColorProps} />
             </View>
           </Pressable>
@@ -502,6 +502,7 @@ const InteractiveVideoPlayer = ({
               progress={progressValue}
               minimumValue={min}
               maximumValue={max}
+              disableTapEvent={true}
             />
           </View>
         </View>
