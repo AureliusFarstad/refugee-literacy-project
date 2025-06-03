@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Svg, { Path } from "react-native-svg";
 import Animated, {
+  cancelAnimation,
   Easing,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withSequence,
   withTiming,
-  cancelAnimation,
 } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Svg, { Path } from "react-native-svg";
 
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
 import NoBackgroundSVG from "@/assets/language-select/svg/no-background.svg";
@@ -291,7 +291,7 @@ const LanguageSelectionScreen = () => {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: APP_COLORS.offwhite }}>
         <View style={styles.confirmationContainer}>
-        <View style={styles.yesRow}>
+          <View style={styles.yesRow}>
             <View style={styles.yesBackgroundWrapper}>
               {hasPlayedConfirmationAudio ? (
                 <YesBackgroundSVG
@@ -331,8 +331,16 @@ const LanguageSelectionScreen = () => {
             audioSource={assets?.confirmAudio as string}
             onPress={handlePlayConfirmationAudio} // Add this prop
           >
-            <PulsingNativeButtonWrapper isActive={isInitialPulseActive} width={120} height={120}>
-              <NativeButton {...defaultButtonColorProps} width={120} height={120} />
+            <PulsingNativeButtonWrapper
+              isActive={isInitialPulseActive}
+              width={120}
+              height={120}
+            >
+              <NativeButton
+                {...defaultButtonColorProps}
+                width={120}
+                height={120}
+              />
             </PulsingNativeButtonWrapper>
           </AnimatedAudioButton>
 
@@ -400,8 +408,14 @@ const PulsingNativeButtonWrapper = ({
     if (isActive) {
       pulseOpacity.value = withRepeat(
         withSequence(
-          withTiming(0.7, { duration: PULSE_DURATION / 2, easing: Easing.inOut(Easing.ease) }),
-          withTiming(0.2, { duration: PULSE_DURATION / 2, easing: Easing.inOut(Easing.ease) }),
+          withTiming(0.7, {
+            duration: PULSE_DURATION / 2,
+            easing: Easing.inOut(Easing.ease),
+          }),
+          withTiming(0.2, {
+            duration: PULSE_DURATION / 2,
+            easing: Easing.inOut(Easing.ease),
+          }),
         ),
         -1, // Infinite repeat
         true, // Reverse direction
@@ -428,12 +442,7 @@ const PulsingNativeButtonWrapper = ({
 
   return (
     <View style={{ alignItems: "center", justifyContent: "center" }}>
-      <Animated.View
-        style={[
-          { position: "absolute" },
-          animatedBorderStyle,
-        ]}
-      />
+      <Animated.View style={[{ position: "absolute" }, animatedBorderStyle]} />
       {children}
     </View>
   );

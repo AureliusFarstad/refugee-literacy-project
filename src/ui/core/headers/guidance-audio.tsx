@@ -80,7 +80,12 @@ function AnimatedAudioButton({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPlaying, initialPulseColor, isInitialPulseConditionMet, hasBeenPressedAtLeastOnce]);
+  }, [
+    isPlaying,
+    initialPulseColor,
+    isInitialPulseConditionMet,
+    hasBeenPressedAtLeastOnce,
+  ]);
 
   useEffect(() => {
     if (
@@ -98,7 +103,12 @@ function AnimatedAudioButton({
       stopInitialPulseAnimation();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialPulseColor, isInitialPulseConditionMet, hasBeenPressedAtLeastOnce, isPlaying]);
+  }, [
+    initialPulseColor,
+    isInitialPulseConditionMet,
+    hasBeenPressedAtLeastOnce,
+    isPlaying,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -187,21 +197,24 @@ function AnimatedAudioButton({
       onPress={handlePress}
       className={className}
     >
-      {initialPulseColor && isInitialPulseConditionMet && !hasBeenPressedAtLeastOnce && !isPlaying && (
-        <Animated.View
-          style={[
-            styles.animatedBorder,
-            {
-              borderColor: initialPulseColor,
-              borderWidth,
-              width: width + borderWidth * 2,
-              height: height + borderWidth * 2,
-              borderRadius: (width + borderWidth * 2) / 2,
-            },
-            initialPulseAnimatedStyle,
-          ]}
-        />
-      )}
+      {initialPulseColor &&
+        isInitialPulseConditionMet &&
+        !hasBeenPressedAtLeastOnce &&
+        !isPlaying && (
+          <Animated.View
+            style={[
+              styles.animatedBorder,
+              {
+                borderColor: initialPulseColor,
+                borderWidth,
+                width: width + borderWidth * 2,
+                height: height + borderWidth * 2,
+                borderRadius: (width + borderWidth * 2) / 2,
+              },
+              initialPulseAnimatedStyle,
+            ]}
+          />
+        )}
       <Animated.View
         style={[
           styles.animatedBorder,
