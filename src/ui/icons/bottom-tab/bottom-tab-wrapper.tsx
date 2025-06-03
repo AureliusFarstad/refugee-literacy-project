@@ -3,11 +3,12 @@ import { StyleSheet, View } from "react-native";
 
 import type { SectionColorScheme } from "@/constants/routes";
 import { APP_COLORS } from "@/constants/routes";
+import { TAB_ICON_CONTAINER_SIZE } from "@/utils/layout";
 
 const styles = StyleSheet.create({
   rounded_square: {
-    width: 60,
-    height: 60,
+    width: TAB_ICON_CONTAINER_SIZE,
+    height: TAB_ICON_CONTAINER_SIZE,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",

@@ -7,11 +7,16 @@ import { useIsFocused } from "@react-navigation/native";
 import welcome from "assets/videos/welcome-dict";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Animated, Pressable, StyleSheet, View } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Animated,
+  type LayoutChangeEvent,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 import { Slider } from "react-native-awesome-slider";
 import { useSharedValue } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import { APP_COLORS } from "@/constants/routes";
 import useSound from "@/core/hooks/useSoundExtended";
@@ -105,6 +110,12 @@ const InteractiveVideoPlayer = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [showOverlay, setShowOverlay] = useState(true);
   const [svgContent, setSvgContent] = useState<string | null>(null);
+
+  // State for video container dimensions
+  const [videoContainerLayout, setVideoContainerLayout] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
 
   // Completion tracking
   const [audioCompleted, setAudioCompleted] = useState(false);
@@ -268,6 +279,12 @@ const InteractiveVideoPlayer = ({
   const handlePlay = useCallback(() => {
     const currentSegment = animationCollection.segments[currentSegmentIndex];
 
+    // Ensure svgContent is loaded before trying to play, especially if it relies on it.
+    if (!svgContent) {
+      console.warn("Play attempted before SVG content is loaded.");
+      return;
+    }
+
     // Set playing state
     setIsPlaying(true);
     setShowOverlay(false);
@@ -309,7 +326,7 @@ const InteractiveVideoPlayer = ({
     } else {
       setAudioCompleted(true);
     }
-  }, [currentSegmentIndex, animationCollection, playSound]);
+  }, [currentSegmentIndex, animationCollection, playSound, svgContent]);
 
   // Handle pause button press
   const handlePause = useCallback(() => {
@@ -417,14 +434,55 @@ const InteractiveVideoPlayer = ({
     };
   }, [cleanup, stopSound]);
 
+  const handleVideoContainerLayout = (event: LayoutChangeEvent) => {
+    const { width, height } = event.nativeEvent.layout;
+    setVideoContainerLayout({ width, height });
+  };
+
+  const svgNominalWidth = 900;
+  const svgNominalHeight = 1600;
+  const svgAspectRatio = svgNominalWidth / svgNominalHeight; // width/height
+
+  const videoPlayerDimensions = useMemo(() => {
+    if (!videoContainerLayout) {
+      return { width: 0, height: 0, ready: false };
+    }
+
+    const { width: containerWidth, height: rawContainerHeight } =
+      videoContainerLayout;
+    // Adjust available height by subtracting the bottom inset.
+    // This is crucial for ensuring the video content respects the tab navigator or other bottom obstructions.
+    const containerHeight = rawContainerHeight;
+
+    let targetWidth: number;
+    let targetHeight: number;
+
+    // Aspect ratio of SVG is W/H (900/1600)
+    if (containerWidth / containerHeight > svgAspectRatio) {
+      // Container is wider than SVG's aspect ratio (relative to its height), so height is the limiting dimension
+      targetHeight = containerHeight;
+      targetWidth = containerHeight * svgAspectRatio;
+    } else {
+      // Container is taller or same aspect ratio as SVG (relative to its width), so width is the limiting dimension
+      targetWidth = containerWidth;
+      targetHeight = containerWidth / svgAspectRatio;
+    }
+
+    return {
+      width: Math.max(0, Math.floor(targetWidth)),
+      height: Math.max(0, Math.floor(targetHeight)),
+      ready: true,
+    };
+  }, [videoContainerLayout, svgAspectRatio]);
+
   return (
-    <SafeAreaView style={globalStyles.safeAreaView}>
+    <View style={globalStyles.safeAreaView}>
       {/* Top Bar */}
       <View className="flex-row items-center justify-between p-4">
         {/* Home Button */}
         <View className="flex-row items-center space-x-4">
           <Pressable onPress={navigateToHome} className="p-2">
-            <View style={[{ width: 40, height: 40 }]}>
+            <View style={[{ width: 50, height: 50 }]}>
               <HomeButton {...homeColorProps} />
             </View>
           </Pressable>
@@ -444,51 +502,68 @@ const InteractiveVideoPlayer = ({
               progress={progressValue}
               minimumValue={min}
               maximumValue={max}
+              disableTapEvent={true}
             />
           </View>
         </View>
       </View>
 
       {/* Video Screen */}
-      <View className="flex-1 items-center justify-center">
-        {/* Overlay To Pause */}
-        <Pressable
-          style={StyleSheet.absoluteFill}
-          onPress={handlePause}
-          disabled={!isPlaying}
-        >
-          {/* Animation Itself */}
-          <VideoPlayer
-            ref={playerRef}
-            // @ts-ignore
-            svgContent={svgContent}
-            onAnimationComplete={handleAnimationComplete}
-          />
-        </Pressable>
+      <View
+        style={styles.videoScreenContainer}
+        onLayout={handleVideoContainerLayout}
+      >
+        {videoPlayerDimensions.ready && svgContent ? (
+          <Pressable
+            // This Pressable defines the tappable area for pause, matching the scaled video.
+            style={{
+              width: videoPlayerDimensions.width,
+              height: videoPlayerDimensions.height,
+            }}
+            onPress={handlePause}
+            disabled={!isPlaying}
+          >
+            <VideoPlayer
+              ref={playerRef}
+              // @ts-ignore
+              svgContent={svgContent}
+              onAnimationComplete={handleAnimationComplete}
+              style={{ width: "100%", height: "100%" }}
+              // Assuming VideoPlayer's internal WebView is styled to fill this Pressable (e.g. width: '100%', height: '100%')
+            />
+          </Pressable>
+        ) : (
+          // Placeholder while dimensions are calculated or content is loading
+          // Consider adding an ActivityIndicator if loading takes time
+          <View style={{ flex: 1 }} /> // Takes up space to prevent layout jumps
+        )}
 
         {/* Overlay When Paused */}
-        {showOverlay && (
-          <Animated.View
-            style={[StyleSheet.absoluteFill, { opacity: overlayOpacity }]}
-          >
-            <BlurView
-              intensity={40}
-              tint="dark"
-              className="absolute size-full items-center justify-center"
+        {showOverlay &&
+          svgContent && ( // Conditionally render based on svgContent as well
+            <Animated.View
+              style={[styles.overlayContainer, { opacity: overlayOpacity }]}
             >
-              <View className="flex flex-row">
-                <Pressable
-                  onPress={handlePlay}
-                  className="flex items-center justify-center"
-                >
-                  <PlayButton width={80} height={80} {...buttonColorProps} />
-                </Pressable>
-              </View>
-            </BlurView>
-          </Animated.View>
-        )}
+              <BlurView
+                intensity={40}
+                tint="dark"
+                style={styles.blurViewStyle} // Using StyleSheet for consistency
+              >
+                <View>
+                  {" "}
+                  {/* Removed className="flex flex-row" as PlayButton is centered by BlurView */}
+                  <Pressable
+                    onPress={handlePlay}
+                    // className removed, BlurView handles centering
+                  >
+                    <PlayButton width={80} height={80} {...buttonColorProps} />
+                  </Pressable>
+                </View>
+              </BlurView>
+            </Animated.View>
+          )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -503,5 +578,21 @@ const styles = StyleSheet.create({
   },
   slider: {
     height: 40,
+  },
+  videoScreenContainer: {
+    // Styles for the main video area container
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  overlayContainer: {
+    // Fills the videoScreenContainer
+    ...StyleSheet.absoluteFillObject,
+  },
+  blurViewStyle: {
+    // Fills its parent (overlayContainer) and centers content
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

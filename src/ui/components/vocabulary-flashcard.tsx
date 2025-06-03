@@ -70,8 +70,8 @@ export const VocabularyFlashCard = ({
     },
     iconButton: {
       position: "absolute",
-      width: 40,
-      height: 40,
+      width: 50,
+      height: 50,
     },
     buttonRow: {
       flexDirection: "row",
@@ -80,21 +80,21 @@ export const VocabularyFlashCard = ({
     englishButtonOverlay: {
       // top: -10,
       // right: -10,
-      width: 40,
-      height: 40,
+      width: 50,
+      height: 50,
       backgroundColor: colors.off_white_color,
     },
     snailButtonOverlay: {
       // top: -10,
       // left: -10,
-      width: 40,
-      height: 40,
+      width: 50,
+      height: 50,
       backgroundColor: colors.off_white_color,
     },
     nativeButtonOverlay: {
       position: "absolute",
-      top: -10,
-      right: -10,
+      top: -5,
+      right: -5,
       width: 60,
       height: 60,
       borderRadius: 30,
@@ -122,8 +122,8 @@ export const VocabularyFlashCard = ({
           <View style={[styles.iconButton, { top: 0, right: 0 }]}>
             <AnimatedAudioButton
               audioSource={requireCompleteNativeAudioForWord(word)}
-              width={40}
-              height={40}
+              width={50}
+              height={50}
             >
               <NativeButton {...iconButtonProps} />
             </AnimatedAudioButton>
@@ -136,8 +136,8 @@ export const VocabularyFlashCard = ({
           <View style={styles.englishButtonOverlay}>
             <AnimatedAudioButton
               audioSource={requireCompleteEnglishAudioForWord(word)}
-              width={40}
-              height={40}
+              width={50}
+              height={45}
             >
               <EnglishButton {...iconButtonProps} />
             </AnimatedAudioButton>
@@ -147,8 +147,8 @@ export const VocabularyFlashCard = ({
           <View style={styles.snailButtonOverlay}>
             <AnimatedAudioButton
               audioSource={requireSnailSpeedCompleteEnglishAudioForWord(word)}
-              width={40}
-              height={40}
+              width={50}
+              height={50}
             >
               <SnailButton {...iconButtonProps} />
             </AnimatedAudioButton>

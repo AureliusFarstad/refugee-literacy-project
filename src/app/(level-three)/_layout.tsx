@@ -1,13 +1,14 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import type { JSX } from "react/jsx-runtime";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SECTION_COLORS } from "@/constants/routes";
 import TabIconWrapper from "@/ui/icons/bottom-tab/bottom-tab-wrapper";
 import { ConversationIcon } from "@/ui/icons/bottom-tab/conversation-icon";
 import { DragIcon } from "@/ui/icons/bottom-tab/drag-and-drop-icon";
 import { TeacherIcon } from "@/ui/icons/bottom-tab/teacher-icon";
-import { IS_IOS } from "@/utils/layout";
+import { BOTTOM_TAB_HEIGHT, IS_IOS } from "@/utils/layout";
 
 export const sectionColor = SECTION_COLORS.speaking;
 
@@ -36,6 +37,9 @@ const tabs: TabType[] = [
 ];
 
 export default function LevelTwoTabLayout() {
+  const { bottom: safe_area_bottom_inset } = useSafeAreaInsets();
+  const paddingTop = 20;
+
   return (
     <Tabs
       initialRouteName="listening"
@@ -44,8 +48,9 @@ export default function LevelTwoTabLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: sectionColor.primary,
-          paddingTop: IS_IOS ? 16 : 4,
-          height: IS_IOS ? 108 : 80,
+          paddingTop,
+          height: BOTTOM_TAB_HEIGHT + (IS_IOS ? 0 : safe_area_bottom_inset),
+          paddingBottom: IS_IOS ? 0 : safe_area_bottom_inset,
           paddingHorizontal: 12,
         },
         // tabBarInactiveTintColor: "white",

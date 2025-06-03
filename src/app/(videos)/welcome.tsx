@@ -65,7 +65,7 @@ const WelcomeVideo = () => {
   return (
     <SafeAreaView
       style={globalStyles.safeAreaView}
-      edges={["right", "bottom", "left"]} // Exclude 'top' edge
+      edges={["top", "right", "bottom", "left"]}
     >
       <InteractiveVideoPlayer
         animationCollection={welcomeAnimationCollection}

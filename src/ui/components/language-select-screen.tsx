@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import Animated, {
+  cancelAnimation,
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Path } from "react-native-svg";
 
@@ -9,7 +18,7 @@ import NoBackgroundGreyscaleSVG from "@/assets/language-select/svg/no-background
 import SelectSVG from "@/assets/language-select/svg/select.svg";
 import YesBackgroundSVG from "@/assets/language-select/svg/yes-background.svg";
 import YesBackgroundGreyscaleSVG from "@/assets/language-select/svg/yes-background-greyscale.svg";
-import { APP_COLORS } from "@/constants/routes";
+import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import useSound from "@/core/hooks/useSoundExtended";
 import { SUPPORTED_LANGUAGES, useUser } from "@/core/store/user";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
@@ -70,6 +79,10 @@ const BACKGROUND_ASPECT_RATIO = 160 / 280; // Original height/width ratio
 const BACKGROUND_WIDTH = SELECT_BANNER_WIDTH;
 const BACKGROUND_HEIGHT = BACKGROUND_WIDTH * BACKGROUND_ASPECT_RATIO;
 
+const PULSE_BORDER_COLOR = SECTION_COLORS.speaking.primary;
+const PULSE_BORDER_WIDTH = 4;
+const PULSE_DURATION = 1500;
+
 const defaultButtonColorProps: ButtonColorProps = {
   primaryColor: APP_COLORS.green,
   secondaryColor: APP_COLORS.lightgreen,
@@ -118,6 +131,7 @@ const LanguageSelectionScreen = () => {
     useState<LanguageCode | null>(null);
   const [hasPlayedConfirmationAudio, setHasPlayedConfirmationAudio] =
     useState(false);
+  const [isInitialPulseActive, setIsInitialPulseActive] = useState(true);
 
   // Cleanup audio on unmount
   useEffect(() => {
@@ -159,6 +173,7 @@ const LanguageSelectionScreen = () => {
     console.log("HERE");
     if (!selectedLanguageCode) return;
     setHasPlayedConfirmationAudio(true);
+    setIsInitialPulseActive(false); // Stop pulsing when audio button is pressed
   };
 
   // Step 3: Handle final cancellation (restart process)
@@ -170,6 +185,7 @@ const LanguageSelectionScreen = () => {
     setCurrentStep(SelectionStep.LANGUAGE_SELECTION);
     setSelectedLanguageCode(null);
     setHasPlayedConfirmationAudio(false);
+    setIsInitialPulseActive(true); // Re-enable pulsing if process restarts
   };
 
   // Step 3: Handle final confirmation (save to store)
@@ -215,8 +231,8 @@ const LanguageSelectionScreen = () => {
               >
                 <PlayButton
                   {...defaultButtonColorProps}
-                  width={40}
-                  height={40}
+                  width={50}
+                  height={50}
                 />
                 <Text
                   style={[
@@ -275,16 +291,6 @@ const LanguageSelectionScreen = () => {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: APP_COLORS.offwhite }}>
         <View style={styles.confirmationContainer}>
-          {/* Audio Preview Button */}
-          <AnimatedAudioButton
-            width={80}
-            height={80}
-            audioSource={assets?.confirmAudio as string}
-            onPress={handlePlayConfirmationAudio} // Add this prop
-          >
-            <NativeButton {...defaultButtonColorProps} width={80} height={80} />
-          </AnimatedAudioButton>
-
           <View style={styles.yesRow}>
             <View style={styles.yesBackgroundWrapper}>
               {hasPlayedConfirmationAudio ? (
@@ -317,6 +323,26 @@ const LanguageSelectionScreen = () => {
               />
             </Pressable>
           </View>
+
+          {/* Audio Preview Button */}
+          <AnimatedAudioButton
+            width={120}
+            height={120}
+            audioSource={assets?.confirmAudio as string}
+            onPress={handlePlayConfirmationAudio} // Add this prop
+          >
+            <PulsingNativeButtonWrapper
+              isActive={isInitialPulseActive}
+              width={120}
+              height={120}
+            >
+              <NativeButton
+                {...defaultButtonColorProps}
+                width={120}
+                height={120}
+              />
+            </PulsingNativeButtonWrapper>
+          </AnimatedAudioButton>
 
           <View style={styles.yesRow}>
             <View style={styles.yesBackgroundWrapper}>
@@ -362,6 +388,63 @@ const LanguageSelectionScreen = () => {
       {currentStep === SelectionStep.FINAL_CONFIRMATION &&
         renderFinalConfirmationScreen()}
     </>
+  );
+};
+
+const PulsingNativeButtonWrapper = ({
+  isActive,
+  children,
+  width,
+  height,
+}: {
+  isActive: boolean;
+  children: React.ReactNode;
+  width: number;
+  height: number;
+}) => {
+  const pulseOpacity = useSharedValue(0);
+
+  React.useEffect(() => {
+    if (isActive) {
+      pulseOpacity.value = withRepeat(
+        withSequence(
+          withTiming(0.7, {
+            duration: PULSE_DURATION / 2,
+            easing: Easing.inOut(Easing.ease),
+          }),
+          withTiming(0.2, {
+            duration: PULSE_DURATION / 2,
+            easing: Easing.inOut(Easing.ease),
+          }),
+        ),
+        -1, // Infinite repeat
+        true, // Reverse direction
+      );
+    } else {
+      cancelAnimation(pulseOpacity);
+      pulseOpacity.value = withTiming(0, { duration: 300 });
+    }
+    return () => {
+      cancelAnimation(pulseOpacity);
+    };
+  }, [isActive, pulseOpacity]);
+
+  const animatedBorderStyle = useAnimatedStyle(() => {
+    return {
+      opacity: pulseOpacity.value,
+      width: width + PULSE_BORDER_WIDTH * 4, // Make border visually distinct
+      height: height + PULSE_BORDER_WIDTH * 4,
+      borderRadius: (width + PULSE_BORDER_WIDTH * 4) / 2,
+      borderWidth: PULSE_BORDER_WIDTH,
+      borderColor: PULSE_BORDER_COLOR,
+    };
+  });
+
+  return (
+    <View style={{ alignItems: "center", justifyContent: "center" }}>
+      <Animated.View style={[{ position: "absolute" }, animatedBorderStyle]} />
+      {children}
+    </View>
   );
 };
 
@@ -437,8 +520,8 @@ const styles = StyleSheet.create({
 
   // Language Row Styles
   languageRowBase: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
     marginBottom: 20,
     borderRadius: 35,
     borderWidth: 2,

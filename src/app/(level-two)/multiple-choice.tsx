@@ -1,16 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   BLENDING_WORD_LIST_BY_LEVEL,
   requireEnglishAudioForWord,
   requireImageForWord,
 } from "@/assets/blending";
-import type { SectionColorTheme } from "@/constants/routes";
+import { type SectionColorTheme } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { WordChoiceScreen } from "@/ui/components/multiple-choice";
 import type { WordSet } from "@/ui/components/multiple-choice/types";
@@ -20,22 +17,26 @@ import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
 import { globalStyles } from "@/ui/styles";
-import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
 // TODO: Not sure if we want to generate these or have a static list.
-const generatedWordSets: WordSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
-  (word: string) => {
-    return {
-      correctAnswer: word,
-      options: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
-        (option) => option !== word,
-      )
+
+const shuffle = (array: string[]): string[] => {
+  return [...array].sort(() => Math.random() - 0.5);
+};
+
+const generatedWordSets: WordSet[] = shuffle(
+  BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1,
+).map((word: string) => {
+  return {
+    correctAnswer: word,
+    options: shuffle(
+      BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter((option) => option !== word)
         .slice(0, 2)
         .concat(word),
-    };
-  },
-);
+    ),
+  };
+});
 
 // TODO: Refactor this out to _layout?
 const buttonStyles: ButtonColorProps = {
@@ -107,10 +108,11 @@ const RenderBackCard = (word: string, colors: SectionColorTheme) => {
       resizeMode: "contain", // This ensures the image fits while maintaining aspect ratio
     },
     cardBackText: {
-      fontSize: 24,
+      fontSize: 42,
+      lineHeight: 48,
       color: colors.appBlackColor,
       textAlign: "center",
-      fontFamily: "sans-serif",
+      fontFamily: "Thomas",
       // letterSpacing: 2, // TODO: Maybe have letter spacing everywhere?
     },
   });
@@ -144,7 +146,10 @@ const RenderOption = (
 ) => {
   const styles = {
     optionText: {
-      fontSize: 24,
+      fontFamily: "Thomas",
+      fontSize: 40,
+      lineHeight: 50,
+      color: colors.appBlackColor,
     },
     disabledText: {
       color: colors.appWhiteColor,
@@ -161,18 +166,22 @@ const RenderOption = (
 };
 
 const AudioMultipleChoice = () => {
-  const insets = useSafeAreaInsets();
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "multiple-choice",
     module: "blending-module",
   });
 
   return (
-    <SafeAreaView style={globalStyles.safeAreaView}>
+    <SafeAreaView
+      style={globalStyles.safeAreaView}
+      edges={["top", "right", "left"]}
+    >
       <View
         style={{
-          height:
-            HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
           flex: 1,
         }}
       >
@@ -180,6 +189,7 @@ const AudioMultipleChoice = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
+          onStopGuide={stopGuideAudio}
           showLetterCaseSwitch={true}
         />
         <WordChoiceScreen

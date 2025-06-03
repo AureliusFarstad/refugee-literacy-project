@@ -28,7 +28,7 @@ const WELCOME_ASPECT_RATIO = 161 / 281; // Original height/width ratio
 const WELCOME_HEIGHT = WELCOME_WIDTH * WELCOME_ASPECT_RATIO;
 
 // Level Banner Styling
-const BUTTON_WIDTH = 40;
+const BUTTON_WIDTH = 50;
 const BUTTON_MARGIN_OUTSIDE = 20;
 const BUTTON_MARGIN_INSIDE = 10;
 const LEVEL_WIDTH =
@@ -55,11 +55,13 @@ const HomeHeader = () => {
           setLanguage("DEFAULT");
         }}
       >
-        <Image
-          source={require("@/assets/home/png/return-to-select.png")} // Replace with your image path
-          style={{ width: 98 * 1.5, height: 54 * 1.5, paddingLeft: 25 }} // Add dimensions
-          resizeMode="contain" // Optional: adjust how image scales
-        />
+        <View style={{ paddingLeft: 25 }}>
+          <Image
+            source={require("@/assets/home/png/return-to-select.png")} // Replace with your image path
+            style={{ width: 98 * 1.8, height: 54 * 1.8 }} // Add dimensions
+            resizeMode="contain" // Optional: adjust how image scales
+          />
+        </View>
       </Pressable>
       <Pressable
         onPress={() => {
@@ -175,7 +177,7 @@ const Home = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="py-10">
+      <View>
         <FlatList
           ListHeaderComponent={HomeHeader}
           data={LESSONS}
@@ -183,6 +185,7 @@ const Home = () => {
           keyExtractor={(_) => _.id}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={Separator}
+          contentContainerStyle={{ paddingVertical: 30 }}
         />
       </View>
     </SafeAreaView>

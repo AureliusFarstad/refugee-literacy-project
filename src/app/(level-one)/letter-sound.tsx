@@ -1,9 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ALPHABET_LETTER_LIST_BY_LEVEL } from "@/assets/alphabet";
 import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
@@ -18,7 +15,6 @@ import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
 import { globalStyles } from "@/ui/styles";
-import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
 
@@ -35,17 +31,27 @@ const sectionColorTheme: SectionColorTheme = {
 };
 
 // TODO: Not sure if we want to generate these or have a static list.
-const generatedLetterSets: WordSet[] =
-  ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1.map((letter: string) => {
-    return {
-      correctAnswer: letter,
-      options: ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1.filter(
-        (option) => option !== letter,
-      )
-        .slice(0, 2)
-        .concat(letter),
-    };
-  });
+function shuffleArray<T>(array: T[]): T[] {
+  return array
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
+
+const generatedLetterSets: WordSet[] = shuffleArray(
+  ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1,
+).map((letter: string) => {
+  const distractors = ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1.filter(
+    (option) => option !== letter,
+  ).slice(0, 2);
+
+  const allOptions = shuffleArray([...distractors, letter]);
+
+  return {
+    correctAnswer: letter,
+    options: allOptions,
+  };
+});
 
 // TODO: Refactor this out to _layout?
 const buttonStyles: ButtonColorProps = {
@@ -103,11 +109,10 @@ const RenderBackCard = (letter: string, colors: SectionColorTheme) => {
       padding: 10,
     },
     cardBackText: {
-      fontSize: 24,
       color: colors.appBlackColor,
-      textAlign: "center",
-      fontFamily: "sans-serif",
-      // letterSpacing: 2, // TODO: Maybe have letter spacing everywhere?
+      fontFamily: "Thomas",
+      fontSize: 140,
+      lineHeight: 168,
     },
   });
 
@@ -134,7 +139,10 @@ const RenderOption = (
 ) => {
   const styles = {
     optionText: {
-      fontSize: 24,
+      fontFamily: "Thomas",
+      fontSize: 70,
+      lineHeight: 84,
+      color: APP_COLORS.offblack,
     },
     disabledText: {
       color: colors.appWhiteColor,
@@ -151,18 +159,22 @@ const RenderOption = (
 };
 
 const LetterSoundScreen = () => {
-  const insets = useSafeAreaInsets();
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "letter-sound",
     module: "alphabet-module",
   });
 
   return (
-    <SafeAreaView style={globalStyles.safeAreaView}>
+    <SafeAreaView
+      style={globalStyles.safeAreaView}
+      edges={["top", "left", "right"]}
+    >
       <View
         style={{
-          height:
-            HEIGHT - (insets.bottom + insets.top + 90 + (IS_IOS ? 96 : 112)),
           flex: 1,
         }}
       >
@@ -170,6 +182,7 @@ const LetterSoundScreen = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
+          onStopGuide={stopGuideAudio}
           showLetterCaseSwitch={true}
         />
         <WordChoiceScreen

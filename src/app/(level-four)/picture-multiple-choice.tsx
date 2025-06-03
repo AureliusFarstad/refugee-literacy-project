@@ -31,18 +31,23 @@ const buttonStyles: ButtonColorProps = {
 };
 
 // TODO: Not sure if we want to generate these or have a static list.
-const generatedWordSets: WordSet[] = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
-  (word: string) => {
-    return {
-      correctAnswer: word,
-      options: VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
-        (option) => option !== word,
-      )
+
+const shuffle = (array: string[]): string[] => {
+  return [...array].sort(() => Math.random() - 0.5);
+};
+
+const generatedWordSets: WordSet[] = shuffle(
+  VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1,
+).map((word: string) => {
+  return {
+    correctAnswer: word,
+    options: shuffle(
+      VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.filter((option) => option !== word)
         .slice(0, 2)
         .concat(word),
-    };
-  },
-);
+    ),
+  };
+});
 
 const RenderFrontCard = (word: string) => {
   // TODO: Refactor this out of function
@@ -140,7 +145,7 @@ const RenderOption = (
 
 const AudioMultipleChoice = () => {
   const insets = useSafeAreaInsets();
-  const { isPlaying, playGuideAudio } = useGuideAudio({
+  const { isPlaying, playGuideAudio, stopGuideAudio } = useGuideAudio({
     screenName: "picture-multiple-choice",
     module: "vocabulary-module",
   });
@@ -154,11 +159,11 @@ const AudioMultipleChoice = () => {
           flex: 1,
         }}
       >
-        {/* TODO: add correct source */}
         <GuidanceAudioHeader
           title="Sound"
           isPlaying={isPlaying}
           onPressGuide={playGuideAudio}
+          onStopGuide={stopGuideAudio}
           showLetterCaseSwitch={false}
         />
 

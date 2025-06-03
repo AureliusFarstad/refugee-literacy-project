@@ -1,6 +1,6 @@
 import type { RefObject } from "react";
 import React, { useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -11,8 +11,7 @@ import {
   requireEnglishConversationAudio,
   requireNativeConversationAudio,
 } from "@/assets/conversation";
-import { SECTION_COLORS } from "@/constants/routes";
-import { APP_COLORS } from "@/constants/routes";
+import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import type {
   DestinationComponentType,
@@ -21,13 +20,12 @@ import type {
 import AudioMultipleChoice from "@/ui/components/audio-multiple-choice-component";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
+import { PlayButton } from "@/ui/icons/circular/play-button";
 import { UserAvatar } from "@/ui/illustrations";
 import { globalStyles } from "@/ui/styles";
-import { HEIGHT, IS_IOS } from "@/utils/layout";
-
-import { sectionColor } from "./_layout";
 
 const primaryColor = SECTION_COLORS.speaking;
 const secondaryColor = SECTION_COLORS.vocabulary;
@@ -80,24 +78,30 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     borderStyle: "dashed",
     borderWidth: 2,
-    borderColor: primaryColor.dark,
     backgroundColor: primaryColor.light,
   },
   overflowContainer: {
     flex: 1,
-    overflow: "hidden", // Hide content that overflows
-    position: "relative", // For positioning the inner container
-    flexDirection: "column", // Stack children vertically
+    overflow: "hidden",
+    position: "relative",
+    flexDirection: "column",
   },
   bottomAnchoredContent: {
-    position: "absolute", // Position at the bottom of the container
-    flexDirection: "column", // Stack children vertically
-    flex: 1,
+    position: "absolute",
+    flexDirection: "column",
     bottom: 0,
     left: 0,
     right: 0,
-    // No explicit height - it will grow from the bottom up
-    // Content that extends beyond the parent container will be clipped
+  },
+  playButtonArea: {
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  playButtonWrapper: {},
+  completedViewContainer: {
+    flex: 1,
+    backgroundColor: APP_COLORS.backgroundgrey,
   },
 });
 
@@ -117,13 +121,53 @@ const maleButtonProps = {
   backgroundColor: APP_COLORS.backgroundgrey,
 };
 
+const activePlayButtonColorProps: ButtonColorProps = {
+  primaryColor: SECTION_COLORS.speaking.primary,
+  secondaryColor: APP_COLORS.lightgreen,
+  offwhiteColor: APP_COLORS.offwhite,
+  offblackColor: APP_COLORS.offblack,
+  backgroundColor: APP_COLORS.backgroundgrey,
+};
+
+const draggableButtonColorsConfig: ButtonColorProps[] = [
+  {
+    primaryColor: "#FFABDE",
+    offwhiteColor: "#FAFAFA",
+    offblackColor: "#3F3F46",
+    secondaryColor: "#D282AE",
+    backgroundColor: "#FFF0F6",
+  },
+  {
+    primaryColor: SECTION_COLORS.alphabet.primary,
+    secondaryColor: SECTION_COLORS.alphabet.dark,
+    backgroundColor: SECTION_COLORS.alphabet.light,
+    offwhiteColor: APP_COLORS.offwhite,
+    offblackColor: APP_COLORS.offblack,
+  },
+  {
+    primaryColor: SECTION_COLORS.blending.primary,
+    secondaryColor: SECTION_COLORS.blending.dark,
+    backgroundColor: SECTION_COLORS.blending.light,
+    offwhiteColor: APP_COLORS.offwhite,
+    offblackColor: APP_COLORS.offblack,
+  },
+];
+
+const customAudioChoiceColors = {
+  primary: SECTION_COLORS.speaking.primary,
+  secondary: SECTION_COLORS.vocabulary.primary,
+  tertiary: SECTION_COLORS.blending.primary,
+  light: SECTION_COLORS.speaking.light,
+  dark: SECTION_COLORS.speaking.dark,
+};
+
 interface DestinationCardFactoryProps {
-  gender: "female" | "male"; // Union type for strict type checking
+  gender: "female" | "male";
   nativeAudioFile: string;
 }
 
 interface CompletedCardProps {
-  gender: "female" | "male"; // Union type for strict type checking
+  gender: "female" | "male";
   englishAudioFile: string;
   nativeAudioFile: string;
 }
@@ -135,7 +179,7 @@ type DestinationFunction<T> = (
 ) => [DestinationComponentType, RefObject<View | null>, RefObject<View | null>];
 
 const CompletedCard: React.FC<CompletedCardProps> = ({
-  gender = "male", // Default parameter using destructuring
+  gender = "male",
   englishAudioFile,
   nativeAudioFile,
 }) => {
@@ -195,11 +239,7 @@ const CompletedCard: React.FC<CompletedCardProps> = ({
 
 const createConversationDestinationComponent: DestinationFunction<
   DestinationCardFactoryProps
-> = ({
-  gender = "male",
-  nativeAudioFile = ALPHABET_AUDIO_SOURCES.a.sound, // Default value
-}) => {
-  // This returns a function that matches the original signature expected by AudioMultipleChoice
+> = ({ gender = "male", nativeAudioFile = ALPHABET_AUDIO_SOURCES.a.sound }) => {
   return (
     isCardActive: boolean,
   ): [
@@ -245,7 +285,22 @@ const createConversationDestinationComponent: DestinationFunction<
               />
             </View>
           </AnimatedAudioButton>
-          <View ref={dropCircleRef} style={styles.dropCircle} />
+          <View
+            ref={dropCircleRef}
+            style={[
+              styles.dropCircle,
+              {
+                borderColor:
+                  gender === "female"
+                    ? primaryColor.primary
+                    : secondaryColor.primary,
+                backgroundColor:
+                  gender === "female"
+                    ? primaryColor.light
+                    : secondaryColor.light,
+              },
+            ]}
+          />
         </View>
         {gender === "male" && (
           <View style={styles.avatarWrapper}>
@@ -254,23 +309,23 @@ const createConversationDestinationComponent: DestinationFunction<
         )}
       </View>
     );
-    // silence the error:
-    return [SpeakerCard, dropCircleRef, destinationContainerRef]; //
+    return [SpeakerCard, dropCircleRef, destinationContainerRef];
   };
 };
 
 const Screen = () => {
-  const insets = useSafeAreaInsets();
-
-  // Convert dialogueCounter to state so it persists between renders
   const [dialogueCounter, setDialogueCounter] = useState(0);
+  const insets = useSafeAreaInsets();
 
   const onCorrectAnswer = () => {
     setDialogueCounter((prevCounter) => prevCounter + 1);
   };
 
-  // Helper function to render the appropriate content based on dialogueCounter
-  const renderContent = () => {
+  const restartGame = () => {
+    setDialogueCounter(0);
+  };
+
+  const renderInProgressContent = () => {
     switch (dialogueCounter) {
       case 0:
         const FirstConversationDestinationComponent =
@@ -300,7 +355,8 @@ const Screen = () => {
             useDestinationComponent={FirstConversationDestinationComponent}
             gameSet={firstGameSet}
             onCorrectAnswer={onCorrectAnswer}
-            sectionColorTheme={sectionColor}
+            sectionColorTheme={customAudioChoiceColors}
+            buttonColors={draggableButtonColorsConfig}
           />
         );
       case 1:
@@ -343,7 +399,8 @@ const Screen = () => {
               useDestinationComponent={SecondConversationDestinationComponent}
               gameSet={secondGameSet}
               onCorrectAnswer={onCorrectAnswer}
-              sectionColorTheme={sectionColor}
+              sectionColorTheme={customAudioChoiceColors}
+              buttonColors={draggableButtonColorsConfig}
             />
           </View>
         );
@@ -395,7 +452,8 @@ const Screen = () => {
               useDestinationComponent={ThirdConversationDestinationComponent}
               gameSet={thirdGameSet}
               onCorrectAnswer={onCorrectAnswer}
-              sectionColorTheme={sectionColor}
+              sectionColorTheme={customAudioChoiceColors}
+              buttonColors={draggableButtonColorsConfig}
             />
           </View>
         );
@@ -458,87 +516,109 @@ const Screen = () => {
               useDestinationComponent={FourthConversationDestinationComponent}
               gameSet={forthGameSet}
               onCorrectAnswer={onCorrectAnswer}
-              sectionColorTheme={sectionColor}
+              sectionColorTheme={customAudioChoiceColors}
+              buttonColors={draggableButtonColorsConfig}
             />
           </View>
         );
       default:
-        return (
-          // TODO: Scrollable view
-          <View style={{ flex: 1 }}>
-            <CompletedCard
-              gender="female"
-              englishAudioFile={requireEnglishConversationAudio(
-                "part1",
-                "female",
-              )}
-              nativeAudioFile={requireNativeConversationAudio(
-                "part1",
-                "female",
-              )}
-            />
-            <CompletedCard
-              gender="male"
-              englishAudioFile={requireEnglishConversationAudio(
-                "part2",
-                "male",
-              )}
-              nativeAudioFile={requireNativeConversationAudio("part2", "male")}
-            />
-            <CompletedCard
-              gender="female"
-              englishAudioFile={requireEnglishConversationAudio(
-                "part3",
-                "female",
-              )}
-              nativeAudioFile={requireNativeConversationAudio(
-                "part3",
-                "female",
-              )}
-            />
-            <CompletedCard
-              gender="male"
-              englishAudioFile={requireEnglishConversationAudio(
-                "part4",
-                "male",
-              )}
-              nativeAudioFile={requireNativeConversationAudio("part4", "male")}
-            />
-          </View>
-        );
+        return null;
     }
   };
 
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "audio-ordering",
     module: "conversation-module",
   });
 
-  // TODO: Maybe use some of these styles
-  // <SafeAreaView>
-  //   <View className="flex h-full items-center ">
-  //     <View className="flex w-full flex-1 flex-col   ">
-  //       <DragDrop activeActivity={activeActivity} />
-
   return (
-    <SafeAreaView style={globalStyles.safeAreaView}>
-      <View
-        style={{
-          height: HEIGHT - (insets.bottom + insets.top + (IS_IOS ? 96 : 112)),
-          flex: 1,
-          backgroundColor: APP_COLORS.backgroundgrey,
-        }}
-      >
+    <SafeAreaView
+      style={globalStyles.safeAreaView}
+      edges={["top", "right", "left"]}
+    >
+      <View style={{ flex: 1, backgroundColor: APP_COLORS.backgroundgrey }}>
         <GuidanceAudioHeader
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
+          onStopGuide={stopGuideAudio}
           onPressGuide={playGuideAudio}
           showLetterCaseSwitch={false}
         />
-        <View style={styles.overflowContainer}>
-          {/* Bottom-anchored content that can overflow at the top */}
-          <View style={styles.bottomAnchoredContent}>{renderContent()}</View>
-        </View>
+
+        {dialogueCounter >= 4 ? (
+          <View style={styles.completedViewContainer}>
+            <ScrollView
+              contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
+            >
+              <View style={styles.playButtonArea}>
+                <TouchableOpacity
+                  onPress={restartGame}
+                  style={styles.playButtonWrapper}
+                >
+                  <PlayButton
+                    width={80}
+                    height={80}
+                    {...activePlayButtonColorProps}
+                  />
+                </TouchableOpacity>
+              </View>
+              <CompletedCard
+                gender="female"
+                englishAudioFile={requireEnglishConversationAudio(
+                  "part1",
+                  "female",
+                )}
+                nativeAudioFile={requireNativeConversationAudio(
+                  "part1",
+                  "female",
+                )}
+              />
+              <CompletedCard
+                gender="male"
+                englishAudioFile={requireEnglishConversationAudio(
+                  "part2",
+                  "male",
+                )}
+                nativeAudioFile={requireNativeConversationAudio(
+                  "part2",
+                  "male",
+                )}
+              />
+              <CompletedCard
+                gender="female"
+                englishAudioFile={requireEnglishConversationAudio(
+                  "part3",
+                  "female",
+                )}
+                nativeAudioFile={requireNativeConversationAudio(
+                  "part3",
+                  "female",
+                )}
+              />
+              <CompletedCard
+                gender="male"
+                englishAudioFile={requireEnglishConversationAudio(
+                  "part4",
+                  "male",
+                )}
+                nativeAudioFile={requireNativeConversationAudio(
+                  "part4",
+                  "male",
+                )}
+              />
+            </ScrollView>
+          </View>
+        ) : (
+          <View style={styles.overflowContainer}>
+            <View style={styles.bottomAnchoredContent}>
+              {renderInProgressContent()}
+            </View>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );

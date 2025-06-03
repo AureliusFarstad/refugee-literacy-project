@@ -7,7 +7,7 @@ type AnimatedLetterComponentProps = {
   name: string;
   onAnimationComplete: (letter: string) => void;
   onAnimationStart: () => void;
-  isAnimating: boolean;
+  // isAnimating: boolean;
 };
 
 type AnimatedLetterComponentRef = {
@@ -22,21 +22,23 @@ interface LetterRef {
 const AnimatedLetterComponent = forwardRef<
   AnimatedLetterComponentRef,
   AnimatedLetterComponentProps
->(({ name, onAnimationComplete, onAnimationStart, isAnimating }, ref) => {
+>(({ name, onAnimationComplete, onAnimationStart }, ref) => {
   const lowercaseRef = useRef<LetterRef>(null);
   const uppercaseRef = useRef<LetterRef>(null);
 
   console.log({ name });
 
   const animateLowercase = () => {
-    if (!isAnimating && lowercaseRef.current && lowercaseRef.current.play) {
+    if (lowercaseRef.current && lowercaseRef.current.play) {
+      // !isAnimating &&
       onAnimationStart();
       lowercaseRef.current.play();
     }
   };
 
   const animateUppercase = () => {
-    if (!isAnimating && uppercaseRef.current && uppercaseRef.current.play) {
+    if (uppercaseRef.current && uppercaseRef.current.play) {
+      // !isAnimating &&
       onAnimationStart();
       uppercaseRef.current.play();
     }
@@ -77,10 +79,10 @@ const AnimatedLetterComponent = forwardRef<
   return (
     <View className="z-100 absolute flex size-full flex-row justify-around border-purple-500">
       <View className="mb-16 flex w-[128px] items-center justify-center">
-        {renderLowercaseLetter()}
+        {renderUppercaseLetter()}
       </View>
       <View className="mb-16 flex w-[132px] items-center justify-center">
-        {renderUppercaseLetter()}
+        {renderLowercaseLetter()}
       </View>
     </View>
   );

@@ -7,6 +7,7 @@ import {
   requireEnglishAudioForWord,
   requireNativeAudioForWord,
 } from "@/assets/blending/index";
+import { APP_COLORS } from "@/constants/routes";
 import { Text } from "@/ui";
 import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
@@ -74,13 +75,13 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
     },
     iconButton: {
       position: "absolute",
-      width: 40,
-      height: 40,
+      width: 50,
+      height: 50,
     },
     nativeButtonOverlay: {
       position: "absolute",
-      top: -10,
-      right: -10,
+      top: -5,
+      right: -5,
       width: 60,
       height: 60,
       borderRadius: 30,
@@ -91,20 +92,16 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       alignItems: "center",
       justifyContent: "center",
       width: 180,
-      height: 40,
-      borderRadius: 20,
+      height: 50,
+      borderRadius: 25,
       backgroundColor: colors.primary_color,
       // alignSelf: "center",
     },
-    text: {
-      color: colors.off_black_color,
-      fontWeight: "bold",
-      textAlign: "center",
-    },
     word: {
-      fontSize: 24,
-      height: 40, // TODO: might change with font.
-      lineHeight: 40,
+      fontFamily: "Thomas",
+      fontSize: 42,
+      lineHeight: 48,
+      color: APP_COLORS.offblack,
     },
     lettersContainer: {
       paddingTop: 18,
@@ -114,15 +111,18 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
       gap: 25,
     },
     letterButton: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
+      width: 50,
+      height: 50,
+      borderRadius: 25,
       backgroundColor: colors.primary_color,
       justifyContent: "center",
       alignItems: "center",
     },
     letter: {
-      fontSize: 20,
+      fontFamily: "Thomas",
+      fontSize: 42,
+      lineHeight: 48,
+      color: APP_COLORS.offblack,
     },
   });
 
@@ -141,8 +141,8 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
           <View style={[styles.iconButton, { top: 0, right: 0 }]}>
             <AnimatedAudioButton
               audioSource={requireNativeAudioForWord(content.word)}
-              width={40}
-              height={40}
+              width={50}
+              height={50}
             >
               <NativeButton {...iconButtonProps} />
             </AnimatedAudioButton>
@@ -153,13 +153,13 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
         <AnimatedAudioButton
           audioSource={requireEnglishAudioForWord(content.word)}
           width={180}
-          height={40}
+          height={50}
         >
           <View style={styles.wordContainer}>
             <View style={[styles.iconButton, { left: 0 }]}>
               <EnglishButton {...iconButtonProps} />
             </View>
-            <Text style={[styles.text, styles.word]}>
+            <Text style={[styles.word]}>
               {isLowercase
                 ? content.word.toLowerCase()
                 : content.word.toUpperCase()}
@@ -173,11 +173,11 @@ export const BlendingFlashCard = ({ content, colors }: FlashCardProps) => {
             <AnimatedAudioButton
               key={letter} // TODO: do we need this?
               audioSource={ALPHABET_AUDIO_SOURCES[letter].sound}
-              width={40}
-              height={40}
+              width={50}
+              height={50}
             >
               <View style={styles.letterButton}>
-                <Text style={[styles.text, styles.letter]}>
+                <Text style={[styles.letter]}>
                   {isLowercase ? letter.toLowerCase() : letter.toUpperCase()}
                 </Text>
               </View>

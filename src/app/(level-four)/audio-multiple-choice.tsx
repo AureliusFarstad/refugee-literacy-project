@@ -39,6 +39,7 @@ import {
   BOTTOM_TAB_HEIGHT,
   HEADER_HEIGHT,
   HEIGHT,
+  IS_SMALL_SCREEN,
   WIDTH,
 } from "@/utils/layout";
 
@@ -129,6 +130,7 @@ const DISABLED_COLORS: ButtonColorProps = {
 interface DraggableButtonProps {
   item: ButtonItem;
   disabled?: boolean;
+  isLockedByGame?: boolean;
   onAudioPlay: () => void;
   onDragStart: () => void;
   onDragEnd: (position: Position, isInTarget: boolean) => void;
@@ -185,18 +187,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: APP_COLORS.backgroundgrey,
   },
   flashcardContainer: {
     flex: 1,
     justifyContent: "center", // Center the flashcard vertically
   },
   flashcard: {
-    height: FLASHCARD_HEIGHT,
+    height: IS_SMALL_SCREEN ? FLASHCARD_HEIGHT - 40 : FLASHCARD_HEIGHT,
     borderWidth: 2,
     borderColor: SECTION_COLOR.sectionPrimaryColor,
     borderRadius: 12,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: APP_COLORS.offwhite,
     marginHorizontal: 16,
     padding: 16,
     flexDirection: "column",
@@ -209,7 +211,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: "100%",
-    height: 200,
+    height: IS_SMALL_SCREEN ? 160 : 200,
     backgroundColor: APP_COLORS.backgroundgrey,
     borderRadius: 10,
     justifyContent: "center",
@@ -223,8 +225,8 @@ const styles = StyleSheet.create({
   },
   nativeButtonOverlay: {
     position: "absolute",
-    top: -10,
-    right: -10,
+    top: -5,
+    right: -5,
     width: 60,
     height: 60,
     borderRadius: 30,
@@ -232,8 +234,8 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     position: "absolute",
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
   },
   iconButtonActive: {
     backgroundColor: SECTION_COLOR.sectionSecondaryColor,
@@ -301,6 +303,7 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   breatheDuration = 2000,
   animationBorderColor = "#4CAF50", // TODO: Refactor our green color?
   animationBorderWidth = 4,
+  isLockedByGame = false,
 }) => {
   // Track position of button
   const translateX: SharedValue<number> = useSharedValue<number>(0);
@@ -466,22 +469,22 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
   // Define tap gesture
   const tapGesture = Gesture.Tap()
     .onStart(() => {
-      if (!isDragging.value && !disabled && !isPlaying) {
+      if (!isDragging.value && !disabled && !isLockedByGame && !isPlaying) {
         runOnJS(onAudioPlay)();
       }
     })
     .maxDuration(250)
-    .enabled(!disabled);
+    .enabled(!disabled && !isLockedByGame);
 
   // Define drag gesture
   const dragGesture = Gesture.Pan()
     .onStart(() => {
-      if (disabled) return;
+      if (disabled || isLockedByGame) return;
       touchStartTime.value = Date.now();
       savedPosition.value = { x: translateX.value, y: translateY.value };
     })
     .onUpdate((event) => {
-      if (disabled) return;
+      if (disabled || isLockedByGame) return;
       if (Date.now() - touchStartTime.value > DRAG_DELAY_MS) {
         if (!isDragging.value) {
           isDragging.value = true;
@@ -493,7 +496,15 @@ const DraggableButton: React.FC<DraggableButtonProps> = ({
       }
     })
     .onEnd((event) => {
-      if (disabled) return;
+      if (disabled || isLockedByGame) {
+        // If locked or disabled, and it was dragging, reset to origin
+        if (isDragging.value) {
+          translateX.value = withSpring(0, SPRING_CONFIG);
+          translateY.value = withSpring(0, SPRING_CONFIG);
+          isDragging.value = false;
+        }
+        return;
+      }
       if (isDragging.value) {
         const droppedX: number = event.absoluteX;
         const droppedY: number = event.absoluteY;
@@ -637,6 +648,10 @@ const DraggableAudioGame: React.FC = () => {
   const [currentGameSetIndex, setCurrentGameSetIndex] = useState(0);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
 
+  // ADDED: State to lock interactions globally for the game
+  const [isGameInteractionLocked, setIsGameInteractionLocked] =
+    useState<boolean>(false);
+
   // Reference to target drop circle
   const dropCircleRef = useRef<View>(null);
 
@@ -699,6 +714,7 @@ const DraggableAudioGame: React.FC = () => {
     setDisabledButtons([]);
     setPlacedButtonId(null);
     setIsCorrectAnswer(null);
+    setIsGameInteractionLocked(false);
 
     // Schedule the next game setup after state updates have completed
     setTimeout(() => {
@@ -868,6 +884,7 @@ const DraggableAudioGame: React.FC = () => {
       setIsCardActive(false);
 
       if (isInTarget) {
+        setIsGameInteractionLocked(true);
         setPlacedButtonId(buttonId);
         const isCorrect = buttonId === CORRECT_BUTTON_ID;
         setIsCorrectAnswer(isCorrect);
@@ -883,19 +900,25 @@ const DraggableAudioGame: React.FC = () => {
               currentSound.current = null;
             }
             setPlayingButtonId(null);
-
-            // Move to next game set, loop back to beginning if at end
+            // Game lock will be released by resetAllButtonPositions when game set changes
             setCurrentGameSetIndex(
               (prevIndex) => (prevIndex + 1) % generatedGameSets.length,
             );
           }, 1500); // Wait 1.5 seconds before advancing
+        } else {
+          // Incorrect answer, feedback (and subsequent call to onDragEnd with isInTarget:false)
+          // is handled by DraggableButton's useEffect. The lock will be released there.
         }
       } else if (placedButtonId === buttonId) {
+        // This button was the one in the target and is now being reset/removed
         setPlacedButtonId(null);
         setIsCorrectAnswer(null);
+        setIsGameInteractionLocked(false);
       }
+      // If a button is just dragged and dropped outside, and it wasn't the 'placedButtonId',
+      // we DON'T change isGameInteractionLocked, as another button might still be in the target and being processed.
     },
-    [placedButtonId],
+    [placedButtonId], // CORRECT_BUTTON_ID is from closure, not a direct dep for useCallback here
   );
 
   return (
@@ -931,8 +954,8 @@ const DraggableAudioGame: React.FC = () => {
                 audioSource={requireCompleteNativeAudioForWord(
                   CORRECT_BUTTON_ID,
                 )}
-                width={40}
-                height={40}
+                width={50}
+                height={50}
               >
                 <NativeButton {...NATIVE_BUTTON_COLOR} />
               </AnimatedAudioButton>
@@ -965,6 +988,7 @@ const DraggableAudioGame: React.FC = () => {
             isPlaced={placedButtonId === item.id}
             isCorrect={placedButtonId === item.id ? isCorrectAnswer : null}
             disabled={disabledButtons.includes(item.id)}
+            isLockedByGame={isGameInteractionLocked}
             isPlaying={playingButtonId === item.id}
             onMarkDisabled={(buttonId: string) =>
               setDisabledButtons((prev) => [...prev, buttonId])
@@ -977,6 +1001,15 @@ const DraggableAudioGame: React.FC = () => {
 };
 
 const Screen = () => {
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
+    screenName: "audio-multiple-choice",
+    module: "vocabulary-module",
+  });
+
   const screenStyles = StyleSheet.create({
     content: {
       flex: 1,
@@ -984,11 +1017,6 @@ const Screen = () => {
       flexDirection: "column",
       justifyContent: "space-between", // Space between header, game, bottom tab bar
     },
-  });
-
-  const { isPlaying, playGuideAudio } = useGuideAudio({
-    screenName: "audio-multiple-choice",
-    module: "vocabulary-module",
   });
 
   return (
@@ -999,8 +1027,9 @@ const Screen = () => {
       <View style={screenStyles.content}>
         <GuidanceAudioHeader
           title="Audio Multiple Choice"
-          isPlaying={isPlaying}
+          isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
+          onStopGuide={stopGuideAudio}
           showLetterCaseSwitch={false}
         />
         <DraggableAudioGame />

@@ -1,16 +1,19 @@
 import clsx from "clsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Alert, View } from "react-native";
+import { Platform, View } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import Svg, { Path as SvgPath } from "react-native-svg";
 
+import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
 import { useLevelStore } from "@/core/store/levels";
 import { Text, TouchableOpacity } from "@/ui";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
+import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
+import { ScissorButton } from "@/ui/icons/circular/scissor-button";
 import { globalStyles } from "@/ui/styles";
 import { shuffleLetters } from "@/utils/level-one";
 
@@ -31,7 +34,11 @@ const LetterTapMatching = () => {
 
   const insets = useSafeAreaInsets();
 
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "letter-matching",
     module: "alphabet-module",
   });
@@ -48,6 +55,8 @@ const LetterTapMatching = () => {
     right: null,
   });
   const [paths, setPaths] = useState<Path[]>([]);
+  const [gameCompleted, setGameCompleted] = useState(false);
+  const [showScissorButton, setShowScissorButton] = useState(false);
 
   // @ts-ignore
   const tappedPath = useRef<Path>();
@@ -62,6 +71,9 @@ const LetterTapMatching = () => {
       pageY: number;
     }[]
   >();
+
+  const svgContainerRef = useRef<View>(null);
+  const [svgScreenOrigin, setSvgScreenOrigin] = useState({ x: 0, y: 0 });
 
   const initializeGame = useCallback(() => {
     const letters = shuffleLetters(activeActivity.current.letters ?? []);
@@ -80,6 +92,8 @@ const LetterTapMatching = () => {
     setSelectedLeft(null);
     setMatchedPairs([]);
     setPaths([]);
+    setGameCompleted(false);
+    setShowScissorButton(false);
   }, []);
 
   useEffect(() => {
@@ -109,7 +123,7 @@ const LetterTapMatching = () => {
 
       // Check if all pairs are matched
       if (matchedPairs.length + 1 === leftLetters.length) {
-        Alert.alert("Level", "Completed");
+        setGameCompleted(true);
         const updatedLevels = levels.map((level: ILevel) => {
           if (level.id !== levels[0].id) return level;
 
@@ -173,10 +187,31 @@ const LetterTapMatching = () => {
   };
 
   useEffect(() => {
-    if (matchedPairs.length === activeActivity.current.letters?.length) {
-      Alert.alert("Level", "Completed", [{ text: "Done" }]);
+    if (
+      activeActivity.current.letters &&
+      matchedPairs.length === activeActivity.current.letters?.length &&
+      matchedPairs.length > 0
+    ) {
+      setGameCompleted(true);
     }
-  }, [matchedPairs, initializeGame]);
+  }, [matchedPairs]);
+
+  useEffect(() => {
+    let timerId: number | undefined;
+    if (gameCompleted) {
+      timerId = setTimeout(() => {
+        setShowScissorButton(true);
+      }, 500);
+    } else {
+      setShowScissorButton(false);
+    }
+
+    return () => {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+    };
+  }, [gameCompleted]);
 
   const renderLetters = (
     letters: ILetter[],
@@ -214,14 +249,26 @@ const LetterTapMatching = () => {
                 );
                 if (!letterMetaInformation) return;
 
-                const offset = insets.top + 16; // Fixed offset calculation
+                const absoluteTileCenterY = letterMetaInformation.pageY + 32; // Center of the 64px TouchableOpacity
+                let yPosForPath = Math.floor(
+                  absoluteTileCenterY - svgScreenOrigin.y,
+                );
 
+                if (Platform.OS === "ios") {
+                  // Heuristic: iPhone SE has insets.top ~20. iPhone 15 has ~59.
+                  // If insets.top is significantly larger, assume it needs the special offset like iPhone 15.
+                  // TODO: KEEP INVESTIGATING THIS FIX... WORKS NOT ON ANDROID BUT NOT ALL iOS
+                  if (insets.top > 30) {
+                    // Threshold to differentiate devices needing the extra offset
+                    yPosForPath += insets.top / 2 + 2; // Add the device's own top inset, as per your iPhone 15 observation
+                  }
+                }
                 if (!isRight) {
                   tappedPath.current = {
                     pathString: "",
                     startingPoint: {
                       x1: Math.floor(letterMetaInformation.pageX) - 90,
-                      y1: Math.floor(letterMetaInformation.pageY) - offset,
+                      y1: yPosForPath,
                     },
                     endingPoint: {
                       x2: 0,
@@ -234,30 +281,35 @@ const LetterTapMatching = () => {
                   tappedPath.current = {
                     pathString: `M${tappedPath.current.startingPoint.x1},${
                       tappedPath.current.startingPoint.y1
-                    } L${letterMetaInformation.pageX - 90},${
-                      letterMetaInformation.pageY - offset
-                    }`,
+                    } L${letterMetaInformation.pageX - 90},${yPosForPath}`,
                     startingPoint: tappedPath.current?.startingPoint as {
                       x1: number;
                       y1: number;
                     },
                     endingPoint: {
                       x2: Math.floor(letterMetaInformation.pageX) - 90,
-                      y2: Math.floor(letterMetaInformation.pageY) - offset,
+                      y2: yPosForPath,
                     },
                   };
                 }
                 onPress(letter);
               }}
             >
-              <Text className="text-2xl font-bold text-white">
+              <Text
+                style={{
+                  fontFamily: "Thomas",
+                  fontSize: 42,
+                  lineHeight: 52,
+                  color: APP_COLORS.offwhite,
+                }}
+              >
                 {letter.value}
               </Text>
               <View
                 className={clsx("absolute size-4 rounded-full border-2", {
                   "right-24": isRight,
                   "left-24": !isRight,
-                  "bg-[#8AC65B] border-[#8AC65B]": matchedPairs.includes(
+                  "bg-[#62CC82] border-[#62CC82]": matchedPairs.includes(
                     letter.value.toLowerCase(),
                   ),
                   "bg-[#FF0000] border-[#FF0000]":
@@ -309,29 +361,59 @@ const LetterTapMatching = () => {
     </View>
   );
 
+  const scissorButtonColorProps: ButtonColorProps = {
+    primaryColor: SECTION_COLORS.alphabet.primary,
+    secondaryColor: SECTION_COLORS.alphabet.light,
+    offwhiteColor: APP_COLORS.offwhite,
+    offblackColor: APP_COLORS.offblack,
+    backgroundColor: APP_COLORS.backgroundgrey,
+  };
+
+  const handleScissorPress = () => {
+    initializeGame();
+  };
+
   return (
     <SafeAreaView style={globalStyles.safeAreaView}>
       <GuidanceAudioHeader
-        title="Sound"
+        title="Letter Matching"
         isPlaying={isPlayingGuidanceAudio}
         onPressGuide={playGuideAudio}
+        onStopGuide={stopGuideAudio}
         showLetterCaseSwitch={false}
       />
       <View className="relative flex flex-row justify-between bg-[#F2EFF0] px-10">
         {renderLetters(leftLetters, handleLeftLetterPress, false)}
-        <View className="z-10 flex-1">
+        <View
+          className="z-10 flex-1"
+          ref={svgContainerRef}
+          onLayout={() => {
+            svgContainerRef.current?.measure(
+              (x, y, width, height, pageX, pageY) => {
+                setSvgScreenOrigin({ x: pageX, y: pageY });
+              },
+            );
+          }}
+        >
           <Svg height="100%" width="100%">
             {paths.map((p, index) => (
               <React.Fragment key={index}>
                 <SvgPath
                   d={p.pathString}
-                  stroke="#8AC65B"
+                  stroke="#62CC82"
                   strokeWidth="2"
                   fill="none"
                 />
               </React.Fragment>
             ))}
           </Svg>
+          {showScissorButton && (
+            <View className="absolute inset-0 items-center justify-center">
+              <TouchableOpacity onPress={handleScissorPress}>
+                <ScissorButton {...scissorButtonColorProps} />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
         {renderLetters(rightLetters, handleRightLetterPress, true)}
       </View>
