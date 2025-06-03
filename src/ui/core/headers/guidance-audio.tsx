@@ -185,7 +185,7 @@ const GuidanceAudioHeader = ({
 
   return (
     <View
-      className="flex-row items-center justify-between p-4"
+      className="flex-row items-center justify-between py-2 px-4"
       style={{
         backgroundColor: APP_COLORS.offwhite,
       }}
@@ -202,6 +202,7 @@ const GuidanceAudioHeader = ({
       </View>
       <View className="flex-row items-center space-x-4">
         <AnimatedAudioButton
+          className="p-2"
           onPress={onPressGuide || (() => {})}
           isPlaying={isPlaying} // isPlaying is used here for the animation
           width={SIZE}
