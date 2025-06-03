@@ -105,7 +105,11 @@ const LetterFormation = () => {
     setIsAnimating(true);
   };
 
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "letter-formation",
     module: "alphabet-module",
   });
@@ -143,6 +147,7 @@ const LetterFormation = () => {
       <GuidanceAudioHeader
         title="Formation"
         onPressGuide={playGuideAudio}
+        onStopGuide={stopGuideAudio}
         isPlaying={isPlayingGuidanceAudio}
         showLetterCaseSwitch={true}
       />

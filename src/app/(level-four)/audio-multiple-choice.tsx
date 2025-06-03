@@ -1001,6 +1001,15 @@ const DraggableAudioGame: React.FC = () => {
 };
 
 const Screen = () => {
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
+    screenName: "audio-multiple-choice",
+    module: "vocabulary-module",
+  });
+
   const screenStyles = StyleSheet.create({
     content: {
       flex: 1,
@@ -1008,11 +1017,6 @@ const Screen = () => {
       flexDirection: "column",
       justifyContent: "space-between", // Space between header, game, bottom tab bar
     },
-  });
-
-  const { isPlaying, playGuideAudio } = useGuideAudio({
-    screenName: "audio-multiple-choice",
-    module: "vocabulary-module",
   });
 
   return (
@@ -1023,8 +1027,9 @@ const Screen = () => {
       <View style={screenStyles.content}>
         <GuidanceAudioHeader
           title="Audio Multiple Choice"
-          isPlaying={isPlaying}
+          isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
+          onStopGuide={stopGuideAudio}
           showLetterCaseSwitch={false}
         />
         <DraggableAudioGame />

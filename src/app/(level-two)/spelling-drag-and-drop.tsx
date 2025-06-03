@@ -385,7 +385,11 @@ const Screen = () => {
     createSpellingDestinationComponent,
   ]);
 
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "spelling-drag-and-drop",
     module: "blending-module",
   });
@@ -396,9 +400,10 @@ const Screen = () => {
       edges={["top", "right", "left"]}
     >
       <GuidanceAudioHeader
-        title="Sound"
+        title="Spelling Game"
         isPlaying={isPlayingGuidanceAudio}
         onPressGuide={playGuideAudio}
+        onStopGuide={stopGuideAudio}
         showLetterCaseSwitch={true}
       />
       {spellingContent}

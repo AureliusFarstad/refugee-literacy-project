@@ -1,7 +1,6 @@
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import type { ReactNode } from "react";
-import { useCallback } from "react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
   cancelAnimation,
@@ -154,6 +153,7 @@ function AnimatedAudioButton({
 type HeaderProps = {
   title: string;
   onPressGuide?: () => void;
+  onStopGuide?: () => void;
   isPlaying: boolean;
   showLetterCaseSwitch?: boolean;
 };
@@ -161,13 +161,27 @@ type HeaderProps = {
 const GuidanceAudioHeader = ({
   title,
   onPressGuide,
+  onStopGuide,
   isPlaying,
   showLetterCaseSwitch = true,
 }: HeaderProps) => {
   const navigateToHome = useCallback(() => {
     router.navigate("/");
   }, []);
+
   console.log(title);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Effect runs when screen comes into focus
+      return () => {
+        // Cleanup runs when screen loses focus or onStopGuide changes
+        if (onStopGuide) {
+          onStopGuide();
+        }
+      };
+    }, [onStopGuide]), // Dependency: only onStopGuide
+  );
 
   return (
     <View
@@ -189,7 +203,7 @@ const GuidanceAudioHeader = ({
       <View className="flex-row items-center space-x-4">
         <AnimatedAudioButton
           onPress={onPressGuide || (() => {})}
-          isPlaying={isPlaying}
+          isPlaying={isPlaying} // isPlaying is used here for the animation
           width={SIZE}
           height={SIZE}
           borderColor={APP_COLORS.green}

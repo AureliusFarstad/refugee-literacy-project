@@ -47,7 +47,11 @@ export default function FlashCardContainer() {
     },
   });
 
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "blending-flashcard",
     module: "blending-module",
   });
@@ -61,6 +65,7 @@ export default function FlashCardContainer() {
         title="Sound"
         isPlaying={isPlayingGuidanceAudio}
         onPressGuide={playGuideAudio}
+        onStopGuide={stopGuideAudio}
         showLetterCaseSwitch={true}
       />
       <FlatList

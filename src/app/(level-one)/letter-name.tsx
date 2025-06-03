@@ -159,7 +159,11 @@ const RenderOption = (
 };
 
 const LetterNameScreen = () => {
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "letter-name",
     module: "alphabet-module",
   });
@@ -178,6 +182,7 @@ const LetterNameScreen = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
+          onStopGuide={stopGuideAudio}
           showLetterCaseSwitch={true}
         />
         <WordChoiceScreen

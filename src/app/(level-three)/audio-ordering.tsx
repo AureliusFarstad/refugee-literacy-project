@@ -526,7 +526,11 @@ const Screen = () => {
     }
   };
 
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "audio-ordering",
     module: "conversation-module",
   });
@@ -540,6 +544,7 @@ const Screen = () => {
         <GuidanceAudioHeader
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
+          onStopGuide={stopGuideAudio}
           onPressGuide={playGuideAudio}
           showLetterCaseSwitch={false}
         />

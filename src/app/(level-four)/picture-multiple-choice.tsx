@@ -145,7 +145,7 @@ const RenderOption = (
 
 const AudioMultipleChoice = () => {
   const insets = useSafeAreaInsets();
-  const { isPlaying, playGuideAudio } = useGuideAudio({
+  const { isPlaying, playGuideAudio, stopGuideAudio } = useGuideAudio({
     screenName: "picture-multiple-choice",
     module: "vocabulary-module",
   });
@@ -163,6 +163,7 @@ const AudioMultipleChoice = () => {
           title="Sound"
           isPlaying={isPlaying}
           onPressGuide={playGuideAudio}
+          onStopGuide={stopGuideAudio}
           showLetterCaseSwitch={false}
         />
 

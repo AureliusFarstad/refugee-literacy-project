@@ -32,7 +32,7 @@ export default function FlashCardContainer() {
   });
 
   // TODO: update with correct resource
-  const { isPlaying, playGuideAudio } = useGuideAudio({
+  const { isPlaying, playGuideAudio, stopGuideAudio } = useGuideAudio({
     screenName: "flashcard",
     module: "vocabulary-module",
   });
@@ -46,6 +46,7 @@ export default function FlashCardContainer() {
         title="Blending Flashcards"
         isPlaying={isPlaying}
         onPressGuide={playGuideAudio}
+        onStopGuide={stopGuideAudio}
         showLetterCaseSwitch={false}
       />
       <FlatList

@@ -34,7 +34,11 @@ const LetterTapMatching = () => {
 
   const insets = useSafeAreaInsets();
 
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "letter-matching",
     module: "alphabet-module",
   });
@@ -357,11 +361,11 @@ const LetterTapMatching = () => {
     </View>
   );
 
-  const scissorButtonColors: ButtonColorProps = {
+  const scissorButtonColorProps: ButtonColorProps = {
     primaryColor: SECTION_COLORS.alphabet.primary,
+    secondaryColor: SECTION_COLORS.alphabet.light,
     offwhiteColor: APP_COLORS.offwhite,
     offblackColor: APP_COLORS.offblack,
-    secondaryColor: SECTION_COLORS.alphabet.light,
     backgroundColor: APP_COLORS.backgroundgrey,
   };
 
@@ -372,9 +376,10 @@ const LetterTapMatching = () => {
   return (
     <SafeAreaView style={globalStyles.safeAreaView}>
       <GuidanceAudioHeader
-        title="Sound"
+        title="Letter Matching"
         isPlaying={isPlayingGuidanceAudio}
         onPressGuide={playGuideAudio}
+        onStopGuide={stopGuideAudio}
         showLetterCaseSwitch={false}
       />
       <View className="relative flex flex-row justify-between bg-[#F2EFF0] px-10">
@@ -405,7 +410,7 @@ const LetterTapMatching = () => {
           {showScissorButton && (
             <View className="absolute inset-0 items-center justify-center">
               <TouchableOpacity onPress={handleScissorPress}>
-                <ScissorButton {...scissorButtonColors} />
+                <ScissorButton {...scissorButtonColorProps} />
               </TouchableOpacity>
             </View>
           )}

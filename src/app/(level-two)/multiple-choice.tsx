@@ -166,7 +166,11 @@ const RenderOption = (
 };
 
 const AudioMultipleChoice = () => {
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "multiple-choice",
     module: "blending-module",
   });
@@ -185,6 +189,7 @@ const AudioMultipleChoice = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
+          onStopGuide={stopGuideAudio}
           showLetterCaseSwitch={true}
         />
         <WordChoiceScreen

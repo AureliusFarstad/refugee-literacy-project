@@ -1024,7 +1024,11 @@ const DraggableAudioGame: React.FC = () => {
 
 // Update the Screen component styles
 const Screen = () => {
-  const { playGuideAudio, isPlaying: isPlayingGuidanceAudio } = useGuideAudio({
+  const {
+    playGuideAudio,
+    stopGuideAudio,
+    isPlaying: isPlayingGuidanceAudio,
+  } = useGuideAudio({
     screenName: "audio-multiple-choice",
     module: "blending-module",
   });
@@ -1048,6 +1052,7 @@ const Screen = () => {
           title="Sound"
           isPlaying={isPlayingGuidanceAudio}
           onPressGuide={playGuideAudio}
+          onStopGuide={stopGuideAudio}
           showLetterCaseSwitch={true}
         />
         <DraggableAudioGame />

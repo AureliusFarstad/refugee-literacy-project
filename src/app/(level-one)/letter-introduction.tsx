@@ -101,7 +101,7 @@ const LetterIntroduction = () => {
     // setIsAnimating(true);
   };
 
-  const { playGuideAudio, isPlaying } = useGuideAudio({
+  const { playGuideAudio, stopGuideAudio, isPlaying } = useGuideAudio({
     screenName: "letter-introduction",
     module: "alphabet-module",
   });
@@ -251,9 +251,10 @@ const LetterIntroduction = () => {
       edges={["top", "left", "right"]}
     >
       <GuidanceAudioHeader
-        title="Sound"
+        title="Letter Introduction"
         isPlaying={isPlaying}
         onPressGuide={playGuideAudio}
+        onStopGuide={stopGuideAudio}
         showLetterCaseSwitch={false}
       />
       <View className="flex flex-1 flex-col bg-[#F2EFF0] pb-4">
