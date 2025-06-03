@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: APP_COLORS.backgroundgrey,
   },
   flashcardContainer: {
     flex: 1,
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: SECTION_COLOR.sectionPrimaryColor,
     borderRadius: 12,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: APP_COLORS.offwhite,
     marginHorizontal: 16,
     padding: 16,
     flexDirection: "column",
