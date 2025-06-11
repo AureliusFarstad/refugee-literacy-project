@@ -1,10 +1,7 @@
 import clsx from "clsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Platform, View } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Path as SvgPath } from "react-native-svg";
 
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
@@ -32,8 +29,6 @@ const LetterTapMatching = () => {
   const { levels, updateLevels } = useLevelStore();
   const activeActivity = useRef(levels[0].modules[0].sections[4].activities[0]);
 
-  const insets = useSafeAreaInsets();
-
   const {
     playGuideAudio,
     stopGuideAudio,
@@ -46,6 +41,7 @@ const LetterTapMatching = () => {
   const [leftLetters, setLeftLetters] = useState<ILetter[]>([]);
   const [rightLetters, setRightLetters] = useState<ILetter[]>([]);
   const [selectedLeft, setSelectedLeft] = useState<ILetter | null>(null);
+  const [selectedRight, setSelectedRight] = useState<ILetter | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<string[]>([]);
   const [incorrectMatch, setIncorrectMatch] = useState<{
     left: string | null;
@@ -58,22 +54,9 @@ const LetterTapMatching = () => {
   const [gameCompleted, setGameCompleted] = useState(false);
   const [showScissorButton, setShowScissorButton] = useState(false);
 
-  // @ts-ignore
-  const tappedPath = useRef<Path>();
-  // @ts-ignore
-  const layoutValuesRef = useRef<
-    {
-      x: number;
-      y: number;
-      id: string;
-      value: string;
-      pageX: number;
-      pageY: number;
-    }[]
-  >();
-
+  const tappedPath = useRef<Path | undefined>(undefined);
   const svgContainerRef = useRef<View>(null);
-  const [svgScreenOrigin, setSvgScreenOrigin] = useState({ x: 0, y: 0 });
+  const dotRefs = useRef<{ [key: string]: View }>({});
 
   const initializeGame = useCallback(() => {
     const letters = shuffleLetters(activeActivity.current.letters ?? []);
@@ -90,10 +73,12 @@ const LetterTapMatching = () => {
     setLeftLetters(left);
     setRightLetters(right);
     setSelectedLeft(null);
+    setSelectedRight(null);
     setMatchedPairs([]);
     setPaths([]);
     setGameCompleted(false);
     setShowScissorButton(false);
+    dotRefs.current = {};
   }, []);
 
   useEffect(() => {
@@ -104,76 +89,71 @@ const LetterTapMatching = () => {
     return [...array].sort(() => Math.random() - 0.5);
   };
 
-  const handleLeftLetterPress = (letter: ILetter) => {
-    if (!matchedPairs.includes(letter.value)) {
-      setSelectedLeft(letter);
-    }
-  };
+  const checkAndHandleMatch = useCallback(
+    (leftLetter: ILetter, rightLetter: ILetter) => {
+      if (leftLetter.value.toUpperCase() === rightLetter.value) {
+        // Correct match
+        setMatchedPairs([...matchedPairs, leftLetter.value]);
+        if (tappedPath?.current) {
+          const updatedPaths = [...paths, tappedPath.current];
+          setPaths(updatedPaths);
+        }
+        tappedPath.current = undefined;
+        setSelectedLeft(null);
+        setSelectedRight(null);
 
-  const handleRightLetterPress = (letter: ILetter) => {
-    if (selectedLeft && selectedLeft.value.toUpperCase() === letter.value) {
-      setMatchedPairs([...matchedPairs, selectedLeft.value]);
-      if (tappedPath?.current) {
-        const updatedPaths = [...paths, tappedPath.current];
-        setPaths(updatedPaths);
-      }
-      // @ts-ignore
-      tappedPath.current = undefined;
-      setSelectedLeft(null);
+        // Check if all pairs are matched
+        if (matchedPairs.length + 1 === leftLetters.length) {
+          setGameCompleted(true);
+          const updatedLevels = levels.map((level: ILevel) => {
+            if (level.id !== levels[0].id) return level;
 
-      // Check if all pairs are matched
-      if (matchedPairs.length + 1 === leftLetters.length) {
-        setGameCompleted(true);
-        const updatedLevels = levels.map((level: ILevel) => {
-          if (level.id !== levels[0].id) return level;
+            const _updatedModules = level.modules.map((sublevel) => {
+              if (sublevel.id !== levels[0].modules[0].id) return sublevel;
 
-          const _updatedModules = level.modules.map((sublevel) => {
-            if (sublevel.id !== levels[0].modules[0].id) return sublevel;
+              const _updatedSections = sublevel.sections.map(
+                (section: ISection) => {
+                  if (section.id !== levels[0].modules[0].sections[4].id)
+                    return section;
 
-            const _updatedSections = sublevel.sections.map(
-              (section: ISection) => {
-                if (section.id !== levels[0].modules[0].sections[4].id)
-                  return section;
+                  const _updatedActivities = section.activities.map(
+                    (activity: IActivity) => {
+                      if (activity.id !== activeActivity.current.id)
+                        return activity;
 
-                const _updatedActivities = section.activities.map(
-                  (activity: IActivity) => {
-                    if (activity.id !== activeActivity.current.id)
-                      return activity;
+                      return {
+                        ...activity,
+                        numberOfTimesCorrectAnswerGiven:
+                          activity.numberOfTimesCorrectAnswerGiven + 1,
+                      };
+                    },
+                  );
 
-                    return {
-                      ...activity,
-                      numberOfTimesCorrectAnswerGiven:
-                        activity.numberOfTimesCorrectAnswerGiven + 1,
-                    };
-                  },
-                );
+                  return {
+                    ...section,
+                    activities: _updatedActivities,
+                  };
+                },
+              );
 
-                return {
-                  ...section,
-                  activities: _updatedActivities,
-                };
-              },
-            );
+              return {
+                ...sublevel,
+                sections: _updatedSections,
+              };
+            });
 
             return {
-              ...sublevel,
-              sections: _updatedSections,
+              ...level,
+              modules: _updatedModules,
             };
           });
-
-          return {
-            ...level,
-            modules: _updatedModules,
-          };
-        });
-        updateLevels(updatedLevels);
-      }
-    } else {
-      // Handle incorrect match - flash red for 400ms
-      if (selectedLeft) {
+          updateLevels(updatedLevels);
+        }
+      } else {
+        // Incorrect match
         setIncorrectMatch({
-          left: selectedLeft.id,
-          right: letter.id,
+          left: leftLetter.id,
+          right: rightLetter.id,
         });
         setTimeout(() => {
           setIncorrectMatch({
@@ -181,7 +161,36 @@ const LetterTapMatching = () => {
             right: null,
           });
         }, 500);
+        setSelectedLeft(null);
+        setSelectedRight(null);
+        tappedPath.current = undefined;
       }
+    },
+    [matchedPairs, paths, leftLetters.length, levels, updateLevels],
+  );
+
+  const handleLeftLetterPress = (letter: ILetter) => {
+    if (matchedPairs.includes(letter.value)) return;
+
+    if (selectedRight) {
+      // Right letter already selected, check for match
+      checkAndHandleMatch(letter, selectedRight);
+    } else {
+      // Select this left letter
+      setSelectedLeft(letter);
+      setSelectedRight(null);
+    }
+  };
+
+  const handleRightLetterPress = (letter: ILetter) => {
+    if (matchedPairs.includes(letter.value.toLowerCase())) return;
+
+    if (selectedLeft) {
+      // Left letter already selected, check for match
+      checkAndHandleMatch(selectedLeft, letter);
+    } else {
+      // Select this right letter
+      setSelectedRight(letter);
       setSelectedLeft(null);
     }
   };
@@ -233,66 +242,79 @@ const LetterTapMatching = () => {
                     incorrectMatch.left === letter.id ||
                     incorrectMatch.right === letter.id,
                   "bg-[#7471F0]":
-                    selectedLeft?.id === letter.id &&
+                    (selectedLeft?.id === letter.id ||
+                      selectedRight?.id === letter.id) &&
                     incorrectMatch.left !== letter.id &&
                     incorrectMatch.right !== letter.id,
                   "bg-[#C385F8]":
                     !matchedPairs.includes(letter.value.toLowerCase()) &&
                     selectedLeft?.id !== letter.id &&
+                    selectedRight?.id !== letter.id &&
                     incorrectMatch.left !== letter.id &&
                     incorrectMatch.right !== letter.id,
                 },
               )}
               onPress={() => {
-                const letterMetaInformation = layoutValuesRef.current?.find(
-                  (item) => item.value === letter.value,
-                );
-                if (!letterMetaInformation) return;
+                // Get dot and SVG positions directly
+                const dotRef = dotRefs.current[letter.id];
+                if (!dotRef || !svgContainerRef.current) return;
 
-                const absoluteTileCenterY = letterMetaInformation.pageY + 32; // Center of the 64px TouchableOpacity
-                let yPosForPath = Math.floor(
-                  absoluteTileCenterY - svgScreenOrigin.y,
-                );
+                Promise.all([
+                  new Promise<{
+                    x: number;
+                    y: number;
+                    width: number;
+                    height: number;
+                  }>((resolve) => {
+                    dotRef.measure((x, y, width, height, pageX, pageY) => {
+                      resolve({ x: pageX, y: pageY, width, height });
+                    });
+                  }),
+                  new Promise<{ x: number; y: number }>((resolve) => {
+                    svgContainerRef.current!.measure(
+                      (x, y, width, height, pageX, pageY) => {
+                        resolve({ x: pageX, y: pageY });
+                      },
+                    );
+                  }),
+                ]).then(([dotPos, svgPos]) => {
+                  // Calculate dot center relative to SVG
+                  const tileCenterX = dotPos.x + dotPos.width / 2 - svgPos.x;
+                  const tileCenterY = dotPos.y + dotPos.height / 2 - svgPos.y;
 
-                if (Platform.OS === "ios") {
-                  // Heuristic: iPhone SE has insets.top ~20. iPhone 15 has ~59.
-                  // If insets.top is significantly larger, assume it needs the special offset like iPhone 15.
-                  // TODO: KEEP INVESTIGATING THIS FIX... WORKS NOT ON ANDROID BUT NOT ALL iOS
-                  if (insets.top > 30) {
-                    // Threshold to differentiate devices needing the extra offset
-                    yPosForPath += insets.top / 2 + 2; // Add the device's own top inset, as per your iPhone 15 observation
+                  // Determine if this is the first selection or completing a match
+                  const isFirstSelection = !selectedLeft && !selectedRight;
+                  const isCompletingMatch =
+                    (isRight && selectedLeft) || (!isRight && selectedRight);
+
+                  if (isFirstSelection) {
+                    // First selection - store starting point
+                    tappedPath.current = {
+                      pathString: "",
+                      startingPoint: {
+                        x1: tileCenterX,
+                        y1: tileCenterY,
+                      },
+                      endingPoint: {
+                        x2: 0,
+                        y2: 0,
+                      },
+                    };
+                  } else if (isCompletingMatch) {
+                    // Completing a match - draw line to this point
+                    if (!tappedPath.current) return;
+
+                    tappedPath.current = {
+                      pathString: `M${tappedPath.current.startingPoint.x1},${tappedPath.current.startingPoint.y1} L${tileCenterX},${tileCenterY}`,
+                      startingPoint: tappedPath.current.startingPoint,
+                      endingPoint: {
+                        x2: tileCenterX,
+                        y2: tileCenterY,
+                      },
+                    };
                   }
-                }
-                if (!isRight) {
-                  tappedPath.current = {
-                    pathString: "",
-                    startingPoint: {
-                      x1: Math.floor(letterMetaInformation.pageX) - 90,
-                      y1: yPosForPath,
-                    },
-                    endingPoint: {
-                      x2: 0,
-                      y2: 0,
-                    },
-                  };
-                } else {
-                  if (!tappedPath.current) return;
-
-                  tappedPath.current = {
-                    pathString: `M${tappedPath.current.startingPoint.x1},${
-                      tappedPath.current.startingPoint.y1
-                    } L${letterMetaInformation.pageX - 90},${yPosForPath}`,
-                    startingPoint: tappedPath.current?.startingPoint as {
-                      x1: number;
-                      y1: number;
-                    },
-                    endingPoint: {
-                      x2: Math.floor(letterMetaInformation.pageX) - 90,
-                      y2: yPosForPath,
-                    },
-                  };
-                }
-                onPress(letter);
+                  onPress(letter);
+                });
               }}
             >
               <Text
@@ -306,6 +328,11 @@ const LetterTapMatching = () => {
                 {letter.value}
               </Text>
               <View
+                ref={(ref) => {
+                  if (ref) {
+                    dotRefs.current[letter.id] = ref;
+                  }
+                }}
                 className={clsx("absolute size-4 rounded-full border-2", {
                   "right-24": isRight,
                   "left-24": !isRight,
@@ -316,43 +343,17 @@ const LetterTapMatching = () => {
                     incorrectMatch.left === letter.id ||
                     incorrectMatch.right === letter.id,
                   "bg-[#7471F0] border-[#7471F0]":
-                    selectedLeft?.id === letter.id &&
+                    (selectedLeft?.id === letter.id ||
+                      selectedRight?.id === letter.id) &&
                     incorrectMatch.left !== letter.id &&
                     incorrectMatch.right !== letter.id,
                   "border-colors-purple-500":
                     !matchedPairs.includes(letter.value.toLowerCase()) &&
                     selectedLeft?.id !== letter.id &&
+                    selectedRight?.id !== letter.id &&
                     incorrectMatch.left !== letter.id &&
                     incorrectMatch.right !== letter.id,
                 })}
-                onLayout={(e) => {
-                  e.target.measure((x, y, width, height, pageX, pageY) => {
-                    if (layoutValuesRef.current) {
-                      layoutValuesRef.current = [
-                        ...layoutValuesRef.current,
-                        {
-                          x: Math.floor(-x + pageX),
-                          y: Math.floor(y + pageY),
-                          id: letter.id,
-                          value: letter.value,
-                          pageX: Math.floor(pageX),
-                          pageY: Math.floor(pageY),
-                        },
-                      ];
-                    } else {
-                      layoutValuesRef.current = [
-                        {
-                          id: letter.id,
-                          x: Math.floor(-x + pageX),
-                          y: Math.floor(y + pageY),
-                          value: letter.value,
-                          pageX: Math.floor(pageX),
-                          pageY: Math.floor(pageY),
-                        },
-                      ];
-                    }
-                  });
-                }}
               />
             </TouchableOpacity>
           </View>
@@ -384,17 +385,7 @@ const LetterTapMatching = () => {
       />
       <View className="relative flex flex-row justify-between bg-[#F2EFF0] px-10">
         {renderLetters(leftLetters, handleLeftLetterPress, false)}
-        <View
-          className="z-10 flex-1"
-          ref={svgContainerRef}
-          onLayout={() => {
-            svgContainerRef.current?.measure(
-              (x, y, width, height, pageX, pageY) => {
-                setSvgScreenOrigin({ x: pageX, y: pageY });
-              },
-            );
-          }}
-        >
+        <View className="z-10 flex-1" ref={svgContainerRef}>
           <Svg height="100%" width="100%">
             {paths.map((p, index) => (
               <React.Fragment key={index}>
