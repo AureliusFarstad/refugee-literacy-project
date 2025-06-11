@@ -17,14 +17,30 @@ type LanguageType = "DEFAULT" | (typeof SUPPORTED_LANGUAGES)[number]["code"];
 
 interface UserState {
   language: LanguageType;
+  levelsCompleted: string[];
   setLanguage: (language: LanguageType) => void;
+  addCompletedLevel: (levelId: string) => void;
+  removeCompletedLevel: (levelId: string) => void;
+  resetLevels: () => void;
 }
 
 const useUserStore = create<UserState>()(
   persist(
     (set) => ({
       language: "DEFAULT",
+      levelsCompleted: [],
       setLanguage: (language) => set(() => ({ language })),
+      addCompletedLevel: (levelId) =>
+        set((state) => ({
+          levelsCompleted: state.levelsCompleted.includes(levelId)
+            ? state.levelsCompleted
+            : [...state.levelsCompleted, levelId],
+        })),
+      removeCompletedLevel: (levelId) =>
+        set((state) => ({
+          levelsCompleted: state.levelsCompleted.filter((id) => id !== levelId),
+        })),
+      resetLevels: () => set(() => ({ levelsCompleted: [] })),
     }),
     {
       name: "user-storage",
@@ -37,6 +53,6 @@ export const useUser = createSelectors(useUserStore);
 
 /**
  * Usage:
- * 1. const { language, setLanguage } = useUser();
+ * 1. const { language, setLanguage, levelsCompleted, addCompletedLevel, resetLevels } = useUser();
  * 2. setLanguage("zh");
  */

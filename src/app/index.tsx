@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import {
   FlatList,
   Image,
@@ -114,11 +114,8 @@ const homeStyles = StyleSheet.create({
 });
 
 const Home = () => {
-  const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
-    {},
-  );
-
-  const { language } = useUser();
+  const { language, addCompletedLevel, levelsCompleted, removeCompletedLevel } =
+    useUser();
 
   // Show language selection if no language is selected
   if (language === "DEFAULT") {
@@ -130,7 +127,9 @@ const Home = () => {
   // Happening because of svg items...
 
   const renderItem = ({ item }: { item: ILesson }) => {
-    const currentFill = checkedItems[item.id] === true ? "#62CC82" : "#D4D4D8";
+    const currentFill = levelsCompleted.includes(item.id)
+      ? "#62CC82"
+      : "#D4D4D8";
     return (
       <View className="flex flex-row items-start">
         {/* Guidance Audio Button */}
@@ -157,10 +156,11 @@ const Home = () => {
         <Pressable
           onPress={() => {
             // Toggle the checked state for this specific item
-            setCheckedItems((prev) => ({
-              ...prev,
-              [item.id]: !prev[item.id],
-            }));
+            if (levelsCompleted.includes(item.id)) {
+              removeCompletedLevel(item.id);
+            } else {
+              addCompletedLevel(item.id);
+            }
           }}
         >
           <View style={homeStyles.checkButtonStyle}>
