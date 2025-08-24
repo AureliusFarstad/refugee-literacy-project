@@ -132,8 +132,8 @@ interface AlphabetModule {
 }
 
 interface BlendingModule {
+  "blending-introduction": AudioSection;
   "audio-multiple-choice": AudioSection;
-  "blending-flashcard": AudioSection;
   "multiple-choice": AudioSection;
   "spelling-drag-and-drop": AudioSection;
 }

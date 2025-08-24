@@ -61,17 +61,17 @@ const ENGLISH_GUIDANCE_AUDIO: GuidanceType = {
     },
   },
   "blending-module": {
+    "blending-introduction": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/guidance/blending-module/blending-introduction/blending1_lesson1_info.mp3"),
+      ],
+    },
     "spelling-drag-and-drop": {
       "audio-files": [
         require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partA.mp3"),
         require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partB.mp3"),
         require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partC.mp3"),
         require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partD.mp3"),
-      ],
-    },
-    "blending-flashcard": {
-      "audio-files": [
-        require("assets/multilingual-audio/english/guidance/blending-module/blending-introduction/blending1_lesson1_info.mp3"),
       ],
     },
     "multiple-choice": {
@@ -120,7 +120,7 @@ const FARSI_GUIDANCE_AUDIO: GuidanceType = {
   "home-screen": {
     "alphabet-module": {
       "audio-files": [
-        require("assets/multilingual-audio/farsi/guidance/alphabet-module/section_letters_explanation.mp3")
+        require("assets/multilingual-audio/farsi/guidance/alphabet-module/section_letters_explanation.mp3"),
       ],
     },
     "blending-module": {
@@ -130,7 +130,7 @@ const FARSI_GUIDANCE_AUDIO: GuidanceType = {
     },
     "vocabulary-module": {
       "audio-files": [
-        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/section_vocabulary_explanation1.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/section_vocabulary_explanation1.mp3"), // AUDIO TODO: rename without 1
       ],
     },
     "conversation-module": {
@@ -175,17 +175,20 @@ const FARSI_GUIDANCE_AUDIO: GuidanceType = {
     },
   },
   "blending-module": {
+    "blending-introduction": {
+      "audio-files": [
+        require("assets/multilingual-audio/farsi/guidance/blending-module/blending-introduction/blending1_lesson1_info_partA.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/blending-module/blending-introduction/blending1_lesson1_info_partB.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/blending-module/blending-introduction/blending1_lesson1_info_partC.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/blending-module/blending-introduction/blending1_lesson1_info_partD.mp3"),
+      ],
+    },
     "spelling-drag-and-drop": {
       "audio-files": [
         require("assets/multilingual-audio/farsi/guidance/blending-module/blending-game/blending1_practice1_info_partA.mp3"),
         require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partB.mp3"), // TODO AUDIO: Missing part?
         require("assets/multilingual-audio/farsi/guidance/blending-module/blending-game/blending1_practice1_info_partC.mp3"),
         require("assets/multilingual-audio/farsi/guidance/blending-module/blending-game/blending1_practice1_info_partD.mp3"),
-      ],
-    },
-    "blending-flashcard": {
-      "audio-files": [
-        require("assets/multilingual-audio/farsi/guidance/blending-module/blending-introduction/blending1_lesson1_info.mp3"),
       ],
     },
     "multiple-choice": {
@@ -289,17 +292,17 @@ const DARI_GUIDANCE_AUDIO: GuidanceType = {
     },
   },
   "blending-module": {
+    "blending-introduction": {
+      "audio-files": [
+        require("assets/multilingual-audio/english/guidance/blending-module/blending-introduction/blending1_lesson1_info.mp3"),
+      ],
+    },
     "spelling-drag-and-drop": {
       "audio-files": [
         require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partA.mp3"),
         require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partB.mp3"),
         require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partC.mp3"),
         require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partD.mp3"),
-      ],
-    },
-    "blending-flashcard": {
-      "audio-files": [
-        require("assets/multilingual-audio/english/guidance/blending-module/blending-introduction/blending1_lesson1_info.mp3"),
       ],
     },
     "multiple-choice": {
@@ -411,7 +414,7 @@ const KURMANJI_GUIDANCE_AUDIO: GuidanceType = {
         require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partD.mp3"),
       ],
     },
-    "blending-flashcard": {
+    "blending-introduction": {
       "audio-files": [
         require("assets/multilingual-audio/english/guidance/blending-module/blending-introduction/blending1_lesson1_info.mp3"),
       ],
@@ -525,7 +528,7 @@ const SYRIAN_ARABIC_GUIDANCE_AUDIO: GuidanceType = {
         require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partD.mp3"),
       ],
     },
-    "blending-flashcard": {
+    "blending-introduction": {
       "audio-files": [
         require("assets/multilingual-audio/english/guidance/blending-module/blending-introduction/blending1_lesson1_info.mp3"),
       ],
