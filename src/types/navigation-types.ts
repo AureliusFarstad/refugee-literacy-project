@@ -7,22 +7,22 @@ export type LevelOneBottomTabRoutes = {
 };
 export type LevelTwoBottomTabRoutes = {
   "blending-introduction": undefined;
-  "audio-multiple-choice": undefined;
-  "multiple-choice": undefined;
-  "spelling-drag-and-drop": undefined;
+  "multiple-choice-tab": undefined;
+  "audio-multiple-choice-tab": undefined;
+  "spelling-tab": undefined;
 };
 
 export type LevelThreeBottomTabRoutes = {
-  listening: undefined;
+  "listening-tab": undefined;
   "video-explanation": undefined;
-  "audio-ordering": undefined;
+  "audio-ordering-tab": undefined;
 };
 
 export type LevelFourBottomTabRoutes = {
-  flashcard: undefined;
-  "picture-multiple-choice": undefined;
-  "audio-multiple-choice": undefined;
+  "flashcards-tab": undefined;
   "video-explanation": undefined;
+  "picture-multiple-choice-tab": undefined;
+  "audio-multiple-choice-tab": undefined;
 };
 
 export type CombinedRoutes =

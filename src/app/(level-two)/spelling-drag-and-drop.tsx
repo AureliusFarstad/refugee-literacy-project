@@ -390,7 +390,7 @@ const Screen = () => {
     stopGuideAudio,
     isPlaying: isPlayingGuidanceAudio,
   } = useGuideAudio({
-    screenName: "spelling-drag-and-drop",
+    screenName: "spelling-tab",
     module: "blending-module",
   });
 

@@ -33,8 +33,8 @@ type TabType = {
 
 const tabs: TabType[] = [
   {
-    name: "blending-flashcard",
-    label: "blending-flashcard",
+    name: "blending-flashcard-tab",
+    label: "blending-flashcard-tab",
     icon: TeacherIcon,
   },
   {

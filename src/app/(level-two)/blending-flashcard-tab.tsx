@@ -52,7 +52,7 @@ export default function FlashCardContainer() {
     stopGuideAudio,
     isPlaying: isPlayingGuidanceAudio,
   } = useGuideAudio({
-    screenName: "blending-flashcard",
+    screenName: "blending-introduction",
     module: "blending-module",
   });
 
