@@ -120,27 +120,27 @@ const FARSI_GUIDANCE_AUDIO: GuidanceType = {
   "home-screen": {
     "alphabet-module": {
       "audio-files": [
-        require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/alphabet-module/section_letters_explanation.mp3")
       ],
     },
     "blending-module": {
       "audio-files": [
-        require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/blending-module/section_blending_explanation.mp3"),
       ],
     },
     "vocabulary-module": {
       "audio-files": [
-        require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/section_vocabulary_explanation1.mp3"),
       ],
     },
     "conversation-module": {
       "audio-files": [
-        require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/conversation-module/section_conversation_explanation.mp3"),
       ],
     },
     "teacher-tip": {
       "audio-files": [
-        require("assets/multilingual-audio/farsi/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/teacher-tip-module/section_teacher_tip_explanation.mp3"),
       ],
     },
   },
