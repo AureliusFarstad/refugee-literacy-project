@@ -6,6 +6,10 @@ const ENGLISH_WELCOME_VIDEO_AUDIO = {
   partC: require("assets/multilingual-audio/english/videos/welcome/welcome_partC.mp3"),
   partD: require("assets/multilingual-audio/english/videos/welcome/welcome_partD.mp3"),
   partE: require("assets/multilingual-audio/english/videos/welcome/welcome_partE.mp3"),
+  partF: require("assets/multilingual-audio/english/videos/welcome/welcome_partF.mp3"),
+  partG: require("assets/multilingual-audio/english/videos/welcome/welcome_partG.mp3"),
+  partH: require("assets/multilingual-audio/english/videos/welcome/welcome_partH.mp3"),
+  partI: require("assets/multilingual-audio/english/videos/welcome/welcome_partI.mp3"),
 };
 
 const FARSI_WELCOME_VIDEO_AUDIO = {
@@ -14,6 +18,10 @@ const FARSI_WELCOME_VIDEO_AUDIO = {
   partC: require("assets/multilingual-audio/farsi/videos/welcome/welcome_partC.mp3"),
   partD: require("assets/multilingual-audio/farsi/videos/welcome/welcome_partD.mp3"),
   partE: require("assets/multilingual-audio/farsi/videos/welcome/welcome_partE.mp3"),
+  partF: require("assets/multilingual-audio/farsi/videos/welcome/welcome_partF.mp3"),
+  partG: require("assets/multilingual-audio/farsi/videos/welcome/welcome_partG.mp3"),
+  partH: require("assets/multilingual-audio/farsi/videos/welcome/welcome_partH.mp3"),
+  partI: require("assets/multilingual-audio/farsi/videos/welcome/welcome_partI.mp3"),
 };
 
 const DARI_WELCOME_VIDEO_AUDIO = {
@@ -22,14 +30,22 @@ const DARI_WELCOME_VIDEO_AUDIO = {
   partC: require("assets/multilingual-audio/dari/videos/welcome/welcome_partC.mp3"),
   partD: require("assets/multilingual-audio/dari/videos/welcome/welcome_partD.mp3"),
   partE: require("assets/multilingual-audio/dari/videos/welcome/welcome_partE.mp3"),
+  partF: require("assets/multilingual-audio/dari/videos/welcome/welcome_partF.mp3"),
+  partG: require("assets/multilingual-audio/dari/videos/welcome/welcome_partG.mp3"),
+  partH: require("assets/multilingual-audio/dari/videos/welcome/welcome_partH.mp3"),
+  partI: require("assets/multilingual-audio/dari/videos/welcome/welcome_partI.mp3"),
 };
 
 const KURMANJI_WELCOME_VIDEO_AUDIO = {
   partA: require("assets/multilingual-audio/kurmanji/videos/welcome/welcome_partA.mp3"),
   partB: require("assets/multilingual-audio/kurmanji/videos/welcome/welcome_partB.mp3"),
-  partC: require("assets/multilingual-audio/kurmanji/videos/welcome/welcome_partB.mp3"), // AUDIO TODO: Missing part C
+  partC: require("assets/multilingual-audio/kurmanji/videos/welcome/welcome_partC.mp3"),
   partD: require("assets/multilingual-audio/kurmanji/videos/welcome/welcome_partD.mp3"),
   partE: require("assets/multilingual-audio/kurmanji/videos/welcome/welcome_partE.mp3"),
+  partF: require("assets/multilingual-audio/kurmanji/videos/welcome/welcome_partF.mp3"),
+  partG: require("assets/multilingual-audio/kurmanji/videos/welcome/welcome_partG.mp3"),
+  partH: require("assets/multilingual-audio/kurmanji/videos/welcome/welcome_partH.mp3"),
+  partI: require("assets/multilingual-audio/kurmanji/videos/welcome/welcome_partI.mp3"),
 };
 
 const SYRIAN_ARABIC_WELCOME_VIDEO_AUDIO = {
@@ -38,6 +54,10 @@ const SYRIAN_ARABIC_WELCOME_VIDEO_AUDIO = {
   partC: require("assets/multilingual-audio/syrian_arabic/videos/welcome/welcome_partC.mp3"),
   partD: require("assets/multilingual-audio/syrian_arabic/videos/welcome/welcome_partD.mp3"),
   partE: require("assets/multilingual-audio/syrian_arabic/videos/welcome/welcome_partE.mp3"),
+  partF: require("assets/multilingual-audio/syrian_arabic/videos/welcome/welcome_partF.mp3"),
+  partG: require("assets/multilingual-audio/syrian_arabic/videos/welcome/welcome_partG.mp3"),
+  partH: require("assets/multilingual-audio/syrian_arabic/videos/welcome/welcome_partH.mp3"),
+  partI: require("assets/multilingual-audio/syrian_arabic/videos/welcome/welcome_partI.mp3"),
 };
 
 const VIDEO_AUDIO_SOURCES_BY_LANGUAGE_VIDEONAME_PART = {
