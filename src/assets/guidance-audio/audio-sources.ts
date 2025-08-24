@@ -68,15 +68,15 @@ const ENGLISH_GUIDANCE_AUDIO: GuidanceType = {
     },
     "spelling-tab": {
       "audio-files": [
-        require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partA.mp3"),
-        require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partB.mp3"),
-        require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partC.mp3"),
-        require("assets/multilingual-audio/english/guidance/blending-module/blending-game/blending1_practice1_info_partD.mp3"),
+        require("assets/multilingual-audio/english/guidance/blending-module/spelling-tab/blending1_practice1_info_partA.mp3"),
+        require("assets/multilingual-audio/english/guidance/blending-module/spelling-tab/blending1_practice1_info_partB.mp3"),
+        require("assets/multilingual-audio/english/guidance/blending-module/spelling-tab/blending1_practice1_info_partC.mp3"),
+        require("assets/multilingual-audio/english/guidance/blending-module/spelling-tab/blending1_practice1_info_partD.mp3"),
       ],
     },
     "multiple-choice-tab": {
       "audio-files": [
-        require("assets/multilingual-audio/english/guidance/blending-module/word-matching/blending1_game1_info.mp3"),
+        require("assets/multilingual-audio/english/guidance/blending-module/multiple-choice-tab/blending1_game1_info.mp3"),
       ],
     },
     "audio-multiple-choice-tab": {
