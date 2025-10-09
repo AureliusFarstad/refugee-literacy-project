@@ -130,7 +130,7 @@ const FARSI_GUIDANCE_AUDIO: GuidanceType = {
     },
     "vocabulary-module": {
       "audio-files": [
-        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/section_vocabulary_explanation1.mp3"), // AUDIO TODO: rename without 1
+        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/section_vocabulary_explanation.mp3"),
       ],
     },
     "conversation-module": {
@@ -220,9 +220,9 @@ const FARSI_GUIDANCE_AUDIO: GuidanceType = {
   "vocabulary-module": {
     "flashcards-tab": {
       "audio-files": [
-        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/audio-ordering-tab/vocabulary1_lesson1_partA.mp3"),
-        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/audio-ordering-tab/vocabulary1_lesson1_partB.mp3"),
-        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/audio-ordering-tab/vocabulary1_lesson1_partC.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/flashcards-tab/vocabulary1_lesson1_partA.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/flashcards-tab/vocabulary1_lesson1_partB.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/flashcards-tab/vocabulary1_lesson1_partC.mp3"),
       ],
     },
     "picture-multiple-choice-tab": {
@@ -232,7 +232,7 @@ const FARSI_GUIDANCE_AUDIO: GuidanceType = {
     },
     "audio-multiple-choice-tab": {
       "audio-files": [
-        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/picture-multiple-choice-tab/vocabulary1_game2.mp3"),
+        require("assets/multilingual-audio/farsi/guidance/vocabulary-module/audio-multiple-choice-tab/vocabulary1_game2.mp3"),
       ],
     },
   },
@@ -252,7 +252,7 @@ const DARI_GUIDANCE_AUDIO: GuidanceType = {
     },
     "vocabulary-module": {
       "audio-files": [
-        require("assets/multilingual-audio/dari/guidance/vocabulary-module/section_vocabulary_explanation1.mp3"), // AUDIO TODO: rename without 1
+        require("assets/multilingual-audio/dari/guidance/vocabulary-module/section_vocabulary_explanation.mp3"),
       ],
     },
     "conversation-module": {
@@ -342,9 +342,9 @@ const DARI_GUIDANCE_AUDIO: GuidanceType = {
   "vocabulary-module": {
     "flashcards-tab": {
       "audio-files": [
-        require("assets/multilingual-audio/dari/guidance/vocabulary-module/audio-ordering-tab/vocabulary1_lesson1_partA.mp3"),
-        require("assets/multilingual-audio/dari/guidance/vocabulary-module/audio-ordering-tab/vocabulary1_lesson1_partB.mp3"),
-        require("assets/multilingual-audio/dari/guidance/vocabulary-module/audio-ordering-tab/vocabulary1_lesson1_partC.mp3"),
+        require("assets/multilingual-audio/dari/guidance/vocabulary-module/flashcards-tab/vocabulary1_lesson1_partA.mp3"),
+        require("assets/multilingual-audio/dari/guidance/vocabulary-module/flashcards-tab/vocabulary1_lesson1_partB.mp3"),
+        require("assets/multilingual-audio/dari/guidance/vocabulary-module/flashcards-tab/vocabulary1_lesson1_partC.mp3"),
       ],
     },
     "picture-multiple-choice-tab": {
@@ -354,7 +354,7 @@ const DARI_GUIDANCE_AUDIO: GuidanceType = {
     },
     "audio-multiple-choice-tab": {
       "audio-files": [
-        require("assets/multilingual-audio/dari/guidance/vocabulary-module/picture-multiple-choice-tab/vocabulary1_game2.mp3"),
+        require("assets/multilingual-audio/dari/guidance/vocabulary-module/audio-multiple-choice-tab/vocabulary1_game2.mp3"),
       ],
     },
   },
