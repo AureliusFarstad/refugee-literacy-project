@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // @ts-nocheck
 import SVGatorPlayer from "@svgator/react-native";
-import pencilMap from "./pencil-map"
 import React, {
   forwardRef,
   useEffect,
@@ -11,7 +10,8 @@ import React, {
   useState,
 } from "react";
 import WebView from "react-native-webview";
-import { map } from "zod";
+
+import pencilMap from "./pencil-map";
 
 const Pencil = forwardRef(({ onAnimationComplete, letter, ...props }, ref) => {
   const webViewRef = useRef(null);
