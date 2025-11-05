@@ -531,7 +531,7 @@ const Screen = () => {
     stopGuideAudio,
     isPlaying: isPlayingGuidanceAudio,
   } = useGuideAudio({
-    screenName: "audio-ordering",
+    screenName: "audio-ordering-tab",
     module: "conversation-module",
   });
 

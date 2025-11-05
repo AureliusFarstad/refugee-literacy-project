@@ -171,7 +171,7 @@ const AudioMultipleChoice = () => {
     stopGuideAudio,
     isPlaying: isPlayingGuidanceAudio,
   } = useGuideAudio({
-    screenName: "multiple-choice",
+    screenName: "multiple-choice-tab",
     module: "blending-module",
   });
 

@@ -12,7 +12,10 @@ import Animated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Path } from "react-native-svg";
 
-import { ALPHABET_AUDIO_SOURCES } from "@/assets/alphabet/alphabet_sounds";
+import {
+  LANGUAGE_CONFIRMATION_AUDIO,
+  LANGUAGE_OPTION_SELECTION_AUDIO,
+} from "@/assets/language-select/svg/language-select-audio-sources";
 import NoBackgroundSVG from "@/assets/language-select/svg/no-background.svg";
 import NoBackgroundGreyscaleSVG from "@/assets/language-select/svg/no-background-greyscale.svg";
 import SelectSVG from "@/assets/language-select/svg/select.svg";
@@ -94,28 +97,28 @@ const defaultButtonColorProps: ButtonColorProps = {
 const languageAssets = {
   en: {
     selectText: "I speak English",
-    selectAudio: ALPHABET_AUDIO_SOURCES.a.sound,
-    confirmAudio: ALPHABET_AUDIO_SOURCES.b.sound,
+    selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.en,
+    confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.en,
   },
   fa: {
     selectText: "من فارسی صحبت می‌کنم",
-    selectAudio: ALPHABET_AUDIO_SOURCES.a.sound,
-    confirmAudio: ALPHABET_AUDIO_SOURCES.b.sound,
+    selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.fa,
+    confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.fa,
   },
   fa_AF: {
     selectText: "من دری صحبت می‌کنم",
-    selectAudio: ALPHABET_AUDIO_SOURCES.a.sound,
-    confirmAudio: ALPHABET_AUDIO_SOURCES.b.sound,
+    selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.fa_af,
+    confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.fa_af,
   },
   ku: {
     selectText: "Ez bi kurdî diaxivim",
-    selectAudio: ALPHABET_AUDIO_SOURCES.a.sound,
-    confirmAudio: ALPHABET_AUDIO_SOURCES.b.sound,
+    selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.ku,
+    confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.ku,
   },
   ar_SY: {
     selectText: "Ana atakallam al-lughah al-arabiyah",
-    selectAudio: ALPHABET_AUDIO_SOURCES.a.sound,
-    confirmAudio: ALPHABET_AUDIO_SOURCES.b.sound,
+    selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.ar_sy,
+    confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.ar_sy,
   },
 };
 

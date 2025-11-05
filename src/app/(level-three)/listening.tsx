@@ -389,7 +389,7 @@ const Listening: React.FC = () => {
   >(Array(NUMBER_OF_CARDS).fill("hidden"));
 
   const { playGuideAudio, isPlaying: isGuidePlaying } = useGuideAudio({
-    screenName: "listening",
+    screenName: "listening-tab",
     module: "conversation-module",
   });
 

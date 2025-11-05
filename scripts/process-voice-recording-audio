@@ -9,7 +9,7 @@ output_dir="/Users/marcusfarstad/Documents/rlp/refugee-literacy-project/assets/m
 mkdir -p "$output_dir"
 
 # Process each MP4, M4A, or MP3 file in the input directory and its subdirectories
-find "$input_dir" -type f \( -name "*.mp4" -o -name "*.m4a" -o -name "*.mp3" \) | while read -r input_file; do
+find "$input_dir" -type f \( -name "*.mp4" -o -name "*.m4a" -o -name "*.mp3"  -o -name "*.ogg" \) | while read -r input_file; do
     # Get the relative path of the file from the input directory
     relative_path="${input_file#$input_dir/}"
     

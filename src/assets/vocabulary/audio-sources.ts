@@ -1,3 +1,5 @@
+// AUDIO TODO: male and female... all files
+
 import type {
   IEnglish_Vocabulary_Audio_Source,
   INative_Vocabulary_Audio_Source,
@@ -76,7 +78,6 @@ const FARSI_VOCABULARY_AUDIO: INative_Vocabulary_Audio_Source = {
 };
 
 const DARI_VOCABULARY_AUDIO: INative_Vocabulary_Audio_Source = {
-  // AUDIO TODO: male
   good: {
     complete: require("assets/multilingual-audio/dari/vocabulary/emotions/vocabulary1_good_complete_female.mp3"),
     contracted: require("assets/multilingual-audio/dari/vocabulary/emotions/vocabulary1_good_contracted_female.mp3"),
@@ -112,43 +113,41 @@ const DARI_VOCABULARY_AUDIO: INative_Vocabulary_Audio_Source = {
 };
 
 const KURMANJI_VOCABULARY_AUDIO: INative_Vocabulary_Audio_Source = {
-  // AUDIO TODO: Kurmanji contracted
   good: {
-    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_good_male.mp3"),
-    // contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_good_contracted_male.mp3"),
+    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_good_complete_male.mp3"),
+    contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_good_contracted_female.mp3"),
   },
   tired: {
-    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_tired_male.mp3"),
-    // contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_tired_contracted_male.mp3"),
+    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_tired_complete_male.mp3"),
+    contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_tired_contracted_female.mp3"),
   },
   sad: {
-    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_sad_male.mp3"),
-    // contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_sad_contracted_male.mp3"),
+    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_sad_complete_male.mp3"),
+    contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_sad_contracted_female.mp3"),
   },
   hungry: {
-    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_hungry_male.mp3"),
-    // contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_hungry_contracted_male.mp3"),
+    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_hungry_complete_male.mp3"),
+    contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_hungry_contracted_female.mp3"),
   },
   angry: {
-    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_angry_male.mp3"),
-    // contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_angry_contracted_male.mp3"),
+    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_angry_complete_male.mp3"),
+    contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_angry_contracted_female.mp3"),
   },
   sick: {
-    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_sick_male.mp3"),
-    // contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_sick_contracted_male.mp3"),
+    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_sick_complete_male.mp3"),
+    contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_sick_contracted_female.mp3"),
   },
   hot: {
-    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_hot_male.mp3"),
-    // contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_hot_contracted_male.mp3"),
+    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_hot_complete_male.mp3"),
+    contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_hot_contracted_female.mp3"),
   },
   cold: {
-    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_cold_male.mp3"),
-    // contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_cold_contracted_female.mp3"),
+    complete: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_cold_complete_male.mp3"),
+    contracted: require("assets/multilingual-audio/kurmanji/vocabulary/emotions/vocabulary1_cold_contracted_female.mp3"),
   },
 };
 
 const SYRIAN_ARABIC_VOCABULARY_AUDIO: INative_Vocabulary_Audio_Source = {
-  // AUDIO TODO: male...
   good: {
     complete: require("assets/multilingual-audio/syrian_arabic/vocabulary/emotions/vocabulary1_good_complete_female.mp3"),
     contracted: require("assets/multilingual-audio/syrian_arabic/vocabulary/emotions/vocabulary1_good_contracted_female.mp3"),

@@ -146,7 +146,7 @@ const RenderOption = (
 const AudioMultipleChoice = () => {
   const insets = useSafeAreaInsets();
   const { isPlaying, playGuideAudio, stopGuideAudio } = useGuideAudio({
-    screenName: "picture-multiple-choice",
+    screenName: "picture-multiple-choice-tab",
     module: "vocabulary-module",
   });
 

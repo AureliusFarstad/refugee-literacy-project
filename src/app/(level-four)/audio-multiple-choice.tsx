@@ -1006,7 +1006,7 @@ const Screen = () => {
     stopGuideAudio,
     isPlaying: isPlayingGuidanceAudio,
   } = useGuideAudio({
-    screenName: "audio-multiple-choice",
+    screenName: "audio-multiple-choice-tab",
     module: "vocabulary-module",
   });
 

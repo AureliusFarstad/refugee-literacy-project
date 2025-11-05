@@ -33,7 +33,7 @@ export default function FlashCardContainer() {
 
   // TODO: update with correct resource
   const { isPlaying, playGuideAudio, stopGuideAudio } = useGuideAudio({
-    screenName: "flashcard",
+    screenName: "flashcards-tab",
     module: "vocabulary-module",
   });
 

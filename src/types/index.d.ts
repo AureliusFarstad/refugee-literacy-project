@@ -132,23 +132,23 @@ interface AlphabetModule {
 }
 
 interface BlendingModule {
-  "audio-multiple-choice": AudioSection;
-  "blending-flashcard": AudioSection;
-  "multiple-choice": AudioSection;
-  "spelling-drag-and-drop": AudioSection;
+  "blending-introduction": AudioSection;
+  "multiple-choice-tab": AudioSection;
+  "audio-multiple-choice-tab": AudioSection;
+  "spelling-tab": AudioSection;
 }
 
 interface ConversationSection {
-  "audio-ordering": AudioSection;
-  listening: AudioSection;
-  "video-explanation"?: AudioSection;
+  "listening-tab": AudioSection;
+  // "video-explanation"?: AudioSection;
+  "audio-ordering-tab": AudioSection;
 }
 
 interface VocabularySection {
-  flashcard: AudioSection;
-  "picture-multiple-choice": AudioSection;
-  "audio-multiple-choice": AudioSection;
-  "video-explanation"?: AudioSection;
+  "flashcards-tab": AudioSection;
+  // "video-explanation"?: AudioSection;
+  "picture-multiple-choice-tab": AudioSection;
+  "audio-multiple-choice-tab": AudioSection;
 }
 
 interface HomeScreen {

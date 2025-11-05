@@ -33,8 +33,8 @@ type TabType = {
 
 const tabs: TabType[] = [
   {
-    name: "blending-flashcard",
-    label: "blending-flashcard",
+    name: "blending-flashcard-tab",
+    label: "blending-flashcard-tab",
     icon: TeacherIcon,
   },
   {
@@ -67,7 +67,7 @@ export default function LevelTwoTabLayout() {
 
   return (
     <Tabs
-      initialRouteName="blending-flashcard"
+      initialRouteName="blending-flashcard-tab"
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {
