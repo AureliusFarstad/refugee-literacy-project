@@ -73,13 +73,12 @@ const KURMANJI_BLENDING_AUDIO: IBlending_Audio_Source = {
   pan: {
     file: require("assets/multilingual-audio/kurmanji/vocabulary/blending/blending1_pan.mp3"),
   },
-  // AUDIO TODO:
-  // ant: {
-  //   file: require("assets/multilingual-audio/kurmanji/vocabulary/blending/blending1_ant.mp3"),
-  // },
-  // in: {
-  //   file: require("assets/multilingual-audio/kurmanji/vocabulary/blending/blending1_in.mp3"),
-  // },
+  ant: {
+    file: require("assets/multilingual-audio/kurmanji/vocabulary/blending/blending1_ant.mp3"),
+  },
+  in: {
+    file: require("assets/multilingual-audio/kurmanji/vocabulary/blending/blending1_in.mp3"),
+  },
   tap: {
     file: require("assets/multilingual-audio/kurmanji/vocabulary/blending/blending1_tap.mp3"),
   },
@@ -95,13 +94,12 @@ const SYRIAN_ARABIC_BLENDING_AUDIO: IBlending_Audio_Source = {
   pan: {
     file: require("assets/multilingual-audio/syrian_arabic/vocabulary/blending/blending1_pan.mp3"),
   },
-  // AUDIO TODO:
-  // ant: {
-  //   file: require("assets/multilingual-audio/syrian_arabic/vocabulary/blending/blending1_ant.mp3"),
-  // },
-  // in: {
-  //   file: require("assets/multilingual-audio/syrian_arabic/vocabulary/blending/blending1_in.mp3"),
-  // },
+  ant: {
+    file: require("assets/multilingual-audio/syrian_arabic/vocabulary/blending/blending1_ant.mp3"),
+  },
+  in: {
+    file: require("assets/multilingual-audio/syrian_arabic/vocabulary/blending/blending1_in.mp3"),
+  },
   tap: {
     file: require("assets/multilingual-audio/syrian_arabic/vocabulary/blending/blending1_tap.mp3"),
   },

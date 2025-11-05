@@ -58,21 +58,20 @@ const DARI_CONVERSATION_AUDIO: IConversation_Audio_Source = {
 };
 
 const KURMANJI_CONVERSATION_AUDIO: IConversation_Audio_Source = {
-  // AUDIO TODO: ADD female (currently hardcoded to male)
   part1: {
-    female: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
+    female: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partA_female.mp3"),
     male: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partA_male.mp3"),
   },
   part2: {
-    female: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partB_male.mp3"),
+    female: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partB_female.mp3"),
     male: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partB_male.mp3"),
   },
   part3: {
-    female: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partC_male.mp3"),
+    female: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partC_female.mp3"),
     male: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partC_male.mp3"),
   },
   part4: {
-    female: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partD_male.mp3"),
+    female: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partD_female.mp3"),
     male: require("assets/multilingual-audio/kurmanji/conversations/how_are_you/conversation1_how_are_you_partD_male.mp3"),
   },
 };
