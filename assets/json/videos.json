@@ -5,7 +5,7 @@
         "The svgator_file file paths are relative to: assets/"
     ],
     "welcome": {
-        "number_of_screens": 8,
+        "number_of_screens": 10,
         "screens": {
             "screen-1": {
                 "audio": "welcome/welcome_partA.mp3",
@@ -15,47 +15,47 @@
             "screen-2": {
                 "audio": "welcome/welcome_partB.mp3",
                 "svgator_file": "videos/welcome.js",
-                "svgator_key": "welcome_screen_2"
+                "svgator_key": "welcome_screen_1"
             },
             "screen-3": {
                 "audio": "welcome/welcome_partC.mp3",
                 "svgator_file": "videos/welcome.js",
-                "svgator_key": "welcome_screen_3"
+                "svgator_key": "welcome_screen_2"
             },
             "screen-4": {
                 "audio": "welcome/welcome_partD",
                 "svgator_file": "videos/welcome.js",
-                "svgator_key": "welcome_screen_4"
+                "svgator_key": "welcome_screen_3"
             },
             "screen-5": {
                 "audio": "welcome/welcome_partE",
                 "svgator_file": "videos/welcome.js",
-                "svgator_key": "welcome_screen_5"
+                "svgator_key": "welcome_screen_4"
             },
             "screen-6": {
                 "audio": "welcome/welcome_partF",
                 "svgator_file": "videos/welcome.js",
-                "svgator_key": "welcome_screen_6"
+                "svgator_key": "welcome_screen_5"
             },
             "screen-7": {
                 "audio": "welcome/welcome_partG",
                 "svgator_file": "videos/welcome.js",
-                "svgator_key": "welcome_screen_7"
+                "svgator_key": "welcome_screen_6"
             },
             "screen-8": {
                 "audio": "welcome/welcome_partH",
                 "svgator_file": "videos/welcome.js",
-                "svgator_key": "to_do"
+                "svgator_key": "welcome_screen_7"
             },
             "screen-9": {
                 "audio": "welcome/welcome_partI",
                 "svgator_file": "videos/welcome.js",
-                "svgator_key": "to_do"
+                "svgator_key": "welcome_screen_8"
             },
             "screen-10": {
                 "audio": "welcome/welcome_partJ",
                 "svgator_file": "videos/welcome.js",
-                "svgator_key": "to_do"
+                "svgator_key": "welcome_screen_9"
             }
         }
     }

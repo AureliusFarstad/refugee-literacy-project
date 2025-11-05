@@ -67,7 +67,7 @@ export default function LevelTwoTabLayout() {
 
   return (
     <Tabs
-      initialRouteName="blending-flashcard"
+      initialRouteName="blending-flashcard-tab"
       screenOptions={({}) => ({
         headerShown: false,
         tabBarStyle: {

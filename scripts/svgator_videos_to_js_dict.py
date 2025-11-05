@@ -1,7 +1,12 @@
 import os
 
+# Example 1
 INPUT_FOLDER_PATH = "raw-assets/alphabet/animation/pencil"
-OUTPUT_JS_FILE_PATH = "assets/alphabet/animation/pencil.js"
+OUTPUT_JS_FILE_PATH = "assets/alphabet/animation/pencil-map.js"
+
+# Example 2
+# INPUT_FOLDER_PATH = "raw-assets/videos/you"
+# OUTPUT_JS_FILE_PATH = "assets/videos/you.js"
 
 def __main__():
     """This python script is used to convert the SVGator videos to a dictionary in a JavaScript file.
@@ -19,6 +24,9 @@ def __main__():
     input_folder_name = os.path.basename(input_folder_path)
     # Get the output JavaScript file path
     output_js_file_path = os.path.join(repo_dir, OUTPUT_JS_FILE_PATH)
+
+    # Exported dictionary name
+    exported_dict_name = input_folder_name.replace("-", "_")
 
     # Get the list of files in the input folder
     files = os.listdir(input_folder_path)
@@ -59,11 +67,11 @@ def __main__():
     js_str += "\n/* eslint-disable react-hooks/exhaustive-deps */"
     js_str += "\n// @ts-nocheck"
     js_str += '\nimport SVGatorPlayer from "@svgator/react-native";'
-    js_str += f"\n\nconst {input_folder_name} = {{\n"
+    js_str += f"\n\nconst {exported_dict_name} = {{\n"
     for i in range(len(js_strs)):
         js_str += f"    {dict_keys[i]}: {js_strs[i]},\n"
     js_str += "};"
-    js_str += f"\n\nexport default {input_folder_name};"
+    js_str += f"\n\nexport default {exported_dict_name};"
 
     # create the output folder
     output_folder = os.path.dirname(output_js_file_path)

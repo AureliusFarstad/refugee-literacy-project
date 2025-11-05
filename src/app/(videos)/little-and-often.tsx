@@ -1,4 +1,4 @@
-import welcome from "assets/videos/welcome-dict";
+import little_and_often from "assets/videos/little-and-often";
 import { useMemo } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -15,7 +15,7 @@ export const screenOptions = {
 };
 
 // Example usage in your VideoTab component
-const WelcomeVideo = () => {
+const LittleAndOftenVideo = () => {
   const sectionButtonColorProps: ButtonColorProps = {
     primaryColor: APP_COLORS.green,
     secondaryColor: APP_COLORS.lightgreen,
@@ -24,37 +24,31 @@ const WelcomeVideo = () => {
     backgroundColor: APP_COLORS.backgroundgrey,
   };
 
-  // TODO: REPLACE with correct SVG animation
   const { language } = useUser();
 
   const littleAndOftenAnimationCollection = useMemo<AnimationCollection>(
     () => ({
-      svgatorDict: welcome,
+      svgatorDict: little_and_often,
       segments: [
         {
-          audio: requireVideoAudio("welcome", "partA"),
-          svgatorDictKey: "welcome_screen_1",
-          animationDuration: 0,
+          audio: requireVideoAudio("little_and_often", "partA"),
+          svgatorDictKey: "little_and_often_screen_1",
+          animationDuration: 12000,
         },
         {
-          audio: requireVideoAudio("welcome", "partB"),
-          svgatorDictKey: "welcome_screen_2",
-          animationDuration: 0,
+          audio: requireVideoAudio("little_and_often", "partB"),
+          svgatorDictKey: "little_and_often_screen_2",
+          animationDuration: 19000,
         },
         {
-          audio: requireVideoAudio("welcome", "partC"),
-          svgatorDictKey: "welcome_screen_3",
-          animationDuration: 6000,
+          audio: requireVideoAudio("little_and_often", "partC"),
+          svgatorDictKey: "little_and_often_screen_3",
+          animationDuration: 17500,
         },
         {
-          audio: requireVideoAudio("welcome", "partD"),
-          svgatorDictKey: "welcome_screen_4",
-          animationDuration: 0,
-        },
-        {
-          audio: requireVideoAudio("welcome", "partE"),
-          svgatorDictKey: "welcome_screen_5",
-          animationDuration: 0,
+          audio: requireVideoAudio("little_and_often", "partD"),
+          svgatorDictKey: "little_and_often_screen_4",
+          animationDuration: 3000,
         },
       ],
     }),
@@ -76,4 +70,4 @@ const WelcomeVideo = () => {
   );
 };
 
-export default WelcomeVideo;
+export default LittleAndOftenVideo;

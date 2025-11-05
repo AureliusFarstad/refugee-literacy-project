@@ -1,4 +1,4 @@
-import welcome from "assets/videos/welcome-dict";
+import welcome from "assets/videos/welcome.js";
 import { useMemo } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -43,7 +43,7 @@ const WelcomeVideo = () => {
         {
           audio: requireVideoAudio("welcome", "partC"),
           svgatorDictKey: "welcome_screen_3",
-          animationDuration: 6000,
+          animationDuration: 4000,
         },
         {
           audio: requireVideoAudio("welcome", "partD"),
@@ -53,6 +53,31 @@ const WelcomeVideo = () => {
         {
           audio: requireVideoAudio("welcome", "partE"),
           svgatorDictKey: "welcome_screen_5",
+          animationDuration: 4000,
+        },
+        {
+          audio: requireVideoAudio("welcome", "partF"),
+          svgatorDictKey: "welcome_screen_6",
+          animationDuration: 4000,
+        },
+        {
+          audio: requireVideoAudio("welcome", "partG"),
+          svgatorDictKey: "welcome_screen_7",
+          animationDuration: 0,
+        },
+        {
+          audio: requireVideoAudio("welcome", "partH"),
+          svgatorDictKey: "welcome_screen_8",
+          animationDuration: 0,
+        },
+        {
+          audio: requireVideoAudio("welcome", "partI"),
+          svgatorDictKey: "welcome_screen_9",
+          animationDuration: 0,
+        },
+        {
+          audio: requireVideoAudio("welcome", "partJ"),
+          svgatorDictKey: "welcome_screen_1",
           animationDuration: 0,
         },
       ],

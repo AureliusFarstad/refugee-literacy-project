@@ -11,7 +11,7 @@ const DARI_WELCOME_VIDEO_AUDIO = {
   partG: require("assets/multilingual-audio/dari/videos/welcome/welcome_partG.mp3"),
   partH: require("assets/multilingual-audio/dari/videos/welcome/welcome_partH.mp3"),
   partI: require("assets/multilingual-audio/dari/videos/welcome/welcome_partI.mp3"),
-  partJ: require("assets/multilingual-audio/dari/videos/welcome/welcome_partI.mp3"),
+  partJ: require("assets/multilingual-audio/dari/videos/welcome/welcome_partJ.mp3"),
 };
 
 const ENGLISH_WELCOME_VIDEO_AUDIO = {

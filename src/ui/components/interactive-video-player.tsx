@@ -4,7 +4,7 @@
 // 120:16  error  'isAudioPlaying' is assigned a value but never used. Allowed unused vars must match /^_/u                         unused-imports/no-unused-vars
 
 import { useIsFocused } from "@react-navigation/native";
-import welcome from "assets/videos/welcome-dict";
+import welcome from "assets/videos/welcome";
 import { BlurView } from "expo-blur";
 import { router } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";

@@ -1,4 +1,4 @@
-import welcome from "assets/videos/welcome-dict";
+import you from "assets/videos/you";
 import { useMemo } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -28,32 +28,22 @@ const VideoTab = () => {
   const youAnimationCollection: AnimationCollection =
     useMemo<AnimationCollection>(
       () => ({
-        svgatorDict: welcome,
+        svgatorDict: you,
         segments: [
           {
-            audio: requireVideoAudio("welcome", "partA"),
-            svgatorDictKey: "welcome_screen_1",
-            animationDuration: 0,
+            audio: requireVideoAudio("you", "partA"),
+            svgatorDictKey: "you_screen_1",
+            animationDuration: 7000,
           },
           {
-            audio: requireVideoAudio("welcome", "partB"),
-            svgatorDictKey: "welcome_screen_2",
-            animationDuration: 0,
+            audio: requireVideoAudio("you", "partB"),
+            svgatorDictKey: "you_screen_2",
+            animationDuration: 10000,
           },
           {
-            audio: requireVideoAudio("welcome", "partC"),
-            svgatorDictKey: "welcome_screen_3",
-            animationDuration: 6000,
-          },
-          {
-            audio: requireVideoAudio("welcome", "partD"),
-            svgatorDictKey: "welcome_screen_4",
-            animationDuration: 0,
-          },
-          {
-            audio: requireVideoAudio("welcome", "partE"),
-            svgatorDictKey: "welcome_screen_5",
-            animationDuration: 0,
+            audio: requireVideoAudio("you", "partC"),
+            svgatorDictKey: "you_screen_3",
+            animationDuration: 3500,
           },
         ],
       }),
