@@ -12,6 +12,10 @@ import Animated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Path } from "react-native-svg";
 
+import {
+  LANGUAGE_CONFIRMATION_AUDIO,
+  LANGUAGE_OPTION_SELECTION_AUDIO,
+} from "@/assets/language-select/svg/language-select-audio-sources";
 import NoBackgroundSVG from "@/assets/language-select/svg/no-background.svg";
 import NoBackgroundGreyscaleSVG from "@/assets/language-select/svg/no-background-greyscale.svg";
 import SelectSVG from "@/assets/language-select/svg/select.svg";
@@ -27,7 +31,6 @@ import { WIDTH } from "@/utils/layout";
 import type { ButtonColorProps } from "../icons/circular/color-scheme";
 import { NativeButton } from "../icons/circular/native-button";
 import { PlayButton } from "../icons/circular/play-button";
-import { LANGUAGE_CONFIRMATION_AUDIO, LANGUAGE_OPTION_SELECTION_AUDIO } from "@/assets/language-select/svg/language-select-audio-sources";
 
 // Checkmark SVG Component
 const CheckmarkSVG = ({ size = 24, color = "white", strokeWidth = 3 }) => (

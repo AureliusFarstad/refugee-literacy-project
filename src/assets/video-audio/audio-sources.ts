@@ -77,7 +77,7 @@ const ENGLISH_YOU_VIDEO_AUDIO = {
   partA: require("assets/multilingual-audio/english/videos/grammar-you/grammar_you_partA.mp3"),
   partB: require("assets/multilingual-audio/english/videos/grammar-you/grammar_you_partB.mp3"),
   partC: require("assets/multilingual-audio/english/videos/grammar-you/grammar_you_partC.mp3"),
-}
+};
 
 const FARSI_YOU_VIDEO_AUDIO = {
   partA: require("assets/multilingual-audio/farsi/videos/grammar-you/grammar_you_partA.mp3"),
@@ -89,13 +89,13 @@ const KURMANJI_YOU_VIDEO_AUDIO = {
   partA: require("assets/multilingual-audio/kurmanji/videos/grammar-you/grammar_you_partA.mp3"),
   partB: require("assets/multilingual-audio/kurmanji/videos/grammar-you/grammar_you_partB.mp3"),
   partC: require("assets/multilingual-audio/kurmanji/videos/grammar-you/grammar_you_partC.mp3"),
-}
+};
 
 const SYRIAN_ARABIC_YOU_VIDEO_AUDIO = {
   partA: require("assets/multilingual-audio/syrian_arabic/videos/grammar-you/grammar_you_partA.mp3"),
   partB: require("assets/multilingual-audio/syrian_arabic/videos/grammar-you/grammar_you_partB.mp3"),
   partC: require("assets/multilingual-audio/syrian_arabic/videos/grammar-you/grammar_you_partC.mp3"),
-}
+};
 
 // Grammar I Am
 const DARI_I_AM_VIDEO_AUDIO = {
@@ -106,7 +106,7 @@ const DARI_I_AM_VIDEO_AUDIO = {
 const ENGLISH_I_AM_VIDEO_AUDIO = {
   partA: require("assets/multilingual-audio/english/videos/grammar-i-am/grammar_i_am_partA.mp3"),
   partB: require("assets/multilingual-audio/english/videos/grammar-i-am/grammar_i_am_partB.mp3"),
-}
+};
 
 const FARSI_I_AM_VIDEO_AUDIO = {
   partA: require("assets/multilingual-audio/farsi/videos/grammar-i-am/grammar_i_am_partA.mp3"),
@@ -116,12 +116,12 @@ const FARSI_I_AM_VIDEO_AUDIO = {
 const KURMANJI_I_AM_VIDEO_AUDIO = {
   partA: require("assets/multilingual-audio/kurmanji/videos/grammar-i-am/grammar_i_am_partA.mp3"),
   partB: require("assets/multilingual-audio/kurmanji/videos/grammar-i-am/grammar_i_am_partB.mp3"),
-}
+};
 
 const SYRIAN_ARABIC_I_AM_VIDEO_AUDIO = {
   partA: require("assets/multilingual-audio/syrian_arabic/videos/grammar-i-am/grammar_i_am_partA.mp3"),
   partB: require("assets/multilingual-audio/syrian_arabic/videos/grammar-i-am/grammar_i_am_partB.mp3"),
-}
+};
 
 // Teacher Tip Out and About
 const DARI_OUT_AND_ABOUT = {

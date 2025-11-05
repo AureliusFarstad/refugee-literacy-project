@@ -375,7 +375,7 @@ const KURMANJI_GUIDANCE_AUDIO: GuidanceType = {
     },
     "blending-module": {
       "audio-files": [
-          require("assets/multilingual-audio/kurmanji/guidance/blending-module/section_blending_explanation.mp3"),
+        require("assets/multilingual-audio/kurmanji/guidance/blending-module/section_blending_explanation.mp3"),
       ],
     },
     "vocabulary-module": {
