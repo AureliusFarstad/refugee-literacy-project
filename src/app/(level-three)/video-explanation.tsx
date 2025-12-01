@@ -44,7 +44,7 @@ const VideoTab = () => {
             audio: null,
             svgatorDictKey: "i_am_screen_3",
             animationDuration: 3200,
-          }
+          },
         ],
       }),
       // eslint-disable-next-line react-hooks/exhaustive-deps
