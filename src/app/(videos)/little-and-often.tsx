@@ -33,22 +33,37 @@ const LittleAndOftenVideo = () => {
         {
           audio: requireVideoAudio("little_and_often", "partA"),
           svgatorDictKey: "little_and_often_screen_1",
-          animationDuration: 12000,
+          animationDuration: 3000,
         },
         {
           audio: requireVideoAudio("little_and_often", "partB"),
           svgatorDictKey: "little_and_often_screen_2",
-          animationDuration: 19000,
+          animationDuration: 7000,
         },
         {
           audio: requireVideoAudio("little_and_often", "partC"),
           svgatorDictKey: "little_and_often_screen_3",
-          animationDuration: 17500,
+          animationDuration: 6000,
         },
         {
           audio: requireVideoAudio("little_and_often", "partD"),
           svgatorDictKey: "little_and_often_screen_4",
           animationDuration: 3000,
+        },
+        {
+          audio: requireVideoAudio("little_and_often", "partE"),
+          svgatorDictKey: "little_and_often_screen_5",
+          animationDuration: 3200,
+        },
+        {
+          audio: requireVideoAudio("little_and_often", "partF"),
+          svgatorDictKey: "little_and_often_screen_6",
+          animationDuration: 3000,
+        },
+        {
+          audio: null,
+          svgatorDictKey: "little_and_often_screen_7",
+          animationDuration: 3200,
         },
       ],
     }),
