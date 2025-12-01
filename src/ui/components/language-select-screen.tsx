@@ -107,8 +107,8 @@ const languageAssets = {
   },
   fa_AF: {
     selectText: "من دری صحبت می‌کنم",
-    selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.fa_af,
-    confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.fa_af,
+    selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.fa_AF,
+    confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.fa_AF,
   },
   ku: {
     selectText: "Ez bi kurdî diaxivim",
@@ -117,8 +117,8 @@ const languageAssets = {
   },
   ar_SY: {
     selectText: "Ana atakallam al-lughah al-arabiyah",
-    selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.ar_sy,
-    confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.ar_sy,
+    selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.ar_SY,
+    confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.ar_SY,
   },
 };
 
