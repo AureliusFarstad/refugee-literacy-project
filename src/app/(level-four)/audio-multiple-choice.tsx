@@ -1,6 +1,12 @@
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { StyleSheet, View } from "react-native";
 import {
   Gesture,
@@ -35,6 +41,7 @@ import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { NativeButton } from "@/ui/icons/circular/native-button";
 import { globalStyles } from "@/ui/styles";
+import { generateMultipleChoiceOptions, shuffleArray } from "@/utils/helpers";
 import {
   BOTTOM_TAB_HEIGHT,
   HEADER_HEIGHT,
@@ -153,20 +160,6 @@ type GameSet = {
   correctAnswer: string;
   options: string[];
 };
-
-// TODO: Not sure if we want to generate these or have a static list...
-const generatedGameSets: GameSet[] = VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.map(
-  (word: string) => {
-    return {
-      correctAnswer: word,
-      options: VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
-        (option) => option !== word,
-      )
-        .slice(0, 2)
-        .concat(word),
-    };
-  },
-);
 
 // Layout and animation constants
 const BUTTON_SIZE: number = 80;
@@ -645,6 +638,7 @@ const DraggableAudioGame: React.FC = () => {
   const currentSound = useRef<Sound | null>(null);
 
   // Game state
+  const [gameSets, setGameSets] = useState<GameSet[]>([]);
   const [currentGameSetIndex, setCurrentGameSetIndex] = useState(0);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
 
@@ -655,15 +649,33 @@ const DraggableAudioGame: React.FC = () => {
   // Reference to target drop circle
   const dropCircleRef = useRef<View>(null);
 
-  // Function to shuffle array
-  const shuffleArray = useCallback((array: string[]) => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
+  useEffect(() => {
+    const newGameSets = shuffleArray([
+      ...VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1,
+    ]).map(
+      (word: string): GameSet => ({
+        correctAnswer: word,
+        options: generateMultipleChoiceOptions(
+          VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1,
+          word,
+          3,
+        ),
+      }),
+    );
+    setGameSets(newGameSets);
   }, []);
+
+  const advanceNextGame = useCallback(() => {
+    const nextIndex = (currentGameSetIndex + 1) % gameSets.length;
+    if (nextIndex === 0) {
+      // Reshuffle for the next loop
+      const newGameSets = shuffleArray([...gameSets]);
+      setGameSets(newGameSets);
+    }
+    setCurrentGameSetIndex(nextIndex);
+  }, [currentGameSetIndex, gameSets]);
+
+  const currentGameSet = gameSets[currentGameSetIndex];
 
   // Function to get the absolute position of the target drop circle
   const measureDropCircle = useCallback((): void => {
@@ -700,6 +712,13 @@ const DraggableAudioGame: React.FC = () => {
     }, 100);
   }, []);
 
+  const shuffleCurrentOptions = useCallback(() => {
+    if (currentGameSet) {
+      const shuffled = shuffleArray([...currentGameSet.options]);
+      setShuffledOptions(shuffled);
+    }
+  }, [currentGameSet]);
+
   const resetAllButtonPositions = useCallback(() => {
     // Cancel any ongoing animations that might interfere
     if (currentSound.current) {
@@ -719,38 +738,30 @@ const DraggableAudioGame: React.FC = () => {
     // Schedule the next game setup after state updates have completed
     setTimeout(() => {
       // Get current game set and shuffle options
-      const currentGameSet = generatedGameSets[currentGameSetIndex];
-      if (currentGameSet) {
-        const shuffled = shuffleArray([...currentGameSet.options]); // Create a new array to avoid reference issues
-        setShuffledOptions(shuffled);
-
+      if (gameSets[currentGameSetIndex]) {
+        shuffleCurrentOptions();
         // Force re-measurement after layout is updated with a longer delay
         setTimeout(measureDropCircle, 300);
       }
     }, 50);
-  }, [currentGameSetIndex, measureDropCircle, shuffleArray]);
+  }, [currentGameSetIndex, measureDropCircle, gameSets, shuffleCurrentOptions]);
 
   useEffect(() => {
     resetAllButtonPositions();
   }, [currentGameSetIndex, resetAllButtonPositions]);
 
   useEffect(() => {
-    if (generatedGameSets.length > 0 && shuffledOptions.length === 0) {
-      const initialGameSet = generatedGameSets[0];
-      const shuffled = shuffleArray(initialGameSet.options);
-      setShuffledOptions(shuffled);
+    if (gameSets.length > 0 && shuffledOptions.length === 0) {
+      shuffleCurrentOptions();
     }
-  }, [shuffledOptions.length, shuffleArray]);
+  }, [shuffledOptions.length, gameSets, shuffleCurrentOptions]);
 
   // Current game data
-  const currentGameSet = generatedGameSets[currentGameSetIndex];
-  const CORRECT_BUTTON_ID: string = currentGameSet.correctAnswer;
-  const Svg = requireImageForWord(CORRECT_BUTTON_ID);
-
-  // Available audio buttons using shuffled options
-  const availableButtons: ButtonItem[] = shuffledOptions.map((word: string) => {
-    return { id: word, word: word };
-  });
+  const Svg = useMemo(() => {
+    return currentGameSet
+      ? requireImageForWord(currentGameSet.correctAnswer)
+      : null;
+  }, [currentGameSet]);
 
   // Function to play audio - simplified for reliability
   const playAudio = useCallback(
@@ -877,7 +888,7 @@ const DraggableAudioGame: React.FC = () => {
       position: Position,
       buttonId: string,
       isInTarget: boolean,
-      // eslint-disable-next-line @typescript-eslint/no-shadow
+
       CORRECT_BUTTON_ID: string,
       // TODO: CORRECT_BUTTON_ID is already declared in the upper scope on line 731 column 9  @typescript-eslint/no-shadow
     ): void => {
@@ -901,9 +912,7 @@ const DraggableAudioGame: React.FC = () => {
             }
             setPlayingButtonId(null);
             // Game lock will be released by resetAllButtonPositions when game set changes
-            setCurrentGameSetIndex(
-              (prevIndex) => (prevIndex + 1) % generatedGameSets.length,
-            );
+            advanceNextGame();
           }, 1500); // Wait 1.5 seconds before advancing
         } else {
           // Incorrect answer, feedback (and subsequent call to onDragEnd with isInTarget:false)
@@ -918,9 +927,22 @@ const DraggableAudioGame: React.FC = () => {
       // If a button is just dragged and dropped outside, and it wasn't the 'placedButtonId',
       // we DON'T change isGameInteractionLocked, as another button might still be in the target and being processed.
     },
-    [placedButtonId], // CORRECT_BUTTON_ID is from closure, not a direct dep for useCallback here
+    [placedButtonId, advanceNextGame],
   );
 
+  // Available audio buttons using shuffled options
+  const availableButtons: ButtonItem[] = useMemo(
+    () =>
+      shuffledOptions.map((word: string) => {
+        return { id: word, word: word };
+      }),
+    [shuffledOptions],
+  );
+
+  if (gameSets.length === 0 || !currentGameSet) {
+    return null; // Or a loading spinner, ensures hooks are called before this
+  }
+  const CORRECT_BUTTON_ID: string = currentGameSet.correctAnswer;
   return (
     <GestureHandlerRootView style={styles.container}>
       {/* Flashcard */}
@@ -935,12 +957,14 @@ const DraggableAudioGame: React.FC = () => {
           }}
         >
           <View style={styles.imageContainer}>
-            <Svg
-              style={styles.image}
-              height="60%"
-              width="60%"
-              preserveAspectRatio="xMidYMid meet"
-            />
+            {Svg && (
+              <Svg
+                style={styles.image}
+                height="60%"
+                width="60%"
+                preserveAspectRatio="xMidYMid meet"
+              />
+            )}
 
             {/* Native Button */}
             <View

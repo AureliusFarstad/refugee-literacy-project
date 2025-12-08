@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -17,26 +17,10 @@ import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EarButton } from "@/ui/icons/circular/ear-button";
 import { globalStyles } from "@/ui/styles";
+import { generateMultipleChoiceOptions, shuffleArray } from "@/utils/helpers";
 
 import { SECTION_COLOR } from "./_layout";
 // TODO: Not sure if we want to generate these or have a static list.
-
-const shuffle = (array: string[]): string[] => {
-  return [...array].sort(() => Math.random() - 0.5);
-};
-
-const generatedWordSets: WordSet[] = shuffle(
-  BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1,
-).map((word: string) => {
-  return {
-    correctAnswer: word,
-    options: shuffle(
-      BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter((option) => option !== word)
-        .slice(0, 2)
-        .concat(word),
-    ),
-  };
-});
 
 // TODO: Refactor this out to _layout?
 const buttonStyles: ButtonColorProps = {
@@ -166,6 +150,28 @@ const RenderOption = (
 };
 
 const AudioMultipleChoice = () => {
+  const [wordSets, setWordSets] = useState<WordSet[]>([]);
+
+  const generateNewSets = useCallback(() => {
+    const newWordSets = shuffleArray([
+      ...BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1,
+    ]).map(
+      (word: string): WordSet => ({
+        correctAnswer: word,
+        options: generateMultipleChoiceOptions(
+          BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1,
+          word,
+          3,
+        ),
+      }),
+    );
+    setWordSets(newWordSets);
+  }, []);
+
+  useEffect(() => {
+    generateNewSets();
+  }, [generateNewSets]);
+
   const {
     playGuideAudio,
     stopGuideAudio,
@@ -174,6 +180,10 @@ const AudioMultipleChoice = () => {
     screenName: "multiple-choice-tab",
     module: "blending-module",
   });
+
+  if (wordSets.length === 0) {
+    return null; // Or a loading spinner
+  }
 
   return (
     <SafeAreaView
@@ -193,11 +203,12 @@ const AudioMultipleChoice = () => {
           showLetterCaseSwitch={true}
         />
         <WordChoiceScreen
-          wordSets={generatedWordSets}
+          wordSets={wordSets}
           colors={SECTION_COLOR}
           renderFrontCard={RenderFrontCard}
           renderBackCard={RenderBackCard}
           renderOption={RenderOption}
+          onGameComplete={generateNewSets}
         />
       </View>
     </SafeAreaView>

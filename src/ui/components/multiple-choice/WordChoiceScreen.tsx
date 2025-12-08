@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-import { BLENDING_WORD_LIST_BY_LEVEL } from "@/assets/blending";
 // Import default values
 import { APP_COLORS, SECTION_COLORS } from "@/constants/routes";
 
@@ -11,21 +10,7 @@ import FlipCard from "./components/FlipCard";
 // Import custom hook
 import { useWordGame } from "./hooks/useWordGame";
 // Import types
-import type { ColorTheme, WordChoiceScreenProps, WordSet } from "./types";
-
-// Generate default word sets
-const GeneratedWordSets: WordSet[] = BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.map(
-  (word: string) => {
-    return {
-      correctAnswer: word,
-      options: BLENDING_WORD_LIST_BY_LEVEL.LEVEL_1.filter(
-        (option) => option !== word,
-      )
-        .slice(0, 2)
-        .concat(word),
-    };
-  },
-);
+import type { ColorTheme, WordChoiceScreenProps } from "./types";
 
 // Default color theme
 const DEFAULT_COLORS: ColorTheme = {
@@ -48,7 +33,7 @@ const DEFAULT_COLORS: ColorTheme = {
  * 3. Handling user interactions and animations
  */
 const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
-  wordSets = GeneratedWordSets,
+  wordSets,
   colors = DEFAULT_COLORS,
   onGameComplete,
   renderFrontCard,
@@ -60,6 +45,10 @@ const WordChoiceScreen: React.FC<WordChoiceScreenProps> = ({
 
   // Get current set
   const currentWordSet = wordSets[gameState.currentSetIndex];
+
+  if (!currentWordSet) {
+    return null; // Or a loading spinner
+  }
 
   // Create styles
   const styles = StyleSheet.create({

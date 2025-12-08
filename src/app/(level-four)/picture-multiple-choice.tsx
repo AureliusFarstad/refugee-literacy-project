@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -17,6 +17,7 @@ import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 import { SnailButton } from "@/ui/icons/circular/snail-button";
 import { globalStyles } from "@/ui/styles";
+import { generateMultipleChoiceOptions, shuffleArray } from "@/utils/helpers";
 import { HEIGHT, IS_IOS } from "@/utils/layout";
 
 import { SECTION_COLOR } from "./_layout";
@@ -31,23 +32,6 @@ const buttonStyles: ButtonColorProps = {
 };
 
 // TODO: Not sure if we want to generate these or have a static list.
-
-const shuffle = (array: string[]): string[] => {
-  return [...array].sort(() => Math.random() - 0.5);
-};
-
-const generatedWordSets: WordSet[] = shuffle(
-  VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1,
-).map((word: string) => {
-  return {
-    correctAnswer: word,
-    options: shuffle(
-      VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1.filter((option) => option !== word)
-        .slice(0, 2)
-        .concat(word),
-    ),
-  };
-});
 
 const RenderFrontCard = (word: string) => {
   // TODO: Refactor this out of function
@@ -144,11 +128,37 @@ const RenderOption = (
 };
 
 const AudioMultipleChoice = () => {
+  const [wordSets, setWordSets] = useState<WordSet[]>([]);
+
+  const generateNewSets = useCallback(() => {
+    const newWordSets = shuffleArray([
+      ...VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1,
+    ]).map(
+      (word: string): WordSet => ({
+        correctAnswer: word,
+        options: generateMultipleChoiceOptions(
+          VOCABULARY_WORD_LIST_BY_LEVEL.LEVEL_1,
+          word,
+          3,
+        ),
+      }),
+    );
+    setWordSets(newWordSets);
+  }, []);
+
+  useEffect(() => {
+    generateNewSets();
+  }, [generateNewSets]);
+
   const insets = useSafeAreaInsets();
   const { isPlaying, playGuideAudio, stopGuideAudio } = useGuideAudio({
     screenName: "picture-multiple-choice-tab",
     module: "vocabulary-module",
   });
+
+  if (wordSets.length === 0) {
+    return null; // Or a loading spinner
+  }
 
   return (
     <SafeAreaView style={globalStyles.safeAreaView}>
@@ -168,11 +178,12 @@ const AudioMultipleChoice = () => {
         />
 
         <WordChoiceScreen
-          wordSets={generatedWordSets}
+          wordSets={wordSets}
           colors={SECTION_COLOR}
           renderFrontCard={RenderFrontCard}
           renderBackCard={renderBackCardSnail}
           renderOption={RenderOption}
+          onGameComplete={generateNewSets}
         />
       </View>
     </SafeAreaView>
