@@ -216,7 +216,7 @@ const VIDEO_AUDIO_SOURCES_BY_LANGUAGE_VIDEONAME_PART = {
     out_and_about: FARSI_OUT_AND_ABOUT,
     little_and_often: FARSI_LITTLE_AND_OFTEN,
   },
-  fa_af: {
+  fa_AF: {
     welcome: DARI_WELCOME_VIDEO_AUDIO,
     you: DARI_YOU_VIDEO_AUDIO,
     i_am: DARI_I_AM_VIDEO_AUDIO,
@@ -230,7 +230,7 @@ const VIDEO_AUDIO_SOURCES_BY_LANGUAGE_VIDEONAME_PART = {
     // out_and_about: KURMANJI_OUT_AND_ABOUT,
     little_and_often: KURMANJI_LITTLE_AND_OFTEN,
   },
-  ar_sy: {
+  ar_SY: {
     welcome: SYRIAN_ARABIC_WELCOME_VIDEO_AUDIO,
     you: SYRIAN_ARABIC_YOU_VIDEO_AUDIO,
     i_am: SYRIAN_ARABIC_I_AM_VIDEO_AUDIO,
@@ -248,11 +248,5 @@ export const requireVideoAudio = (videoName: string, part: string): any => {
   ];
   const audio = audioSource?.[videoName]?.[part];
 
-  if (!audio) {
-    // Fallback to English
-    return (VIDEO_AUDIO_SOURCES_BY_LANGUAGE_VIDEONAME_PART as any).en[
-      videoName
-    ]?.[part];
-  }
   return audio;
 };

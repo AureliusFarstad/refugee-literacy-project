@@ -38,7 +38,12 @@ const VideoTab = () => {
           {
             audio: requireVideoAudio("i_am", "partB"),
             svgatorDictKey: "i_am_screen_2",
-            animationDuration: 5500,
+            animationDuration: 4000,
+          },
+          {
+            audio: null,
+            svgatorDictKey: "i_am_screen_3",
+            animationDuration: 3200,
           },
         ],
       }),
