@@ -5,11 +5,11 @@ import { zustandStorage } from "@/core/storage";
 import { createSelectors } from "@/core/utils";
 
 export const SUPPORTED_LANGUAGES = [
-  { code: "en", label: "English" },
   { code: "fa", label: "فارسی" }, // Farsi
   { code: "fa_AF", label: "دری" }, // Dari
-  { code: "ku", label: "Kurmancî" }, // Kurmanji
   { code: "ar_SY", label: "العربية السورية" }, // Syrian Arabic
+  { code: "ku", label: "Kurmancî" }, // Kurmanji
+  { code: "en", label: "English" },
 ];
 
 // Derive the type from the array
