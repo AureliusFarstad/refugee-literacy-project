@@ -95,11 +95,6 @@ const defaultButtonColorProps: ButtonColorProps = {
 };
 
 const languageAssets = {
-  en: {
-    selectText: "I speak English",
-    selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.en,
-    confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.en,
-  },
   fa: {
     selectText: "من فارسی صحبت می‌کنم",
     selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.fa,
@@ -116,10 +111,25 @@ const languageAssets = {
     confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.ku,
   },
   ar_SY: {
-    selectText: "Ana atakallam al-lughah al-arabiyah",
+    selectText: "انا بحكي عربي",
     selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.ar_SY,
     confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.ar_SY,
   },
+  en: {
+    selectText: "I speak English",
+    selectAudio: LANGUAGE_OPTION_SELECTION_AUDIO.en,
+    confirmAudio: LANGUAGE_CONFIRMATION_AUDIO.en,
+  },
+};
+
+const getTextAlign = (languageCode: LanguageCode) => {
+  switch (languageCode) {
+    case "en":
+    case "ku":
+      return "left";
+    default:
+      return "right";
+  }
 };
 
 const LanguageSelectionScreen = () => {
@@ -173,7 +183,6 @@ const LanguageSelectionScreen = () => {
 
   // Step 3: Handle confirmation audio button
   const handlePlayConfirmationAudio = () => {
-    console.log("HERE");
     if (!selectedLanguageCode) return;
     setHasPlayedConfirmationAudio(true);
     setIsInitialPulseActive(false); // Stop pulsing when audio button is pressed
@@ -244,6 +253,7 @@ const LanguageSelectionScreen = () => {
                       ? styles.languageRowTextSelected
                       : styles.languageRowTextUnselected,
                     language.code === "en" && globalStyles.thomasFont,
+                    { textAlign: getTextAlign(language.code as LanguageCode) },
                   ]}
                 >
                   {assets?.selectText || language.label}
@@ -543,9 +553,9 @@ const styles = StyleSheet.create({
 
   // Language Row Text Styles
   languageRowTextBase: {
-    fontSize: 18,
+    fontSize: 22,
     flex: 1,
-    textAlign: "center",
+    paddingRight: 16,
   },
   languageRowTextSelected: {
     color: APP_COLORS.offblack,

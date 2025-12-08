@@ -22,6 +22,7 @@ type AnimatedAudioButtonProps = {
   borderWidth?: number;
   breatheDuration?: number;
   onPress?: () => void; // Add this
+  disabled?: boolean;
 };
 
 export const AnimatedAudioButton = ({
@@ -33,6 +34,7 @@ export const AnimatedAudioButton = ({
   borderWidth = 4,
   breatheDuration = 2000,
   onPress,
+  disabled,
 }: AnimatedAudioButtonProps) => {
   const [sound, setSound] = React.useState<Sound>();
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -114,7 +116,7 @@ export const AnimatedAudioButton = ({
   }));
 
   return (
-    <TouchableOpacity onPress={playSound}>
+    <TouchableOpacity onPress={playSound} disabled={disabled}>
       <View style={[styles.container]}>
         <Animated.View
           style={[

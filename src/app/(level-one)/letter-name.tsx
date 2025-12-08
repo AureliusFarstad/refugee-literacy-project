@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -15,6 +15,7 @@ import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { NameButton } from "@/ui/icons/circular/name-button";
 import { globalStyles } from "@/ui/styles";
+import { generateMultipleChoiceOptions, shuffleArray } from "@/utils/helpers";
 
 import { SECTION_COLOR } from "./_layout";
 
@@ -31,27 +32,6 @@ const sectionColorTheme: SectionColorTheme = {
 };
 
 // TODO: Not sure if we want to generate these or have a static list.
-function shuffleArray<T>(array: T[]): T[] {
-  return array
-    .map((value) => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
-}
-
-const generatedLetterSets: WordSet[] = shuffleArray(
-  ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1,
-).map((letter: string) => {
-  const distractors = ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1.filter(
-    (option) => option !== letter,
-  ).slice(0, 2);
-
-  const allOptions = shuffleArray([...distractors, letter]);
-
-  return {
-    correctAnswer: letter,
-    options: allOptions,
-  };
-});
 
 // TODO: Refactor this out to _layout?
 const buttonStyles: ButtonColorProps = {
@@ -159,6 +139,28 @@ const RenderOption = (
 };
 
 const LetterNameScreen = () => {
+  const [letterSets, setLetterSets] = useState<WordSet[]>([]);
+
+  const generateNewSets = useCallback(() => {
+    const newLetterSets = shuffleArray([
+      ...ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1,
+    ]).map(
+      (letter: string): WordSet => ({
+        correctAnswer: letter,
+        options: generateMultipleChoiceOptions(
+          ALPHABET_LETTER_LIST_BY_LEVEL.LEVEL_1,
+          letter,
+          3,
+        ),
+      }),
+    );
+    setLetterSets(newLetterSets);
+  }, []);
+
+  useEffect(() => {
+    generateNewSets();
+  }, [generateNewSets]);
+
   const {
     playGuideAudio,
     stopGuideAudio,
@@ -167,6 +169,10 @@ const LetterNameScreen = () => {
     screenName: "letter-name",
     module: "alphabet-module",
   });
+
+  if (letterSets.length === 0) {
+    return null; // Or a loading spinner
+  }
 
   return (
     <SafeAreaView
@@ -186,11 +192,12 @@ const LetterNameScreen = () => {
           showLetterCaseSwitch={true}
         />
         <WordChoiceScreen
-          wordSets={generatedLetterSets}
+          wordSets={letterSets}
           colors={sectionColorTheme}
           renderFrontCard={RenderFrontCard}
           renderBackCard={RenderBackCard}
           renderOption={RenderOption}
+          onGameComplete={generateNewSets}
         />
       </View>
     </SafeAreaView>
