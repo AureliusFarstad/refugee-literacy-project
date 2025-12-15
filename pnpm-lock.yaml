@@ -74,6 +74,9 @@ dependencies:
   expo-image:
     specifier: ~2.1.6
     version: 2.1.6(expo@53.0.7)(react-native-web@0.20.0)(react-native@0.79.2)(react@19.0.0)
+  expo-keep-awake:
+    specifier: ~14.1.4
+    version: 14.1.4(expo@53.0.7)(react@19.0.0)
   expo-linking:
     specifier: ~7.1.4
     version: 7.1.4(expo@53.0.7)(react-native@0.79.2)(react@19.0.0)
@@ -553,9 +556,9 @@ packages:
     resolution: {integrity: sha512-ETzz9UTjQSTmw39GboatdymDq4XIQbR8ySgVrylRhPOFpsd+JrKHIuF0de7GCWmem+T4uC5z7EZguod7Wj4A4g==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/template': 7.27.0
+      '@babel/template': 7.27.1
       '@babel/traverse': 7.27.0
-      '@babel/types': 7.27.0
+      '@babel/types': 7.27.1
     transitivePeerDependencies:
       - supports-color
 
@@ -8970,8 +8973,8 @@ packages:
     engines: {node: '>=18.18'}
     dependencies:
       '@babel/core': 7.26.10
-      '@babel/generator': 7.27.0
-      '@babel/template': 7.27.0
+      '@babel/generator': 7.27.1
+      '@babel/template': 7.27.1
       '@babel/traverse': 7.27.0
       flow-enums-runtime: 0.0.6
       nullthrows: 1.1.1
@@ -8984,9 +8987,9 @@ packages:
     engines: {node: '>=18.18'}
     dependencies:
       '@babel/core': 7.26.10
-      '@babel/generator': 7.27.0
-      '@babel/parser': 7.27.0
-      '@babel/types': 7.27.0
+      '@babel/generator': 7.27.1
+      '@babel/parser': 7.27.1
+      '@babel/types': 7.27.1
       flow-enums-runtime: 0.0.6
       metro: 0.82.2
       metro-babel-transformer: 0.82.2
