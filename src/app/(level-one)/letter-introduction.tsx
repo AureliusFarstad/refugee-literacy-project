@@ -2,6 +2,7 @@ import clsx from "clsx";
 import type { AVPlaybackSource, AVPlaybackStatus } from "expo-av";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, TouchableOpacity } from "react-native";
 import Svg, { Line } from "react-native-svg";
@@ -125,6 +126,9 @@ const LetterIntroduction = () => {
         await sound.unloadAsync();
       }
 
+      // Activate keep awake when starting audio
+      activateKeepAwakeAsync("letter-audio");
+
       const { sound: soundResponse } = await Audio.Sound.createAsync(
         playbackSource,
         { shouldPlay: true },
@@ -135,6 +139,7 @@ const LetterIntroduction = () => {
       return new Promise<void>((resolve, _reject) => {
         const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
           if (status.isLoaded && status.didJustFinish) {
+            deactivateKeepAwake("letter-audio");
             soundResponse.unloadAsync().then(() => resolve());
           }
         };
@@ -143,6 +148,7 @@ const LetterIntroduction = () => {
       });
     } catch (error) {
       console.log("error in playSound", error);
+      deactivateKeepAwake("letter-audio");
       throw error;
     }
   };

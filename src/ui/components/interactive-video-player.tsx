@@ -6,6 +6,7 @@
 import { useIsFocused } from "@react-navigation/native";
 import welcome from "assets/videos/welcome";
 import { BlurView } from "expo-blur";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { router } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -274,6 +275,20 @@ const InteractiveVideoPlayer = ({
       setAnimationCompleted(false);
     }
   }, [isFocused, isPlaying, stopSound, pauseSound]);
+
+  // Keep screen awake while playing
+  useEffect(() => {
+    if (isPlaying) {
+      activateKeepAwakeAsync("video-playback");
+    } else {
+      deactivateKeepAwake("video-playback");
+    }
+
+    // Cleanup on unmount
+    return () => {
+      deactivateKeepAwake("video-playback");
+    };
+  }, [isPlaying]);
 
   // Handle play button press
   const handlePlay = useCallback(() => {

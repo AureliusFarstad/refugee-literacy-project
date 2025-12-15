@@ -1,5 +1,6 @@
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import {
@@ -715,6 +716,8 @@ const DraggableAudioGame: React.FC = () => {
       currentSound.current = null;
     }
 
+    deactivateKeepAwake("audio-playback");
+
     // First clear all states
     setPlayingButtonId(null);
     setIsCardActive(false);
@@ -777,6 +780,9 @@ const DraggableAudioGame: React.FC = () => {
       // Explicitly clear playingButtonId before setting new one
       setPlayingButtonId(null);
 
+      // Activate keep awake when audio starts
+      activateKeepAwakeAsync("audio-playback");
+
       // Set this button as the playing one
       setPlayingButtonId(buttonId);
 
@@ -800,6 +806,9 @@ const DraggableAudioGame: React.FC = () => {
           if (status.didJustFinish) {
             console.log(`Audio finished for button ${buttonId}`);
             isHandled = true;
+
+            // Deactivate keep awake when audio finishes
+            deactivateKeepAwake("audio-playback");
 
             // Force update the playing button ID state
             setPlayingButtonId((prevId) => {
@@ -826,6 +835,9 @@ const DraggableAudioGame: React.FC = () => {
 
           isHandled = true;
           console.log(`Safety timeout reached for button ${buttonId}`);
+
+          // Deactivate keep awake on timeout
+          deactivateKeepAwake("audio-playback");
 
           setPlayingButtonId((prevId) => {
             if (prevId === buttonId) {

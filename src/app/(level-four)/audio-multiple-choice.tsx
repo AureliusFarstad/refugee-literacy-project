@@ -1,5 +1,6 @@
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import React, {
   useCallback,
   useEffect,
@@ -727,6 +728,9 @@ const DraggableAudioGame: React.FC = () => {
       currentSound.current = null;
     }
 
+    // Deactivate keep awake when audio stops
+    deactivateKeepAwake("audio-playback-l4");
+
     // First clear all states
     setPlayingButtonId(null);
     setIsCardActive(false);
@@ -779,6 +783,8 @@ const DraggableAudioGame: React.FC = () => {
         currentSound.current = null;
       }
 
+      activateKeepAwakeAsync("audio-playback-l4");
+
       // Set this button as the playing one
       setPlayingButtonId(buttonId);
 
@@ -802,6 +808,8 @@ const DraggableAudioGame: React.FC = () => {
           if (status.didJustFinish) {
             console.log(`Audio finished for button ${buttonId}`);
             isHandled = true;
+
+            deactivateKeepAwake("audio-playback-l4");
 
             // Force update the playing button ID state
             setPlayingButtonId((prevId) => {
@@ -828,6 +836,8 @@ const DraggableAudioGame: React.FC = () => {
 
           isHandled = true;
           console.log(`Safety timeout reached for button ${buttonId}`);
+
+          deactivateKeepAwake("audio-playback-l4");
 
           setPlayingButtonId((prevId) => {
             if (prevId === buttonId) {
@@ -856,6 +866,7 @@ const DraggableAudioGame: React.FC = () => {
         }, 6000);
       } catch (error) {
         console.error("Error playing audio:", error);
+        deactivateKeepAwake("audio-playback-l4");
         setPlayingButtonId(null);
       }
     },

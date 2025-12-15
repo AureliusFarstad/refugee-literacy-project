@@ -1,6 +1,7 @@
 import type { AVPlaybackSource } from "expo-av";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { useFocusEffect } from "expo-router";
 import React from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -192,6 +193,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
           if (status.didJustFinish) {
             console.log("Audio finished");
             setIsPlaying(false);
+            deactivateKeepAwake("conversation-audio");
             onAudioComplete?.();
             return;
           }
@@ -201,6 +203,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
               "Playback stopped unexpectedly (isLoaded=true, but not playing and not finished).",
             );
             setIsPlaying(false);
+            deactivateKeepAwake("conversation-audio");
             onAudioComplete?.();
           }
         } else {
@@ -211,6 +214,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
             );
           }
           setIsPlaying(false);
+          deactivateKeepAwake("conversation-audio");
           onAudioComplete?.();
         }
       });
@@ -234,6 +238,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
     if (isPlayingState && !hasAutoPlayed.current) {
       console.log("State changed to playing, starting audio...");
       hasAutoPlayed.current = true;
+      activateKeepAwakeAsync("conversation-audio");
       playEnglishAudio();
     }
 
@@ -241,6 +246,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
       hasAutoPlayed.current = false;
       if (isPlaying) {
         setIsPlaying(false);
+        deactivateKeepAwake("conversation-audio");
         if (sound) {
           sound.setOnPlaybackStatusUpdate(null);
           sound

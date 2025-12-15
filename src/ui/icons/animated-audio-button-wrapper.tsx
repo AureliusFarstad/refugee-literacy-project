@@ -1,6 +1,7 @@
 import type { AVPlaybackSource } from "expo-av";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import * as React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
@@ -40,6 +41,19 @@ export const AnimatedAudioButton = ({
   const [isPlaying, setIsPlaying] = React.useState(false);
 
   const borderOpacity = useSharedValue(0);
+
+  // Keep screen awake while audio is playing
+  React.useEffect(() => {
+    if (isPlaying) {
+      activateKeepAwakeAsync("animated-audio-button");
+    } else {
+      deactivateKeepAwake("animated-audio-button");
+    }
+
+    return () => {
+      deactivateKeepAwake("animated-audio-button");
+    };
+  }, [isPlaying]);
 
   // Cleanup sound on unmount
   React.useEffect(() => {

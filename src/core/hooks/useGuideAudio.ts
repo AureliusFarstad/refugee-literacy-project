@@ -1,5 +1,6 @@
 import { Audio, type AVPlaybackSource, type AVPlaybackStatus } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { CombinedRoutes } from "@/types/navigation-types";
@@ -14,6 +15,19 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
   const soundRef = useRef<Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const isMountedRef = useRef(true);
+
+  // Keep screen awake while guidance audio is playing
+  useEffect(() => {
+    if (isPlaying) {
+      activateKeepAwakeAsync("guidance-audio");
+    } else {
+      deactivateKeepAwake("guidance-audio");
+    }
+
+    return () => {
+      deactivateKeepAwake("guidance-audio");
+    };
+  }, [isPlaying]);
 
   useEffect(() => {
     isMountedRef.current = true;
