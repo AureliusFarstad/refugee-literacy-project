@@ -23,7 +23,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = refugeeliteracyprojectapp/Info.plist; sourceTree = "<group>"; };
 		808CB93CD841B13A14235DDA /* libPods-refugeeliteracyprojectapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-refugeeliteracyprojectapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		962C001CE2936DCFA507B98F /* Pods-refugeeliteracyprojectapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-refugeeliteracyprojectapp.debug.xcconfig"; path = "Target Support Files/Pods-refugeeliteracyprojectapp/Pods-refugeeliteracyprojectapp.debug.xcconfig"; sourceTree = "<group>"; };
-		A880D2D4A9BA24C6969BCA9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = refugeeliteracyprojectapp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A880D2D4A9BA24C6969BCA9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = refugeeliteracyprojectapp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = refugeeliteracyprojectapp/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		D64209C98AD1242CA10CE106 /* Pods-refugeeliteracyprojectapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-refugeeliteracyprojectapp.release.xcconfig"; path = "Target Support Files/Pods-refugeeliteracyprojectapp/Pods-refugeeliteracyprojectapp.release.xcconfig"; sourceTree = "<group>"; };
@@ -128,7 +128,6 @@
 				962C001CE2936DCFA507B98F /* Pods-refugeeliteracyprojectapp.debug.xcconfig */,
 				D64209C98AD1242CA10CE106 /* Pods-refugeeliteracyprojectapp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -350,6 +349,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = refugeeliteracyprojectapp/refugeeliteracyprojectapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7NNQHFTN5Z;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -386,6 +386,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = refugeeliteracyprojectapp/refugeeliteracyprojectapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7NNQHFTN5Z;
 				INFOPLIST_FILE = refugeeliteracyprojectapp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -463,10 +464,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -521,10 +519,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
