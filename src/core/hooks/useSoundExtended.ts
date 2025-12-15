@@ -3,6 +3,8 @@ import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
 import { useCallback, useRef } from "react";
 
+import { audioStoreActions } from "@/core/store/audio";
+
 const useSound = () => {
   const soundRef = useRef<Sound | null>(null);
   const isPlayingRef = useRef(false);
@@ -14,6 +16,7 @@ const useSound = () => {
         await soundRef.current.unloadAsync();
         soundRef.current = null;
         isPlayingRef.current = false;
+        audioStoreActions.clearCurrentSound();
       } catch (error) {
         console.log("Error stopping sound:", error);
       }
@@ -45,7 +48,10 @@ const useSound = () => {
   const playSound = useCallback(
     async (soundSource: AVPlaybackSource | string) => {
       try {
-        // Stop any currently playing sound
+        // Stop any currently playing audio globally
+        await audioStoreActions.stopAllAudio();
+
+        // Stop any currently playing sound from this hook
         await stopSound();
 
         // Handle string paths (for require() imports)
@@ -68,12 +74,16 @@ const useSound = () => {
           soundResponse.setOnPlaybackStatusUpdate((status) => {
             if (status.isLoaded && status.didJustFinish) {
               isPlayingRef.current = false;
+              audioStoreActions.clearCurrentSound();
+              // Unload sound when finished? Or let cleanup handle it?
+              // soundResponse.unloadAsync(); // Optional: aggressive cleanup
             }
           });
 
-          // Return the sound object so caller can control it if needed
-          return soundResponse;
+          // Register with global audio store
+          await audioStoreActions.registerSound(soundResponse);
         }
+        return soundResponse;
       } catch (error) {
         console.log("Error in playSound:", error);
         throw error;

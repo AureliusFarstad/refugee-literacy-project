@@ -14,6 +14,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { audioStoreActions } from "@/core/store/audio";
+
 type AnimatedAudioButtonProps = {
   width?: number;
   height?: number;
@@ -22,7 +24,7 @@ type AnimatedAudioButtonProps = {
   borderColor?: string;
   borderWidth?: number;
   breatheDuration?: number;
-  onPress?: () => void; // Add this
+  onPress?: () => void;
   disabled?: boolean;
 };
 
@@ -59,7 +61,11 @@ export const AnimatedAudioButton = ({
   React.useEffect(() => {
     return () => {
       if (sound) {
-        sound.unloadAsync();
+        try {
+          sound.unloadAsync();
+        } catch (e) {
+          // Ignore error if sound is already unloaded or not loaded
+        }
       }
     };
   }, [sound]);
@@ -88,9 +94,16 @@ export const AnimatedAudioButton = ({
 
   const playSound = async () => {
     try {
+      // Stop any currently playing audio globally
+      await audioStoreActions.stopAllAudio();
+
       if (sound) {
-        await sound.stopAsync();
-        await sound.unloadAsync();
+        try {
+          await sound.stopAsync();
+          await sound.unloadAsync();
+        } catch (e) {
+          // Ignore error if sound is already unloaded
+        }
       }
 
       setIsPlaying(true);
@@ -107,11 +120,10 @@ export const AnimatedAudioButton = ({
       );
       setSound(newSound);
 
-      onPress?.();
-
       newSound.setOnPlaybackStatusUpdate((status) => {
         if (!status.isLoaded || status.didJustFinish) {
           stopAnimation();
+          audioStoreActions.clearCurrentSound();
           return;
         }
 
@@ -119,6 +131,11 @@ export const AnimatedAudioButton = ({
           stopAnimation();
         }
       });
+
+      // Register with global audio store
+      await audioStoreActions.registerSound(newSound);
+
+      onPress?.();
     } catch (error) {
       console.error("Error playing sound:", error);
       stopAnimation();
@@ -153,23 +170,18 @@ export const AnimatedAudioButton = ({
 
 const styles = StyleSheet.create({
   container: {
-    // borderColor: "red", // Border for debugging
-    // borderWidth: 2,
-    // borderStyle: "solid",
     alignItems: "center",
     justifyContent: "center",
   },
   border: {
     position: "absolute",
     borderStyle: "solid",
-    // borderColor: "purple", // Border for debugging
-    // borderWidth: 2,
   },
   button: {
     zIndex: 2,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "white", // Ensures visibility
+    backgroundColor: "white",
     borderRadius: 999,
   },
 });
