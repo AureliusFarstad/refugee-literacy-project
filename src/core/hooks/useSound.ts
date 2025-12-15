@@ -37,16 +37,15 @@ const useSound = () => {
   useEffect(() => {
     return sound
       ? () => {
-        try {
-          sound.unloadAsync();
-        } catch (e) {
-          // Ignore error if sound is already unloaded
+          try {
+            sound.unloadAsync();
+          } catch (e) {
+            // Ignore error if sound is already unloaded
+          }
         }
-      }
       : undefined;
   }, [sound]);
   return { playSound };
 };
 
 export default useSound;
-

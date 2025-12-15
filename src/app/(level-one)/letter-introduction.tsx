@@ -10,6 +10,7 @@ import Svg, { Line } from "react-native-svg";
 import { APP_COLORS } from "@/constants/routes";
 import { MS_300 } from "@/constants/timing";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
+import { audioStoreActions } from "@/core/store/audio";
 import { useLevelStore } from "@/core/store/levels";
 import { Pressable, SafeAreaView, Text, View } from "@/ui";
 import AnimatedLetterComponent from "@/ui/components/home/animated-letter-component";
@@ -122,8 +123,15 @@ const LetterIntroduction = () => {
 
   const playSound = async (playbackSource: AVPlaybackSource) => {
     try {
+      // Stop any currently playing audio globally
+      await audioStoreActions.stopAllAudio();
+
       if (sound) {
-        await sound.unloadAsync();
+        try {
+          await sound.unloadAsync();
+        } catch (e) {
+          // Ignore error if sound is already unloaded
+        }
       }
 
       // Activate keep awake when starting audio
@@ -136,16 +144,25 @@ const LetterIntroduction = () => {
 
       setSound(soundResponse);
 
-      return new Promise<void>((resolve, _reject) => {
+      const completionPromise = new Promise<void>((resolve, _reject) => {
         const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
           if (status.isLoaded && status.didJustFinish) {
             deactivateKeepAwake("letter-audio");
-            soundResponse.unloadAsync().then(() => resolve());
+            audioStoreActions.clearCurrentSound();
+            soundResponse
+              .unloadAsync()
+              .then(() => resolve())
+              .catch((e) => console.warn("Error unloading sound:", e));
           }
         };
 
         soundResponse.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
       });
+
+      // Register with global audio store AFTER setting up listeners
+      await audioStoreActions.registerSound(soundResponse);
+
+      return completionPromise;
     } catch (error) {
       console.log("error in playSound", error);
       deactivateKeepAwake("letter-audio");

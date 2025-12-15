@@ -270,4 +270,3 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
     isPlaying,
   };
 };
-

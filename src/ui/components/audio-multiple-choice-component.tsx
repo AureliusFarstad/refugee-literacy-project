@@ -22,6 +22,7 @@ import Reanimated, {
 
 import { requireEnglishAudioForWord } from "@/assets/blending";
 import { APP_COLORS } from "@/constants/routes";
+import { audioStoreActions } from "@/core/store/audio";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
 import { EnglishButton } from "@/ui/icons/circular/english-button";
 
@@ -919,7 +920,11 @@ const AudioMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
         `[TRACE] AudioMultipleChoice - Sound cleanup running on unmount`,
       );
       if (currentSound.current) {
-        currentSound.current.unloadAsync();
+        try {
+          currentSound.current.unloadAsync();
+        } catch (e) {
+          // Ignore error
+        }
         currentSound.current = null;
       }
     };
@@ -928,15 +933,16 @@ const AudioMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
   // Audio playback function
   const playAudio = useCallback(
     async (audioFile: any, buttonId: string): Promise<void> => {
-      // Removed excessive logging
+      // Stop any currently playing audio globally
+      await audioStoreActions.stopAllAudio();
 
-      // Stop any currently playing audio
+      // Stop any currently playing audio from this component
       if (currentSound.current) {
         try {
           await currentSound.current.stopAsync();
           await currentSound.current.unloadAsync();
         } catch (e) {
-          console.error("Error cleaning up previous sound:", e);
+          // Ignore error cleaning up previous sound
         }
         currentSound.current = null;
       }
@@ -972,13 +978,23 @@ const AudioMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
               return prevId;
             });
 
+            // Clear from global audio store
+            audioStoreActions.clearCurrentSound();
+
             // Unload the sound
-            sound.unloadAsync();
+            try {
+              sound.unloadAsync();
+            } catch (e) {
+              // Ignore error
+            }
             if (currentSound.current === sound) {
               currentSound.current = null;
             }
           }
         });
+
+        // Register with global audio store
+        await audioStoreActions.registerSound(sound);
 
         // Add a safety timeout
         const timeoutId = setTimeout(() => {
@@ -992,6 +1008,8 @@ const AudioMultipleChoice: React.FC<AudioMultipleChoiceProps> = ({
             }
             return prevId;
           });
+
+          audioStoreActions.clearCurrentSound();
 
           try {
             sound.unloadAsync();
