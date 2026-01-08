@@ -8,12 +8,13 @@ import {
   useFonts,
 } from "@expo-google-fonts/inter";
 import { ThemeProvider } from "@react-navigation/native";
-import { Stack } from "expo-router";
+import { Stack, usePathname } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { LogBox } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+import { audioStoreActions } from "@/core/store/audio";
 import { theme } from "@/core/useThemeConfig";
 import { LetterCaseProvider } from "@/ui/core/headers/letter-case-context";
 
@@ -72,37 +73,59 @@ export default function RootLayout() {
   );
 }
 
+function NavigationAudioHandler() {
+  const pathname = usePathname();
+  const previousPathnameRef = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    // Stop audio when route changes
+    if (
+      previousPathnameRef.current !== undefined &&
+      previousPathnameRef.current !== pathname
+    ) {
+      audioStoreActions.stopAllAudio();
+    }
+
+    previousPathnameRef.current = pathname;
+  }, [pathname]);
+
+  return null;
+}
+
 function RootLayoutNav() {
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(level-one)" options={{ headerShown: false }} />
-      <Stack.Screen name="(level-two)" options={{ headerShown: false }} />
-      <Stack.Screen name="(level-three)" options={{ headerShown: false }} />
-      <Stack.Screen name="(level-four)" options={{ headerShown: false }} />
-      {/* Define video screens (maybe don't need this:) */}
-      <Stack.Screen
-        name="(videos)/welcome"
-        options={{
-          animation: "slide_from_bottom",
-          presentation: "fullScreenModal",
+    <>
+      <NavigationAudioHandler />
+      <Stack
+        screenOptions={{
           headerShown: false,
-          headerShadowVisible: false,
         }}
-      />
-      <Stack.Screen
-        name="(videos)/little-and-often"
-        options={{
-          animation: "slide_from_bottom",
-          presentation: "fullScreenModal",
-          headerShown: false,
-          headerShadowVisible: false,
-        }}
-      />
-    </Stack>
+      >
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(level-one)" options={{ headerShown: false }} />
+        <Stack.Screen name="(level-two)" options={{ headerShown: false }} />
+        <Stack.Screen name="(level-three)" options={{ headerShown: false }} />
+        <Stack.Screen name="(level-four)" options={{ headerShown: false }} />
+        {/* Define video screens (maybe don't need this:) */}
+        <Stack.Screen
+          name="(videos)/welcome"
+          options={{
+            animation: "slide_from_bottom",
+            presentation: "fullScreenModal",
+            headerShown: false,
+            headerShadowVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="(videos)/little-and-often"
+          options={{
+            animation: "slide_from_bottom",
+            presentation: "fullScreenModal",
+            headerShown: false,
+            headerShadowVisible: false,
+          }}
+        />
+      </Stack>
+    </>
   );
 }

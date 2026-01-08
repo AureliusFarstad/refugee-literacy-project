@@ -1,6 +1,7 @@
 import type { AVPlaybackSource } from "expo-av";
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { useFocusEffect } from "expo-router";
 import React from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -21,6 +22,7 @@ import {
 import { SECTION_COLORS } from "@/constants/routes";
 import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
+import { audioStoreActions } from "@/core/store/audio";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
 import type { ButtonColorProps } from "@/ui/icons/circular/color-scheme";
@@ -148,6 +150,9 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
   const playEnglishAudio = React.useCallback(async () => {
     console.log("Playing English audio");
     try {
+      // Stop any currently playing audio globally
+      await audioStoreActions.stopAllAudio();
+
       if (sound) {
         try {
           await sound.stopAsync();
@@ -174,24 +179,13 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
         });
       setSound(newSound);
 
-      if (!initialStatus.isLoaded) {
-        const errorMessage =
-          initialStatus.error ||
-          "Sound failed to load, initial status indicates not loaded.";
-        console.error(
-          "Sound load error:",
-          errorMessage,
-          "Full status:",
-          initialStatus,
-        );
-        throw new Error(errorMessage);
-      }
-
       newSound.setOnPlaybackStatusUpdate((status) => {
         if (status.isLoaded) {
           if (status.didJustFinish) {
             console.log("Audio finished");
             setIsPlaying(false);
+            deactivateKeepAwake("conversation-audio");
+            audioStoreActions.clearCurrentSound();
             onAudioComplete?.();
             return;
           }
@@ -201,6 +195,8 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
               "Playback stopped unexpectedly (isLoaded=true, but not playing and not finished).",
             );
             setIsPlaying(false);
+            deactivateKeepAwake("conversation-audio");
+            audioStoreActions.clearCurrentSound();
             onAudioComplete?.();
           }
         } else {
@@ -211,9 +207,14 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
             );
           }
           setIsPlaying(false);
+          deactivateKeepAwake("conversation-audio");
+          audioStoreActions.clearCurrentSound();
           onAudioComplete?.();
         }
       });
+
+      // Register with global audio store
+      await audioStoreActions.registerSound(newSound);
 
       await newSound.playAsync();
     } catch (error: unknown) {
@@ -234,6 +235,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
     if (isPlayingState && !hasAutoPlayed.current) {
       console.log("State changed to playing, starting audio...");
       hasAutoPlayed.current = true;
+      activateKeepAwakeAsync("conversation-audio");
       playEnglishAudio();
     }
 
@@ -241,6 +243,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
       hasAutoPlayed.current = false;
       if (isPlaying) {
         setIsPlaying(false);
+        deactivateKeepAwake("conversation-audio");
         if (sound) {
           sound.setOnPlaybackStatusUpdate(null);
           sound

@@ -1,5 +1,6 @@
 import { Audio } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import {
@@ -29,6 +30,7 @@ import {
 } from "@/assets/blending";
 import { APP_COLORS } from "@/constants/routes";
 import { useGuideAudio } from "@/core/hooks/useGuideAudio";
+import { audioStoreActions } from "@/core/store/audio";
 import GuidanceAudioHeader from "@/ui/core/headers/guidance-audio";
 import { useLetterCase } from "@/ui/core/headers/letter-case-context";
 import { AnimatedAudioButton } from "@/ui/icons/animated-audio-button-wrapper";
@@ -715,6 +717,8 @@ const DraggableAudioGame: React.FC = () => {
       currentSound.current = null;
     }
 
+    deactivateKeepAwake("audio-playback");
+
     // First clear all states
     setPlayingButtonId(null);
     setIsCardActive(false);
@@ -764,18 +768,28 @@ const DraggableAudioGame: React.FC = () => {
     async (audioFile: any, buttonId: string): Promise<void> => {
       console.log("Playing audio for button:", buttonId);
 
-      // Stop any currently playing audio
+      // Stop any currently playing audio globally
+      await audioStoreActions.stopAllAudio();
+
+      // Stop any currently playing audio from this component
       if (currentSound.current) {
         try {
           await currentSound.current.stopAsync();
-          await currentSound.current.unloadAsync();
+          try {
+            await currentSound.current.unloadAsync();
+          } catch (e) {
+            // Ignore error
+          }
         } catch (e) {
-          console.error("Error cleaning up previous sound:", e);
+          // Ignore error cleaning up previous sound
         }
         currentSound.current = null;
       }
       // Explicitly clear playingButtonId before setting new one
       setPlayingButtonId(null);
+
+      // Activate keep awake when audio starts
+      activateKeepAwakeAsync("audio-playback");
 
       // Set this button as the playing one
       setPlayingButtonId(buttonId);
@@ -801,6 +815,9 @@ const DraggableAudioGame: React.FC = () => {
             console.log(`Audio finished for button ${buttonId}`);
             isHandled = true;
 
+            // Deactivate keep awake when audio finishes
+            deactivateKeepAwake("audio-playback");
+
             // Force update the playing button ID state
             setPlayingButtonId((prevId) => {
               if (prevId === buttonId) {
@@ -812,13 +829,23 @@ const DraggableAudioGame: React.FC = () => {
               return prevId;
             });
 
+            // Clear from global audio store
+            audioStoreActions.clearCurrentSound();
+
             // Unload the sound
-            sound.unloadAsync();
+            try {
+              sound.unloadAsync();
+            } catch (e) {
+              // Ignore error
+            }
             if (currentSound.current === sound) {
               currentSound.current = null;
             }
           }
         });
+
+        // Register with global audio store
+        await audioStoreActions.registerSound(sound);
 
         // Add a safety timeout
         const timeoutId = setTimeout(() => {
@@ -826,6 +853,9 @@ const DraggableAudioGame: React.FC = () => {
 
           isHandled = true;
           console.log(`Safety timeout reached for button ${buttonId}`);
+
+          // Deactivate keep awake on timeout
+          deactivateKeepAwake("audio-playback");
 
           setPlayingButtonId((prevId) => {
             if (prevId === buttonId) {
@@ -837,8 +867,14 @@ const DraggableAudioGame: React.FC = () => {
             return prevId;
           });
 
+          audioStoreActions.clearCurrentSound();
+
           try {
-            sound.unloadAsync();
+            try {
+              sound.unloadAsync();
+            } catch (e) {
+              // Ignore error
+            }
             if (currentSound.current === sound) {
               currentSound.current = null;
             }
@@ -864,7 +900,11 @@ const DraggableAudioGame: React.FC = () => {
   useEffect(() => {
     return () => {
       if (currentSound.current) {
-        currentSound.current.unloadAsync();
+        try {
+          currentSound.current.unloadAsync();
+        } catch (e) {
+          // Ignore error
+        }
         currentSound.current = null;
       }
     };

@@ -1,7 +1,9 @@
 import { Audio, type AVPlaybackSource, type AVPlaybackStatus } from "expo-av";
 import type { Sound } from "expo-av/build/Audio";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { audioStoreActions } from "@/core/store/audio";
 import type { CombinedRoutes } from "@/types/navigation-types";
 import { getGuides } from "@/utils/shared";
 
@@ -14,6 +16,19 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
   const soundRef = useRef<Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const isMountedRef = useRef(true);
+
+  // Keep screen awake while guidance audio is playing
+  useEffect(() => {
+    if (isPlaying) {
+      activateKeepAwakeAsync("guidance-audio");
+    } else {
+      deactivateKeepAwake("guidance-audio");
+    }
+
+    return () => {
+      deactivateKeepAwake("guidance-audio");
+    };
+  }, [isPlaying]);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -77,6 +92,7 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
             await soundRef.current.unloadAsync().catch((e) => console.warn(e));
           soundRef.current = null;
           if (isMountedRef.current) setIsPlaying(false);
+          audioStoreActions.clearCurrentSound();
           return;
         }
         if (currentSoundIndex >= playbackSources.length) {
@@ -84,6 +100,7 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
             await soundRef.current.unloadAsync().catch((e) => console.warn(e));
           soundRef.current = null;
           if (isMountedRef.current) setIsPlaying(false);
+          audioStoreActions.clearCurrentSound();
           return;
         }
 
@@ -132,6 +149,7 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
                 newSound.setOnPlaybackStatusUpdate(null);
                 if (soundRef.current === newSound) soundRef.current = null;
                 if (isMountedRef.current) setIsPlaying(false);
+                audioStoreActions.clearCurrentSound();
               }
               return;
             }
@@ -141,6 +159,9 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
               playNextSound();
             }
           });
+
+          // Register with global audio store
+          await audioStoreActions.registerSound(newSound);
         } catch (error) {
           console.error(
             "[useGuideAudio] playSequentialSounds: Error creating or playing sound:",
@@ -158,6 +179,7 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
             soundRef.current = null;
           }
           if (isMountedRef.current) setIsPlaying(false);
+          audioStoreActions.clearCurrentSound();
         }
       };
 
@@ -177,12 +199,12 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
         }
         await soundToStop.unloadAsync();
       } catch (error) {
-        if (
-          !(
-            error instanceof Error &&
-            error.message.includes("sound is not loaded")
-          )
-        ) {
+        // Ignore expected errors when audio is interrupted
+        const isExpectedError =
+          error instanceof Error &&
+          (error.message.includes("sound is not loaded") ||
+            error.message.includes("Seeking interrupted"));
+        if (!isExpectedError) {
           console.error(
             "[useGuideAudio] stopGuideAudio: Error stopping/unloading sound:",
             error,
@@ -198,6 +220,7 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
     if (isMountedRef.current) {
       setIsPlaying(false);
     }
+    audioStoreActions.clearCurrentSound();
   }, []);
 
   const playGuideAudio = useCallback(async () => {
@@ -208,6 +231,9 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
     if (!isMountedRef.current) {
       return;
     }
+
+    // Stop any other audio playing globally before starting guidance
+    await audioStoreActions.stopAllAudio();
 
     setIsPlaying(true);
 
@@ -234,6 +260,7 @@ export const useGuideAudio = ({ screenName, module }: GuideAudioProps) => {
         soundRef.current = null;
       }
       if (isMountedRef.current) setIsPlaying(false);
+      audioStoreActions.clearCurrentSound();
     }
   }, [screenName, module, stopGuideAudio, playSequentialSounds, isPlaying]);
 

@@ -1,5 +1,6 @@
 import type { AudioSource } from "expo-audio";
 import { useAudioPlayer } from "expo-audio";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { useEffect } from "react";
 
 /**
@@ -12,6 +13,19 @@ const useSoundWithFeedback = () => {
 
   // Get the isPlaying status directly from the player
   const isPlaying = player.playing;
+
+  // Keep screen awake while playing
+  useEffect(() => {
+    if (isPlaying) {
+      activateKeepAwakeAsync("sound-feedback");
+    } else {
+      deactivateKeepAwake("sound-feedback");
+    }
+
+    return () => {
+      deactivateKeepAwake("sound-feedback");
+    };
+  }, [isPlaying]);
 
   /**
    * Plays a sound from the given source
