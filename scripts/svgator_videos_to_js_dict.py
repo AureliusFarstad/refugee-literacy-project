@@ -5,8 +5,8 @@ import os
 # OUTPUT_JS_FILE_PATH = "assets/alphabet/animation/pencil-map.js"
 
 # Example 2
-INPUT_FOLDER_PATH = "raw-assets/videos/little-and-often"
-OUTPUT_JS_FILE_PATH = "assets/videos/little-and-often.js"
+INPUT_FOLDER_PATH = "raw-assets/alphabet/animation/pencil"
+OUTPUT_JS_FILE_PATH = "assets/alphabet/animation/pencil-map.js"
 
 def __main__():
     """This python script is used to convert the SVGator videos to a dictionary in a JavaScript file.
