@@ -287,8 +287,6 @@ const LetterIntroduction = () => {
         onPressGuide={handlePlayGuideAudio}
         onStopGuide={stopGuideAudio}
         showLetterCaseSwitch={false}
-        initialPulseColorForGuidance={SECTION_COLOR.primary}
-        activateInitialGuidancePulse={!hasPlayedGuidanceOnce}
       />
       <View className="flex flex-1 flex-col bg-[#F2EFF0] pb-4">
         <View className="m-4 flex flex-1 flex-col overflow-hidden rounded-xl border-2 border-purple-500 bg-white ">
