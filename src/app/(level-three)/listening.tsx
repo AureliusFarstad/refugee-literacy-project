@@ -173,10 +173,12 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
           ? { uri: englishAudioFile }
           : englishAudioFile;
 
-      const { sound: newSound, status: initialStatus } =
-        await Audio.Sound.createAsync(source as AVPlaybackSource, {
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        source as AVPlaybackSource,
+        {
           shouldPlay: false,
-        });
+        },
+      );
       setSound(newSound);
 
       newSound.setOnPlaybackStatusUpdate((status) => {
